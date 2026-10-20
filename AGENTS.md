@@ -2,7 +2,7 @@
 ## Guía de Contexto y Operación Multi-Agente (Antigravity)
 
 **Ubicación local del proyecto:**
-`/home/carmen/.gemini/antigravity-ide/scratch/itapytapunta-3d/`
+`/media/carmen/Datos/Dev/itapytapunta-3d/`
 
 **Repositorio Git remoto:**
 `https://github.com/leoberniga/itapytapunta-3d` (Rama: `main`)
@@ -62,8 +62,8 @@ itapytapunta-3d/
 
 ### 5. Comandos de Ejecución y Desarrollo
 ```bash
-# Entrar al directorio
-cd /home/carmen/.gemini/antigravity-ide/scratch/itapytapunta-3d/app
+# Entrar al directorio del proyecto en Dev
+cd /media/carmen/Datos/Dev/itapytapunta-3d/app
 
 # Instalar dependencias
 npm install

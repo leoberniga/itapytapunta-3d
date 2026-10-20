@@ -1437,7 +1437,7 @@ function buildSheet3ControlYArquitecto() {
       desc: 'Semanas 1 a 3: Firma de Carpeta Bancaria (Colores Negro/Verde/Rojo/Amarillo) + Rehabilitación Losa 1 + Muro Contención y Drenaje',
       pct: 0.20,
       obraGs: 46800000,
-      cond: 'Planos aprobados para Caja Mutual + Sikadur-32 en 17 pilares + Barbacanas y drenaje francés verificados'
+      cond: 'Planos aprobados para BNF (Banco Nacional de Fomento) + Sikadur-32 en 17 pilares + Barbacanas y drenaje francés verificados'
     },
     {
       hito: 'Hito 2 (20%)',
@@ -1465,7 +1465,7 @@ function buildSheet3ControlYArquitecto() {
       desc: 'Semanas 14 a 16: Baño Suite y Cocina Equipados + Blindex/Puertas/Barandas + Tableros DIN/Alarma Pet-Immune + Limpieza Final Mudanza',
       pct: 0.20,
       obraGs: 23600000,
-      cond: 'Acta de Recepción Definitiva firmada + Pruebas de disyuntores, bomba presurizadora y alarma modo noche'
+      cond: 'Acta de Recepción Definitiva firmada + Pruebas de disyuntores, presión directa ESSAP y alarma modo noche'
     }
   ];
 
@@ -1554,8 +1554,8 @@ function buildSheet3ControlYArquitecto() {
 }
 
 // ============================================================================
-// HOJA 4: 4_CREDITO_CAJA_MUTUAL
-// Simulador Financiero El Crédito Nuevo 9,9% vs. 6,5% a 15 Años / 180 Cuotas
+// HOJA 4: 4_CREDITO_BNF
+// Simulador Financiero BNF (Banco Nacional de Fomento) 9,9% vs. 6,5% a 15 Años / 180 Cuotas
 // ============================================================================
 
 function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) {
@@ -1570,7 +1570,7 @@ function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) 
         1,
         r,
         CREDITO_CAJA_MUTUAL?.titulo ||
-          'SIMULADOR FINANCIERO: EL CRÉDITO NUEVO (CAJA MUTUAL 9,9% ANUAL VS. LÍNEA PREFERENCIAL 6,5% — 15 AÑOS / 180 CUOTAS)',
+          'SIMULADOR FINANCIERO: CRÉDITO VIVIENDA BNF (BANCO NACIONAL DE FOMENTO 9,9% ANUAL VS. LÍNEA PREFERENCIAL 6,5% — 15 AÑOS / 180 CUOTAS)',
         STYLE.TITLE_BANNER
       ),
       ...Array.from({ length: 10 }, (_, i) =>
@@ -1587,7 +1587,7 @@ function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) 
       makeStringCell(
         1,
         r,
-        `Condiciones Cerradas Ruth y Leo: Plazo ${loanYears || 15} Años (180 cuotas) | A sola firma (Terreno garantiza el crédito) | Sin período de gracia | Simulación Activa: Gs. ${Number(loanAmount || 350000000).toLocaleString('es-PY')} (${activeRateKey === 'tasa65' ? '6,5%' : '9,9%'})`,
+        `Entidad Financiera: BNF (Banco Nacional de Fomento) | Plazo ${loanYears || 15} Años (180 cuotas) | Garantía Hipotecaria / Terreno | Simulación Activa: Gs. ${Number(loanAmount || 350000000).toLocaleString('es-PY')} (${activeRateKey === 'tasa65' ? '6,5%' : '9,9%'})`,
         STYLE.SUBTITLE_BANNER
       ),
       ...Array.from({ length: 10 }, (_, i) =>
@@ -1605,7 +1605,7 @@ function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) 
       makeStringCell(
         1,
         r,
-        'Factores Normativos por cada Gs. 1.000.000 a 15 Años (180 Meses): Cuota Pura 9,9% = Gs. 11.097/M | Seguro Caja Mutual = Gs. 668,91/M | Cuota Total 9,9% c/ Seguro = Gs. 11.765,91/M | Cuota Pura 6,5% = Gs. 8.982/M',
+        'Factores Normativos por cada Gs. 1.000.000 a 15 Años (180 Meses): Cuota Pura 9,9% = Gs. 11.097/M | Seguro BNF = Gs. 668,91/M | Cuota Total 9,9% c/ Seguro = Gs. 11.765,91/M | Cuota Pura 6,5% = Gs. 8.982/M',
         STYLE.SECTION_ROW
       ),
       ...Array.from({ length: 10 }, (_, i) =>
@@ -1617,10 +1617,10 @@ function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) 
 
   // Fila 4: Encabezados de la Tabla Comparativa para 250M, 300M, 350M y 440M
   const headers = [
-    'Tramo de Crédito',
+    'Tramo de Crédito BNF',
     'Capital Solicitado (Gs.)',
     'Cuota Pura 9,9% Anual (Gs. Fórmula)',
-    'Seguro Vida / Incendio Caja Mutual (Gs. Fórmula)',
+    'Seguro Vida / Incendio BNF (Gs. Fórmula)',
     'Cuota Total Mensual 9,9% c/ Seguros (Gs. Fórmula)',
     'Total Pagado en 180 Cuotas a 9,9% (Gs. Fórmula)',
     'Costo Financiero + Seguros 9,9% (Gs. Fórmula)',
@@ -1847,9 +1847,9 @@ function buildSheet4CreditoCajaMutual({ loanAmount, loanYears, activeRateKey }) 
   r++;
 
   const plazosList = [
-    { anios: 15, meses: 180, c65: 8982, c99: 11097, obs: 'Plazo oficial Caja Mutual (180 cuotas) — Menor costo financiero total' },
-    { anios: 20, meses: 240, c65: 7727, c99: 9997, obs: 'Plazo intermedio bancario (240 cuotas)' },
-    { anios: 30, meses: 360, c65: 6592, c99: 9114, obs: 'Plazo máximo hipotecario (360 cuotas)' }
+    { anios: 15, meses: 180, c65: 8982, c99: 11097, obs: 'Plazo oficial BNF (180 cuotas) — Menor costo financiero total' },
+    { anios: 20, meses: 240, c65: 7727, c99: 9997, obs: 'Plazo intermedio bancario BNF (240 cuotas)' },
+    { anios: 30, meses: 360, c65: 6592, c99: 9114, obs: 'Plazo máximo hipotecario BNF (360 cuotas)' }
   ];
 
   plazosList.forEach((p) => {
@@ -2609,7 +2609,7 @@ function buildWorkbookXml() {
     `<sheet name="1_CARPETA_BANCO_COLORES" sheetId="1" r:id="rId1"/>` +
     `<sheet name="2_FORMATO_LG_RB_LOZARRAP" sheetId="2" r:id="rId2"/>` +
     `<sheet name="3_CONTROL_Y_ARQUITECTO" sheetId="3" r:id="rId3"/>` +
-    `<sheet name="4_CREDITO_CAJA_MUTUAL" sheetId="4" r:id="rId4"/>` +
+    `<sheet name="4_CREDITO_BNF" sheetId="4" r:id="rId4"/>` +
     `<sheet name="5_AUDITORIA_6_ESPECIALISTAS" sheetId="5" r:id="rId5"/>` +
     `<sheet name="6_COMPRA_CHINA_DOMOTICA" sheetId="6" r:id="rId6"/>` +
     `</sheets>` +

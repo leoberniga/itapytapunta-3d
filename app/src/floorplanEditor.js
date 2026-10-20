@@ -720,12 +720,12 @@ export const MEP_NODE_CATALOG = {
   },
   cisterna_presurizadora: {
     id: 'cisterna_presurizadora',
-    name: 'Tanque Cisterna 1.000L + Bomba Presurizadora Inteligente (2,0 bar)',
+    name: 'Medidor de Agua ESSAP Directo a Nivel de Calle al Costado del Portón (Sin Tanque • Buena Presión)',
     symbol: '🚰',
-    code: 'CIST-1000L',
+    code: 'M-ESSAP',
     color: '#0284c7',
-    unitCostGs: 3150000,
-    category: 'Hidrosanitaria Presurizada'
+    unitCostGs: 950000,
+    category: 'Hidrosanitaria Directa ESSAP'
   },
   toma_20a: {
     id: 'toma_20a',
@@ -963,12 +963,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_piscina_futura',
-        name: 'Piscina 4.65×2.45m en Patio Nivelado (Muralla al fondo en z=26.80m detrás de la piscina)',
+        name: 'Piscina Transversal en el Fondo (5.80×2.40m en z=23.15..25.55m • Diseño Original Lámina 2 • Muralla al fondo en z=26.80m)',
         codeType: 'exterior',
-        x: -0.45,
-        z: 15.80,
-        w: 4.65,
-        d: 2.45,
+        x: -1.25,
+        z: 23.15,
+        w: 5.80,
+        d: 2.40,
         floorCostPerM2Gs: 0,
         equipCostGs: 0,
         activeStage: subsueloFullFinish,

@@ -73,48 +73,51 @@
       </div>
     </div>
 
-    <!-- Central Scenario Quick Selector -->
+    <!-- Central Scenario Quick Selector (BNF) -->
     <div class="scenario-selector-bar glass-panel scenario-selector">
-      <span class="scenario-label"><i data-lucide="layers" style="width:13px;height:13px;"></i> Escalones de Crédito:</span>
+      <span class="scenario-label"><i data-lucide="landmark" style="width:13px;height:13px;"></i> Crédito BNF:</span>
       <div class="scenario-pills">
         <button id="btn-scen-hoy" class="scenario-pill" data-scenario="hoy_en_obra" title="Estado real hoy según Acta de Recepción 29/12/2025 (Gs. 163.820.972): Esqueleto H°A° hasta Losa 1 (+100.00m) + 100.71 m² libres en Subsuelo + Escalera 1">
           <span class="pill-title">Hoy en Obra (163,8M)</span>
-          <span class="pill-desc">Esqueleto H°A° + 100m² Subsuelo Libre</span>
+          <span class="pill-desc">Solo lo ya construido (Gs. 0 Crédito)</span>
         </button>
-        <button id="btn-scen-300" class="scenario-pill active" data-scenario="escenario300" title="Crédito 300 Millones Gs.: 2do Piso Dormitorio/Estudio + Nivel Calle Sala/Comedor/Cocina + Subsuelo Lavadero/Depósito + Pasillo Antihumedad 1.50m">
-          <span class="pill-title">Crédito 300 Millones</span>
-          <span class="pill-desc">Dorm. 2do Piso + Sala/Cocina PB + Lavadero Sub.</span>
+        <button id="btn-scen-300" class="scenario-pill active" data-scenario="escenario300" title="Crédito BNF 300 Millones Gs. (Gs. 298,2M exactos): 3 Niveles Habitables, Losa Rap 38m², Techo +105.64m, Mampostería, Plomería Directa ESSAP y Red Trifásica ANDE">
+          <span class="pill-title">Crédito BNF 300M</span>
+          <span class="pill-desc">Gs. 298,2M • 3 Niveles Habitables</span>
         </button>
-        <button id="btn-scen-370" class="scenario-pill" data-scenario="escenario350" title="Crédito 350 Millones Gs.: Suma Porcelanato 60×60 + Amoblamiento Completo Cocina + Blindex al Río + Jardín Césped (con Palancas de Combinación)">
-          <span class="pill-title">Crédito 350 Millones</span>
-          <span class="pill-desc">+ Cocina Full + Blindex Río + Porcelanato</span>
+        <button id="btn-scen-370" class="scenario-pill" data-scenario="escenario350" title="Crédito BNF 350 Millones Gs. (Gs. 348,1M exactos): Suma Pisos Porcelanato 60×60 + Carpintería Madera Interior + Placares Dormitorios + Domótica Smart DIN">
+          <span class="pill-title">Crédito BNF 350M</span>
+          <span class="pill-desc">Gs. 348,1M • + Porcelanato y Placares</span>
         </button>
-        <button id="btn-scen-460" class="scenario-pill" data-scenario="escenario440" title="Crédito 440 Millones Gs.: 3 Niveles Terminados + Blindex Habitaciones + Rejas Balcones + Deck Galería L1 + Portón Automatizado">
-          <span class="pill-title">Crédito 440 Millones</span>
-          <span class="pill-desc">3 Niveles Full + Rejas + Deck + Portón</span>
+        <button id="btn-scen-460" class="scenario-pill" data-scenario="escenario440" title="Crédito BNF 440 Millones Gs. (Gs. 439,7M exactos): Obra 100% Llave en Mano + Blindex Panorámico Galería + Cocina Granito/Isla + Piscina 5.80×2.40m en el Fondo">
+          <span class="pill-title">Crédito BNF 440M</span>
+          <span class="pill-desc">Gs. 439,7M • Full + Blindex + Piscina</span>
         </button>
-        <button id="btn-toggle-pool-top" class="scenario-pill pool-toggle-pill" data-pool-visible="off" title="Visualizar u ocultar la futura Piscina (4,65×2,45m) y Quincho en el Jardín 3D sin cambiar de escalón de crédito">
-          <span class="pill-title">🏊 Ver Piscina + Quincho 3D</span>
-          <span class="pill-desc">Vista Opcional Jardín (Sin alterar crédito)</span>
+        <button id="btn-toggle-pool-top" class="scenario-pill pool-toggle-pill" data-pool-visible="off" title="Visualizar u ocultar la Piscina Transversal (5,80×2,40m) en el Fondo del Jardín 3D sin cambiar de escalón de crédito">
+          <span class="pill-title">🏊 Piscina en Fondo 3D</span>
+          <span class="pill-desc">Vista Opcional Jardín</span>
         </button>
       </div>
     </div>
 
     <div class="header-actions">
-      <button id="btn-toggle-game-mode" class="btn-header glass-panel" data-game-active="off" style="border-color:rgba(16,185,129,0.75); background:linear-gradient(135deg, rgba(16,185,129,0.28), rgba(5,150,105,0.42)); color:#ecfdf5; font-weight:800;" title="Activar Modo Juego / Recorrido Hiperrealista Estilo GTA VI con radar minimapa, niveles e interacciones en vivo">
-        <span>🎮 Modo Juego (Recorrido GTA)</span>
+      <button id="btn-toggle-computo-drawer" class="btn-header glass-panel" data-drawer-open="false" style="border-color:rgba(56,189,248,0.75); background:linear-gradient(135deg, rgba(14,165,233,0.26), rgba(3,105,161,0.42)); color:#f0f9ff; font-weight:800;" title="Desplegar Menú de Lista de Costos y Cálculo Métrico Producto por Producto (Unidad, Precio Total y Estado: Ya está vs. Previsto en Crédito BNF)">
+        <span>📋 Lista de Costos (Cálculo Métrico)</span>
       </button>
-      <button id="btn-live-cad-sheets" class="btn-header glass-panel" style="border-color:rgba(56,189,248,0.65); background:linear-gradient(135deg, rgba(2,132,199,0.28), rgba(3,105,161,0.38)); color:#e0f2fe; font-weight:700;" title="Regenerar y abrir los 4 Planos Oficiales CAD Vivos actualizados según los ajustes actuales">
-        <span>📐 Regenerar Planos CAD Vivo</span>
+      <button id="btn-toggle-game-mode" class="btn-header glass-panel" data-game-active="off" style="border-color:rgba(16,185,129,0.75); background:linear-gradient(135deg, rgba(16,185,129,0.24), rgba(5,150,105,0.38)); color:#ecfdf5; font-weight:800;" title="Activar Modo Juego Hiperrealista en 1ra/3ra Persona con colisión de muros, radar minimapa e interacciones en vivo">
+        <span>🎮 Modo Juego Realista</span>
       </button>
-      <button id="btn-open-repo-links" class="btn-header glass-panel" style="border-color:rgba(168,85,247,0.55); background:rgba(88,28,135,0.28); color:#f3e8ff; font-weight:700;" title="Abrir vínculo directo al Repositorio de Archivos Originales e Históricos de Obra">
-        <span>🗂️ Repositorio</span>
+      <button id="btn-toggle-roof-style" class="btn-header btn-primary" data-roof-style="isopanel" title="Alternar en vivo el Techo 3D (+105.64m) entre Isopanel Termoacústico, Tejas Cerámicas de Tobatí o Techo Oculto (para ver interior)">
+        <span>🏠 Techo 3D: Isopanel</span>
       </button>
-      <button id="btn-toggle-bank-colors" class="btn-header glass-panel" data-bank-colors="off" style="border-color:rgba(245,158,11,0.55); color:#fde68a; font-weight:700;" title="Activar Código de Colores Normativo del Banco en el Modelo 3D y Editor 2D: ⚫ Negro (Ya construido) | 🟢 Verde (Hormigón) | 🔴 Rojo (A construir) | 🟡 Amarillo (A refaccionar/adecuar)">
-        <span>🎨 Colores Banco: OFF</span>
+      <button id="btn-header-stop-sims" class="btn-header glass-panel" style="display:none; border-color:rgba(239,68,68,0.85); background:rgba(185,28,28,0.35); color:#fecaca; font-weight:800;" title="Detener inmediatamente la simulación de lluvia/tormenta y flujos activos en 3D">
+        <span>⏹️ Detener Lluvia / Sim.</span>
       </button>
-      <button id="btn-toggle-roof-style" class="btn-header btn-primary" data-roof-style="isopanel" title="Alternar en vivo el Techo 3D (+105.64m) entre Chapa Termoacústica Isopanel (Gs. 47,85M) y Tejas Cerámicas de Tobatí s/ Tejuelón Visto (Gs. 49,40M)">
-        <span>🏠 Techo 3D: Isopanel vs Tejas</span>
+      <button id="btn-toggle-bank-colors" class="btn-header glass-panel" data-bank-colors="off" style="border-color:rgba(245,158,11,0.55); color:#fde68a; font-weight:700;" title="Activar Código de Colores Normativo del BNF en el Modelo 3D y Editor 2D: ⚫ Negro (Ya construido) | 🟢 Verde (Hormigón) | 🔴 Rojo (A construir) | 🟡 Amarillo (A refaccionar)">
+        <span>🎨 Colores BNF: OFF</span>
+      </button>
+      <button id="btn-live-cad-sheets" class="btn-header glass-panel" style="border-color:rgba(56,189,248,0.55); color:#e0f2fe; font-weight:700;" title="Regenerar y abrir los 4 Planos Oficiales CAD Vivos actualizados según los ajustes actuales">
+        <span>📐 Planos Vivos</span>
       </button>
       <button id="btn-toggle-ui" class="btn-header glass-panel" title="Ocultar/Mostrar Interfaz">
         <i data-lucide="eye"></i>
@@ -202,26 +205,31 @@
       <div class="mep-sim-header">
         <div>
           <span class="mep-sim-tag">SIMULADOR INTERACTIVO EN VIVO 3D</span>
-          <h3 class="mep-sim-title">⚡💧 Instalaciones por Capas (Eléctrica + Pluvial/Sanitaria)</h3>
+          <h3 class="mep-sim-title">⚡💧 Instalaciones por Capas (Eléctrica ANDE + Pluvial/ESSAP Directo)</h3>
         </div>
-        <button id="btn-close-mep-sim" class="modal-close-btn" title="Minimizar panel">&times;</button>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button id="btn-stop-all-sims" class="btn-header" style="padding:5px 10px; font-size:10.5px; font-weight:800; background:rgba(220,38,38,0.28); border:1px solid #ef4444; color:#fecaca; border-radius:6px; cursor:pointer;" title="Apagar lluvia, flujo de agua y alertas eléctricas en 3D">
+            ⏹️ Detener Todo
+          </button>
+          <button id="btn-close-mep-sim" class="modal-close-btn" title="Minimizar panel">&times;</button>
+        </div>
       </div>
 
       <!-- Controles de Simulación Hidrosanitaria y Pluvial -->
       <div class="mep-sim-section">
         <div class="mep-sim-sec-title" style="color:#38bdf8;">
-          <span>💧 Simulador Pluvial y Núcleo Húmedo Eje F-G</span>
+          <span>💧 Simulador Pluvial Hacia Calle y Agua Directa ESSAP</span>
           <span id="mep-live-pluvial-badge" class="badge-pill" style="margin:0; font-size:9.5px;">En Espera</span>
         </div>
         <div class="mep-sim-buttons">
           <button class="mep-sim-btn" id="btn-sim-rain-165" data-pluv-sim="tormenta">
-            <span>🌧️ Simular Tormenta 165 mm/h (Techo + Pérgola -> 4 Bajadas Ø100mm -> Drenaje Francés)</span>
+            <span>🌧️ Activar / Desactivar Lluvia 165 mm/h (Canaletas -> Bajadas Ø100mm -> Desagüe a Calle)</span>
           </button>
           <button class="mep-sim-btn" id="btn-sim-water-pressure" data-pluv-sim="presion_agua">
-            <span>🚰 Simular Presión Agua Fría/Caliente (Cisterna 1000L + Rowa -> Cocina y 3 Baños Superpuestos Eje F-G)</span>
+            <span>🚰 Activar / Desactivar Agua Directa ESSAP (Medidor al Costado del Portón -> Cocina y 3 Baños sin Tanque)</span>
           </button>
           <button class="mep-sim-btn" id="btn-sim-sewer-flush" data-pluv-sim="descarga_cloacal">
-            <span>🚽 Simular Descarga Cloacal Vertical (Baños PA + PB -> Columna Ø100mm -> Cámara Séptica y Pozo Ciego)</span>
+            <span>🚽 Activar / Desactivar Cloaca Vertical (Baños PA + PB -> Cámara Séptica y Pozo Ciego en Fondo)</span>
           </button>
         </div>
         <div class="mep-sim-metrics-grid">
@@ -230,8 +238,8 @@
             <strong id="mep-metric-flow" style="color:#38bdf8;">0.00 L/s</strong>
           </div>
           <div class="mep-sim-metric">
-            <span>Presión Red Rowa</span>
-            <strong id="mep-metric-pressure" style="color:#34d399;">2.8 bar</strong>
+            <span>Presión Red ESSAP</span>
+            <strong id="mep-metric-pressure" style="color:#34d399;">2.8 bar (Directa)</strong>
           </div>
           <div class="mep-sim-metric">
             <span>Columna Eje F-G</span>
@@ -243,7 +251,7 @@
       <!-- Controles de Simulación Eléctrica y Domótica -->
       <div class="mep-sim-section" style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
         <div class="mep-sim-sec-title" style="color:#c084fc;">
-          <span>⚡ Simulador Eléctrico Trifásico y Prevención Activa</span>
+          <span>⚡ Bajada ANDE (Al Costado del Portón) y Prevención Activa</span>
           <span id="mep-live-elec-badge" class="badge-pill" style="margin:0; font-size:9.5px; border-color:#10b981; color:#6ee7b7;">DIN Normal (220V)</span>
         </div>
         <div class="mep-sim-buttons">
@@ -305,8 +313,11 @@
         <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Gs. 1.680.484 / m²</strong>
       </div>
       <p id="kpi-objective-desc" class="kpi-desc">
-        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Dormitorio en Suite y Estudio en 2do Piso (+102.88m), Gran Sala-Comedor-Cocina en Nivel Calle (+100.00m) y Lavadero + Depósito en los 100.71 m² libres del Subsuelo (+97.66m) con Pasillo Antihumedad de 1.50m.
+        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Dormitorio en Suite y Estudio en 2do Piso (+102.88m), Gran Sala-Comedor-Cocina en Nivel Calle (+100.00m) y Lavadero + Salón Abierto en los 100.71 m² libres del Subsuelo (+97.66m) con Pasillo Antihumedad de 1.50m.
       </p>
+      <button id="btn-kpi-open-drawer" class="btn-primary" style="width:100%; margin-top:8px; padding:7px 10px; font-size:11px; font-weight:800; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg, rgba(14,165,233,0.32), rgba(2,132,199,0.52)); border:1px solid rgba(56,189,248,0.65); color:#f0f9ff;">
+        <span>📋 Desplegar Lista de Costos (Cálculo Métrico BNF)</span>
+      </button>
     </div>
 
     <!-- Recorrido por Habitación y Detalle (3 Niveles de Ruth y Leo) -->
@@ -536,6 +547,97 @@
           <i data-lucide="ruler"></i> Cinta Métrica
         </button>
       </div>
+    </div>
+  </aside>
+
+  <!-- ===================================================================== -->
+  <!-- MENÚ DESPLEGABLE DE LISTA DE COSTOS Y CÁLCULO MÉTRICO (#computo-drawer) -->
+  <!-- ===================================================================== -->
+  <aside id="computo-drawer" class="computo-drawer glass-panel" aria-label="Menú Desplegable de Cálculo Métrico y Lista de Costos BNF">
+    <div class="computo-drawer-header">
+      <div>
+        <div class="computo-drawer-kicker">CRÉDITO VIVIENDA BNF • CÁLCULO MÉTRICO ÍTEM POR ÍTEM</div>
+        <h3 id="computo-drawer-title" class="computo-drawer-title">Lista de Costos y Estado por Presupuesto</h3>
+      </div>
+      <button id="btn-close-computo-drawer" class="modal-close-btn" title="Cerrar menú de costos">&times;</button>
+    </div>
+
+    <!-- Tarjeta Resumen del Escalón Seleccionado (Solo lo previsto en este monto) -->
+    <div class="computo-drawer-summary">
+      <div class="cd-summary-main">
+        <div>
+          <span class="cd-summary-label" id="cd-scenario-label">Crédito BNF 300 Millones</span>
+          <div class="cd-summary-amount" id="cd-total-credito">Gs. 298.227.534</div>
+        </div>
+        <div style="text-align:right;">
+          <span class="cd-summary-label">Tope Crédito BNF</span>
+          <div class="cd-summary-target" id="cd-target-credito">Gs. 300.000.000</div>
+          <span class="cd-summary-diff" id="cd-diff-credito">Disponible: +Gs. 1.772.466</span>
+        </div>
+      </div>
+      <div class="cd-summary-kpis">
+        <div class="cd-kpi-chip">
+          <span>✅ Ya está en Obra (H°A°/Muros/Portón)</span>
+          <strong id="cd-total-ya-obra">Gs. 163.820.972</strong>
+        </div>
+        <div class="cd-kpi-chip">
+          <span>🎯 Ítems en este Crédito BNF</span>
+          <strong id="cd-count-previstos" style="color:#38bdf8;">29 rubros</strong>
+        </div>
+        <div class="cd-kpi-chip">
+          <span>💳 Cuota BNF (9,9% · 180m)</span>
+          <strong id="cd-cuota-bnf" style="color:#fbbf24;">Gs. 3.529.773/mes</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Filtros Intuitivos y Buscador Producto por Producto -->
+    <div class="computo-drawer-controls">
+      <div class="cd-filter-pills" id="computo-drawer-filters">
+        <button class="cd-filter-pill active" data-cd-filter="PREVISTOS">
+          🎯 Previsto en este Monto (<span id="cd-badge-previstos">29</span>)
+        </button>
+        <button class="cd-filter-pill" data-cd-filter="YA_ESTA">
+          ✅ Ya está (<span id="cd-badge-ya-esta">15</span>)
+        </button>
+        <button class="cd-filter-pill" data-cd-filter="ALL">
+          📋 Todos (<span id="cd-badge-all">54</span>)
+        </button>
+        <button class="cd-filter-pill" data-cd-filter="NO_INCLUIDOS">
+          ⏸️ No incluidos (<span id="cd-badge-no-inc">10</span>)
+        </button>
+      </div>
+      <div class="cd-search-row">
+        <input type="search" id="computo-drawer-search" class="cd-search-input" placeholder="Buscar producto, rubro, código o unidad (ej. porcelanato, techo, piscina, ANDE)...">
+      </div>
+    </div>
+
+    <!-- Tabla Desplegable Producto por Producto, Unidad, Precio Total y Si Ya Está -->
+    <div class="computo-drawer-table-wrap">
+      <table class="computo-drawer-table">
+        <thead>
+          <tr>
+            <th>Producto / Rubro (Cálculo Métrico)</th>
+            <th style="width:82px; text-align:right;">Cant. / Unid.</th>
+            <th style="width:96px; text-align:right;">P. Unit. (Gs.)</th>
+            <th style="width:110px; text-align:right;">Precio Total</th>
+            <th style="width:132px;">¿Ya está? / Estado</th>
+          </tr>
+        </thead>
+        <tbody id="computo-drawer-tbody">
+          <!-- Renderizado dinámico por budgetAndSceneService.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pie del Menú con Acciones Rápidas -->
+    <div class="computo-drawer-footer">
+      <button id="btn-drawer-open-full-modal" class="btn-header glass-panel" style="flex:1; justify-content:center; font-size:11px; font-weight:700; border-color:rgba(168,85,247,0.55); color:#e9d5ff;">
+        <span>🏦 Abrir Carpeta BNF Completa y Auditoría</span>
+      </button>
+      <button id="btn-drawer-export-xlsx" class="btn-primary" style="padding:7px 12px; font-size:11px; font-weight:800; border-radius:7px; cursor:pointer; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399;">
+        <span>📊 Excel BNF (.XLSX)</span>
+      </button>
     </div>
   </aside>
 
@@ -1059,23 +1161,23 @@
     </div>
   </div>
 
-  <!-- Modal 1: SIMULADOR DE CÓMPUTO MÉTRICO, EL CRÉDITO NUEVO (CAJA MUTUAL), COLORES DEL BANCO Y AUDITORÍA (#modal-simulador) -->
+  <!-- Modal 1: SIMULADOR DE CÓMPUTO MÉTRICO, CRÉDITO VIVIENDA BNF, COLORES DEL BANCO Y AUDITORÍA (#modal-simulador) -->
   <div id="modal-simulador" class="modal-overlay">
     <div class="modal-content glass-panel" style="max-width:1240px;">
       <div class="modal-header">
         <div>
           <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
             <i data-lucide="calculator" style="color:var(--accent-gold);"></i>
-            Planilla Bancaria (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo), «El Crédito Nuevo» (Caja Mutual 9,9%) y Cómputo Métrico
+            Planilla Bancaria BNF (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo), Crédito Vivienda BNF y Cómputo Métrico
           </h2>
           <p style="font-size:11.5px; color:var(--text-muted);">
-            Cumple 100% los requisitos técnicos del Banco (Código de Colores Normativo + Desglose Materiales vs. Mano de Obra) + Condiciones cerradas de <strong>El Crédito Nuevo (Caja Mutual 9,9% anual · 15 años / 180 cuotas · A sola firma · Con Seguros Incluidos)</strong> + 5 Ajustes Reales de Obra de Leo.
+            Cumple 100% los requisitos técnicos del <strong>BNF (Banco Nacional de Fomento)</strong>: Código de Colores Normativo + Desglose Materiales vs. Mano de Obra + Simulación de Cuotas a 15 años (180 meses) + Ajustes Reales de Obra de Ruth y Leo.
           </p>
         </div>
         <button class="modal-close-btn">&times;</button>
       </div>
 
-      <!-- 0. PANEL PRINCIPAL: PRESUPUESTO VIVO «EL CRÉDITO NUEVO» (CAJA MUTUAL 250M / 300M / 350M / 440M) + CÓDIGO DE COLORES BANCO -->
+      <!-- 0. PANEL PRINCIPAL: PRESUPUESTO VIVO CRÉDITO BNF (250M / 300M / 350M / 440M) + CÓDIGO DE COLORES BANCO -->
       <div id="bank-credit-and-requirements-host"></div>
 
       <!-- PANEL 1: 🛡️ CONTROL DE OBRA POR HITOS QUINCENALES (20% C/U) Y REGLAS DE CONTRATACIÓN -->
@@ -1092,7 +1194,7 @@
         <div class="multi-budget-header" style="margin-bottom:0;">
           <div>
             <h3 style="font-size:14px; color:#e2e8f0;">🗂️ Referencias Históricas de Presupuestos y Correcciones Forenses Incorporadas</h3>
-            <p style="font-size:11px; color:#94a3b8;">Los presupuestos pasados (JIVESA/LG-RB y Edifica Studio) quedan archivados en el Repositorio. Aquí solo opera el Presupuesto Vivo actualizado.</p>
+            <p style="font-size:11px; color:#94a3b8;">Los presupuestos pasados (JIVESA/LG-RB y Edifica Studio) quedan archivados en el Repositorio. Aquí solo opera el Presupuesto Vivo actualizado para el BNF.</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button id="btn-add-all-forensic" class="btn-primary" style="padding:6px 12px; font-size:11px; border-radius:6px; cursor:pointer;">
@@ -1114,19 +1216,19 @@
       <!-- 3. LIVE BUDGET SUMMARY BANNER -->
       <div class="simulador-summary-banner">
         <div class="sim-stat">
-          <span class="label">Inversión Estimada Activa:</span>
-          <span class="value" id="sim-total-display">Gs. 298.500.000</span>
+          <span class="label">Inversión Previsto Activo:</span>
+          <span class="value" id="sim-total-display">Gs. 298.227.534</span>
         </div>
         <div class="sim-stat">
-          <span class="label">Presupuesto Objetivo:</span>
+          <span class="label">Monto Crédito BNF:</span>
           <span class="value" style="color:var(--accent-cyan);" id="sim-target-display">300.000.000 Gs.</span>
         </div>
         <div class="sim-stat">
           <span class="label">Saldo Disponible:</span>
-          <span class="value" id="sim-saldo-display" style="color:#10b981;">+ 1.500.000 Gs.</span>
+          <span class="value" id="sim-saldo-display" style="color:#10b981;">+ 1.772.466 Gs.</span>
         </div>
         <div class="sim-stat">
-          <span class="label">Cuota Caja Mutual (9,9% 15a c/ seg.):</span>
+          <span class="label">Cuota BNF (9,9% 15a c/ seg.):</span>
           <span class="value" id="sim-m2-display" style="color:var(--accent-gold);">Gs. 3.529.773 / mes</span>
         </div>
       </div>
@@ -1135,9 +1237,9 @@
       <div class="computo-toolbar">
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
           <button class="tool-btn" id="btn-preset-hoy" style="flex:initial;">⚫ Hoy en Obra (163,8M Ejecutado)</button>
-          <button class="tool-btn active" id="btn-preset-300" style="flex:initial;">💳 Crédito 300M (Cuota Gs. 3.529.773)</button>
-          <button class="tool-btn" id="btn-preset-370" style="flex:initial;">💳 Crédito 350M (Cuota Gs. 4.118.068)</button>
-          <button class="tool-btn" id="btn-preset-440" style="flex:initial;">💳 Crédito 440M (Cuota Gs. 5.177.000)</button>
+          <button class="tool-btn active" id="btn-preset-300" style="flex:initial;">💳 Crédito BNF 300M (Gs. 298,2M)</button>
+          <button class="tool-btn" id="btn-preset-370" style="flex:initial;">💳 Crédito BNF 350M (Gs. 348,1M)</button>
+          <button class="tool-btn" id="btn-preset-440" style="flex:initial;">💳 Crédito BNF 440M (Gs. 439,7M)</button>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button class="btn-header btn-primary" id="btn-export-computo-xlsx" style="font-size:11px; padding:7px 14px; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; font-weight:700;">

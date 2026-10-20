@@ -480,42 +480,76 @@ export class ProjectScene {
    */
   buildUrbanContext() {
     this.groups.urbanContext.clear();
+    const mats = this.archVizMats || {};
 
-    // 1. Calle Tte. Guillermo Arias al frente (z = -11.85m a -5.65m)
+    // 1. Calle Tte. Guillermo Arias al frente (z = -11.85m a -5.65m) + Veredas Norte/Sur + Cul-de-Sac
     const streetGroup = new THREE.Group();
-    const streetLength = 38;
+    const streetLength = 46;
     const streetWidth = 6.2;
-    const streetGeo = new THREE.BoxGeometry(streetLength, 0.14, streetWidth);
-    const streetMat = this.archVizMats.gtaAsphaltPBR || new THREE.MeshStandardMaterial({
-      color: 0x4b5563,
-      roughness: 0.85,
+    const streetGeo = new THREE.BoxGeometry(streetLength, 0.16, streetWidth);
+    const streetMat = mats.gtaAsphaltPBR || new THREE.MeshStandardMaterial({
+      color: 0x3b4252,
+      roughness: 0.82,
       metalness: 0.08
     });
     const streetMesh = new THREE.Mesh(streetGeo, streetMat);
-    streetMesh.position.set(0, -0.06, -8.75);
+    streetMesh.position.set(0, -0.07, -8.75);
     streetMesh.receiveShadow = true;
     streetMesh.userData = {
       type: 'urban_street',
-      name: 'Calle Tte. Guillermo Arias #1950 (Empedrado Basáltico + Arena Rojiza • Street View Verificado)',
-      dimensions: 'Calzada 6,20m frente al lote de 9.89m',
-      status: 'Tramo Sin Salida (Cul-de-sac Residencial)',
-      desc: 'Calzada de piedra basáltica paraguaya con postes ANDE en acera Norte y muralla blanca/galpón de Molinos Harineros en acera Sur.'
+      name: 'Calle Tte. Guillermo Arias #1950 (Empedrado Basáltico + Asfalto • Street View Verificado)',
+      dimensions: 'Calzada 6,20m + Veredas Municipales (Tramo Cul-de-Sac)',
+      status: 'Tramo Sin Salida (Cul-de-sac Residencial Itá Pytã Punta)',
+      desc: 'Calzada de piedra basáltica paraguaya y carpeta asfáltica con cordón cuneta, postes ANDE con alumbrado público, acometida aérea directa al pilar ANDE (x=-3.85m) y muralla/galpón de Molinos Harineros en acera Sur.'
     };
     streetGroup.add(streetMesh);
 
-    const curbMat = new THREE.MeshStandardMaterial({ color: 0xb89f8d, roughness: 0.78 });
-    const curbNorth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.20), curbMat);
-    curbNorth.position.set(0, 0.01, -5.65);
+    // Vereda Norte (frente a los lotes residenciales, z = -5.65m a -4.00m) y Vereda Sur (frente a Molinos, z = -13.30m a -11.85m)
+    const sidewalkMat = mats.sidewalkTilePBR || mats.concreteFoundationPBR || new THREE.MeshStandardMaterial({
+      color: 0x9ca3af,
+      roughness: 0.85
+    });
+    const northSidewalkLeft = new THREE.Mesh(new THREE.BoxGeometry(18.0, 0.14, 1.62), sidewalkMat);
+    northSidewalkLeft.position.set(-14.0, 0.01, -4.82);
+    northSidewalkLeft.receiveShadow = true;
+    streetGroup.add(northSidewalkLeft);
+
+    const northSidewalkRight = new THREE.Mesh(new THREE.BoxGeometry(18.0, 0.14, 1.62), sidewalkMat);
+    northSidewalkRight.position.set(14.0, 0.01, -4.82);
+    northSidewalkRight.receiveShadow = true;
+    streetGroup.add(northSidewalkRight);
+
+    const southSidewalk = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.14, 1.45), sidewalkMat);
+    southSidewalk.position.set(0, 0.01, -12.58);
+    southSidewalk.receiveShadow = true;
+    streetGroup.add(southSidewalk);
+
+    const curbMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.72 });
+    const curbNorth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.18), curbMat);
+    curbNorth.position.set(0, 0.02, -5.65);
     streetGroup.add(curbNorth);
 
-    const curbSouth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.20), curbMat);
-    curbSouth.position.set(0, 0.01, -11.85);
+    const curbSouth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.18), curbMat);
+    curbSouth.position.set(0, 0.02, -11.85);
     streetGroup.add(curbSouth);
 
-    // Acera Sur (frente a la obra): Muralla blanca + Galpón metálico de Molinos Harineros del Paraguay
-    const molinosWallMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.88 });
-    const molinosWall = new THREE.Mesh(new THREE.BoxGeometry(36, 3.1, 0.28), molinosWallMat);
-    molinosWall.position.set(0, 1.5, -13.3);
+    // Cierre Cul-de-Sac al Oeste (+X = +22.5m) con baranda municipal sobre el barranco
+    const culDeSacCurb = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.85, 9.2), curbMat);
+    culDeSacCurb.position.set(22.8, 0.42, -8.75);
+    culDeSacCurb.userData = {
+      type: 'urban_context',
+      name: 'Cierre de Calle Sin Salida (Cul-de-Sac Tte. Guillermo Arias hacia el Barranco)',
+      dimensions: 'Fin de calzada vehicular a 18m del lote',
+      status: 'Seguridad Urbana Natural (Un solo sentido de ingreso/egreso)',
+      desc: 'El tramo final de la calle Tte. Guillermo Arias termina en un cul-de-sac sobre el barranco, reduciendo el tránsito vehicular exclusivamente a los vecinos de la cuadra.'
+    };
+    streetGroup.add(culDeSacCurb);
+
+    // Acera Sur (frente a la obra): Muralla blanca con pilastras + Galpón industrial de Molinos Harineros del Paraguay
+    const molinosWallMat = mats.plasterExteriorPBR || new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.86 });
+    const molinosPlinthMat = mats.stoneWallPBR || new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.90 });
+    const molinosWall = new THREE.Mesh(new THREE.BoxGeometry(44, 2.85, 0.28), molinosWallMat);
+    molinosWall.position.set(0, 1.65, -13.35);
     molinosWall.castShadow = true;
     molinosWall.receiveShadow = true;
     molinosWall.userData = {
@@ -523,44 +557,72 @@ export class ProjectScene {
       name: 'Muralla y Galpón Molinos Harineros del Paraguay (Acera Sur)',
       dimensions: 'Frente continuo sobre vereda Sur de Tte. Guillermo Arias',
       status: 'Colindancia Urbana Real (Google Street View)',
-      desc: 'Muralla blanca con zócalo de piedra y techo industrial metálico en la vereda opuesta (Sur) de la calle Tte. Guillermo Arias.'
+      desc: 'Muralla blanca con zócalo de piedra y nave industrial metálica en la vereda opuesta (Sur) de la calle Tte. Guillermo Arias.'
     };
     streetGroup.add(molinosWall);
 
-    const molinosUpperCladdingMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.55, metalness: 0.35 });
-    const molinosUpper = new THREE.Mesh(new THREE.BoxGeometry(36, 1.6, 4.5), molinosUpperCladdingMat);
-    molinosUpper.position.set(0, 3.8, -15.5);
+    const molinosPlinth = new THREE.Mesh(new THREE.BoxGeometry(44, 0.55, 0.32), molinosPlinthMat);
+    molinosPlinth.position.set(0, 0.28, -13.35);
+    streetGroup.add(molinosPlinth);
+
+    const molinosUpperCladdingMat = mats.isopanelRoofPBR || new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.48, metalness: 0.45 });
+    const molinosUpper = new THREE.Mesh(new THREE.BoxGeometry(44, 2.4, 7.5), molinosUpperCladdingMat);
+    molinosUpper.position.set(0, 4.2, -17.2);
+    molinosUpper.castShadow = true;
     streetGroup.add(molinosUpper);
 
-    // Postes de Hormigón ANDE en la Acera Norte
-    const poleMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, roughness: 0.7 });
+    // Postes de Hormigón ANDE en la Acera Norte + Luminarias LED + Bajada de Luz Directa a Pilastra ANDE (x = -3.85m, z = -4.08m)
+    const poleMat = mats.concretePBR || new THREE.MeshStandardMaterial({ color: 0xd1d5db, roughness: 0.7 });
     const wireMat = new THREE.LineBasicMaterial({ color: 0x1e293b });
-    [-6.2, 6.4].forEach((px) => {
-      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.16, 7.2, 8), poleMat);
-      pole.position.set(px, 3.5, -5.35);
+    const lampBulbMat = new THREE.MeshStandardMaterial({
+      color: 0xfef3c7,
+      emissive: 0xf59e0b,
+      emissiveIntensity: 0.85,
+      roughness: 0.2
+    });
+
+    [-5.8, 6.4, -17.5, 18.0].forEach((px) => {
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.16, 7.4, 10), poleMat);
+      pole.position.set(px, 3.6, -5.35);
       pole.castShadow = true;
       streetGroup.add(pole);
 
-      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.4, 6), poleMat);
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.5, 8), poleMat);
       arm.rotation.x = Math.PI / 3;
-      arm.position.set(px, 6.5, -5.9);
+      arm.position.set(px, 6.65, -5.95);
       streetGroup.add(arm);
+
+      const lampHead = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.10, 0.22), lampBulbMat);
+      lampHead.position.set(px, 6.95, -6.45);
+      streetGroup.add(lampHead);
     });
-    [6.8, 6.4, 5.9].forEach((wy) => {
+
+    [6.85, 6.45, 6.05].forEach((wy) => {
       const pts = [
-        new THREE.Vector3(-18, wy, -5.35),
-        new THREE.Vector3(-6.2, wy - 0.12, -5.35),
+        new THREE.Vector3(-22, wy, -5.35),
+        new THREE.Vector3(-5.8, wy - 0.10, -5.35),
         new THREE.Vector3(6.4, wy - 0.08, -5.35),
-        new THREE.Vector3(18, wy, -5.35)
+        new THREE.Vector3(22, wy, -5.35)
       ];
       const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
       streetGroup.add(new THREE.Line(lineGeo, wireMat));
     });
 
+    // Cable Preensamblado de Acometida ANDE desde el poste callejero (-5.8m) hasta el bastón de nuestra Pilastra ANDE al costado del portón (x = -3.85m, z = -4.08m)
+    const serviceDropPts = [
+      new THREE.Vector3(-5.80, 6.45, -5.35),
+      new THREE.Vector3(-4.75, 4.55, -4.65),
+      new THREE.Vector3(-3.85, 3.25, -4.08)
+    ];
+    const serviceDropLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(serviceDropPts),
+      new THREE.LineBasicMaterial({ color: 0x0f172a })
+    );
+    streetGroup.add(serviceDropLine);
+
     this.groups.urbanContext.add(streetGroup);
 
     // 2. VECINO DE 2 PLANTAS CON TREMENDA PARED MEDIANERA (Costado Derecho mirando desde la calle: x = -5.00m a -12.00m, z = -3.80m a +14.80m)
-    // Tal como se ve en las fotos reales `media_1792502169633.jpg` y `media_1792502324664.jpg`:
     const tallNeighborGroup = new THREE.Group();
     const tallNeighborMeta = {
       type: 'urban_context',
@@ -570,12 +632,11 @@ export class ProjectScene {
       desc: 'Construcción vecina de dos plantas de altura pegada a nuestra medianera derecha (mirando desde la calle), con una gran pared ciega revocada/impermeabilizada en negro y ladrillo hacia nuestro lote y techo de tejas coloniales.'
     };
 
-    const neighborBodyMat = new THREE.MeshStandardMaterial({ color: 0xe5e7eb, roughness: 0.85 });
+    const neighborBodyMat = mats.plasterExteriorPBR || new THREE.MeshStandardMaterial({ color: 0xe5e7eb, roughness: 0.85 });
     const neighborDarkPartyMat = new THREE.MeshStandardMaterial({ color: 0x27272a, roughness: 0.90 });
-    const neighborBrickUpperMat = this.archVizMats.brickWallPBR || new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.88 });
-    const neighborRoofTileMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.75 });
+    const neighborBrickUpperMat = mats.brickWallPBR || new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.88 });
+    const neighborRoofTileMat = mats.clayRoofTilePBR || new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.72 });
 
-    // Volumen principal de 2 plantas del vecino (-X)
     const neighborMainBox = new THREE.Mesh(new THREE.BoxGeometry(6.80, 6.20, 18.60), neighborBodyMat);
     neighborMainBox.position.set(-8.45, 3.10, 5.50);
     neighborMainBox.castShadow = true;
@@ -583,8 +644,6 @@ export class ProjectScene {
     neighborMainBox.userData = tallNeighborMeta;
     tallNeighborGroup.add(neighborMainBox);
 
-    // Tremenda pared medianera directa hacia nuestro lote (x = -5.02m):
-    // Tramo con pintura asfáltica negra/revoque y ladrillo visto de 2 pisos visto en la foto de obra
     const partyWallLower = new THREE.Mesh(new THREE.BoxGeometry(0.16, 4.20, 18.60), neighborDarkPartyMat);
     partyWallLower.position.set(-5.03, 2.10, 5.50);
     partyWallLower.castShadow = true;
@@ -598,17 +657,22 @@ export class ProjectScene {
     partyWallUpper.userData = tallNeighborMeta;
     tallNeighborGroup.add(partyWallUpper);
 
-    // Techo de tejas a dos aguas sobre la construcción de 2 plantas
-    const neighborRoof = new THREE.Mesh(new THREE.BoxGeometry(7.10, 0.25, 19.00), neighborRoofTileMat);
+    // Muralla frontal baja del vecino (-X) donde apoya el costado del portón y la bajada de luz
+    const neighborFrontFence = new THREE.Mesh(new THREE.BoxGeometry(6.80, 2.10, 0.20), neighborBodyMat);
+    neighborFrontFence.position.set(-8.45, 1.05, -4.00);
+    neighborFrontFence.userData = tallNeighborMeta;
+    tallNeighborGroup.add(neighborFrontFence);
+
+    const neighborRoof = new THREE.Mesh(new THREE.BoxGeometry(7.10, 0.26, 19.00), neighborRoofTileMat);
     neighborRoof.position.set(-8.45, 6.32, 5.50);
     neighborRoof.rotation.z = 0.08;
+    neighborRoof.castShadow = true;
     neighborRoof.userData = tallNeighborMeta;
     tallNeighborGroup.add(neighborRoof);
 
     this.groups.urbanContext.add(tallNeighborGroup);
 
     // 3. VECINO "CASA TOPO" EN SUBSUELO (Costado Izquierdo mirando desde la calle: x = +5.00m a +12.50m, z = -3.50m a +14.00m)
-    // Desde fuera a nivel de calle parece un piso/terraza de cemento, pero es la losa de techo de la vivienda construida abajo en el subsuelo:
     const casaTopoGroup = new THREE.Group();
     const casaTopoMeta = {
       type: 'urban_context',
@@ -618,24 +682,21 @@ export class ProjectScene {
       desc: 'Vivienda vecina construida debajo del nivel de calle (en el desnivel del barranco). Desde la calle y desde nuestra Planta Baja se observa su techo de losa de hormigón como un piso de cemento con baranda baja, dejando totalmente despejada la visual hacia el Río Paraguay.'
     };
 
-    const topoSlabMat = this.archVizMats.concreteFoundationPBR || new THREE.MeshStandardMaterial({ color: 0x9ca3af, roughness: 0.86 });
-    const topoSubWallMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
+    const topoSlabMat = mats.concreteFoundationPBR || new THREE.MeshStandardMaterial({ color: 0x9ca3af, roughness: 0.86 });
+    const topoSubWallMat = mats.plasterRoughPBR || new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
 
-    // Cuerpo inferior de la "Casa Topo" alojado en el subsuelo (Y = -2.34m a Y = 0.00m)
     const topoSubBody = new THREE.Mesh(new THREE.BoxGeometry(7.20, 2.34, 16.50), topoSubWallMat);
     topoSubBody.position.set(8.65, -1.17, 4.75);
     topoSubBody.receiveShadow = true;
     topoSubBody.userData = casaTopoMeta;
     casaTopoGroup.add(topoSubBody);
 
-    // Losa de techo a nivel de calle (parece un piso de cemento visto desde afuera, en Y = +0.04m)
     const topoRoofSlab = new THREE.Mesh(new THREE.BoxGeometry(7.40, 0.18, 16.80), topoSlabMat);
     topoRoofSlab.position.set(8.65, 0.02, 4.75);
     topoRoofSlab.receiveShadow = true;
     topoRoofSlab.userData = casaTopoMeta;
     casaTopoGroup.add(topoRoofSlab);
 
-    // Murete / parapeto perimetral bajo (35cm) sobre el borde de la losa de la Casa Topo
     const topoParapetFront = new THREE.Mesh(new THREE.BoxGeometry(7.40, 0.40, 0.15), topoSlabMat);
     topoParapetFront.position.set(8.65, 0.30, -3.55);
     topoParapetFront.userData = casaTopoMeta;
@@ -647,6 +708,69 @@ export class ProjectScene {
     casaTopoGroup.add(topoParapetRear);
 
     this.groups.urbanContext.add(casaTopoGroup);
+
+    // 4. ACANTILADO DE ARENISCA ROJIZA ITÁ PYTÃ PUNTA, MIRADOR Y CURVA DEL RÍO PARAGUAY AL NORTE/NOROESTE (z = 27m a 110m)
+    const cliffAndRiverGroup = new THREE.Group();
+    const sandstoneMat = mats.stoneWallPBR || new THREE.MeshStandardMaterial({
+      color: 0x9a3412,
+      roughness: 0.92,
+      metalness: 0.04
+    });
+
+    // Talud escalonado de arenisca rojiza hacia el Río Paraguay (z = 27m a 52m, bajando de Y = -2.4m a Y = -9.5m)
+    const cliffTerrace1 = new THREE.Mesh(new THREE.BoxGeometry(68, 3.6, 14), sandstoneMat);
+    cliffTerrace1.position.set(0, -4.2, 34.0);
+    cliffTerrace1.receiveShadow = true;
+    cliffTerrace1.userData = {
+      type: 'urban_context',
+      name: 'Barranca de Arenisca Roja de Itá Pytã Punta ("Punta de Piedra Roja")',
+      dimensions: 'Formación geológica natural en pendiente hacia el Río Paraguay',
+      status: 'Geología Característica del Barrio Itá Pytã Punta',
+      desc: 'Estrato de arenisca rojiza ferruginosa que da nombre al barrio Itá Pytã Punta y sostiene la barranca sobre la curva del Río Paraguay.'
+    };
+    cliffAndRiverGroup.add(cliffTerrace1);
+
+    const cliffTerrace2 = new THREE.Mesh(new THREE.BoxGeometry(78, 4.5, 16), sandstoneMat);
+    cliffTerrace2.position.set(0, -7.2, 48.0);
+    cliffTerrace2.receiveShadow = true;
+    cliffAndRiverGroup.add(cliffTerrace2);
+
+    // Mirador Itá Pytã Punta (hacia el Noroeste, x = +18m, z = 44m)
+    const miradorPlatform = new THREE.Mesh(new THREE.BoxGeometry(12.0, 0.45, 8.0), curbMat);
+    miradorPlatform.position.set(19.0, -2.15, 42.0);
+    miradorPlatform.userData = {
+      type: 'urban_context',
+      name: 'Mirador Público Itá Pytã Punta (Hito Urbano a ~85m NNW)',
+      dimensions: 'Balcón urbano histórico sobre el acantilado de piedra roja',
+      status: 'Patrimonio Urbano de Asunción',
+      desc: 'Desde nuestra Galería Panorámica (PB) y el Deck del 2do Piso (+2.88m) se domina la visual abierta hacia la curva del Río Paraguay y el Mirador Itá Pytã Punta.'
+    };
+    cliffAndRiverGroup.add(miradorPlatform);
+
+    // Espejo de Agua del Río Paraguay (z = 55m a 145m, Y = -8.8m) con textura animada en animate()
+    const riverMat = mats.poolWaterPBR
+      ? mats.poolWaterPBR.clone()
+      : new THREE.MeshStandardMaterial({
+          color: 0x0284c7,
+          roughness: 0.14,
+          metalness: 0.35
+        });
+    const riverGeo = new THREE.PlaneGeometry(180, 95);
+    riverGeo.rotateX(-Math.PI / 2);
+    const riverMesh = new THREE.Mesh(riverGeo, riverMat);
+    riverMesh.position.set(0, -8.65, 98.0);
+    riverMesh.receiveShadow = true;
+    riverMesh.userData = {
+      type: 'urban_context',
+      name: 'Río Paraguay — Curva Panorámica de Itá Pytã Punta',
+      dimensions: 'Cauce principal al Norte / Noroeste de la propiedad',
+      status: 'Vista Panorámica Abierta desde Galería y 2do Piso 🌊',
+      desc: 'Espejo de agua del Río Paraguay visible por encima de la Casa Topo y la barranca norte desde la Galería y la Terraza del 2do Piso.'
+    };
+    this.riverWaterMesh = riverMesh;
+    cliffAndRiverGroup.add(riverMesh);
+
+    this.groups.urbanContext.add(cliffAndRiverGroup);
   }
 
   buildGeotechnicalLayer() {
@@ -1330,75 +1454,61 @@ export class ProjectScene {
       type: 'techo',
       bankCategory: 'nuevo_rojo',
       name: 'Techo Tradicional de Tejas Cerámicas de Tobatí + Tejuelones y Tirantes de Lapacho/Yvyra Pytã',
-      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (150 m² • Pendiente hacia Canaletas Laterales/Frontales)`,
+      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (150 m² • Pendiente hacia Canaleta Frontal Eje G)`,
       area: 150,
       status: 'Opción B: Máximo Confort Acústico ante Lluvias Torrenciales ✨',
       costo: 'Gs. 71.850.000 (Tijerales y Tirantes Madera Dura + Tejuelones + Aislación + Tejas Prensadas)',
-      desc: 'Cubierta tradicional paraguaya con maderamen de Lapacho/Yvyra Pytã, tejuelones cerámicos vistos, membrana hidrófuga/térmica y tejas cerámicas coloniales de Tobatí.'
+      desc: 'Cubierta tradicional paraguaya con maderamen de Lapacho/Yvyra Pytã, tejuelones cerámicos vistos, membrana hidrófuga/térmica y tejas cerámicas coloniales de Tobatí con pendiente continua hacia la canaleta frontal.'
     };
 
-    const halfD = roofD / 2;
-    const ridgeRise = 1.32;
-    const pitchAngle = Math.atan2(ridgeRise, halfD);
-    const slopeLen = Math.hypot(halfD, ridgeRise) + 0.25;
+    const tejasSlopePitch = 0.032; // Pendiente limpia hacia adelante (de Y=+5.98m en z=13.34m a Y=+5.64m en z=2.92m)
+    const tejasMidY = roofBaseY + 0.16;
 
-    for (let tx = -4.60; tx <= 4.65; tx += 1.15) {
-      [-1, 1].forEach((dirZ) => {
-        const rafter = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 0.16, slopeLen),
-          mats.woodDoorPBR
-        );
-        rafter.position.set(tx, roofBaseY + ridgeRise / 2 - 0.02, roofCenterZ + (dirZ * halfD) / 2);
-        rafter.rotation.x = dirZ * pitchAngle;
-        rafter.userData = tejasMeta;
-        this.roofTejasGroup.add(rafter);
-      });
+    for (let tx = -4.60; tx <= 4.65; tx += 0.92) {
+      const rafter = new THREE.Mesh(
+        new THREE.BoxGeometry(0.08, 0.16, roofD),
+        mats.woodDoorPBR
+      );
+      rafter.position.set(tx, tejasMidY, roofCenterZ);
+      rafter.rotation.x = tejasSlopePitch;
+      rafter.userData = tejasMeta;
+      this.roofTejasGroup.add(rafter);
     }
 
-    [-1, 1].forEach((dirZ) => {
-      const tejuelonDeck = new THREE.Mesh(
-        new THREE.BoxGeometry(roofW, 0.06, slopeLen),
-        tejuelonUnderMat
-      );
-      tejuelonDeck.position.set(0, roofBaseY + ridgeRise / 2 + 0.06, roofCenterZ + (dirZ * halfD) / 2);
-      tejuelonDeck.rotation.x = dirZ * pitchAngle;
-      tejuelonDeck.userData = tejasMeta;
-      this.roofTejasGroup.add(tejuelonDeck);
-
-      const tileLayer = new THREE.Mesh(
-        new THREE.BoxGeometry(roofW + 0.12, 0.09, slopeLen + 0.08),
-        clayTerracottaMat
-      );
-      tileLayer.position.set(0, roofBaseY + ridgeRise / 2 + 0.14, roofCenterZ + (dirZ * halfD) / 2);
-      tileLayer.rotation.x = dirZ * pitchAngle;
-      tileLayer.castShadow = true;
-      tileLayer.receiveShadow = true;
-      tileLayer.userData = tejasMeta;
-      this.roofTejasGroup.add(tileLayer);
-
-      for (let rx = -roofW / 2 + 0.20; rx <= roofW / 2 - 0.20; rx += 0.28) {
-        const barrelTile = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.055, 0.065, slopeLen + 0.06, 8),
-          clayDarkRidgeMat
-        );
-        barrelTile.rotation.x = Math.PI / 2 + dirZ * pitchAngle;
-        barrelTile.position.set(rx, roofBaseY + ridgeRise / 2 + 0.19, roofCenterZ + (dirZ * halfD) / 2);
-        barrelTile.userData = tejasMeta;
-        this.roofTejasGroup.add(barrelTile);
-      }
-    });
-
-    const ridgeCap = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.12, 0.14, roofW + 0.20, 12),
-      clayDarkRidgeMat
+    const tejuelonDeck = new THREE.Mesh(
+      new THREE.BoxGeometry(roofW, 0.05, roofD),
+      tejuelonUnderMat
     );
-    ridgeCap.rotation.z = Math.PI / 2;
-    ridgeCap.position.set(0, roofBaseY + ridgeRise + 0.20, roofCenterZ);
-    ridgeCap.userData = tejasMeta;
-    this.roofTejasGroup.add(ridgeCap);
+    tejuelonDeck.position.set(0, tejasMidY + 0.10, roofCenterZ);
+    tejuelonDeck.rotation.x = tejasSlopePitch;
+    tejuelonDeck.userData = tejasMeta;
+    this.roofTejasGroup.add(tejuelonDeck);
 
-    this.roofIsopanelGroup.visible = this.currentRoofStyle !== 'tejas';
-    this.roofTejasGroup.visible = this.currentRoofStyle === 'tejas';
+    const tileLayer = new THREE.Mesh(
+      new THREE.BoxGeometry(roofW + 0.12, 0.08, roofD + 0.08),
+      clayTerracottaMat
+    );
+    tileLayer.position.set(0, tejasMidY + 0.16, roofCenterZ);
+    tileLayer.rotation.x = tejasSlopePitch;
+    tileLayer.castShadow = true;
+    tileLayer.receiveShadow = true;
+    tileLayer.userData = tejasMeta;
+    this.roofTejasGroup.add(tileLayer);
+
+    for (let rx = -roofW / 2 + 0.20; rx <= roofW / 2 - 0.20; rx += 0.28) {
+      const barrelTile = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.055, 0.065, roofD + 0.06, 8),
+        clayDarkRidgeMat
+      );
+      barrelTile.rotation.x = Math.PI / 2 + tejasSlopePitch;
+      barrelTile.position.set(rx, tejasMidY + 0.21, roofCenterZ);
+      barrelTile.userData = tejasMeta;
+      this.roofTejasGroup.add(barrelTile);
+    }
+
+    this.roofStyle = this.currentRoofStyle || 'isopanel';
+    this.roofIsopanelGroup.visible = this.roofStyle === 'isopanel';
+    this.roofTejasGroup.visible = this.roofStyle === 'tejas';
 
     this.groups.roof.add(this.roofIsopanelGroup);
     this.groups.roof.add(this.roofTejasGroup);
@@ -1485,19 +1595,38 @@ export class ProjectScene {
    * Conmuta en tiempo real entre:
    * - `'isopanel'`: Techo Termoacústico Sandwich Isopanel PIR 50mm + Cielorraso Acústico Durlock
    * - `'tejas'`: Techo Tradicional de Tejas Cerámicas de Tobatí con Tirantes de Lapacho y Tejuelones
+   * - `'off'`: Oculta el techo para inspeccionar el interior del 2do Piso
    */
   setRoofStyle(style = 'isopanel') {
-    const cleanStyle = String(style || 'isopanel').toLowerCase().includes('teja') ? 'tejas' : 'isopanel';
+    const raw = String(style || 'isopanel').toLowerCase().trim();
+    const cleanStyle = (raw === 'off' || raw === 'none' || raw === 'oculto')
+      ? 'off'
+      : raw.includes('teja')
+        ? 'tejas'
+        : 'isopanel';
+
     this.currentRoofStyle = cleanStyle;
-    if (this.roofIsopanelGroup && this.roofTejasGroup) {
+    this.roofStyle = cleanStyle;
+
+    if (!this.roofIsopanelGroup || !this.roofTejasGroup) {
+      this.buildStructure();
+    }
+
+    if (cleanStyle === 'off') {
+      this.layers.techo = false;
+      this.groups.roof.visible = false;
+      const chk = document.getElementById('layer-techo');
+      if (chk) chk.checked = false;
+    } else {
+      this.layers.techo = true;
       this.roofIsopanelGroup.visible = cleanStyle === 'isopanel';
       this.roofTejasGroup.visible = cleanStyle === 'tejas';
-      this.groups.roof.visible = true;
-      this.rebuildInteractables();
-    } else {
-      this.buildStructure();
-      this.rebuildInteractables();
+      this.groups.roof.visible = this.currentScenario !== 'hoy_en_obra';
+      const chk = document.getElementById('layer-techo');
+      if (chk) chk.checked = this.groups.roof.visible;
     }
+
+    this.rebuildInteractables();
     if (this.bankColorMode) {
       this.setBankColorMode(true);
     }
@@ -1845,7 +1974,12 @@ export class ProjectScene {
     this.currentScenario = scenarioKey;
     const config = ESCENARIOS_INVERSION[scenarioKey];
 
-    // Reconstruir geometría PBR para reflejar texturas y equipamiento de este escenario
+    // En escenarios de crédito inferiores a 440M, si no se forzó manualmente la piscina, se muestra únicamente lo previsto en ese monto
+    if (scenarioKey !== 'escenario440') {
+      this.forcePoolQuinchoVisible = false;
+    }
+
+    // Reconstruir geometría PBR para reflejar texturas y equipamiento exacto de este escenario
     this.buildStructure();
     this.buildMuroEstacionamiento();
     this.buildArchitecture();
@@ -1855,14 +1989,14 @@ export class ProjectScene {
     if (config && config.capas3D) {
       this.setLayerVisibility('muroEstacionamiento', config.capas3D.muroEstacionamiento ?? isHabitableScenario);
       this.setLayerVisibility('losaFase2', config.capas3D.losaFase2 ?? isHabitableScenario);
-      this.setLayerVisibility('techo', config.capas3D.techo ?? isHabitableScenario);
+      this.setLayerVisibility('techo', (config.capas3D.techo ?? isHabitableScenario) && this.roofStyle !== 'off');
       this.setLayerVisibility('architecture', isHabitableScenario);
       this.setLayerVisibility('subsuelo', isHabitableScenario);
 
       const mapChk = {
         'layer-muro-parking': config.capas3D.muroEstacionamiento ?? isHabitableScenario,
         'layer-losa2': config.capas3D.losaFase2 ?? isHabitableScenario,
-        'layer-techo': config.capas3D.techo ?? isHabitableScenario,
+        'layer-techo': (config.capas3D.techo ?? isHabitableScenario) && this.roofStyle !== 'off',
         'layer-arch': isHabitableScenario,
         'layer-subsuelo': isHabitableScenario
       };
@@ -1879,7 +2013,7 @@ export class ProjectScene {
     } else {
       this.setLayerVisibility('muroEstacionamiento', true);
       this.setLayerVisibility('losaFase2', true);
-      this.setLayerVisibility('techo', true);
+      this.setLayerVisibility('techo', this.roofStyle !== 'off');
       this.setLayerVisibility('architecture', true);
       this.setLayerVisibility('subsuelo', true);
     }
@@ -1897,7 +2031,7 @@ export class ProjectScene {
 
     this.renderer.clippingPlanes = [];
 
-    this.groups.roof.visible = this.layers.techo && this.currentScenario !== 'hoy_en_obra';
+    this.groups.roof.visible = this.layers.techo && this.roofStyle !== 'off' && this.currentScenario !== 'hoy_en_obra';
     this.groups.losaFase2.visible = this.layers.losaFase2 && this.currentScenario !== 'hoy_en_obra';
     this.groups.losaFase1.visible = this.layers.structure;
     this.groups.archMain.visible = this.layers.architecture && this.currentScenario !== 'hoy_en_obra';
@@ -1977,6 +2111,12 @@ export class ProjectScene {
         this.groups.losaFase2.visible = visible;
         break;
       case 'techo':
+        if (visible && this.roofStyle === 'off') {
+          this.roofStyle = 'isopanel';
+          this.currentRoofStyle = 'isopanel';
+          if (this.roofIsopanelGroup) this.roofIsopanelGroup.visible = true;
+          if (this.roofTejasGroup) this.roofTejasGroup.visible = false;
+        }
         this.groups.roof.visible = visible;
         break;
       case 'architecture':
@@ -2046,14 +2186,33 @@ export class ProjectScene {
    * Activa/Desactiva el Simulador Interactivo Pluvial / Tormenta y Desagües (`pluvialNetworkRefs`)
    */
   setPluvialSimulationState(state = {}) {
-    const active = Boolean(state && (state.active || state.rainStorm || state.flowActive));
-    if (active) {
+    const isOff = !state || state === 'off' || state === false || (
+      typeof state === 'object' &&
+      !state.active &&
+      !state.rainStorm &&
+      !state.rainstorm &&
+      !state.tormenta &&
+      !state.water_supply &&
+      !state.presion_agua &&
+      !state.sewage_flow &&
+      !state.descarga_cloacal &&
+      !state.flowActive
+    );
+
+    if (!isOff) {
+      this._pluvialAutoOpenedLayer = !this.layers.pluvial;
       this.setLayerVisibility('pluvial', true);
       const chk = document.getElementById('layer-pluvial');
       if (chk) chk.checked = true;
+    } else if (this._pluvialAutoOpenedLayer) {
+      this._pluvialAutoOpenedLayer = false;
+      this.setLayerVisibility('pluvial', false);
+      const chk = document.getElementById('layer-pluvial');
+      if (chk) chk.checked = false;
     }
+
     if (this.pluvialNetworkRefs && typeof this.pluvialNetworkRefs.setSimulationState === 'function') {
-      return this.pluvialNetworkRefs.setSimulationState(state);
+      return this.pluvialNetworkRefs.setSimulationState(isOff ? 'off' : state);
     }
     return state;
   }
@@ -2062,14 +2221,28 @@ export class ProjectScene {
    * Activa/Desactiva el Simulador Interactivo Eléctrico ANDE / Circuitos (`conduitsOutletsRefs`)
    */
   setElectricalSimulationState(state = {}) {
-    const active = Boolean(state && (state.active || state.energized || state.circuitFilter));
-    if (active) {
+    const isOff = !state || state === 'off' || state === false || (
+      typeof state === 'object' &&
+      !state.active &&
+      !state.energized &&
+      !state.circuitFilter &&
+      !state.fallaActiva
+    );
+
+    if (!isOff) {
+      this._elecAutoOpenedLayer = !this.layers.ductos;
       this.setLayerVisibility('ductosYEnchufes', true);
       const chk = document.getElementById('layer-ductos');
       if (chk) chk.checked = true;
+    } else if (this._elecAutoOpenedLayer) {
+      this._elecAutoOpenedLayer = false;
+      this.setLayerVisibility('ductosYEnchufes', false);
+      const chk = document.getElementById('layer-ductos');
+      if (chk) chk.checked = false;
     }
+
     if (this.conduitsOutletsRefs && typeof this.conduitsOutletsRefs.setSimulationState === 'function') {
-      return this.conduitsOutletsRefs.setSimulationState(state);
+      return this.conduitsOutletsRefs.setSimulationState(isOff ? 'off' : state);
     }
     return state;
   }

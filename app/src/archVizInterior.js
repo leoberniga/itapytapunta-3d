@@ -1814,13 +1814,86 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
   frontLintel.userData = murallaData;
   facadeGroup.add(frontLintel);
 
-  // Caja de Medidor ANDE + Portero Eléctrico sobre el pilar central de mampostería
-  const meterBox = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.12), mats.blackMetalMat);
-  meterBox.position.set(0.65, 1.55, -4.15);
-  facadeGroup.add(meterBox);
+  // 1B-Bis. BAJADA DE LUZ ANDE (Pilastra + Caño de Acometida + Caja Medidor Trifásico) Y CAJA DEL MEDIDOR DE AGUA ESSAP A NIVEL DE CALLE
+  //         Exactamente al costado del Portón Balancín, en la muralla más pequeña que da al vecino (-X: x = -3.85m, z = -4.05m)
+  const serviceMetersGroup = new THREE.Group();
 
+  // Caño vertical galvanizado de bajada de luz ANDE + pipeta curva superior
+  const andeMast = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.028, 0.028, 2.65, 12),
+    mats.stainlessMat
+  );
+  andeMast.position.set(-3.85, 2.55, -4.06);
+  serviceMetersGroup.add(andeMast);
+
+  const andeGooseneck = new THREE.Mesh(
+    new THREE.TorusGeometry(0.09, 0.024, 10, 16, Math.PI),
+    mats.stainlessMat
+  );
+  andeGooseneck.position.set(-3.85, 3.87, -4.15);
+  andeGooseneck.rotation.y = Math.PI / 2;
+  serviceMetersGroup.add(andeGooseneck);
+
+  // Caja de Medidor Trifásico ANDE y Limitadora TM en la muralla pequeña junto al portón (x = -3.85m, y = 1.50m, z = -4.14m)
+  const meterBox = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.44, 0.14), mats.blackMetalMat);
+  meterBox.position.set(-3.85, 1.50, -4.14);
+  serviceMetersGroup.add(meterBox);
+
+  const meterWindow = new THREE.Mesh(
+    new THREE.BoxGeometry(0.18, 0.14, 0.02),
+    new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7, emissiveIntensity: 0.45, roughness: 0.2 })
+  );
+  meterWindow.position.set(-3.85, 1.58, -4.215);
+  serviceMetersGroup.add(meterWindow);
+
+  tagGroupUserData(serviceMetersGroup, {
+    type: 'acometida_ande',
+    bankCategory: 'existente_negro',
+    name: 'Bajada de Luz ANDE (Caño de Acometida + Caja de Medidor al Costado del Portón en Muralla Pequeña • x = -3.85m)',
+    dimensions: 'Pilastra/Muro Derecho (x = -3.85m, z = -4.06m) • Caño Galvanizado + Caja Medidor Trifásico ANDE a H=1.50m',
+    costo: 'Acometida en Muralla Pequeña junto al Portón Balancín y Medianera Vecino (-X)',
+    status: 'Ubicación Real Exacta al Costado del Portón ⚡',
+    desc: 'Bajada de luz ANDE con caño de acometida aérea y gabinete de medidor embutido en el paño más pequeño de la muralla frontal (x = -3.85m, entre el portón vehicular balancín y el vecino -X).'
+  });
+  facadeGroup.add(serviceMetersGroup);
+
+  // CAJA DEL MEDIDOR DE AGUA CORRIENTE ESSAP A NIVEL DE CALLE / VEREDA (Abajo de la bajada de luz, x = -3.85m, y = 0.06m, z = -4.22m)
+  const essapMeterGroup = new THREE.Group();
+  const essapBox = new THREE.Mesh(
+    new THREE.BoxGeometry(0.42, 0.14, 0.30),
+    mats.concreteFoundationPBR
+  );
+  essapBox.position.set(-3.85, 0.04, -4.24);
+  essapMeterGroup.add(essapBox);
+
+  const essapLid = new THREE.Mesh(
+    new THREE.BoxGeometry(0.36, 0.03, 0.24),
+    new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.4, metalness: 0.5 })
+  );
+  essapLid.position.set(-3.85, 0.12, -4.24);
+  essapMeterGroup.add(essapLid);
+
+  const essapPipeRiser = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.018, 0.018, 0.26, 10),
+    new THREE.MeshStandardMaterial({ color: 0x0ea5e9, roughness: 0.3 })
+  );
+  essapPipeRiser.position.set(-3.85, 0.15, -4.12);
+  essapMeterGroup.add(essapPipeRiser);
+
+  tagGroupUserData(essapMeterGroup, {
+    type: 'medidor_agua_essap',
+    bankCategory: 'existente_negro',
+    name: 'Caja del Medidor de Agua ESSAP a Nivel de Calle (Al Pie de la Muralla Pequeña junto al Portón • x = -3.85m)',
+    dimensions: 'Caja de Vereda 0.40m × 0.30m (x = -3.85m, y = 0.05m, z = -4.24m) • Conexión Directa con Buena Presión (Sin Tanque)',
+    costo: 'Gs. 0 en Tanque/Cisterna (Agua Corriente Directa ESSAP con Buena Presión en la Zona)',
+    status: 'Conexión Directa ESSAP a Nivel de Calle (Ahorra Tanque y Presurizadora) 🚰💧',
+    desc: 'Caja de medidor de agua corriente ESSAP ubicada a nivel de calle/vereda exactamente debajo de la bajada de luz en la muralla más pequeña junto al portón (x = -3.85m). Al contar la zona con buena presión de red, alimenta directamente el núcleo húmedo Eje F–G sin necesidad de tanque ni bomba presurizadora.'
+  });
+  facadeGroup.add(essapMeterGroup);
+
+  // Portero Visor junto al Portoncito Peatonal (x = +1.05m)
   const intercom = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.16, 0.05), mats.stainlessMat);
-  intercom.position.set(0.98, 1.42, -4.15);
+  intercom.position.set(1.05, 1.42, -4.15);
   facadeGroup.add(intercom);
 
   const gateMat = mats.graphiteSheetGatePBR || mats.blackMetalMat;
@@ -1937,95 +2010,92 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     facadeGroup.add(motorKitGroup);
   }
 
-  // 1E. PÉRGOLA DE MADERA DURA CON ENREDADERA VERDE TUPIDA (SANTA RITA / JAZMÍN) + CHAPA TRANSLÚCIDA DE POLICARBONATO ANTIGRANIZO
-  //     Cubre la cochera y el acceso peatonal (x = -4.50m..+2.50m, z = -3.80m..+2.80m, Y = +2.55m..+2.75m)
-  const pergolaGroup = new THREE.Group();
-  const pMinX = -4.50;
-  const pMaxX = 2.50;
-  const pMinZ = -3.80;
-  const pMaxZ = 2.80;
-  const pW = pMaxX - pMinX; // 7.00m
-  const pD = pMaxZ - pMinZ; // 6.60m
-  const pCenterX = (pMinX + pMaxX) / 2; // -1.00m
-  const pCenterZ = (pMinZ + pMaxZ) / 2; // -0.50m
-  const pY = 2.55;
+  // 1E. PÉRGOLA DE MADERA DURA CON ENREDADERA VERDE TUPIDA + CHAPA TRANSLÚCIDA ANTIGRANIZO
+  //     Visible a partir del Presupuesto BNF 350M y 440M (en BNF 300M se prioriza el cierre habitable esencial)
+  if (isUpgradedGate) {
+    const pergolaGroup = new THREE.Group();
+    const pMinX = -4.50;
+    const pMaxX = 2.50;
+    const pMinZ = -3.80;
+    const pMaxZ = 2.80;
+    const pW = pMaxX - pMinX; // 7.00m
+    const pD = pMaxZ - pMinZ; // 6.60m
+    const pCenterX = (pMinX + pMaxX) / 2; // -1.00m
+    const pCenterZ = (pMinZ + pMaxZ) / 2; // -0.50m
+    const pY = 2.55;
 
-  // Columnas de soporte de madera dura / acero en los bordes del estacionamiento
-  [
-    [pMinX + 0.12, -3.65],
-    [pMaxX - 0.12, -3.65],
-    [pMinX + 0.12, 1.35],
-    [pMaxX - 0.12, 1.35]
-  ].forEach(([cx, cz]) => {
-    const col = new THREE.Mesh(new THREE.BoxGeometry(0.14, pY, 0.14), mats.woodDoorPBR);
-    col.position.set(cx, pY / 2, cz);
-    col.castShadow = true;
-    pergolaGroup.add(col);
-  });
+    [
+      [pMinX + 0.12, -3.65],
+      [pMaxX - 0.12, -3.65],
+      [pMinX + 0.12, 1.35],
+      [pMaxX - 0.12, 1.35]
+    ].forEach(([cx, cz]) => {
+      const col = new THREE.Mesh(new THREE.BoxGeometry(0.14, pY, 0.14), mats.woodDoorPBR);
+      col.position.set(cx, pY / 2, cz);
+      col.castShadow = true;
+      pergolaGroup.add(col);
+    });
 
-  // Vigas maestras longitudinales de madera dura (Lapacho/Ybyrapytã)
-  [pMinX + 0.12, pCenterX, pMaxX - 0.12].forEach((bx) => {
-    const mainBeam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, pD), mats.woodDoorPBR);
-    mainBeam.position.set(bx, pY + 0.04, pCenterZ);
-    mainBeam.castShadow = true;
-    pergolaGroup.add(mainBeam);
-  });
+    [pMinX + 0.12, pCenterX, pMaxX - 0.12].forEach((bx) => {
+      const mainBeam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, pD), mats.woodDoorPBR);
+      mainBeam.position.set(bx, pY + 0.04, pCenterZ);
+      mainBeam.castShadow = true;
+      pergolaGroup.add(mainBeam);
+    });
 
-  // 14 Cabios transversales de madera dura
-  const numRafters = 14;
-  for (let i = 0; i < numRafters; i++) {
-    const rz = pMinZ + 0.20 + i * ((pD - 0.40) / (numRafters - 1));
-    const rafter = new THREE.Mesh(new THREE.BoxGeometry(pW + 0.20, 0.11, 0.065), mats.woodDeckPBR);
-    rafter.position.set(pCenterX, pY + 0.15, rz);
-    rafter.castShadow = true;
-    pergolaGroup.add(rafter);
-  }
+    const numRafters = 14;
+    for (let i = 0; i < numRafters; i++) {
+      const rz = pMinZ + 0.20 + i * ((pD - 0.40) / (numRafters - 1));
+      const rafter = new THREE.Mesh(new THREE.BoxGeometry(pW + 0.20, 0.11, 0.065), mats.woodDeckPBR);
+      rafter.position.set(pCenterX, pY + 0.15, rz);
+      rafter.castShadow = true;
+      pergolaGroup.add(rafter);
+    }
 
-  // Chapa Translúcida de Policarbonato Alveolar Antigranizo sobre los cabios (Y = +2.68m)
-  const polyRoof = new THREE.Mesh(
-    new THREE.BoxGeometry(pW + 0.24, 0.025, pD + 0.15),
-    mats.polycarbonateRoofMat || mats.glassBlindexMat
-  );
-  polyRoof.position.set(pCenterX, pY + 0.22, pCenterZ);
-  pergolaGroup.add(polyRoof);
+    const polyRoof = new THREE.Mesh(
+      new THREE.BoxGeometry(pW + 0.24, 0.025, pD + 0.15),
+      mats.polycarbonateRoofMat || mats.glassBlindexMat
+    );
+    polyRoof.position.set(pCenterX, pY + 0.22, pCenterZ);
+    pergolaGroup.add(polyRoof);
 
-  // Enredadera Verde Tupida (Santa Rita / Jazmín del Paraguay) entrelazada sobre la pérgola
-  const vineMat = mats.lushFoliagePBR || mats.grassPBR;
-  const flowerMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.55 });
-  for (let vx = 0; vx < 7; vx++) {
-    for (let vz = 0; vz < 8; vz++) {
-      if ((vx + vz) % 2 === 0 || vx === 0 || vz < 2) {
-        const fx = pMinX + 0.55 + vx * 0.95;
-        const fz = pMinZ + 0.45 + vz * 0.80;
-        const foliageCluster = new THREE.Mesh(
-          new THREE.SphereGeometry(0.46 + ((vx * 3 + vz) % 3) * 0.08, 10, 8),
-          vineMat
-        );
-        foliageCluster.scale.set(1.25, 0.32, 1.25);
-        foliageCluster.position.set(fx, pY + 0.27, fz);
-        foliageCluster.castShadow = true;
-        pergolaGroup.add(foliageCluster);
+    const vineMat = mats.lushFoliagePBR || mats.grassPBR;
+    const flowerMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.55 });
+    for (let vx = 0; vx < 7; vx++) {
+      for (let vz = 0; vz < 8; vz++) {
+        if ((vx + vz) % 2 === 0 || vx === 0 || vz < 2) {
+          const fx = pMinX + 0.55 + vx * 0.95;
+          const fz = pMinZ + 0.45 + vz * 0.80;
+          const foliageCluster = new THREE.Mesh(
+            new THREE.SphereGeometry(0.46 + ((vx * 3 + vz) % 3) * 0.08, 10, 8),
+            vineMat
+          );
+          foliageCluster.scale.set(1.25, 0.32, 1.25);
+          foliageCluster.position.set(fx, pY + 0.27, fz);
+          foliageCluster.castShadow = true;
+          pergolaGroup.add(foliageCluster);
 
-        if ((vx + vz) % 3 === 0) {
-          const bloom = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), flowerMat);
-          bloom.scale.set(1.2, 0.5, 1.2);
-          bloom.position.set(fx + 0.12, pY + 0.34, fz - 0.08);
-          pergolaGroup.add(bloom);
+          if ((vx + vz) % 3 === 0) {
+            const bloom = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), flowerMat);
+            bloom.scale.set(1.2, 0.5, 1.2);
+            bloom.position.set(fx + 0.12, pY + 0.34, fz - 0.08);
+            pergolaGroup.add(bloom);
+          }
         }
       }
     }
-  }
 
-  tagGroupUserData(pergolaGroup, {
-    type: 'pergola_cochera',
-    bankCategory: 'existente_negro',
-    name: 'Pérgola de Madera Dura con Enredadera Tupida (Santa Rita / Jazmín) y Policarbonato Antigranizo',
-    dimensions: '7.00m × 6.60m (x = -4.50..+2.50m, z = -3.80..+2.80m, Y = +2.55..+2.75m)',
-    costo: 'Incluida en Cubierta de Cochera y Acceso Frontal',
-    status: 'Sombra Fresca Natural + Protección Pluvial de Policarbonato 🌿🚗',
-    desc: 'Pérgola de madera dura que cubre el estacionamiento vehicular y el acceso peatonal, combinando enredadera natural con chapa translúcida de policarbonato antigranizo.'
-  });
-  facadeGroup.add(pergolaGroup);
+    tagGroupUserData(pergolaGroup, {
+      type: 'pergola_cochera',
+      bankCategory: 'nuevo_rojo',
+      name: 'Pérgola de Madera Dura con Enredadera (Santa Rita) y Chapa Translúcida Antigranizo (Incluida desde BNF 350M)',
+      dimensions: '7.00m × 6.60m (x = -4.50..+2.50m, z = -3.80..+2.80m, Y = +2.55..+2.75m)',
+      costo: 'Gs. 7.850.000 (Prevista en Crédito BNF 350M y 440M)',
+      status: 'Sombra Natural + Protección Antigranizo para el Vehículo 🌿🚗',
+      desc: 'Marco de madera dura con enredadera y cubierta translúcida antigranizo sobre el estacionamiento, prevista a partir del escenario de Crédito BNF 350M.'
+    });
+    facadeGroup.add(pergolaGroup);
+  }
 
   // 1F. Solado de Cochera y Caminero Peatonal (z = -4.00m a +1.50m) + SUV Chery Tiggo 2 Pro 2026 alineada con el portón de 2.30m (x = -2.35m)
   if (scenarioKey !== 'hoy_en_obra') {
@@ -2898,21 +2968,23 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
     patioGroup.add(sewageSystemGroup);
   }
 
-  // 3C. PISCINA DE H°A° (4.65m × 2.45m según Plano Oficial Pág. 2) + SOLÁRIUM CON REPOSERAS
+  // 3C. PISCINA EN EL FONDO CON SU ORIENTACIÓN ORIGINAL TRANSVERSAL (según Plano Oficial `instalacion_sanitaria_agua.png`)
+  //     En los documentos originales (`PISCINA 6.40×1.90` / `5.80×2.40m`), la piscina está al fondo del patio (`z = 23.15m..25.55m`),
+  //     orientada TRANSVERSALMENTE paralela a la muralla del fondo (`z = 26.80m`), desde `x = -1.25m` hasta `x = +4.55m`.
   const showPoolAndQuincho = forceShowPoolQuincho || ['escenario440', 'edifica460', 'edifica573'].includes(scenarioKey);
   const poolQuinchoSubGroup = new THREE.Group();
   poolQuinchoSubGroup.name = 'pool_and_quincho_sub';
   poolQuinchoSubGroup.visible = showPoolAndQuincho;
 
-  const poolX = 0.50;
-  const poolZ = 18.80;
-  const poolL = 4.65;
-  const poolW = 2.45;
+  const poolX = 1.65;   // Centrada entre x = -1.25m y x = +4.55m (libre del Pozo Ciego que está en x = -3.25m, z = 20.20m)
+  const poolZ = 24.35;  // En el fondo del patio (z = 23.15m a 25.55m, a 1.25m de retiro de la muralla trasera z = 26.80m)
+  const poolW = 5.80;   // Largo transversal en eje X (paralelo al muro de fondo, según plano sanitario original)
+  const poolL = 2.40;   // Ancho en eje Z
 
   const poolGroup = new THREE.Group();
 
   const copingDeck = new THREE.Mesh(
-    new THREE.BoxGeometry(poolW + 0.90, 0.08, poolL + 0.90),
+    new THREE.BoxGeometry(poolW + 0.80, 0.08, poolL + 0.80),
     mats.ceramicSanitaryMat
   );
   copingDeck.position.set(poolX, patioY + 0.06, poolZ);
@@ -2925,12 +2997,13 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
   poolBasin.position.set(poolX, patioY + 0.08, poolZ);
   poolGroup.add(poolBasin);
 
+  // Escalones romanos de acceso en el extremo izquierdo (-X) de la piscina transversal
   for (let rs = 0; rs < 3; rs++) {
     const rStep = new THREE.Mesh(
-      new THREE.BoxGeometry(poolW - 0.16, 0.05, 0.34),
+      new THREE.BoxGeometry(0.34, 0.05, poolL - 0.16),
       mats.poolTilePBR
     );
-    rStep.position.set(poolX, patioY + 0.10 - rs * 0.02, poolZ - poolL / 2 + 0.22 + rs * 0.32);
+    rStep.position.set(poolX - poolW / 2 + 0.22 + rs * 0.32, patioY + 0.10 - rs * 0.02, poolZ);
     poolGroup.add(rStep);
   }
 
@@ -2941,51 +3014,53 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
   waterSurface.position.set(poolX, patioY + 0.115, poolZ);
   poolGroup.add(waterSurface);
 
-  [-0.95, 0.95].forEach((lz) => {
+  // Focos subacuáticos LED apuntando hacia el fondo (mirando desde la casa no encandilan)
+  [-1.60, 0.0, 1.60].forEach((lx) => {
     const poolLight = new THREE.Mesh(
       new THREE.CylinderGeometry(0.08, 0.08, 0.03, 16),
       mats.ledPoolCyanMat
     );
-    poolLight.rotation.z = Math.PI / 2;
-    poolLight.position.set(poolX + poolW / 2 - 0.05, patioY + 0.09, poolZ + lz);
+    poolLight.rotation.x = Math.PI / 2;
+    poolLight.position.set(poolX + lx, patioY + 0.09, poolZ - poolL / 2 + 0.05);
     poolGroup.add(poolLight);
   });
 
+  // Solárium / Deck de madera delante de la piscina (z = 21.15m..22.85m)
   const solariumDeck = new THREE.Mesh(
-    new THREE.BoxGeometry(poolW + 0.90, 0.06, 1.85),
+    new THREE.BoxGeometry(poolW + 0.80, 0.06, 1.75),
     mats.woodDeckPBR
   );
-  solariumDeck.position.set(poolX, patioY + 0.05, poolZ + poolL / 2 + 1.40);
+  solariumDeck.position.set(poolX, patioY + 0.05, poolZ - poolL / 2 - 1.32);
   poolGroup.add(solariumDeck);
 
-  [-0.65, 0.65].forEach((lx) => {
-    const loungerBase = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.22, 1.65), mats.woodDeckPBR);
-    loungerBase.position.set(poolX + lx, patioY + 0.18, poolZ + poolL / 2 + 1.40);
+  [-1.35, 0.0, 1.35].forEach((lx) => {
+    const loungerBase = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.22, 1.55), mats.woodDeckPBR);
+    loungerBase.position.set(poolX + lx, patioY + 0.18, poolZ - poolL / 2 - 1.32);
     poolGroup.add(loungerBase);
 
-    const loungerPad = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.07, 1.58), mats.bedSheetMat);
-    loungerPad.position.set(poolX + lx, patioY + 0.32, poolZ + poolL / 2 + 1.40);
+    const loungerPad = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.07, 1.48), mats.bedSheetMat);
+    loungerPad.position.set(poolX + lx, patioY + 0.32, poolZ - poolL / 2 - 1.32);
     poolGroup.add(loungerPad);
   });
 
   tagGroupUserData(poolGroup, {
     type: 'piscina_planificada',
     bankCategory: 'nuevo_rojo',
-    name: 'Piscina de H°A° (4.65m × 2.45m según Plano Oficial Pág. 2) Nivelada en el Patio (Y = -2.34m)',
-    dimensions: '4.65m × 2.45m (11.40 m² Espejo de Agua • z = 16.48m..21.12m, Libre de Muralla de Fondo z = 26.80m)',
-    costo: 'Gs. 34.500.000 (Vaso H°A° + Venecita + Filtro + Borde Atérmico + Luces LED)',
-    status: 'Piscina Nivelada y Libre de Colisión con Muralla y Pozo Ciego ✨',
-    desc: 'Piscina proyectada en z = 16.48m..21.12m a cota del patio nivelado (Y = -2.34m), con más de 5 metros libres hasta la muralla trasera del lote (z = 26.80m).'
+    name: 'Piscina en el Fondo con Orientación Transversal Original (5.80m × 2.40m según Plano `instalacion_sanitaria_agua.png`)',
+    dimensions: '5.80m × 2.40m (x = -1.25m..+4.55m, z = 23.15m..25.55m • Paralela a la Muralla de Fondo z = 26.80m)',
+    costo: 'Gs. 34.500.000 (Incluida en Presupuesto Crédito BNF 440M)',
+    status: 'Orientación Transversal en el Fondo según Documento Original ✨🏊',
+    desc: 'Piscina ubicada al fondo del terreno con orientación transversal (largo en X paralelo a la muralla trasera, z = 23.15m..25.55m), respetando el diseño original de `instalacion_sanitaria_agua.png` y dejando libre el sector delantero del patio.'
   });
   poolQuinchoSubGroup.add(poolGroup);
 
-  // 3D. QUINCHO SEMICUBIERTO EN EL JARDÍN (`x = +2.85m`, `z = 17.60m`)
+  // 3D. PÉRGOLA / ESTAR DE JARDÍN EN EL LATERAL DERECHO DEL PATIO (`x = +2.85m`, `z = 17.20m`)
   const quinchoGroup = new THREE.Group();
   const qX = 2.85;
-  const qZ = 17.60;
-  const qW = 3.20;
-  const qD = 4.40;
-  const qH = 2.65;
+  const qZ = 17.20;
+  const qW = 3.10;
+  const qD = 3.80;
+  const qH = 2.60;
 
   const qFloor = new THREE.Mesh(new THREE.BoxGeometry(qW, 0.08, qD), mats.woodDeckPBR);
   qFloor.position.set(qX, patioY + 0.05, qZ);
@@ -3001,32 +3076,24 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
   pergolaRing.position.set(qX, patioY + qH + 0.08, qZ);
   quinchoGroup.add(pergolaRing);
 
-  for (let b = -4; b <= 4; b++) {
+  for (let b = -3; b <= 3; b++) {
     const beam = new THREE.Mesh(new THREE.BoxGeometry(qW + 0.25, 0.12, 0.08), mats.woodDeckPBR);
-    beam.position.set(qX, patioY + qH + 0.20, qZ + b * 0.46);
+    beam.position.set(qX, patioY + qH + 0.20, qZ + b * 0.48);
     quinchoGroup.add(beam);
   }
 
-  const qBarBase = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.92, 2.60), mats.stoneWallPBR);
-  qBarBase.position.set(qX + qW / 2 - 0.40, patioY + 0.52, qZ);
-  quinchoGroup.add(qBarBase);
-
-  const qBarTop = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.045, 2.70), mats.granitePBR);
-  qBarTop.position.set(qX + qW / 2 - 0.40, patioY + 1.00, qZ);
-  quinchoGroup.add(qBarTop);
-
-  const qTable = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.76, 2.10), mats.woodDeckPBR);
-  qTable.position.set(qX - 0.40, patioY + 0.44, qZ);
+  const qTable = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.76, 2.00), mats.woodDeckPBR);
+  qTable.position.set(qX, patioY + 0.44, qZ);
   quinchoGroup.add(qTable);
 
   tagGroupUserData(quinchoGroup, {
     type: 'quincho_jardin',
     bankCategory: 'nuevo_rojo',
-    name: 'Quincho Semicubierto Pergolado en Jardín junto a la Piscina (Nivelado Y = -2.34m)',
-    dimensions: '3.20m × 4.40m (14.08 m²) • Pérgola en Lapacho + Barra de Granito y Mesa',
-    costo: 'Gs. 16.800.000 (Estructura Pergolada + Deck + Mesada Granito con Bacha)',
-    status: 'Planificación de Quincho y Piscina ✨',
-    desc: 'Quincho exterior semicubierto en el jardín posterior nivelado a ras del Subsuelo (Y = -2.34m).'
+    name: 'Pérgola / Solárium Cubierto de Jardín (Incluido en Crédito BNF 440M)',
+    dimensions: '3.10m × 3.80m • Pérgola en Lapacho entre el Subsuelo y la Piscina del Fondo',
+    costo: 'Gs. 16.800.000 (Previsto en Crédito BNF 440M)',
+    status: 'Incluido en Crédito BNF 440M ✨',
+    desc: 'Pérgola exterior en el jardín nivelado (Y = -2.34m) que vincula la Parrillita del Subsuelo con la Piscina transversal del fondo.'
   });
   poolQuinchoSubGroup.add(quinchoGroup);
 
@@ -4046,15 +4113,15 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   addWallSegment(
     plantaAltaArchGroup,
     -4.87, 3.00, 4.87, 3.00,
-    2.38, hPA, 0.20, extWallMat,
+    2.38, Math.max(0.22, hPA - 2.38), 0.20, extWallMat,
     'Dintel Superior Fachada Frontal Planta Alta (Eje G • z = 3.00m)',
     'Viga dintel superior sobre la faja de ventiluces altos de los núcleos húmedos y vestidor en Eje G.'
   );
   // Mochetas entre ventiluces altos en Eje G (z = 3.00m)
-  addWallSegment(plantaAltaArchGroup, -4.87, 3.00, -3.55, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Oeste Eje G', 'Mocheta sobre el cajón de Escalera 2 en Eje G.');
-  addWallSegment(plantaAltaArchGroup, -1.95, 3.00, -1.35, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Oeste Eje G', 'Mocheta entre SSHH 2 y Baño en Suite.');
-  addWallSegment(plantaAltaArchGroup, 0.25, 3.00, 3.25, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Este Eje G', 'Muro ciego entre Baño en Suite y Vestidor.');
-  addWallSegment(plantaAltaArchGroup, 4.35, 3.00, 4.87, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Este Eje G', 'Mocheta lateral Este en fachada frontal PA.');
+  addWallSegment(plantaAltaArchGroup, -4.87, 3.00, -3.55, 3.00, 1.90, 0.48, 0.20, extWallMat, 'Mocheta Frontal Oeste Eje G', 'Mocheta sobre el cajón de Escalera 2 en Eje G.');
+  addWallSegment(plantaAltaArchGroup, -1.95, 3.00, -1.35, 3.00, 1.90, 0.48, 0.20, extWallMat, 'Mocheta Frontal Central-Oeste Eje G', 'Mocheta entre SSHH 2 y Baño en Suite.');
+  addWallSegment(plantaAltaArchGroup, 0.25, 3.00, 3.25, 3.00, 1.90, 0.48, 0.20, extWallMat, 'Mocheta Frontal Central-Este Eje G', 'Muro ciego entre Baño en Suite y Vestidor.');
+  addWallSegment(plantaAltaArchGroup, 4.35, 3.00, 4.87, 3.00, 1.90, 0.48, 0.20, extWallMat, 'Mocheta Frontal Este Eje G', 'Mocheta lateral Este en fachada frontal PA.');
 
   // 3 Ventiluces Altos Horizontales (Clerestory Windows) sobre Eje G (z = 3.00m) para SSHH 2, Baño en Suite y Vestidor
   plantaAltaArchGroup.add(

@@ -34,6 +34,13 @@ import {
   WEAK_SIGNALS_DATA,
   ARQUITECTURA_PARAGUAY_BEST_PRACTICES
 } from './mepSystems.js';
+import {
+  buildMetricCalculationBreakdown,
+  filterMetricRows,
+  cycleRoofStyle,
+  getRoofStyleButtonLabel,
+  isAnyMepSimulationActive
+} from './domain/budgetAndSceneService.js';
 import { FloorplanEditor } from './floorplanEditor.js';
 import { AuthManager } from './auth.js';
 import { exportProjectWorkbookXLSX } from './xlsxExporter.js';
@@ -381,10 +388,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const m2Construido = 178.42;
     const costoM2 = Math.round(total / m2Construido);
 
-    // Cuota mensual Caja Mutual (9,9% anual a 15 años con seguros incluidos) según meta de crédito
-    const factorCajaMutual = PREVISION_CREDITO_NUEVO?.factorCuotaConSegurosPorMillonGs || 11765.9090909;
+    // Cuota mensual BNF (9,9% anual a 15 años con seguros incluidos) según meta de crédito
+    const factorBnf = PREVISION_CREDITO_NUEVO?.factorCuotaConSegurosPorMillonGs || 11765.9090909;
     const millonesTarget = target / 1000000;
-    const cuotaCajaMutualGs = Math.round(millonesTarget * factorCajaMutual);
+    const cuotaBnfGs = Math.round(millonesTarget * factorBnf);
 
     // Update Left Sidebar KPI Card
     if (isHoy && !customTargetOverrideGs) {
@@ -412,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else {
       if (kpiTotalAmount) kpiTotalAmount.textContent = formatGs(total);
-      if (kpiCostoM2) kpiCostoM2.textContent = `Cuota: Gs. ${formatGs(cuotaCajaMutualGs)}/mes (Gs. ${formatGs(costoM2)}/m²)`;
+      if (kpiCostoM2) kpiCostoM2.textContent = `Cuota BNF: Gs. ${formatGs(cuotaBnfGs)}/mes (Gs. ${formatGs(costoM2)}/m²)`;
       if (kpiSemaforo) {
         if (diff >= 0) {
           kpiSemaforo.className = 'kpi-status-badge ok';
@@ -431,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update Modal Summary Banner
     if (simTotalDisplay) simTotalDisplay.textContent = `Gs. ${formatGs(total)}`;
     if (simTargetDisplay) simTargetDisplay.textContent = `Gs. ${formatGs(target)}`;
-    if (simM2Display) simM2Display.textContent = `Gs. ${formatGs(cuotaCajaMutualGs)} / mes`;
+    if (simM2Display) simM2Display.textContent = `Gs. ${formatGs(cuotaBnfGs)} / mes`;
 
     if (simSaldoDisplay) {
       if (diff >= 0) {
@@ -489,9 +496,13 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.toggle('included', active);
       btn.textContent = active ? '✓ Incluida en Cómputo' : '+ Incluir Partida';
     });
+
+    if (typeof renderComputoDrawer === 'function') {
+      renderComputoDrawer();
+    }
   };
 
-  // Render "El Crédito Nuevo" (Caja Mutual), Bank Requirements, Color Legend & 5 Work Adjustments of Leo
+  // Render "El Crédito Nuevo" (BNF - Banco Nacional de Fomento), Bank Requirements, Color Legend & 5 Work Adjustments of Leo
   const renderBankCreditAndRequirements = () => {
     const host = document.getElementById('bank-credit-and-requirements-host');
     if (!host || !PREVISION_CREDITO_NUEVO || !REQUISITOS_BANCO_Y_CUOTAS) return;
@@ -2050,18 +2061,238 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Top Header Button: Toggle 3D Roof Style (Isopanel vs Tejas de Tobatí)
+  // Top Header Button: Cycle 3D Roof Style (Isopanel -> Tejas Tobatí -> Oculto -> Isopanel)
   const btnToggleRoofStyle = document.getElementById('btn-toggle-roof-style');
   if (btnToggleRoofStyle) {
     btnToggleRoofStyle.addEventListener('click', () => {
-      const nextStyle = scene.roofStyle === 'tejas' ? 'isopanel' : 'tejas';
+      const nextStyle = cycleRoofStyle(scene.roofStyle);
       scene.setRoofStyle(nextStyle);
       btnToggleRoofStyle.setAttribute('data-roof-style', nextStyle);
-      btnToggleRoofStyle.innerHTML = nextStyle === 'tejas'
-        ? '<span>🏺 Techo 3D: Tejas Tobatí</span>'
-        : '<span>🏠 Techo 3D: Isopanel vs Tejas</span>';
+      btnToggleRoofStyle.innerHTML = `<span>${getRoofStyleButtonLabel(nextStyle)}</span>`;
+      const chkTecho = document.getElementById('layer-techo');
+      if (chkTecho) {
+        chkTecho.checked = nextStyle !== 'oculto';
+      }
     });
   }
+
+  // =========================================================================
+  // 5B. EXPANDABLE METRIC CALCULATION DRAWER (#computo-drawer — UX 2026)
+  // =========================================================================
+  const computoDrawer = document.getElementById('computo-drawer');
+  const btnToggleComputoDrawer = document.getElementById('btn-toggle-computo-drawer');
+  const btnKpiOpenDrawer = document.getElementById('btn-kpi-open-drawer');
+  const btnCloseComputoDrawer = document.getElementById('btn-close-computo-drawer');
+  const btnDrawerOpenFullModal = document.getElementById('btn-drawer-open-full-modal');
+  const btnDrawerExportXlsx = document.getElementById('btn-drawer-export-xlsx');
+  const computoDrawerSearch = document.getElementById('computo-drawer-search');
+  const computoDrawerTbody = document.getElementById('computo-drawer-tbody');
+
+  let activeDrawerFilter = 'PREVISTOS';
+  let activeDrawerSearch = '';
+
+  const setComputoDrawerOpen = (open) => {
+    if (!computoDrawer) return;
+    const isOpen = Boolean(open);
+    computoDrawer.classList.toggle('open', isOpen);
+    computoDrawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    if (btnToggleComputoDrawer) {
+      btnToggleComputoDrawer.setAttribute('data-drawer-open', isOpen ? 'on' : 'off');
+      btnToggleComputoDrawer.classList.toggle('active', isOpen);
+    }
+    if (isOpen) {
+      renderComputoDrawer();
+    }
+  };
+
+  function renderComputoDrawer() {
+    if (!computoDrawerTbody) return;
+
+    const currentPartidas = editablePartidas.map((p) => ({
+      ...p,
+      cantidad: p.cantidadActual,
+      precioUnitarioGs: p.precioUnitarioActualGs,
+      subtotalGs: p.subtotalActualGs
+    }));
+
+    const customScenariosMap = {
+      ...ESCENARIOS_INVERSION,
+      [activeScenarioKey]: {
+        ...(ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300 || {}),
+        itemsIncluidos:
+          activeScenarioKey === 'hoy_en_obra'
+            ? []
+            : Array.from(selectedItemIds)
+      }
+    };
+
+    const breakdown = buildMetricCalculationBreakdown({
+      scenarioKey: activeScenarioKey,
+      partidas: currentPartidas,
+      scenariosMap: customScenariosMap,
+      builtRubros: REQUISITOS_BANCO_Y_CUOTAS?.construccionesExistentesNegro?.rubros || [],
+      ownItemsGs0: INVENTARIO_MUEBLES_ACTUALES_LEO?.items || []
+    });
+
+    const cdScenarioLabel = document.getElementById('cd-scenario-label');
+    const cdTotalCredito = document.getElementById('cd-total-credito');
+    const cdTargetCredito = document.getElementById('cd-target-credito');
+    const cdDiffCredito = document.getElementById('cd-diff-credito');
+    const cdTotalYaObra = document.getElementById('cd-total-ya-obra');
+    const cdCountPrevistos = document.getElementById('cd-count-previstos');
+    const cdCuotaBnf = document.getElementById('cd-cuota-bnf');
+
+    const scenarioShortName =
+      activeScenarioKey === 'hoy_en_obra'
+        ? 'Hoy en Obra (Solo H°A° Ejecutado)'
+        : activeScenarioKey === 'escenario300'
+          ? 'Crédito BNF 300M (Habitable)'
+          : activeScenarioKey === 'escenario350'
+            ? 'Crédito BNF 350M (Confort)'
+            : 'Crédito BNF 440M (Integral)';
+
+    if (cdScenarioLabel) cdScenarioLabel.textContent = scenarioShortName;
+    if (cdTotalCredito) cdTotalCredito.textContent = `Gs. ${formatGs(breakdown.summary.totalCreditSelectedGs)}`;
+    if (cdTargetCredito) cdTargetCredito.textContent = `Gs. ${formatGs(breakdown.summary.targetCreditGs)}`;
+    if (cdDiffCredito) {
+      const diff = breakdown.summary.differenceGs;
+      cdDiffCredito.textContent = `${diff >= 0 ? '+' : '-'} Gs. ${formatGs(Math.abs(diff))}`;
+      cdDiffCredito.style.color = diff >= 0 ? '#34d399' : '#f87171';
+    }
+    if (cdTotalYaObra) cdTotalYaObra.textContent = `Gs. ${formatGs(breakdown.summary.totalAlreadyBuiltGs)}`;
+    if (cdCountPrevistos) {
+      cdCountPrevistos.textContent = `${breakdown.summary.includedItemsCount} previstos / ${breakdown.summary.alreadyBuiltCount} ya en obra`;
+    }
+
+    const factorBnf = PREVISION_CREDITO_NUEVO?.factorCuotaConSegurosPorMillonGs || 11765.9090909;
+    const cuotaBnf = Math.round((breakdown.summary.targetCreditGs / 1000000) * factorBnf);
+    if (cdCuotaBnf) {
+      cdCuotaBnf.textContent =
+        activeScenarioKey === 'hoy_en_obra' ? 'Gs. 0 / mes (Ya pagado)' : `Gs. ${formatGs(cuotaBnf)} / mes`;
+    }
+
+    // Si está en "hoy_en_obra" y el filtro es PREVISTOS, mostramos YA_ESTA automáticamente o todos para que no quede vacío
+    const effectiveFilter =
+      activeScenarioKey === 'hoy_en_obra' && activeDrawerFilter === 'PREVISTOS'
+        ? 'YA_ESTA'
+        : activeDrawerFilter;
+
+    const rows = filterMetricRows(breakdown.allRows, {
+      statusFilter: effectiveFilter,
+      searchQuery: activeDrawerSearch
+    });
+
+    if (rows.length === 0) {
+      computoDrawerTbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center; padding:24px; color:#94a3b8;">
+            No se encontraron ítems para este filtro (${effectiveFilter}). Probá cambiar a «Todos» o «Ya Está».
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    computoDrawerTbody.innerHTML = rows
+      .map((r) => {
+        let statusBadge = '';
+        let rowClass = '';
+        const isToggleable = !r.id.startsWith('EXIST-') && !r.id.startsWith('PROPIO-');
+
+        if (r.alreadyBuilt) {
+          rowClass = 'row-ya-esta';
+          statusBadge = `<span class="drawer-status-pill pill-ya-esta" title="${r.statusLabel}">✅ YA ESTÁ</span>`;
+        } else if (r.includedInScenario) {
+          rowClass = 'row-previsto';
+          statusBadge = `<span class="drawer-status-pill pill-previsto" title="${r.statusLabel}">🏦 PREVISTO BNF</span>`;
+        } else {
+          rowClass = 'row-no-incluido';
+          statusBadge = `<span class="drawer-status-pill pill-no-incluido" title="${r.statusLabel}">⏸️ NO INCLUIDO</span>`;
+        }
+
+        const toggleCheckboxHtml = isToggleable
+          ? `<input type="checkbox" class="drawer-item-chk" data-drawer-item-id="${r.id}" ${r.includedInScenario ? 'checked' : ''} title="Activar/Desactivar este rubro en el presupuesto" style="cursor:pointer; accent-color:#10b981; margin-right:5px;" />`
+          : '';
+
+        return `
+          <tr class="${rowClass}">
+            <td>
+              <div style="display:flex; align-items:center; gap:4px;">
+                ${toggleCheckboxHtml}
+                ${statusBadge}
+              </div>
+            </td>
+            <td>
+              <div class="drawer-item-title">${r.item}</div>
+              <div class="drawer-item-sub">${r.categoria} • <span style="color:#64748b;">${r.code}</span></div>
+            </td>
+            <td class="num-col">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })}</td>
+            <td><span style="font-family:var(--font-mono); font-size:10.5px; color:#94a3b8;">${r.unidad}</span></td>
+            <td class="num-col">${r.precioUnitarioGs > 0 ? `Gs. ${formatGs(r.precioUnitarioGs)}` : '<span style="color:#34d399;">Gs. 0 (Propio)</span>'}</td>
+            <td class="num-col" style="font-weight:700; color:${r.alreadyBuilt ? '#34d399' : r.includedInScenario ? '#fde68a' : '#64748b'};">
+              ${r.subtotalGs > 0 ? `Gs. ${formatGs(r.subtotalGs)}` : 'Gs. 0'}
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    computoDrawerTbody.querySelectorAll('.drawer-item-chk').forEach((chk) => {
+      chk.addEventListener('change', (e) => {
+        const itemId = e.target.getAttribute('data-drawer-item-id');
+        if (!itemId) return;
+        if (e.target.checked) {
+          selectedItemIds.add(itemId);
+        } else {
+          selectedItemIds.delete(itemId);
+        }
+        recalculateBudget();
+      });
+    });
+  }
+
+  if (btnToggleComputoDrawer) {
+    btnToggleComputoDrawer.addEventListener('click', () => {
+      const isOpen = computoDrawer && computoDrawer.classList.contains('open');
+      setComputoDrawerOpen(!isOpen);
+    });
+  }
+  if (btnKpiOpenDrawer) {
+    btnKpiOpenDrawer.addEventListener('click', () => setComputoDrawerOpen(true));
+  }
+  if (btnCloseComputoDrawer) {
+    btnCloseComputoDrawer.addEventListener('click', () => setComputoDrawerOpen(false));
+  }
+  if (btnDrawerOpenFullModal) {
+    btnDrawerOpenFullModal.addEventListener('click', () => {
+      setComputoDrawerOpen(false);
+      const modalSim = document.getElementById('modal-simulador');
+      if (modalSim) modalSim.classList.add('open');
+    });
+  }
+  if (btnDrawerExportXlsx) {
+    btnDrawerExportXlsx.addEventListener('click', () => {
+      if (btnExportXlsx) btnExportXlsx.click();
+    });
+  }
+
+  document.querySelectorAll('.computo-drawer-filter-btn[data-drawer-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.computo-drawer-filter-btn[data-drawer-filter]').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeDrawerFilter = btn.getAttribute('data-drawer-filter') || 'ALL';
+      renderComputoDrawer();
+    });
+  });
+
+  if (computoDrawerSearch) {
+    computoDrawerSearch.addEventListener('input', (e) => {
+      activeDrawerSearch = e.target.value || '';
+      renderComputoDrawer();
+    });
+  }
+
+  renderComputoDrawer();
 
   // Top Header Button: Toggle Normative Bank Color Mode (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo) in 3D & 2D
   const btnToggleBankColors = document.getElementById('btn-toggle-bank-colors');
@@ -3262,12 +3493,18 @@ document.addEventListener('DOMContentLoaded', () => {
     gtaCurrentLevelNum = Number(lvlNum) || 2;
     if (gtaCurrentLevelNum === 1) {
       gtaPlayer.y = -0.70; // Subsuelo +97.66m
+      if (scene.playerPos) scene.playerPos.set(1.2, -2.34, 8.2);
+      scene.playerLevelIndex = 1;
       scene.setFloorCutaway('cut_pb');
     } else if (gtaCurrentLevelNum === 3) {
       gtaPlayer.y = 4.52; // Planta Alta +102.88m
+      if (scene.playerPos) scene.playerPos.set(0.8, 2.88, 6.4);
+      scene.playerLevelIndex = 3;
       scene.setFloorCutaway('cut_roof');
     } else {
       gtaPlayer.y = 1.65; // Nivel Calle +100.00m
+      if (scene.playerPos) scene.playerPos.set(0.0, 0.0, 6.5);
+      scene.playerLevelIndex = 2;
       scene.setFloorCutaway('cut_pa');
     }
     document.querySelectorAll('.gta-lvl-btn[data-gta-level]').forEach((b) => {
@@ -3419,6 +3656,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (gtaCamModeBadge) {
     gtaCamModeBadge.addEventListener('click', () => {
       gtaThirdPerson = !gtaThirdPerson;
+      scene.gameCameraPerson = gtaThirdPerson ? '3rd' : '1st';
+      if (scene.playerAvatar) {
+        scene.playerAvatar.visible = gtaModeActive && gtaThirdPerson;
+      }
       gtaCamModeBadge.textContent = gtaThirdPerson ? '3ra Persona' : '1ra Persona';
     });
   }
@@ -3429,10 +3670,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gtaKeys[k] = true;
     if (e.key === 'Escape') {
       setGtaGameMode(false);
-    } else if (k === 'e') {
-      executeGtaContextualInteraction();
     } else if (k === 'c') {
-      gtaThirdPerson = !gtaThirdPerson;
+      gtaThirdPerson = scene.gameCameraPerson === '3rd';
       if (gtaCamModeBadge) gtaCamModeBadge.textContent = gtaThirdPerson ? '3ra Persona' : '1ra Persona';
     } else if (k === '1') {
       setGtaLevel(1);
@@ -3447,42 +3686,22 @@ document.addEventListener('DOMContentLoaded', () => {
     gtaKeys[e.key.toLowerCase()] = false;
   });
 
-  // Loop de actualización del Modo Juego GTA VI
+  // Loop de sincronización del HUD Modo Juego GTA VI con la física de colisiones de scene.js
   const updateGtaWalkLoop = () => {
     if (gtaModeActive) {
-      const speed = gtaKeys['shift'] ? 0.14 : 0.075;
-      let moveForward = 0;
-      let moveRight = 0;
-      if (gtaKeys['w'] || gtaKeys['arrowup']) moveForward += 1;
-      if (gtaKeys['s'] || gtaKeys['arrowdown']) moveForward -= 1;
-      if (gtaKeys['a'] || gtaKeys['arrowleft']) moveRight -= 1;
-      if (gtaKeys['d'] || gtaKeys['arrowright']) moveRight += 1;
-
-      if (moveForward !== 0 || moveRight !== 0) {
-        // Obtener orientación actual de la cámara
-        const dirX = scene.controls.target.x - scene.camera.position.x;
-        const dirZ = scene.controls.target.z - scene.camera.position.z;
-        const angle = Math.atan2(dirX, dirZ);
-        gtaPlayer.yaw = angle;
-
-        const stepX = (Math.sin(angle) * moveForward - Math.cos(angle) * moveRight) * speed;
-        const stepZ = (Math.cos(angle) * moveForward + Math.sin(angle) * moveRight) * speed;
-
-        gtaPlayer.x = Math.max(-4.6, Math.min(4.6, gtaPlayer.x + stepX));
-        gtaPlayer.z = Math.max(-3.8, Math.min(14.2, gtaPlayer.z + stepZ));
-
-        const camDist = gtaThirdPerson ? 2.6 : 0.05;
-        const camHeightOffset = gtaThirdPerson ? 0.85 : 0.0;
-        scene.camera.position.set(
-          gtaPlayer.x - Math.sin(angle) * camDist,
-          gtaPlayer.y + camHeightOffset,
-          gtaPlayer.z - Math.cos(angle) * camDist
-        );
-        scene.controls.target.set(
-          gtaPlayer.x + Math.sin(angle) * 2.5,
-          gtaPlayer.y,
-          gtaPlayer.z + Math.cos(angle) * 2.5
-        );
+      if (scene.playerPos) {
+        gtaPlayer.x = scene.playerPos.x;
+        gtaPlayer.y = scene.playerPos.y + 1.65;
+        gtaPlayer.z = scene.playerPos.z;
+      }
+      if (typeof scene.playerYaw === 'number') {
+        gtaPlayer.yaw = scene.playerYaw;
+      }
+      if (typeof scene.playerLevelIndex === 'number' && scene.playerLevelIndex !== gtaCurrentLevelNum) {
+        gtaCurrentLevelNum = scene.playerLevelIndex;
+        document.querySelectorAll('.gta-lvl-btn[data-gta-level]').forEach((b) => {
+          b.classList.toggle('active', Number(b.getAttribute('data-gta-level')) === gtaCurrentLevelNum);
+        });
       }
 
       const zone = getActiveGtaZone();
@@ -3526,6 +3745,19 @@ document.addEventListener('DOMContentLoaded', () => {
     inundacion_subsuelo: false
   };
 
+  const btnStopAllSims = document.getElementById('btn-stop-all-sims');
+  const btnHeaderStopSims = document.getElementById('btn-header-stop-sims');
+
+  const syncStopSimulationsButtonState = () => {
+    const anyActive = isAnyMepSimulationActive(pluvialSimState, electricalSimState);
+    if (btnHeaderStopSims) {
+      btnHeaderStopSims.style.display = anyActive ? 'inline-flex' : 'none';
+    }
+    if (btnStopAllSims) {
+      btnStopAllSims.style.opacity = anyActive ? '1' : '0.65';
+    }
+  };
+
   const updatePluvialSimulationUI = () => {
     const flowEl = document.getElementById('mep-metric-flow');
     const pressEl = document.getElementById('mep-metric-pressure');
@@ -3537,21 +3769,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pluvialSimState.presion_agua) flowLs += 0.85;
     if (pluvialSimState.descarga_cloacal) flowLs += 1.60;
 
-    const pressureBar = pluvialSimState.presion_agua ? 3.4 : 2.8;
+    const pressureBar = pluvialSimState.presion_agua ? 3.2 : 2.8;
     const sewerStatus = pluvialSimState.descarga_cloacal ? 'Descargando 1.6 L/s' : 'Libre OK';
+    const anyActive = pluvialSimState.tormenta || pluvialSimState.presion_agua || pluvialSimState.descarga_cloacal;
 
     if (flowEl) flowEl.textContent = `${flowLs.toFixed(2)} L/s`;
     if (pressEl) pressEl.textContent = `${pressureBar.toFixed(1)} bar`;
     if (sewerEl) sewerEl.textContent = sewerStatus;
     if (badgeEl) {
-      const anyActive = pluvialSimState.tormenta || pluvialSimState.presion_agua || pluvialSimState.descarga_cloacal;
       badgeEl.textContent = anyActive ? 'Flujo Activo 3D' : 'En Espera';
       badgeEl.style.borderColor = anyActive ? '#38bdf8' : '';
       badgeEl.style.color = anyActive ? '#7dd3fc' : '';
     }
 
-    // Asegurar visibilidad de las capas pluvial y ductos en el modelo 3D
-    if (pluvialSimState.tormenta || pluvialSimState.presion_agua || pluvialSimState.descarga_cloacal) {
+    // Asegurar visibilidad de las capas pluvial y ductos en el modelo 3D cuando hay flujo activo
+    if (anyActive) {
       scene.setLayerVisibility('pluvial', true);
       scene.setLayerVisibility('ductos', true);
       const chkPluv = document.getElementById('layer-pluvial');
@@ -3561,8 +3793,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (typeof scene.setPluvialSimulationState === 'function') {
-      scene.setPluvialSimulationState({ ...pluvialSimState, caudalLs: flowLs, presionBar: pressureBar });
+      if (!anyActive) {
+        scene.setPluvialSimulationState('off');
+      } else {
+        scene.setPluvialSimulationState({ ...pluvialSimState, caudalLs: flowLs, presionBar: pressureBar });
+      }
     }
+    syncStopSimulationsButtonState();
   };
 
   const updateElectricalSimulationUI = () => {
@@ -3623,7 +3860,47 @@ document.addEventListener('DOMContentLoaded', () => {
         amps: { R: ampR, S: ampS, T: ampT }
       });
     }
+    syncStopSimulationsButtonState();
   };
+
+  const stopAllMepSimulations = () => {
+    pluvialSimState.tormenta = false;
+    pluvialSimState.presion_agua = false;
+    pluvialSimState.descarga_cloacal = false;
+
+    electricalSimState.fase_r = true;
+    electricalSimState.fase_s = true;
+    electricalSimState.fase_t = true;
+    electricalSimState.fuga_30ma = false;
+    electricalSimState.sobretemp_65c = false;
+    electricalSimState.inundacion_subsuelo = false;
+
+    document.querySelectorAll('[data-pluv-sim]').forEach((btn) => {
+      btn.classList.remove('active');
+    });
+    document.querySelectorAll('[data-elec-sim]').forEach((btn) => {
+      const key = btn.getAttribute('data-elec-sim');
+      const isPhase = key === 'fase_r' || key === 'fase_s' || key === 'fase_t';
+      btn.classList.toggle('active', isPhase);
+    });
+
+    updatePluvialSimulationUI();
+    updateElectricalSimulationUI();
+    if (typeof scene.setPluvialSimulationState === 'function') {
+      scene.setPluvialSimulationState('off');
+    }
+    if (typeof scene.setElectricalSimulationState === 'function') {
+      scene.setElectricalSimulationState('off');
+    }
+    syncStopSimulationsButtonState();
+  };
+
+  if (btnStopAllSims) {
+    btnStopAllSims.addEventListener('click', stopAllMepSimulations);
+  }
+  if (btnHeaderStopSims) {
+    btnHeaderStopSims.addEventListener('click', stopAllMepSimulations);
+  }
 
   document.querySelectorAll('[data-pluv-sim]').forEach((btn) => {
     btn.addEventListener('click', () => {

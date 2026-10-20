@@ -1215,22 +1215,22 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "instalaciones_sanitarias_desagues",
     categoria: "Instalaciones",
-    item: "7.2 Instalación Hidráulica (PPR termofusión Frío/Caliente) y Desagüe Cloacal en Núcleo Húmedo Eje F-G",
+    item: "7.2 Instalación Hidráulica Directa ESSAP (Sin Tanque, Buena Presión de Red) + PPR Frío/Caliente y Desagüe Cloacal en Núcleo Húmedo Eje F-G",
     unidad: "gl",
     cantidad: 1,
-    formulaDim: "Pleno Vertical Eje F-G (z = 3.00m..5.00m): PPR Fría/Caliente + PVC Cloacal 100/50/40mm + Cámaras",
-    precioUnitarioGs: 14800000,
+    formulaDim: "Acometida Directa Medidor ESSAP al costado del portón (x=-3.85m) + Pleno Vertical Eje F-G (PPR Fría/Caliente + PVC Cloacal 100/50/40mm — Sin Tanque)",
+    precioUnitarioGs: 12600000,
     puJivesaGs: 19200000,
-    puLgrbGs: 14800000,
+    puLgrbGs: 12600000,
     puEdificaRefGs: 21612500,
-    puIaGs: 14800000,
+    puIaGs: 12600000,
     fuenteRecomendada: "LGRB",
-    subtotalGs: 14800000,
+    subtotalGs: 12600000,
     esencial: true,
     origenTipo: "PLANILLA_JIVESA_LGRB",
-    origenLabel: "📄 Planilla JIVESA / LG-RB (Esencial Habitabilidad)",
-    camposEstimadosIA: ["Incluye agua fría y caliente PPR para el Núcleo Húmedo vertical Eje F-G (PB: Baño Social y Cocina; PA: Vestidor, Baño en Suite y Baño 2; Subsuelo: Lavadero)"],
-    desc: "Cañerías PVC cloacal 100/50/40mm y montantes PPR agua fría/caliente concentradas en el Núcleo Húmedo vertical del frente (Eje F–G, z = 3.00m..5.00m), optimizando recorridos entre PB, PA y Subsuelo."
+    origenLabel: "📄 Planilla JIVESA / LG-RB (Directo de Red ESSAP — Sin Tanque)",
+    camposEstimadosIA: ["Ahorra Gs. 2.200.000 al eliminar tanque/bomba: aprovecha la buena presión de agua corriente ESSAP desde la caja de medidor a nivel de calle al costado del portón (x=-3.85m, z=-4.24m) hacia el Núcleo Húmedo vertical Eje F-G"],
+    desc: "Alimentación directa desde el medidor ESSAP a nivel de calle al costado del portón (sin tanque de agua, aprovechando la buena presión de red de la zona), montantes PPR termofusión agua fría/caliente y bajadas PVC cloacal 100/50/40mm concentradas en el Núcleo Húmedo vertical del frente (Eje F–G, z = 3.00m..5.00m)."
   },
   {
     id: "pisos_porcelanato",
@@ -1985,10 +1985,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "piscina_patio_oficial",
     categoria: "Galería y Exterior",
-    item: "15.6 Piscina de H°A° 4.65m × 2.45m con Borde Atérmico, Filtrado y LED (Lámina 2 PDF Instalaciones — Etapa Opcional)",
+    item: "15.6 Piscina de H°A° en el Fondo con Orientación Transversal (5.80m × 2.40m, z=23.15..25.55m — Lámina 2 PDF Instalaciones — Etapa Opcional)",
     unidad: "m2",
     cantidad: 11.40,
-    formulaDim: "4.65m largo × 2.45m ancho (Prof. 1.40m / ~16.000 L) = 11.40 m²",
+    formulaDim: "Orientación transversal en el fondo del patio (z = 23.15m..25.55m, x = -1.25m..+4.55m, Prof. 1.40m / ~16.000 L) = 11.40 m²",
     precioUnitarioGs: 2850000,
     puJivesaGs: 0,
     puLgrbGs: 2950000,
@@ -1999,8 +1999,8 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: false,
     origenTipo: "IA_AUDITORIA",
     origenLabel: "📄 Plano Oficial Instalaciones Pág. 2 + 🤖 Costeo IA",
-    camposEstimadosIA: ["Dimensiones exactas (4.65m × 2.45m = 11.40 m²) medidas en Lámina 2 del PDF IE-IS-IH-ISD-IAA; P.U. de vaso H°A° + venecitas + filtro + bomba estimado por IA (Opcional en planificación)"],
-    desc: "Piscina proyectada en el patio norte (cota +96.20m) según Lámina 2 del PDF de Instalaciones: vaso de hormigón armado impermeable, solárium con borde atérmico, casilla de bomba/filtro y reflectores LED subacuáticos."
+    camposEstimadosIA: ["Orientación transversal original en el fondo del terreno (z = 23.15m..25.55m, x = -1.25m..+4.55m) medida en Lámina 2 del PDF IE-IS-IH-ISD-IAA; P.U. de vaso H°A° + venecitas + filtro + bomba estimado por IA (Opcional en planificación)"],
+    desc: "Piscina proyectada en el fondo del patio norte con orientación transversal (paralela al muro de fondo, z = 23.15m..25.55m, x = -1.25m..+4.55m) según el diseño original de la Lámina 2 del PDF de Instalaciones: vaso de hormigón armado impermeable, solárium con borde atérmico, casilla de filtro y reflectores LED subacuáticos."
   },
   {
     id: "cielorraso_acustico_2dopiso",
@@ -2520,7 +2520,7 @@ export const CONTEXTO_URBANO_SATELITAL = {
   ]
 };
 
-// Escenarios Progresivos por Escalón de Crédito Bancario — Plan Maestro Ruth y Leo (2 Personas)
+// Escenarios Progresivos por Escalón de Crédito BNF (Banco Nacional de Fomento) — Plan Maestro Ruth y Leo
 export const ITEMS_CREDITO_300M = [
   "contencion_cochera",
   "viga_fundacion_muro",
@@ -2541,10 +2541,7 @@ export const ITEMS_CREDITO_300M = [
   "bano_suite_sanitarios",
   "cocina_mesada_bacha_esencial",
   "lavadero_habitable",
-  "placares_dormitorios_adicional",
   "biblioteca_4_estantes_2m",
-  "pisos_porcelanato",
-  "edifica_aberturas_madera",
   "hidro_muro_vertical",
   "hidro_drenaje_frances",
   "hidro_capa_horizontal",
@@ -2563,18 +2560,21 @@ export const ITEMS_CREDITO_300M = [
 
 export const ITEMS_CREDITO_350M = [
   ...ITEMS_CREDITO_300M,
-  "edifica_equipamiento_cocina",
-  "vidrios_templados_galeria",
-  "puertas_acceso_principal_servicio",
-  "jardin_cesped_patio"
+  "pisos_porcelanato",
+  "placares_dormitorios_adicional",
+  "edifica_aberturas_madera",
+  "jardin_cesped_patio",
+  "edifica_caminero_vehicular"
 ];
 
 export const ITEMS_CREDITO_440M = [
   ...ITEMS_CREDITO_350M,
+  "edifica_equipamiento_cocina",
+  "puertas_acceso_principal_servicio",
+  "vidrios_templados_galeria",
   "blindex_habitaciones",
   "rejas_balcones_seguridad",
-  "galeria_voladizo_deck",
-  "edifica_pintura_integral"
+  "galeria_voladizo_deck"
 ];
 
 export const ESCENARIOS_INVERSION = {
@@ -2596,76 +2596,76 @@ export const ESCENARIOS_INVERSION = {
   },
   escenario300: {
     id: "escenario300",
-    nombre: "Crédito 300 Millones: 2do Piso Dormitorio/Estudio + Nivel Calle Sala/Comedor/Cocina + Subsuelo Lavadero/Depósito",
+    nombre: "Crédito BNF 300 Millones: Cierre 3 Niveles + 2do Piso + Sala/Cocina PB + Subsuelo c/ Lecherada y Lavadero",
     montoObjetivoGs: 300000000,
-    montoEstimadoGs: 293737534,
-    costoM2ConstruidoGs: 1646326,
+    montoEstimadoGs: 298227534,
+    costoM2ConstruidoGs: 1671491,
     semaforo: "ok",
-    objetivoPrincipal: "Plan Maestro Ruth y Leo desde el Día 1 con Crédito de 300M: 1) En el 2do Piso (+102.88m) se construyen la Losa, el Techo (+105.64m) y el Dormitorio en Suite con Baño, Placares y Estudio; 2) En Nivel Calle (+100.00m) queda la Gran Sala de Estar, Comedor de 6 sillas y Cocina con Mesada y Bacha; 3) En el Subsuelo (+97.66m, 100 m² libres con Pasillo Antihumedad de 1.50m detrás del Muro de Contención) se instalan el Lavadero y el Depósito.",
+    objetivoPrincipal: "Crédito BNF de Gs. 300 Millones (Gs. 298,23M presupuestados): 1) Cierra el vacío de 38 m² con Loza Rap en Losa 1, construye la Losa del 2do Piso (+102.88m), la Escalera 2 (Eje 1–2) y el Techo (+105.64m) con canaletas que desaguan hacia el frente; 2) Levanta la mampostería perimetral, Muro de Contención con Piso de Rejilla Electroforjada y Cámara Séptica + Pozo Ciego en el fondo; 3) Habilita Baño, Cocina con Mesada/Bacha, Biblioteca 4 estantes, Lavadero en pared izquierda del Subsuelo y Salón con lecherada.",
     itemsIncluidos: ITEMS_CREDITO_300M,
     ventajas: [
-      "Dormitorio Principal de Ruth y Leo desde el primer día en el 2do Piso (+102.88m) con las mejores vistas al Río Paraguay y 2 Placares empotrados",
-      "Planta Nivel Calle (+100.00m) 100% social y amplia para el Sofá de 4 piezas, Comedor de 6 sillas, TV 32\" y Cocina Integrada con Mesada y Bacha",
-      "Lavadero y Depósito operativos en los 100.71 m² libres del Subsuelo, protegidos por el Pasillo Antihumedad de 1.50m detrás del Muro de Contención",
-      "Cero obras pesadas de estructura en el futuro: Losa 2do Piso, Techo y Muro de Contención quedan 100% terminados"
+      "Cierra el 100% de la estructura pesada de los 3 niveles (incluyendo los 38 m² de Loza Rap, Losa 2do Piso, Escalera 2 y Techo con desagüe pluvial hacia el frente)",
+      "Conexión directa de agua corriente ESSAP desde el medidor al costado del portón (x = -3.85m, sin gasto en tanque) + Cámara Séptica y Pozo Ciego en el fondo",
+      "Subsuelo nivelado con piso de lecherada de cemento, Gran Salón abierto y Lavadero instalado contra la pared izquierda (+X)",
+      "Cierra exactamente en Gs. 298.227.534 (dentro del tope del Crédito BNF de Gs. 300.000.000)"
     ]
   },
   escenario350: {
     id: "escenario350",
-    nombre: "Crédito 350 Millones: + Alacenas/Isla Cocina + Ventanales Blindex al Río + Puerta Servicio + Jardín Césped",
+    nombre: "Crédito BNF 350 Millones: + Piso Porcelanato 60×60 + Puertas Madera + Placares + Pérgola Cochera + Jardín Césped",
     montoObjetivoGs: 350000000,
-    montoEstimadoGs: 349651284,
-    costoM2ConstruidoGs: 1959709,
+    montoEstimadoGs: 348112534,
+    costoM2ConstruidoGs: 1951085,
     semaforo: "ok",
-    objetivoPrincipal: "Todo el Crédito de 300 Millones + Amoblamiento Completo de Cocina en Nivel Calle (bajo-mesada, alacenas e isla de Gs. 17,5M) + Ventanales Blindex en Eje B al Río + Puerta Principal Pivotante y Puerta de Servicio sobre Eje G (con acceso directo por Escalera 1 al Lavadero/Depósito en Subsuelo y al 2do Piso) + Jardín con Césped Esmeralda (115 m²).",
+    objetivoPrincipal: "Crédito BNF de Gs. 350 Millones (Gs. 348,11M presupuestados): Suma a todo el alcance de 300M los 80 m² de Piso Porcelanato 60×60 rectificado, las 6 Puertas Interiores de Madera, los 2 Placares Empotrados piso-techo en 2do Piso, el Caminero/Pérgola de Estacionamiento y los 115 m² de Jardín Parquizado con Césped Esmeralda.",
     itemsIncluidos: ITEMS_CREDITO_350M,
     ventajas: [
-      "Equipa al 100% la Cocina de Nivel Calle con bajo-mesada, alacenas superiores e isla desayunadora (complementando el mueble propio de microondas)",
-      "Puerta Principal Pivotante + Puerta de Servicio independiente sobre Eje G alineada a la Escalera 1 (hacia el Lavadero/Depósito en Subsuelo)",
-      "Cierra la Sala-Comedor con 24 m² de Ventanales Blindex hacia el Río Paraguay y parquiza los 115 m² de Jardín con Césped Esmeralda",
-      "Cierra en Gs. 349,65M (bajo el tope de Gs. 350.000.000)"
+      "Incorpora los 80 m² de Piso Porcelanato 60×60 en Estar Social, Comedor/Cocina y Planta Alta",
+      "Equipa los dormitorios con los 2 Placares empotrados piso-techo y las 6 puertas placa interiores de madera con herrajes",
+      "Suma el caminero vehicular con pérgola antigranizo en la cochera y los 115 m² de jardín nivelado con césped Esmeralda",
+      "Cierra exactamente en Gs. 348.112.534 (bajo el tope del Crédito BNF de Gs. 350.000.000)"
     ]
   },
   escenario370: {
     id: "escenario370",
-    nombre: "Crédito 350 Millones: + Alacenas/Isla Cocina + Ventanales Blindex al Río + Puerta Servicio + Jardín Césped",
+    nombre: "Crédito BNF 350 Millones: + Piso Porcelanato 60×60 + Puertas Madera + Placares + Pérgola Cochera + Jardín Césped",
     montoObjetivoGs: 350000000,
-    montoEstimadoGs: 349651284,
-    costoM2ConstruidoGs: 1959709,
+    montoEstimadoGs: 348112534,
+    costoM2ConstruidoGs: 1951085,
     semaforo: "ok",
-    objetivoPrincipal: "Alias de compatibilidad para el escalón de Crédito de 350 Millones Gs. del Plan Maestro Ruth y Leo.",
+    objetivoPrincipal: "Alias de compatibilidad para el escalón de Crédito BNF de 350 Millones Gs.",
     itemsIncluidos: ITEMS_CREDITO_350M,
     ventajas: [
-      "Incluye Dormitorio en 2do Piso + Sala/Comedor/Cocina Full en Nivel Calle + Lavadero/Depósito en Subsuelo dentro de 350M Gs."
+      "Incluye Porcelanato 60×60, Placares, Puertas de Madera y Jardín dentro de los 350M Gs. del BNF"
     ]
   },
   escenario440: {
     id: "escenario440",
-    nombre: "Crédito 440 Millones: + Blindex Suite 2do Piso + Rejas Balcones + Deck Galería L1 + Pintura + Cloaca Subsuelo",
+    nombre: "Crédito BNF 440 Millones: + Alacenas/Isla Cocina + Ventanales Blindex PB/PA al Río + Deck Galería + Rejas Balcones",
     montoObjetivoGs: 440000000,
-    montoEstimadoGs: 438409284,
-    costoM2ConstruidoGs: 2457175,
+    montoEstimadoGs: 439734284,
+    costoM2ConstruidoGs: 2464602,
     semaforo: "ok",
-    objetivoPrincipal: "Todo el Crédito de 350 Millones + Aberturas Blindex en el Dormitorio Suite y Estudio del 2do Piso y Subsuelo (18.5 m²) + Rejas y Barandas de Seguridad en Balcones (19.5 ml) + Portón de Cochera Automatizado + Deck de Galería Panorámica L1 + Pintura Integral + Bombeo Cloacal de Subsuelo.",
+    objetivoPrincipal: "Crédito BNF de Gs. 440 Millones (Gs. 439,73M presupuestados): Todo el Crédito de 350M + Amoblamiento Completo de Cocina (bajo-mesada, alacenas e isla de Gs. 17,54M) + Ventanales Blindex en Galería PB (24 m²) y en Dormitorios/Escritorio PA (18.5 m²) + Puerta Principal Pivotante y de Servicio + Barandas de Seguridad en Terraza (19.5 ml) + Deck de Galería Panorámica L1 (33.42 m²).",
     itemsIncluidos: ITEMS_CREDITO_440M,
     ventajas: [
-      "Completa los ventanales Blindex del Dormitorio/Estudio en 2do Piso (+102.88m) y las rejas de seguridad en balcones (19.5 ml)",
-      "Termina el Deck de 33.42 m² en la Galería L1 hacia el Río Paraguay, la Pintura Integral (320 m²) y el Portón Automatizado",
-      "Cierra en Gs. 438,41M (dentro del tope del Crédito de 440 Millones Gs.)",
-      "Deja la Piscina (4.65×2.45m) y la Parrilla fija como Etapa Recreativa Opcional"
+      "Suma el Amoblamiento Completo de Cocina (bajo-mesada, alacenas superiores e isla desayunadora)",
+      "Instala todos los ventanales corredizos Blindex de Planta Baja (24 m²) y Planta Alta (18.5 m²) mirando al Río Paraguay",
+      "Termina el Deck de 33.42 m² en la Galería L1, las puertas de acceso definitivas y las barandas de terraza",
+      "Cierra exactamente en Gs. 439.734.284 (dentro del tope del Crédito BNF de Gs. 440.000.000)"
     ]
   },
   edifica460: {
     id: "edifica460",
-    nombre: "Crédito 440 Millones (Comparativa Edifica B 460,1M Optimizada)",
+    nombre: "Crédito BNF 440 Millones (Comparativa Edifica B 460,1M Optimizada)",
     montoObjetivoGs: 440000000,
-    montoEstimadoGs: 438409284,
-    costoM2ConstruidoGs: 2457175,
+    montoEstimadoGs: 439734284,
+    costoM2ConstruidoGs: 2464602,
     semaforo: "ok",
-    objetivoPrincipal: "Equivalente optimizado a Edifica Studio Opción B pero incluyendo Dormitorio en 2do Piso, Cocina con Isla, Placares y Lavadero/Depósito en Subsuelo dentro del Crédito de 440 Millones Gs.",
+    objetivoPrincipal: "Equivalente optimizado a Edifica Studio Opción B pero incluyendo los 3 niveles operativos dentro del Crédito BNF de 440 Millones Gs.",
     itemsIncluidos: ITEMS_CREDITO_440M,
     ventajas: [
-      "Logra por Gs. 438,4M los 3 niveles operativos que en Edifica Studio Opción B costaban Gs. 460,1M sin 2do piso ni muebles de cocina"
+      "Logra por Gs. 439,7M los 3 niveles operativos que en Edifica Studio Opción B costaban Gs. 460,1M por un solo nivel"
     ]
   },
   edifica573: {
@@ -3646,28 +3646,29 @@ export const CALCULADORA_LADRILLOS_TOBATI = {
   ]
 };
 
-// DATOS OFICIALES DE "EL CRÉDITO NUEVO" (Caja Mutual — Condiciones Cerradas de Ruth y Leo)
+// DATOS OFICIALES DEL CRÉDITO VIVIENDA BNF (Banco Nacional de Fomento — Condiciones Ruth y Leo)
 // Fuente: /assets/planos/prevision_credito_nuevo.png
 export const PREVISION_CREDITO_NUEVO = {
-  titulo: "El Crédito Nuevo — Caja Mutual (Condiciones Cerradas Ruth & Leo)",
+  entidadFinanciera: "BNF (Banco Nacional de Fomento)",
+  titulo: "Crédito Vivienda BNF (Banco Nacional de Fomento — Condiciones Ruth & Leo)",
   documentoImgUrl: "./assets/planos/prevision_credito_nuevo.png",
   tasaAnualPct: 9.9,
   plazoAnios: 15,
   plazoCuotas: 180,
   factorCuotaConSegurosPorMillonGs: 11765.9090909, // 440M -> Gs. 5.177.000/mes exactos
   condicionesCerradas: [
-    "Tasa: 9,9 % anual, a 15 años (180 cuotas).",
-    "Sin período de gracia: los intereses corren desde el primer desembolso (posiblemente en enero).",
-    "A sola firma: el terreno ya garantiza el crédito de Caja Mutual.",
-    "Leo paga la cuota completa. El equilibrio entre los dos (Ruth y Leo) se logra con la caja común.",
-    "La cuota incluye seguros (calculado en proporción a la cotización de 440M = Gs. 5.177.000/mes)."
+    "Entidad Financiera: BNF (Banco Nacional de Fomento) — Línea de Crédito para Construcción/Terminación de Vivienda.",
+    "Tasa de referencia: 9,9 % anual (y comparativa línea preferencial BNF 6,5% / 7,9%), a 15 años (180 cuotas).",
+    "Desembolsos por etapas certificadas sobre carpeta técnica BNF (planos y planilla de cómputo métrico con código de colores).",
+    "El terreno y los Gs. 163,8M ya construidos respaldan la garantía real ante el BNF.",
+    "La cuota mensual incluye seguros (calculado en proporción a los tramos de Gs. 300M, Gs. 350M y Gs. 440M)."
   ],
   tramos: [
     {
       id: "tramo_250m",
       creditoMillones: 250,
       creditoGs: 250000000,
-      label: "250 millones",
+      label: "250 millones (BNF)",
       cuotaMensualConSegurosGs: 2941477,
       totalPagado15AniosGs: 529000000,
       totalPagado15AniosLabel: "529 M",
@@ -3682,7 +3683,7 @@ export const PREVISION_CREDITO_NUEVO = {
       id: "tramo_300m",
       creditoMillones: 300,
       creditoGs: 300000000,
-      label: "300 millones",
+      label: "300 millones (BNF)",
       cuotaMensualConSegurosGs: 3529773,
       totalPagado15AniosGs: 635000000,
       totalPagado15AniosLabel: "635 M",
@@ -3691,14 +3692,14 @@ export const PREVISION_CREDITO_NUEVO = {
       cuotaPuraSinSeguro99Gs: 3329100,
       cuotaPuraSinSeguro65Gs: 2694600,
       destacado: true,
-      badge: "Escalón Base Resaltado",
-      alcanceObraResumen: "3 Niveles Operativos Día 1: Dormitorio Suite en 2do Piso + Sala/Comedor/Cocina/Biblioteca 4 Estantes 2m en Nivel Calle + Lavadero/Depósito en Subsuelo"
+      badge: "Escalón Base BNF",
+      alcanceObraResumen: "3 Niveles Operativos Día 1: 2do Piso (2 Dormitorios + Vestidor + Desk + 2 Baños) + Nivel Calle (Sala, Comedor, Cocina, Baño Social) + Subsuelo (Salón c/ Lecherada + Lavadero en Pared Izquierda)"
     },
     {
       id: "tramo_350m",
       creditoMillones: 350,
       creditoGs: 350000000,
-      label: "350 millones",
+      label: "350 millones (BNF)",
       cuotaMensualConSegurosGs: 4118068,
       totalPagado15AniosGs: 741000000,
       totalPagado15AniosLabel: "741 M",
@@ -3707,14 +3708,14 @@ export const PREVISION_CREDITO_NUEVO = {
       cuotaPuraSinSeguro99Gs: 3883950,
       cuotaPuraSinSeguro65Gs: 3143700,
       destacado: true,
-      badge: "Equilibrio Óptimo Confort/Cuota",
-      alcanceObraResumen: "Todo 300M + Cocina Full con Alacenas/Isla + Ventanales Blindex 24 m² al Río + Puerta Principal/Servicio + Jardín Césped 115 m²"
+      badge: "Equilibrio Óptimo BNF",
+      alcanceObraResumen: "Todo 300M + Cocina Full con Alacenas/Isla + Ventanales Blindex 24 m² al Río + Puerta Principal/Servicio + Pérgola Cochera + Jardín Césped 115 m²"
     },
     {
       id: "tramo_440m",
       creditoMillones: 440,
       creditoGs: 440000000,
-      label: "440 millones",
+      label: "440 millones (BNF)",
       cuotaMensualConSegurosGs: 5177000,
       totalPagado15AniosGs: 932000000,
       totalPagado15AniosLabel: "932 M",
@@ -3723,11 +3724,12 @@ export const PREVISION_CREDITO_NUEVO = {
       cuotaPuraSinSeguro99Gs: 4882680,
       cuotaPuraSinSeguro65Gs: 3952080,
       destacado: false,
-      badge: "Tope Máximo Cotizado",
-      alcanceObraResumen: "Todo 350M + Blindex Suite 2do Piso + Rejas Balcones 19.5 ml + Deck Galería L1 + Pintura Integral + Portón Automatizado + Cloaca Subsuelo"
+      badge: "Tope Completo BNF",
+      alcanceObraResumen: "Todo 350M + Blindex 2do Piso al Río + Rejas Terraza y Foso 19.5 ml + Deck Galería L1 + Pintura Integral + Parrillita Subsuelo"
     }
   ]
 };
+export const CREDITO_BNF = PREVISION_CREDITO_NUEVO;
 export const CREDITO_CAJA_MUTUAL = PREVISION_CREDITO_NUEVO;
 
 // REQUISITOS TÉCNICOS OFICIALES DEL BANCO Y TABLA DE CUOTAS POR MILLÓN
@@ -4295,32 +4297,32 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
     id: "esp_plomero",
     icono: "🚰",
     especialidad: "6. Maestro Plomero e Ingeniero Hidrosanitario (Norma ESSAP / NP)",
-    profesionalRol: "Auditoría del Núcleo Húmedo Vertical en Eje F–G (z=3.00..5.00m), Presurizadora, PPR Frío/Caliente y Desagües Pluviales",
+    profesionalRol: "Auditoría del Núcleo Húmedo Vertical en Eje F–G (z=3.00..5.00m), Conexión Directa ESSAP (Sin Tanque), PPR Frío/Caliente y Desagües Pluviales",
     calificacionActual: "99/100 (Núcleo Húmedo Eje F–G 100% alineado con plano instalacion_sanitaria_agua.png)",
-    resumenDictamen: "Tal como establece el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están alineados verticalmente sobre el frente en el Eje F–G (z = 3.00m..5.00m): en Planta Baja el Baño Social (1.10×2.00m) y la cabecera de Cocina; en Planta Alta el Vestidor, el Baño en Suite y el Baño 2 PA; y en el Subsuelo la Cisterna/Bomba y conexión al Lavadero.",
+    resumenDictamen: "Tal como establece el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están alineados verticalmente sobre el frente en el Eje F–G (z = 3.00m..5.00m): en Planta Baja el Baño Social (1.10×2.00m) y la cabecera de Cocina; en Planta Alta el Vestidor, el Baño en Suite y el Baño 2 PA; y en el Subsuelo la conexión al Lavadero en pared izquierda. Al contar con agua corriente de buena presión en la zona, se alimenta directamente desde el medidor ESSAP (a nivel de calle al costado del portón, x = -3.85m) sin necesidad de tanque ni bomba.",
     huecosDetectadosYSoluciones: [
       {
-        severidad: "CRÍTICO DE CONFORT (PRESIÓN EN PLANTA ALTA)",
-        hallazgo: "Tanque Cisterna Tricapa 1.000 L en Subsuelo (+97.66m) + Bomba Presurizadora Inteligente bajo Núcleo Eje F–G",
-        solucion: "Al ubicar el Tanque Cisterna de 1.000 L en el Subsuelo (-2.34m bajo el Eje F–G), se llena por gravedad desde ESSAP las 24 hs. Una bomba presurizadora inteligente impulsa el agua a 2,0 bar constantes en línea recta vertical hacia el Baño Social y Cocina en PB y hacia el Baño en Suite y Baño 2 en Planta Alta (+102.88m).",
-        costoMaterialesGs: 3150000,
-        costoManoObraGs: 950000,
-        subtotalGs: 4100000,
+        severidad: "OPTIMIZACIÓN DE COSTO (SIN TANQUE NI BOMBA)",
+        hallazgo: "Alimentación Directa desde Caja de Medidor ESSAP al Costado del Portón (x = -3.85m, z = -4.24m) sin Tanque Cisterna",
+        solucion: "Dado que la zona cuenta con agua corriente de ESSAP con buena presión constante, se elimina el gasto adicional de tanque cisterna y bomba presurizadora (ahorrando Gs. 4.100.000). La acometida PPR Ø25mm parte directamente desde la caja del medidor ESSAP a nivel de calle (al costado del portón en la muralla pequeña hacia el vecino, x = -3.85m, z = -4.24m) hacia el pleno vertical del Eje F–G.",
+        costoMaterialesGs: 950000,
+        costoManoObraGs: 550000,
+        subtotalGs: 1500000,
         incluidoEnPartida: "instalaciones_sanitarias_desagues (7.2)"
       },
       {
         severidad: "CRÍTICO CONSTRUCTIVO (PASES #3 Y #4 EN NÚCLEO HÚMEDO EJE F–G)",
-        hallazgo: "Pleno Hidrosanitario Unificado en Eje F–G (z=3.00..5.00m): Bajada Cloacal Ø100mm, Montantes PPR Fría/Caliente y Bajadas Pluviales",
-        solucion: "Concentrar los baños de Planta Alta (Baño en Suite x=-2.80..+0.50m y Baño 2 PA x=+1.69..+3.84m) y el Baño Social de PB (x=-1.64..-0.40m) en la franja frontal Eje F–G (z=3.00m..5.00m) permite que el Pase #3 (Cloaca Ø115mm en x=-1.64m, z=3.45m) y el Pase #4 (Agua PPR Fría/Caliente Ø63mm en x=-1.64m, z=3.95m) resuelvan los 3 niveles con mínimo recorrido de cañerías y bajadas pluviales directas desde las canaletas.",
+        hallazgo: "Pleno Hidrosanitario Unificado en Eje F–G (z=3.00..5.00m): Bajada Cloacal Ø100mm, Montantes PPR Fría/Caliente y Bajadas Pluviales Hacia el Frente",
+        solucion: "Concentrar los baños de Planta Alta (Baño en Suite x=-2.80..+0.50m y Baño 2 PA x=+1.69..+3.84m) y el Baño Social de PB (x=-1.64..-0.40m) en la franja frontal Eje F–G (z=3.00m..5.00m) permite que el Pase #3 (Cloaca Ø115mm en x=-1.64m, z=3.45m) y el Pase #4 (Agua PPR Fría/Caliente Ø63mm en x=-1.64m, z=3.95m) resuelvan los 3 niveles con mínimo recorrido de cañerías, mientras las canaletas y bajadas pluviales desaguan hacia el frente (Calle Guillermo Arias).",
         costoMaterialesGs: 1850000,
         costoManoObraGs: 1250000,
         subtotalGs: 3100000,
         incluidoEnPartida: "instalaciones_sanitarias_desagues (7.2)"
       },
       {
-        severidad: "OPERACIÓN CAMIÓN CISTERNA",
+        severidad: "AUTONOMÍA SANITARIA EN EL FONDO",
         hallazgo: "Ventilación Sanitaria Ø75mm a los 4 Vientos (+106.15m) + Colector Cloacal a Cámara Séptica y Pozo Ciego en Fondo",
-        solucion: "Se prolonga la columna cloacal del Eje F–G con caño de ventilación PVC Ø75mm sobre el techo (+106.15m). En el Subsuelo, el colector cloacal recibe también el Lavadero y la bacha de la Parrillita inferior y corre con pendiente >=2% hacia la Cámara Séptica y el Pozo Ciego del patio posterior.",
+        solucion: "Se prolonga la columna cloacal del Eje F–G con caño de ventilación PVC Ø75mm sobre el techo (+106.15m). En el Subsuelo, el colector cloacal recibe también el Lavadero (pared izquierda) y la bacha de la Parrillita inferior y corre con pendiente >=2% hacia la Cámara Séptica y el Pozo Ciego del patio posterior (evitando la precaria red vecinal).",
         costoMaterialesGs: 680000,
         costoManoObraGs: 420000,
         subtotalGs: 1100000,
@@ -4329,7 +4331,7 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
     ],
     checklistControlPropietario: [
       "Exigir prueba hidráulica manométrica a 6 kg/cm² (6 bar) durante 24 horas en todas las cañerías verdes PPR del núcleo húmedo Eje F–G antes de tapar canaletas.",
-      "Verificar pendiente mínima del 2% (2 cm por metro) en el colector PVC Ø100mm desde el Eje F–G hacia la Cámara Séptica."
+      "Verificar pendiente mínima del 2% (2 cm por metro) en el colector PVC Ø100mm desde el Eje F–G hacia la Cámara Séptica en el fondo."
     ]
   }
 ];
@@ -4340,7 +4342,7 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
 // ============================================================================
 export const DUCTOS_PASES_ENCHUFES_DATOS = {
   resumenTecnico:
-    "De acuerdo con el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están concentrados verticalmente en el Núcleo Húmedo del frente (Eje F–G, z = 3.00m..5.00m): Baño Social y cabecera de Cocina en Planta Baja; Vestidor, Baño en Suite y Baño 2 en Planta Alta; y Cisterna/Bomba en el Subsuelo. Las 4 perforaciones verticales en Losa 1 (eléctrica, datos, cloaca Ø115mm y agua PPR Ø63mm) se ejecutan con Sacabocado de Copa Diamantada dentro del pleno técnico del Eje F–G sin tocar vigas, mientras que los 38.00 m² de Loza Rap sobre el Estar Social permiten embutir cañerías en su capa de compresión.",
+    "De acuerdo con el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están concentrados verticalmente en el Núcleo Húmedo del frente (Eje F–G, z = 3.00m..5.00m): Baño Social y cabecera de Cocina en Planta Baja; Vestidor, Baño en Suite y Baño 2 en Planta Alta; y conexión al Lavadero en el Subsuelo. La bajada de luz ANDE y la caja del medidor de agua ESSAP a nivel de calle se ubican exactamente al costado del portón vehicular sobre la muralla más pequeña que da al vecino (x = -3.85m, z = -4.08m..-4.24m), alimentando la casa con presión directa de red (sin tanque).",
   pasesLosa1Diamantados: [
     {
       id: "PASE_LOSA1_01_ELECTRICO",
@@ -4350,7 +4352,7 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
       pos3D: [-1.64, 0.0, 4.65],
       ejeRef: "Pleno Eje F / Eje 6 (x = -1.64m, z = 4.65m — Junto a Pilar P14)",
       colorHex: 0xf97316,
-      conductores: "Cable subterráneo NYY 4×10 mm² + PE 10 mm² desde Pilastra ANDE y alimentador 5×6 mm² hacia TS-SUB y TS-PA + Sellado Cortafuego Intumescente.",
+      conductores: "Cable subterráneo NYY 4×10 mm² + PE 10 mm² desde Bajada ANDE al costado del portón (x=-3.85m) y alimentador 5×6 mm² hacia TS-SUB y TS-PA + Sellado Cortafuego Intumescente.",
       metodoEjecucion: "Perforación vertical con máquina sacabocado de copa diamantada Ø 50mm húmeda, a 18 cm de la cara del pilar P14 y fuera del alma de la viga."
     },
     {
@@ -4372,18 +4374,18 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
       pos3D: [-1.64, 0.0, 3.45],
       ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.45m — Pleno Baño Social PB y Baño en Suite / Baño 2 PA)",
       colorHex: 0xd97706,
-      conductores: "Columna montante cloacal PVC reforzado Ø 100mm (unifica descargas de Baño en Suite PA, Baño 2 PA y Baño Social PB hacia Subsuelo y Cámara Séptica) + Bajadas pluviales.",
+      conductores: "Columna montante cloacal PVC reforzado Ø 100mm (unifica descargas de Baño en Suite PA, Baño 2 PA y Baño Social PB hacia Subsuelo y Cámara Séptica en el fondo).",
       metodoEjecucion: "Perforación con copa diamantada Ø 115mm en pleno técnico del Eje F–G, sellada con mástic poliuretánico Sikaflex-1A."
     },
     {
       id: "PASE_LOSA1_04_AGUA_PPR",
       codigo: "PASE #4 (Ø 63 mm)",
-      nombre: "Pase Diamantado #4 en Losa 1 — Montantes de Agua Fría Presurizada (PPR Ø25mm) y Caliente (PPR Ø20mm) en Eje F–G",
+      nombre: "Pase Diamantado #4 en Losa 1 — Montantes de Agua Fría Directa ESSAP (PPR Ø25mm) y Caliente (PPR Ø20mm) en Eje F–G",
       diametroMm: 63,
       pos3D: [-1.64, 0.0, 3.95],
       ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.95m — Entre Cocina y Baño Social PB)",
       colorHex: 0x0284c7,
-      conductores: "Subida de Agua Fría Presurizada PPR PN20 Ø 25mm desde la Cisterna/Presurizadora del Subsuelo hacia PB y PA + distribución de Agua Caliente PPR PN20 Ø 20mm aislada para Baño en Suite, Baño 2, Baño Social y Cocina.",
+      conductores: "Subida de Agua Fría Directa ESSAP PPR PN20 Ø 25mm desde la Caja de Medidor a nivel de calle (x=-3.85m, z=-4.24m, sin tanque) hacia PB, PA y Subsuelo + distribución de Agua Caliente PPR PN20 Ø 20mm aislada para Baño en Suite, Baño 2, Baño Social y Cocina.",
       metodoEjecucion: "Perforación con copa diamantada Ø 63mm encamisada con caño PVC Ø 63mm en pleno Eje F–G."
     }
   ],
@@ -4391,11 +4393,11 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     {
       id: "TAB_PILASTRA_ANDE",
       codigo: "M-ANDE 3×40A",
-      nombre: "Pilastra Reglamentaria de Acometida Trifásica ANDE (3×380/220V — TM 3×40A) + 2 Jabalinas Copperweld",
-      nivel: "Frente / Línea Municipal Ciega (z = -4.00m)",
-      pos3D: [-4.72, 1.35, -3.95],
+      nombre: "Bajada de Luz y Medidor Trifásico ANDE al Costado del Portón (en la Muralla Pequeña hacia el Vecino, x = -3.85m)",
+      nivel: "Muralla Pequeña al Costado del Portón (x = -3.85m, z = -4.08m)",
+      pos3D: [-3.85, 1.35, -4.08],
       colorHex: 0xf59e0b,
-      especificacion: "Caja polimérica homologada ANDE p/ medidor electrónico trifásico + Llave limitadora TM 3×40A + Puesta a tierra de servicio."
+      especificacion: "Caño galvanizado de bajada c/ pipeta + Caja homologada ANDE p/ medidor electrónico trifásico + Llave TM 3×40A ubicada exactamente al costado del portón en la muralla pequeña hacia el vecino."
     },
     {
       id: "TAB_TP_PB",
@@ -4418,29 +4420,20 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     {
       id: "TAB_TS_SUB",
       codigo: "TS-SUB (12 DIN IP65)",
-      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m — Lavarropas, Bomba Presurizadora, Parrillita y Exterior)",
+      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m — Lavarropas en Pared Izquierda, Salón, Parrillita y Exterior)",
       nivel: "Subsuelo (+97.66m)",
       pos3D: [-1.64, -0.85, 4.65],
       colorHex: 0xef4444,
-      especificacion: "Gabinete estanco IP65 de 12 DIN con Diferencial 30mA dedicado para Lavarropas, Bomba Presurizadora Rowa/Pedrollo, Parrillita inferior y patio."
+      especificacion: "Gabinete estanco IP65 de 12 DIN con Diferencial 30mA dedicado para Lavarropas en pared izquierda, Salón Subsuelo, Parrillita inferior y patio."
     },
     {
       id: "HID_MEDIDOR_ESSAP",
       codigo: "M-ESSAP ¾\"",
-      nombre: "Caja de Medidor de Agua Potable ESSAP con Llave de Paso Esférica y Válvula de Retención",
-      nivel: "Vereda / Línea Municipal (z = -4.00m)",
-      pos3D: [-3.40, 0.15, -4.15],
+      nombre: "Caja del Medidor de Agua Potable ESSAP a Nivel de Calle (al Costado del Portón bajo Bajada ANDE, x = -3.85m)",
+      nivel: "Nivel de Calle / Vereda al Costado del Portón (x = -3.85m, z = -4.24m)",
+      pos3D: [-3.85, 0.08, -4.24],
       colorHex: 0x0284c7,
-      especificacion: "Acometida en caño PEAD/PPR Ø 25mm (¾\") enterrada a -0.45m hacia la Cisterna del Subsuelo."
-    },
-    {
-      id: "HID_CISTERNA_BOMBA",
-      codigo: "CISTERNA 1.000L + BOMBA",
-      nombre: "Tanque Cisterna Tricapa Antibacteriano 1.000 L + Bomba Presurizadora Inteligente Rowa/Pedrollo (2.0 bar)",
-      nivel: "Subsuelo (+97.66m — Bajo Núcleo Húmedo Eje F–G)",
-      pos3D: [-4.25, -1.65, 3.65],
-      colorHex: 0x0284c7,
-      especificacion: "Se llena por gravedad desde la red ESSAP (al estar a -2.34m bajo la calle) e impulsa agua a presión constante por el pleno Eje F–G a los 3 niveles."
+      especificacion: "Caja de medidor ESSAP a nivel de calle en la muralla más pequeña al costado del portón (x = -3.85m, z = -4.24m) con llave de paso esférica y válvula de retención. Alimenta directamente la vivienda con buena presión de red (sin tanque)."
     }
   ],
   enchufesYTomacorrientes: [
@@ -4456,7 +4449,7 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     { id: "TOMA_PB_09_BIBLIO_PB", codigo: "16A-BIB-PB", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.35, 9.10], label: "Doble Toma 16A — Comedor / Lectura junto a Biblioteca de 4 Estantes" },
     { id: "TOMA_PB_10_AA_SALA", codigo: "20A-AA-PB", tipo: "toma_20a", nivel: "planta_baja", pos3D: [4.76, 2.35, 7.20], label: "Toma 20A Alto — Split Aire Acondicionado 18.000 BTU Estar Social" },
     { id: "TOMA_PB_11_GALERIA", codigo: "16A-GAL-IP55", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.45, 11.45], label: "Doble Toma Estanco IP55 en Galería al Río (-0.45m, sin parrilla fija)" },
-    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [3.45, 1.45, -3.85], label: "Alimentación 20A Estanca — Motor Portón Balancín 2.30m (x=+1.20..+3.50m) y Cerradura Portoncito Peatonal 0.95m" },
+    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.35, 1.45, -3.85], label: "Alimentación 20A Estanca — Motor Portón Balancín 2.30m (x=-3.50..-1.20m) y Cerradura Portoncito Peatonal 0.95m (x=+1.25..+2.20m)" },
 
     // Planta Alta (Y = +2.88m): Dormitorio en Suite + Vestidor + Dormitorio 2 + Escritorio + 2 Baños en Eje F-G
     { id: "TOMA_PA_01_MESALUZ_N", codigo: "16A-ML-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 6.80], label: "Doble Toma 16A + Llave Conmutada — Mesa de Luz #1 en Suite Principal (4.13×4.94m)" },
@@ -4470,10 +4463,9 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     { id: "TOMA_PA_09_COSTURA", codigo: "16A-COSER", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.76, 3.55, 8.20], label: "Doble Toma 16A — Rincón de Estudio y Máquina de Coser en Escritorio PA" },
     { id: "TOMA_PA_10_AA_DORM2_EST", codigo: "20A-AA-EST", tipo: "toma_20a", nivel: "planta_alta", pos3D: [1.80, 5.15, 7.50], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Dormitorio 2 / Escritorio" },
 
-    // Subsuelo (Y = -2.34m): Lavadero, Depósito, Bomba Presurizadora y Parrillita hacia el Patio
-    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-3.25, -1.25, 4.80], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Lavadero Subsuelo" },
-    { id: "TOMA_SUB_02_BOMBA", codigo: "20A-PRESUR", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-4.25, -1.15, 3.65], label: "Alimentación 20A Estanca — Bomba Presurizadora Inteligente bajo Núcleo Eje F–G" },
-    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-DEP-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [1.50, -1.25, 4.20], label: "Doble Toma 16A Estanco IP55 — Depósito y Planta Libre en Subsuelo" },
+    // Subsuelo (Y = -2.34m): Lavadero en Pared Izquierda (+X), Salón y Parrillita hacia el Patio
+    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [4.62, -1.25, 6.20], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Lavadero contra Pared Izquierda (Eje 1)" },
+    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-SALON-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [1.50, -1.25, 4.20], label: "Doble Toma 16A Estanco IP55 — Gran Salón Abierto en Subsuelo (con piso de lecherada)" },
     { id: "TOMA_SUB_04_PARRILLITA", codigo: "16A-QUINCHO-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [-3.20, -1.25, 12.20], label: "Doble Toma Estanco IP55 — Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m)" }
   ],
   llavesYConmutadas3Way: [

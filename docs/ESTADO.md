@@ -29,4 +29,11 @@
     5. `5_AUDITORIA_6_ESPECIALISTAS` (Dictamen completo de los 6 especialistas + tabla de los 4 pases diamantados)
     6. `6_COMPRA_CHINA_DOMOTICA` (Kits 1 y 2 en USD y Gs. + 4 Reglas de Obra + Matriz de Prevención Activa).
 - [x] **Presentación Ejecutiva Exhaustiva en PDF de Alta Estética (`Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` — 12 Páginas Landscape, 19,06 MB):**
-  - Generada en `/media/carmen/Datos/Dev/itapytapunta-3d/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` y servida en `/assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` con 3 nuevos renders fotorrealistas por etapa (`render_etapa_300m_habitable.jpg`, `render_suite_estudio_2do_piso.jpg`, `render_tablero_domotica_china_mep.jpg`) más el compendio integral del proyecto.
+  - Generada en `/media/carmen/Datos/Dev/itapytapunta-3d/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` y servida en `./assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` con 3 nuevos renders fotorrealistas por etapa (`render_etapa_300m_habitable.jpg`, `render_suite_estudio_2do_piso.jpg`, `render_tablero_domotica_china_mep.jpg`) más el compendio integral del proyecto.
+- [x] **Despliegue en Línea Activo (GitHub Pages CI/CD + Blueprint Render.com):**
+  - **URL Pública en Vivo (GitHub Pages CDN con Lock Screen SHA-256):** `https://leoberniga.github.io/itapytapunta-3d/`
+  - **PDF Ejecutivo Directo en Línea:** `https://leoberniga.github.io/itapytapunta-3d/assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf`
+  - **Repositorio GitHub Actualizado (`main`):** `https://github.com/leoberniga/itapytapunta-3d`
+  - **Render.com Static Site Blueprint:** Archivo `render.yaml` configurado en la raíz del repositorio para despliegue alternativo en 1 clic desde Render.
+  - **Credenciales de Acceso al Portal:** Usuario `leo` / Contraseña `itapytapunta2026`.
+

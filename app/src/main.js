@@ -1,9 +1,62 @@
 import { ProjectScene } from './scene.js';
 import { CURATED_PHOTOS, ARCHITECTURAL_ROOMS, GEOTECHNICAL_DATA, STRUCTURAL_ITEMS, PRESUPUESTO_PARTIDAS, ESCENARIOS_INVERSION } from './data/projectData.js';
+import { AuthManager } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.lucide) {
     window.lucide.createIcons();
+  }
+
+  // Authentication Gate Management
+  const authOverlay = document.getElementById('auth-overlay');
+  const authForm = document.getElementById('auth-form');
+  const authUserInput = document.getElementById('auth-username');
+  const authPassInput = document.getElementById('auth-password');
+  const authRemember = document.getElementById('auth-remember');
+  const authErrorMsg = document.getElementById('auth-error-msg');
+  const btnLogout = document.getElementById('btn-logout');
+
+  const onAuthSuccess = () => {
+    if (authOverlay) {
+      authOverlay.classList.add('hidden');
+    }
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  const authManager = new AuthManager(onAuthSuccess);
+
+  if (authOverlay) {
+    if (authManager.isAuthenticated) {
+      authOverlay.classList.add('hidden');
+    } else {
+      authOverlay.classList.remove('hidden');
+    }
+  }
+
+  if (authForm) {
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (authErrorMsg) authErrorMsg.style.display = 'none';
+      const result = authManager.login(authUserInput.value, authPassInput.value, authRemember ? authRemember.checked : true);
+      if (!result.success) {
+        if (authErrorMsg) {
+          authErrorMsg.textContent = result.error;
+          authErrorMsg.style.display = 'block';
+        }
+        if (authPassInput) {
+          authPassInput.value = '';
+          authPassInput.focus();
+        }
+      }
+    });
+  }
+
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      if (confirm('¿Deseas cerrar sesión y bloquear la pantalla?')) {
+        authManager.logout();
+      }
+    });
   }
 
   const container = document.getElementById('canvas-container');

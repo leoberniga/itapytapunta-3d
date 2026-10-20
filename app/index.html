@@ -18,6 +18,48 @@
 </head>
 <body>
 
+  <!-- Authentication Gate (Usuario y Contraseña) -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-badge">Acceso Restringido • Privado</div>
+        <h2 class="auth-title">Residencia Itá Pytã Punta</h2>
+        <p class="auth-subtitle">Explorador BIM 3D, Geotecnia y Presupuesto</p>
+        <p class="auth-location"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Guillermo Arias • Asunción, Paraguay</p>
+      </div>
+
+      <form id="auth-form" class="auth-form" autocomplete="on">
+        <div id="auth-error-msg" class="auth-error-msg" style="display:none;"></div>
+
+        <div class="auth-input-group">
+          <label for="auth-username"><i data-lucide="user" style="width:13px;height:13px;"></i> Usuario</label>
+          <input type="text" id="auth-username" name="username" placeholder="Ingresa tu usuario" required autofocus autocomplete="username">
+        </div>
+
+        <div class="auth-input-group">
+          <label for="auth-password"><i data-lucide="lock" style="width:13px;height:13px;"></i> Contraseña</label>
+          <input type="password" id="auth-password" name="password" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+
+        <div class="auth-options">
+          <label class="auth-remember">
+            <input type="checkbox" id="auth-remember" checked>
+            <span>Recordar en este dispositivo</span>
+          </label>
+        </div>
+
+        <button type="submit" id="auth-submit-btn" class="btn-primary auth-submit-btn">
+          <i data-lucide="log-in" style="width:16px;height:16px;"></i>
+          <span>Entrar al Proyecto</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>🔒 Acceso exclusivo para propietarios y equipo técnico de obra.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Three.js 3D WebGL Canvas Container -->
   <div id="canvas-container"></div>
 
@@ -58,6 +100,10 @@
       <button id="btn-open-cloud" class="btn-header btn-primary" title="Nube Google Cloud y Backup">
         <i data-lucide="cloud"></i>
         <span>Nube Gratuita</span>
+      </button>
+      <button id="btn-logout" class="btn-header glass-panel" title="Cerrar Sesión" style="border-color:rgba(239,68,68,0.3); color:#fca5a5;">
+        <i data-lucide="log-out"></i>
+        <span>Salir</span>
       </button>
     </div>
   </header>

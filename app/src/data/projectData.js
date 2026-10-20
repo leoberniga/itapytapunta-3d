@@ -47,7 +47,7 @@ export const PROJECT_METADATA = {
 // - Y axis (elevation): Street level Cota +100.00m is Y = 0.00m (which corresponds to structural level +2.34m)
 export const EXACT_STRUCTURAL_GRID = {
   metadata: {
-    sourceDocument: "CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf (Láminas E1 a E9) + Acta de Recepción 29/12/2025",
+    sourceDocument: "CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf (Láminas E1 a E9) + Planos IS/IH + Acta de Recepción 29/12/2025",
     calculator: "Ing. Gustavo Velázquez — Reg. N° 3135 M.O.P.C.",
     concreteSpec: "HA-25 (fck = 250 kg/cm² en diseño; 240.3 a 325.75 kg/cm² verificado por PROBETI S.R.L.)",
     steelSpec: "Acero en barras y estribos B 500 S (fy = 5000 kg/cm², Ys = 1.15)",
@@ -55,26 +55,26 @@ export const EXACT_STRUCTURAL_GRID = {
     structuralDepth: 10.34,
     frontParkingRangeZ: [-4.00, 3.00],
     rearPatioRangeZ: [13.34, 27.00],
-    upperFloorCantileverFrontZ: 2.15
+    upperFloorCantileverFrontZ: 3.00
   },
   xAxes: [
-    { id: "Eje 9", x: -4.87, yPlano: 0.00, pillars: ["P17", "P18", "P19", "P20"], desc: "Medianera izquierda (Sur, 0.00m en plano)" },
-    { id: "Eje 8", x: -3.35, yPlano: 1.52, pillars: ["P15"], desc: "Alineación interior P15 (1.52m en plano, muere en PB)" },
-    { id: "Eje 7", x: -2.02, yPlano: 2.85, pillars: ["P16"], desc: "Alineación interior P16 (2.85m en plano, llega a PA)" },
-    { id: "Eje 6", x: -1.64, yPlano: 3.23, pillars: ["P11", "P12", "P14"], desc: "Pórtico longitudinal central-izquierdo (3.23m en plano)" },
-    { id: "Eje 5", x: -0.74, yPlano: 4.13, pillars: ["P13"], desc: "Alineación interior P13 (4.13m en plano, muere en PB)" },
-    { id: "Eje 4", x: 1.69, yPlano: 6.56, pillars: ["P8", "P10"], desc: "Pórtico longitudinal central-derecho (6.56m en plano)" },
-    { id: "Eje 3", x: 2.39, yPlano: 7.26, pillars: ["P9"], desc: "Núcleo de escalera y apoyo central P9 (7.26m en plano)" },
-    { id: "Eje 2", x: 3.84, yPlano: 8.71, pillars: ["P5", "P6", "P7"], desc: "Pórtico interior derecho (8.71m en plano)" },
-    { id: "Eje 1", x: 4.87, yPlano: 9.74, pillars: ["P1", "P2", "P3", "P4"], desc: "Medianera derecha (Norte, 9.74m en plano)" }
+    { id: "Eje 9", x: -4.87, yPlano: 0.00, pillars: ["P17", "P18", "P19", "P20"], desc: "Medianera izquierda (Sur, 0.00m en plano) — Escalera 1 a Subsuelo entre Ejes 8 y 9" },
+    { id: "Eje 8", x: -3.35, yPlano: 1.52, pillars: ["P15"], desc: "Alineación interior P15 (1.52m en plano, muere en PB) y borde interior de Escalera 1" },
+    { id: "Eje 7", x: -2.02, yPlano: 2.85, pillars: ["P16"], desc: "Alineación interior P16 (2.85m en plano, ya hormigonado hasta +2.88m)" },
+    { id: "Eje 6", x: -1.64, yPlano: 3.23, pillars: ["P11", "P12", "P14"], desc: "Pórtico longitudinal central-izquierdo (3.23m en plano; P11 y P14 a +2.88m, P12 muere en PB)" },
+    { id: "Eje 5", x: -0.74, yPlano: 4.13, pillars: ["P13"], desc: "Borde entre Losa maciza L4 y Vacío de 38,00 m² a cerrar con Loza Rap (P13 muere en PB)" },
+    { id: "Eje 4", x: 1.69, yPlano: 6.56, pillars: ["P8", "P10"], desc: "Pórtico longitudinal central-derecho (6.56m en plano; P8 y P10 ya hormigonados hasta +2.88m)" },
+    { id: "Eje 3", x: 2.39, yPlano: 7.26, pillars: ["P9"], desc: "Apoyo central P9 en línea de galería (7.26m en plano, ya hormigonado hasta +2.88m)" },
+    { id: "Eje 2", x: 3.84, yPlano: 8.71, pillars: ["P5", "P6", "P7"], desc: "Pórtico interior derecho y borde de Escalera 2 que sube a Planta Alta (8.71m en plano)" },
+    { id: "Eje 1", x: 4.87, yPlano: 9.74, pillars: ["P1", "P2", "P3", "P4"], desc: "Medianera derecha (Norte, 9.74m en plano) — Escalera 2 a Planta Alta entre Ejes 1 y 2" }
   ],
   zAxes: [
-    { id: "Eje G", z: 3.00, xPlano: 10.34, pillars: ["P4", "P7", "P20"], desc: "Fachada Frontal hacia cochera (10.34m en plano; voladizo PA sale hasta z = 2.15m)" },
-    { id: "Eje F", z: 3.51, xPlano: 9.83, pillars: ["P10", "P14"], desc: "Alineación interna frontal / servicios (9.83m en plano)" },
-    { id: "Eje E", z: 4.77, xPlano: 8.57, pillars: ["P13", "P19"], desc: "Transición área social / apoyo intermedio (8.57m en plano)" },
-    { id: "Eje D", z: 5.26, xPlano: 8.08, pillars: ["P3", "P6"], desc: "Pórtico transversal medio derecha (8.08m en plano)" },
-    { id: "Eje C", z: 7.37, xPlano: 5.97, pillars: ["P12", "P15"], desc: "Eje de apeo en Subsuelo / Losa PB (5.97m en plano; pilares mueren en PB)" },
-    { id: "Eje B", z: 9.94, xPlano: 3.40, pillars: ["P2", "P5", "P9", "P16", "P18"], desc: "Línea divisoria principal Interior / Galería (3.40m en plano)" },
+    { id: "Eje G", z: 3.00, xPlano: 10.34, pillars: ["P4", "P7", "P20"], desc: "Fachada Frontal hacia cochera (10.34m en plano; muro frontal sin balcón ni Blindex en PA)" },
+    { id: "Eje F", z: 3.51, xPlano: 9.83, pillars: ["P10", "P14"], desc: "Núcleo Húmedo Frontal Pluvial/Sanitario Eje F–G (Baño Social y Cocina en PB; Vestidor, Baño Suite y Baño 2 en PA)" },
+    { id: "Eje E", z: 4.77, xPlano: 8.57, pillars: ["P13", "P19"], desc: "Cierre interior del Núcleo Húmedo Frontal y transición a Estar / Dormitorios (8.57m en plano)" },
+    { id: "Eje D", z: 5.26, xPlano: 8.08, pillars: ["P3", "P6"], desc: "Arranque de Escalera 1 (Eje 8–9 baja a Subsuelo) y Escalera 2 (Eje 1–2 sube a PA)" },
+    { id: "Eje C", z: 7.37, xPlano: 5.97, pillars: ["P12", "P15"], desc: "Eje de apeo en Subsuelo / Losa PB (5.97m en plano; P12 y P15 mueren en PB)" },
+    { id: "Eje B", z: 9.94, xPlano: 3.40, pillars: ["P2", "P5", "P9", "P16", "P18"], desc: "Línea divisoria principal Interior / Galería con ventanales Blindex al Río (3.40m en plano)" },
     { id: "Eje A", z: 13.34, xPlano: 0.00, pillars: ["P1", "P8", "P11", "P17"], desc: "Borde de Galería hacia el barranco y Río Paraguay (0.00m en plano)" }
   ],
   elevations: {
@@ -90,7 +90,7 @@ export const EXACT_STRUCTURAL_GRID = {
       cotaAbsoluta: 97.66,
       cotaEstructural: 0.00,
       status: "EJECUTADO 100%",
-      desc: "Nivel de Subsuelo (+97.66m / +0.00m estructural). Vigas de pórticos 1 a 7 y encadenados inferiores ejecutados."
+      desc: "Nivel de Subsuelo (+97.66m / +0.00m estructural). Vigas de pórticos 1 a 7, encadenados inferiores y Escalera 1 en Eje 8–9 ejecutados."
     },
     galeriaL1: {
       y: -0.45,
@@ -103,22 +103,22 @@ export const EXACT_STRUCTURAL_GRID = {
       y: 0.00,
       cotaAbsoluta: 100.00,
       cotaEstructural: 2.34,
-      status: "EJECUTADO 100%",
-      desc: "Nivel Calle / Losa Planta Baja (+100.00m / +2.34m estructural). Losas macizas L2, L3, L4 y Escalera 1 ejecutadas al 100% (0 m² de mampostería)."
+      status: "LOSA L1/L4 + 17 PILARES EJECUTADOS (VACÍO 38,00 m² A CERRAR CON LOZA RAP)",
+      desc: "Nivel Calle (+100.00m / +2.34m est.): Losa L1 (Galería), Losa L4 (ala derecha/Sur Eje 5–9) y los 17 pilares de PB hasta +2.88m ya están hormigonados; resta cerrar en Etapa 1 el hueco abierto entre vigas de 38.00 m² (Eje B–G × Eje 1–5) con Loza Rap."
     },
     plantaAlta: {
       y: 2.88,
       cotaAbsoluta: 102.88,
       cotaEstructural: 5.22,
-      status: "A CONSTRUIR",
-      desc: "Losa de 2do Piso / Planta Alta (+102.88m / +5.22m estructural, losas L1 a L11). Supera la altura de techos linderos permitiendo vista panorámica al Río Paraguay."
+      status: "17 PILARES PB YA EN +2.88m • LOSA PA A CONSTRUIR",
+      desc: "Nivel 2do Piso / Planta Alta (+102.88m / +5.22m est.): los 17 pilares de PB ya llegan a +2.88m. Aloja 2 Dormitorios + Escritorio/Desk al desembarcar de Escalera 2 + 2 Baños y Vestidor sobre Eje F–G (sin balcón ni Blindex frontal)."
     },
     techoCumbrera: {
       y: 5.64,
       cotaAbsoluta: 105.64,
       cotaEstructural: 7.98,
       status: "A CONSTRUIR",
-      desc: "Vigas de coronamiento y cubierta termoacústica de Isopanel (+105.64m / +7.98m estructural)."
+      desc: "Elevación de 14 pilares a techo, vigas de coronamiento y cubierta termoacústica (+105.64m / +7.98m estructural)."
     }
   },
   pillars: [
@@ -133,9 +133,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P1",
       zapataSize: "130x70x50/40 cm",
       rebar: "4Ø12 + Est. Ø6 c/15 cm",
-      builtTopY: -0.45,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Esquina Noroeste de Galería al Río; zapata excéntrica en medianera Norte arriostrada con viga centradora VC.T-1 (40x50) hacia P8."
+      notes: "Esquina Noroeste de Galería al Río; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P2",
@@ -148,9 +148,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P2-P5)",
       zapataSize: "230x160x50/35 cm (combinada P2-P5)",
       rebar: "4Ø12 + Est. Ø6 c/15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Medianera Norte sobre línea divisoria Interior / Galería; comparte zapata combinada con P5."
+      notes: "Medianera Norte sobre línea divisoria Interior / Galería; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P3",
@@ -163,9 +163,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P3-P6)",
       zapataSize: "170x160x35/25 cm (combinada P3-P6)",
       rebar: "4Ø12 + Est. Ø6 c/15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Medianera Norte tramo central; comparte zapata combinada con P6."
+      notes: "Medianera Norte junto a arranque de Escalera 2 (Eje 1–2); ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P4",
@@ -178,9 +178,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P4-P7)",
       zapataSize: "100x160x30/25 cm (combinada P4-P7)",
       rebar: "4Ø12 + Est. Ø6 c/15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Esquina Noreste de Fachada Frontal; comparte zapata combinada con P7."
+      notes: "Esquina Noreste de Fachada Frontal (Eje G); ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P5",
@@ -193,9 +193,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P2-P5)",
       zapataSize: "230x160x50/35 cm (combinada P2-P5)",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 2.88,
-      notes: "Pilar interior en línea de Galería; llega hasta Losa de Planta Alta (+2.88m)."
+      notes: "Pilar interior en línea de Galería y llegada de Escalera 2; ya hormigonado hasta Losa de Planta Alta (+2.88m)."
     },
     {
       id: "P6",
@@ -208,9 +208,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P3-P6)",
       zapataSize: "170x160x35/25 cm (combinada P3-P6)",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 2.88,
-      notes: "Pilar interior en eje D; llega hasta Losa de Planta Alta (+2.88m)."
+      notes: "Pilar interior en Eje D junto a arranque de Escalera 2; ya hormigonado hasta Losa de Planta Alta (+2.88m)."
     },
     {
       id: "P7",
@@ -223,9 +223,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P4-P7)",
       zapataSize: "100x160x30/25 cm (combinada P4-P7)",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Pilar de Fachada Frontal junto a acceso; continúa hasta vigas de Techo (+5.64m)."
+      notes: "Pilar de Fachada Frontal (Eje G); ya hormigonado en PB hasta +2.88m y continúa a Techo (+5.64m)."
     },
     {
       id: "P8",
@@ -238,9 +238,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P8",
       zapataSize: "110x95x50/40 cm",
       rebar: "6Ø12 (Subsuelo) / 4Ø12 (PB-PA) + Est. Ø6",
-      builtTopY: -0.45,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Borde frontal de Galería al Río; arriostrado mediante viga centradora VC.T-1 con P1."
+      notes: "Borde frontal de Galería al Río; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P9",
@@ -253,9 +253,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P9",
       zapataSize: "165x180x40/25 cm",
       rebar: "8Ø12 (Subsuelo) / 4Ø12 (PB-PA) + Est. Ø6",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Pilar central de gran carga junto a Escalera 1; zapata aislada de 165x180 cm."
+      notes: "Pilar central de gran carga en Eje B; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P10",
@@ -268,9 +268,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P10",
       zapataSize: "150x150x35/25 cm",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Pilar cuadrado 20x20 cm en sector anterior; continúa hasta Techo (+5.64m)."
+      notes: "Pilar cuadrado 20x20 cm en Núcleo Húmedo Frontal (Eje F); ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P11",
@@ -283,9 +283,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P11",
       zapataSize: "120x105x50/40 cm",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: -0.45,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Borde de Galería al Río; arriostrado mediante viga centradora VC.T-1 con P17."
+      notes: "Borde de Galería al Río; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P12",
@@ -315,7 +315,7 @@ export const EXACT_STRUCTURAL_GRID = {
       rebar: "6Ø12 + Est. Ø6 c/10-15 cm",
       builtTopY: 0.00,
       designTopY: 0.00,
-      notes: "RESTRICCIÓN CRÍTICA: Muere en Losa de Planta Baja (+0.00m). Comparte cabezal 230x230 cm con P14."
+      notes: "RESTRICCIÓN CRÍTICA: Muere en Losa de Planta Baja (+0.00m) en el borde del vacío de 38,00 m²."
     },
     {
       id: "P14",
@@ -328,9 +328,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P13-P14)",
       zapataSize: "230x230x50/40 cm (combinada P13-P14)",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Pilar cuadrado 20x20 cm en eje 6; continúa hasta Techo (+5.64m)."
+      notes: "Pilar cuadrado 20x20 cm en Núcleo Húmedo Frontal (Eje 6-F); ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P15",
@@ -345,7 +345,7 @@ export const EXACT_STRUCTURAL_GRID = {
       rebar: "6Ø12 + Est. Ø6 c/10-15 cm",
       builtTopY: 0.00,
       designTopY: 0.00,
-      notes: "RESTRICCIÓN CRÍTICA: Muere en Losa de Planta Baja (+0.00m). Prohibido cargar muros pesados encima en 2do piso."
+      notes: "RESTRICCIÓN CRÍTICA: Muere en Losa de Planta Baja (+0.00m) junto a Escalera 1. Prohibido cargar muros pesados encima en 2do piso."
     },
     {
       id: "P16",
@@ -358,9 +358,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P16-P18)",
       zapataSize: "240x215x50/40 cm (combinada P16-P18)",
       rebar: "6Ø12 (Subsuelo) / 4Ø12 (PB) + Est. Ø6",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 2.88,
-      notes: "Pilar robusto 25x40 en subsuelo y 15x30 en PB; llega hasta Losa de Planta Alta (+2.88m)."
+      notes: "Pilar robusto 25x40 en subsuelo y 15x30 en PB; ya hormigonado hasta Losa de Planta Alta (+2.88m)."
     },
     {
       id: "P17",
@@ -373,9 +373,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-P17",
       zapataSize: "130x70x50/40 cm",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: -0.45,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Esquina Suroeste de Galería al Río sobre medianera Sur; vinculada con viga centradora VC.T-1 a P11."
+      notes: "Esquina Suroeste de Galería al Río sobre medianera Sur; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P18",
@@ -388,9 +388,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P16-P18)",
       zapataSize: "240x215x50/40 cm (combinada P16-P18)",
       rebar: "6Ø12 (Subsuelo) / 4Ø12 (PB-PA) + Est. Ø6",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Medianera Izquierda (Eje 9) línea Galería; sección 40x25 en subsuelo y 30x15 en niveles superiores."
+      notes: "Medianera Izquierda (Eje 9) línea Galería; ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P19",
@@ -403,9 +403,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P19-P20)",
       zapataSize: "355x105x50/40 cm (combinada P19-P20)",
       rebar: "6Ø12 (Subsuelo) / 4Ø12 (PB-PA) + Est. Ø6",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Medianera Izquierda (Eje 9); zapata combinada de 3.55m con P20 arriostrada por doble VC.T-1 hacia P13-P14."
+      notes: "Medianera Izquierda (Eje 9); ya hormigonado en PB hasta +2.88m."
     },
     {
       id: "P20",
@@ -418,9 +418,9 @@ export const EXACT_STRUCTURAL_GRID = {
       zapataId: "Z-(P19-P20)",
       zapataSize: "355x105x50/40 cm (combinada P19-P20)",
       rebar: "4Ø12 + Est. Ø6 c/10-15 cm",
-      builtTopY: 0.00,
+      builtTopY: 2.88,
       designTopY: 5.64,
-      notes: "Esquina Sureste Fachada Frontal sobre medianera Sur; llega hasta vigas de Techo (+5.64m)."
+      notes: "Esquina Sureste Fachada Frontal sobre medianera Sur; ya hormigonado en PB hasta +2.88m."
     }
   ]
 };
@@ -431,23 +431,24 @@ export const ACTA_RECEPCION_SUMMARY = {
   contratista: "JIVESA S.A.",
   propietario: "Leonardo Gómez",
   estadoRealObraHoy: {
-    resumen: "100% Esqueleto de Hormigón Armado hasta Losa 1 (Planta Baja) y Escalera 1. 0 m² de paredes de ladrillo.",
+    resumen: "Zapatas, Subsuelo, Escalera 1 (Eje 8–9), Losas macizas L1/L4 y los 17 Pilares de PB hasta +2.88m ya hormigonados. Hueco abierto de 38,00 m² en Losa 1 (Eje B–G × Eje 1–5) a cerrar con Loza Rap. 0 m² de ladrillos.",
     avanceEsqueletoPB: 100,
     mamposteriaEjecutadaM2: 0,
     itemsCompletados: [
       "Excavación y profundización adicional de fundaciones (+1.00 m por estrato superior suelto) hasta cota +95.36m.",
       "100% de Zapatas aisladas/combinadas y vigas centradoras de equilibrio VC.T-1 (40x50 cm).",
-      "100% de Fustes y 20 Pilares (P1 a P20) desde fundación pasando por Subsuelo hasta Losa de Planta Baja.",
-      "100% de Vigas de Subsuelo (Pórticos 1 a 7 en cota -2.34m / +97.66m).",
-      "100% de Losa 1 en hormigón visto: Galería rebajada L1 (-0.45m / +99.55m) y Losas interiores L2, L3, L4 (+0.00m / +100.00m).",
-      "100% de Escalera 1 de H°A° vinculando Subsuelo y Planta Baja.",
-      "Pelos de espera (arranques Ø12) dejados sobre Losa 1 en los 17 pilares que continúan a Planta Alta (P12, P13 y P15 mueren en PB por diseño)."
+      "100% de los 20 Pilares en Subsuelo (P1 a P20) y 100% de los 17 Pilares de Planta Baja ya hormigonados hasta cota +2.88m (+102.88m).",
+      "100% de Vigas de Subsuelo (Pórticos 1 a 7 en cota -2.34m / +97.66m) y vigas perimetrales/interiores de Losa 1.",
+      "Losa 1 en hormigón visto ejecutada en Galería L1 (-0.45m / +99.55m, Eje A–B) y Losa L4 maciza (+0.00m / +100.00m, Eje B–G × Eje 5–9), quedando el vacío estructural entre vigas de 38.00 m² (Eje B–G × Eje 1–5) listo para cerrar con Loza Rap.",
+      "100% de Escalera 1 de H°A° en Eje 8–9 vinculando Subsuelo y Planta Baja.",
+      "Portón Balancín de 2.30m y Portoncito Peatonal de 0.95m haciendo juego en chapa gris grafito (100% ciegos hacia adentro) instalados sobre el frente municipal."
     ],
     itemsNoEjecutadosAun: [
-      "0 m² de mampostería de ladrillos (ni en subsuelo ni en planta baja).",
-      "Muro de contención frontal para relleno de cochera sobre calle Guillermo Arias.",
+      "Cerramiento con Loza Rap de 38.00 m² en el hueco abierto de Losa 1 (cuadrante Eje B–G × Eje 1–5, Fila 9 Planilla LG-RB).",
+      "0 m² de mampostería de ladrillos (ni en subsuelo ni en planta baja/alta).",
+      "Muro de contención frontal en z=+1.50m para relleno de cochera + Piso de Rejilla Metálica Electroforjada y Rejas Laterales sobre el hueco de oxigenación (z=1.50m..3.00m) + Pérgola de madera para enredadera y techo translúcido antigranizo.",
       "Aislación hidrófuga del muro vecino en Medianera Izquierda (Eje 9) expuesto por la excavación.",
-      "Pilares de Planta Baja a Planta Alta, Losa de 2do Piso (+2.88m) y Techo (+5.64m)."
+      "Escalera 2 (Eje 1–2 que sube a Planta Alta), Losa de 2do Piso (+2.88m), continuación de 14 pilares a Techo y Cubierta (+5.64m)."
     ]
   },
   ensayosCompresionProbeti: {
@@ -509,30 +510,30 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     severidad: "CRÍTICA",
     titulo: "Imposibilidad Física de Desagüe Cloacal por Gravedad en Subsuelo (Cota -2.34m vs Calle +0.00m)",
     origenDetectado: "Cruce de cotas topográficas (Subsuelo +97.66m vs Colector Calle Guillermo Arias +100.00m) y Plano IS/IH",
-    problema: "El Excel presupuestó únicamente las cañerías internas del baño y kitchenette del subsuelo, pero omitió que el subsuelo está 2.34 metros por debajo del nivel de la calle. El efluente cloacal no puede subir por gravedad hacia la red pública de ESSAP sobre Guillermo Arias.",
-    solucionTecnica: "Construir Cámara Séptica (Ø1.20m) + Pozo Absorbente calzado en piedra (Ø1.50m, prof. 5.0m) en el patio inferior (cota +96.20m) como indica el plano sanitario, o instalar Pozo de Bombeo Cloacal con bomba trituradora sumergible y válvula de retención hacia la calle.",
-    costoEstimadoGs: 9400000,
+    problema: "El Excel presupuestó únicamente las cañerías internas del subsuelo, pero omitió que el subsuelo está 2.34 metros por debajo del nivel de la calle. El efluente cloacal no puede subir por gravedad hacia la red pública de ESSAP sobre Guillermo Arias.",
+    solucionTecnica: "Construir Cámara Séptica + Pozo Absorbente calzado en ladrillo Tobatí en el corredor izquierdo del patio inferior (cota +96.20m, Ejes 8–9) como indica el plano sanitario, con acceso de manguera de camión cisterna por Escalera 1.",
+    costoEstimadoGs: 6800000,
     partidaVinculadaId: "forense_cloaca_subsuelo_bombeo"
   },
   {
     id: "omision_puente_epoxico_pilares",
     numero: 3,
     severidad: "ALTA",
-    titulo: "Puente de Adherencia Epóxico (Sikadur-32 Gel) y Tratamiento de Pelos de Arranque",
-    origenDetectado: "Estado actual de Losa 1 (hormigonada en dic-2025 con arranques expuestos a la intemperie)",
-    problema: "Los 17 pilares que continúan al 2do Piso tienen sus armaduras de espera (pelos Ø12) expuestas a oxidación superficial y junta fría de hormigonado de varios meses. Las planillas de continuación no incluyeron cepillado/convertidor ni puente epóxico estructural.",
-    solucionTecnica: "Limpieza mecánica con cepillo de acero, desoxidante fosfatizante en barras de espera, escarificado de junta fría en cabezas de los 17 pilares y aplicación de puente de adherencia epóxico estructural Sikadur-32 Gel previo al hormigonado de pilares de PA.",
-    costoEstimadoGs: 3450000,
+    titulo: "Rehabilitación de Losa 1 Expuesta y Puente de Adherencia Epóxico (Sikadur-32 Gel) en Nudos y Arranques",
+    origenDetectado: "Estado actual de Losa 1 y 17 pilares de PB (hormigonados en dic-2025 y expuestos a la intemperie)",
+    problema: "La Losa 1 y los 17 pilares de PB (hormigonados hasta +2.88m) estuvieron meses expuestos al sol e intemperie, presentando microfisuras de retracción térmica y oxidación superficial en pelos de espera. Las planillas de continuación no incluyeron hidrolavado, sellado Sikaflex ni puente epóxico estructural.",
+    solucionTecnica: "Hidrolavado 2.500 PSI, sellado Sikaflex-1A/SikaTop-107, limpieza con desoxidante fosfatizante en barras de espera y aplicación de puente epóxico Sikadur-32 Gel en juntas frías de vigas/losa PA y puente SikaLatex en carpeta.",
+    costoEstimadoGs: 7050000,
     partidaVinculadaId: "forense_puente_adherencia_epoxico"
   },
   {
     id: "omision_fila9_lozarrap",
     numero: 4,
     severidad: "CRÍTICA",
-    titulo: "Omisión de Precio en Fila 9 del Excel 'Planilla computo LG-RB + Lozarrap.xlsx'",
-    origenDetectado: "Auditoría de fórmulas en 'Planilla computo LG-RB + Lozarrap.xlsx' y PDF 'PPTO LG-RB-1.pdf'",
-    problema: "En la planilla de cómputo rápido (Cerramiento LG-RB), la Fila 9 ('Cerramiento con loza rap: 38.00 m²') tiene cargada la cantidad física (38.00 m²) pero la celda de Precio Unitario quedó vacía (0 Gs), subestimando el presupuesto impreso en Gs. 14.440.000.",
-    solucionTecnica: "Incorporar el costo real de los 38.00 m² de cerramiento horizontal con viguetas pretensadas, bovedillas, malla Ø5mm y capa de compresión H°A° a razón de Gs. 380.000/m².",
+    titulo: "Omisión de Precio en Fila 9 del Excel 'Planilla computo LG-RB + Lozarrap.xlsx' (Vacío de 38,00 m² en Losa 1)",
+    origenDetectado: "Auditoría de fórmulas en 'Planilla computo LG-RB + Lozarrap.xlsx', PDF 'PPTO LG-RB-1.pdf' y verificación del hueco abierto en obra",
+    problema: "En Planta Baja hoy existe un hueco abierto entre vigas de 38.00 m² (cuadrante Eje B a Eje G y Eje 1 a Eje 5, donde irá el Estar Social). En la planilla LG-RB la Fila 9 ('Cerramiento con loza rap: 38.00 m²') tiene cargada la cantidad exacta (38.00 m²) pero la celda de Precio Unitario quedó vacía (0 Gs), subestimando la Etapa 1 en Gs. 14.440.000.",
+    solucionTecnica: "Incorporar como ESENCIAL de Etapa 1 (Crédito 300M) los 38.00 m² de cerramiento horizontal con viguetas pretensadas Lozarrap, bovedillas, malla Ø5mm y capa de compresión H°A° a razón de Gs. 380.000/m² para completar el piso del Estar en PB.",
     costoEstimadoGs: 14440000,
     partidaVinculadaId: "forense_omision_fila9_lozarrap"
   },
@@ -542,8 +543,8 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     severidad: "CRÍTICA ESTRUCTURAL",
     titulo: "Restricción Estructural de Pilares que Mueren en Planta Baja (P12, P13 y P15)",
     origenDetectado: "Plano Estructural E4 (Planta Alta) y E9 (Cuadro de Pilares — Ing. Gustavo Velázquez)",
-    problema: "Los pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) nacen en las zapatas para sostener la Losa sobre Subsuelo pero MUEREN en el nivel de Planta Baja (Y = 0.00m). Si se levantan muros pesados de ladrillo macizo o apoyos de techo sobre esos puntos en el 2do piso sin apeo, se sobrecargará la losa por punzonamiento y flexión.",
-    solucionTecnica: "En Planta Alta, alinear los cerramientos portantes exclusivamente sobre los ejes principales (A, B, D, F, G y 1, 2, 4, 6, 9) y ejecutar las divisiones interiores sobre la vertical de P12, P13 y P15 mediante tabiquería liviana (placa cementicia / Durlock o ladrillo hueco cerámico no portante con viga chata de reparto).",
+    problema: "Los pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) nacen en las zapatas para sostener la Losa sobre Subsuelo pero MUEREN en el nivel de Planta Baja (Y = 0.00m), mientras que los otros 17 pilares ya están hormigonados hasta +2.88m. Si se levantan muros pesados de ladrillo macizo sobre P12/P13/P15 en el 2do piso sin apeo, se sobrecargará la losa.",
+    solucionTecnica: "En Planta Alta, alinear los cerramientos portantes sobre los ejes principales y ejecutar las divisiones interiores entre Dormitorio Principal, Dormitorio 2, Escritorio y Baños sobre la vertical de P12, P13 y P15 mediante tabiquería liviana (Durlock W112 / ladrillo hueco cerámico no portante con viga chata de reparto).",
     costoEstimadoGs: 4200000,
     partidaVinculadaId: "forense_tabiqueria_liviana_apeo"
   },
@@ -551,10 +552,10 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     id: "omision_rubro_30_2_canaletas",
     numero: 6,
     severidad: "ALTA",
-    titulo: "Rubro 30.2 en 0 Gs en PRESUPUESTO COMPLETO: Canaletas y Bajadas Pluviales",
-    origenDetectado: "Planilla 'PRESUPUESTO COMPLETO' (Rubro 30.2 con subtotal Gs. 0)",
+    titulo: "Rubro 30.2 en 0 Gs en PRESUPUESTO COMPLETO: Canaletas y Bajadas Pluviales (Núcleo Eje F–G y Eje A)",
+    origenDetectado: "Planilla 'PRESUPUESTO COMPLETO' (Rubro 30.2 con subtotal Gs. 0) vs. Plano IAA",
     problema: "El presupuesto general dejó en 0 Gs las canaletas y bajadas pluviales (Rubro 30.2). Descargar libremente el agua de 86 m² de cubierta sobre el talud arenoso (estrato SM) provocará erosión regresiva y socavación de las zapatas del Eje A.",
-    solucionTecnica: "Instalar canaletas ocultas de chapa galvanizada N° 24/26 y bajadas pluviales de PVC Ø100mm encauzadas hasta el pie del barranco con disipador de energía (incluido en partida 3.3).",
+    solucionTecnica: "Instalar canaletas ocultas de chapa galvanizada N° 24/26 y bajadas pluviales de PVC Ø100mm alineadas al Núcleo Húmedo Eje F–G y Eje A encauzadas hasta el pie del barranco con disipador de energía (incluido en partida 3.3).",
     costoEstimadoGs: 7800000,
     partidaVinculadaId: "desagues_canaletas"
   },
@@ -573,10 +574,10 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     id: "omision_rubro_28_1_sanitarios",
     numero: 8,
     severidad: "MEDIA",
-    titulo: "Rubro 28.1 en 0 Gs: Artefactos Sanitarios y Griferías",
+    titulo: "Rubro 28.1 en 0 Gs: Artefactos Sanitarios y Griferías (Núcleo Húmedo Vertical Eje F–G)",
     origenDetectado: "Planilla 'PRESUPUESTO COMPLETO' (Rubro 28.1 en 0 Gs)",
-    problema: "Se cotizó la red de cañerías pero se dejó en 0 Gs la provisión y colocación de inodoros, lavatorios, duchas y griferías necesarias para habilitar el baño suite y baño social.",
-    solucionTecnica: "Provisión e instalación de artefactos sanitarios, griferías monocomando y accesorios de baño (integrado en partida 10.1).",
+    problema: "Se cotizó la red de cañerías en el Eje F–G pero se dejó en 0 Gs la provisión y colocación de inodoros, lavatorios, duchas y griferías necesarias para habilitar el Baño en Suite, Baño 2 PA y Baño Social PB.",
+    solucionTecnica: "Provisión e instalación de artefactos sanitarios, griferías monocomando y accesorios de baño sobre el Núcleo Húmedo Eje F–G (integrado en partida 10.1).",
     costoEstimadoGs: 7300000,
     partidaVinculadaId: "bano_suite_sanitarios"
   },
@@ -584,10 +585,10 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     id: "omision_rubro_27_3_termocalefon",
     numero: 9,
     severidad: "MEDIA",
-    titulo: "Rubro 27.3 en 0 Gs: Termocalefón y Conexión de Agua Caliente",
+    titulo: "Rubro 27.3 en 0 Gs: Termocalefón y Conexión de Agua Caliente en Eje F–G",
     origenDetectado: "Planilla 'PRESUPUESTO COMPLETO' (Rubro 27.3 en 0 Gs)",
-    problema: "La red de agua caliente en PPR termofusión fue presupuestada, pero el equipo termocalefón quedó en 0 Gs.",
-    solucionTecnica: "Provisión y montaje de termocalefón de 80 litros con válvulas de seguridad y llaves térmicas dedicadas (integrado en partida 10.1).",
+    problema: "La red de agua caliente en PPR termofusión sobre la montante vertical del Eje F–G fue presupuestada, pero el equipo termocalefón quedó en 0 Gs.",
+    solucionTecnica: "Provisión y montaje de termocalefón de 80 litros en el núcleo húmedo del Eje F–G para abastecer en vertical corta Baño en Suite, Baño 2 PA y Cocina PB (integrado en partida 10.1).",
     costoEstimadoGs: 2500000,
     partidaVinculadaId: "bano_suite_sanitarios"
   },
@@ -595,10 +596,10 @@ export const OMISIONES_CRITICAS_PRESUPUESTO = [
     id: "omision_rubro_33_1_barandas",
     numero: 10,
     severidad: "CRÍTICA SEGURIDAD",
-    titulo: "Rubro 33.1 en 0 Gs: Barandas de Escalera y Balcón/Galería al Río (Caída libre de 3.20m)",
+    titulo: "Rubro 33.1 en 0 Gs: Barandas de Escaleras 1 y 2 y Galería/Terraza al Río (Caída libre de 3.20m)",
     origenDetectado: "Planilla 'PRESUPUESTO COMPLETO' (Rubro 33.1 en 0 Gs) y verificación de desnivel en Eje A",
-    problema: "La Losa L1 de la Galería (+99.55m) tiene una caída libre de más de 3.20 metros hacia el terreno natural en pendiente y la Escalera 1 carece de baranda. El rubro 33.1 quedó en 0 Gs, representando un riesgo grave de accidente en obra y uso.",
-    solucionTecnica: "Instalar barandas de protección definitivas de acero inoxidable / hierro galvanizado pintado al horno con vidrio laminado de seguridad o parantes horizontales en todo el borde del Eje A (9.74m) y en el desarrollo de la Escalera 1.",
+    problema: "La Losa L1 de la Galería (+99.55m) tiene una caída libre de más de 3.20 metros hacia el terreno natural en pendiente y las Escaleras 1 (Eje 8–9) y 2 (Eje 1–2) requieren barandas. El rubro 33.1 quedó en 0 Gs.",
+    solucionTecnica: "Instalar barandas de protección definitivas de hierro galvanizado pintado al horno en todo el borde del Eje A (9.74m), en las Escaleras 1 y 2 y rejas laterales sobre el foso de oxigenación frontal.",
     costoEstimadoGs: 11200000,
     partidaVinculadaId: "forense_barandas_seguridad"
   }
@@ -650,83 +651,83 @@ export const GEOTECHNICAL_DATA = {
   ]
 };
 
-// Architectural spaces
+// Architectural spaces aligned 100% with Official Blueprints (instalacion_sanitaria_agua.png & estructural_e5_subsuelo_escalera.png)
 export const ARCHITECTURAL_ROOMS = [
   {
     id: "galeria",
-    name: "Galería Panorámica y Parrilla (Losa L1)",
+    name: "Galería Panorámica al Río (Losa L1 — Sin Parrilla Fija en PB)",
     level: "Planta Baja Rebajada (+99.55m / -0.45m)",
-    dimensions: "3.40m x 9.74m (Eje A a Eje B)",
-    area: 33.12,
-    desc: "Galería mirador sobre Losa L1 rebajada -0.45m (ya hormigonada en H°A° visto) con orientación Noroeste hacia la curva del Río Paraguay y el Mirador Itá Pytã Punta.",
-    highlights: ["Losa L1 ya ejecutada en H°A° visto", "Orientación Noroeste al Río Paraguay (85-96m)", "Conexión directa con Estar/Comedor en Eje B"]
+    dimensions: "3.50m x 9.55m (Eje A a Eje B)",
+    area: 33.42,
+    desc: "Galería mirador sobre Losa L1 rebajada -0.45m (ya hormigonada en H°A° visto) con orientación Noroeste hacia el Río Paraguay. Queda 100% libre como expansión social (la parrillita fija se ubica abajo en el Subsuelo hacia el patio).",
+    highlights: ["Losa L1 ya ejecutada en H°A° visto", "Orientación Noroeste al Río Paraguay (85-96m)", "Ventanales Blindex en Eje B"]
   },
   {
     id: "estar_comedor",
-    name: "Estar / Living Comedor Social",
+    name: "Estar Social Principal (Sector Loza Rap 38.00 m² + Escalera 2 en Eje 1–2)",
     level: "Planta Baja (+100.00m / +2.34m est.)",
-    dimensions: "4.80m x 5.00m",
-    area: 24.00,
-    desc: "Área social principal sobre Losa L2/L3 ejecutada, con amplios ventanales corredizos hacia la galería panorámica.",
-    highlights: ["Iluminación natural cruzada", "Losa maciza H°A° 315 kg/cm² ejecutada", "Piso porcelanato 60x60 proyectado"]
+    dimensions: "4.95m x 4.80m (Eje 1–5 × Eje B–E)",
+    area: 23.76,
+    desc: "Área social principal en el cuadrante izquierdo/Norte (x = -0.74m a +3.84m, z = 5.00m a 9.94m) sobre el paño de 38.00 m² que se cierra con viguetas Loza Rap en Etapa 1, vinculada a la Escalera 2 (Eje 1–2, 3.90×0.80m) que sube a Planta Alta.",
+    highlights: ["Cierre con Loza Rap 38.00 m² en Etapa 1", "Escalera 2 en Eje 1–2 sube a Planta Alta", "Ventanales corredizos Blindex en Eje B al Río"]
   },
   {
     id: "cocina",
-    name: "Cocina y Desayunador",
+    name: "Cocina / Comedor Integrado (Sobre Losa L4 Ejecutada + Escalera 1 en Eje 8–9)",
     level: "Planta Baja (+100.00m / +2.34m est.)",
-    dimensions: "3.20m x 3.80m",
-    area: 12.16,
-    desc: "Cocina integrada con mesada de granito/cuarzo y ventilación hacia el frente.",
-    highlights: ["Isla desayunadora", "Conexión directa con estar-comedor", "Plomería PPR termofusión proyectada"]
-  },
-  {
-    id: "suite",
-    name: "Dormitorio Principal en Suite / Planta Alta",
-    level: "Planta Baja (+100.00m) / Planta Alta (+102.88m)",
-    dimensions: "3.45m x 4.20m",
-    area: 14.49,
-    desc: "Dormitorio principal con vestidor y baño privado. En el nivel +102.88m supera los techos de tejas vecinos logrando visual limpia al río.",
-    highlights: ["Cota +102.88m en 2do Piso con vista panorámica", "Baño privado 1.25m x 2.22m", "Tabiquería liviana sobre ejes P12/P13/P15"]
+    dimensions: "6.20m x 2.75m (Eje 5–9 × Eje B–G)",
+    area: 17.05,
+    desc: "Cocina y comedor en el ala derecha/Sur (x = -4.87m a -0.74m, z = 3.00m a 9.94m) sobre la Losa maciza L4 ya hormigonada, alineada al Núcleo Húmedo Frontal del Eje F–G y contigua a la Escalera 1 (Eje 8–9, 3.30×0.90m) que baja al Subsuelo.",
+    highlights: ["Sobre Losa maciza L4 (315 kg/cm²) ya ejecutada", "Núcleo húmedo vertical en Eje F–G", "Escalera 1 en Eje 8–9 baja a Subsuelo"]
   },
   {
     id: "bano_social",
-    name: "Baño Social",
+    name: "Baño Social / SSHH (Núcleo Húmedo Frontal Eje F–G)",
     level: "Planta Baja (+100.00m)",
-    dimensions: "1.25m x 1.80m",
-    area: 2.25,
-    desc: "Sanitario social próximo al acceso y núcleo de escalera.",
-    highlights: ["Fácil acceso desde el estar", "Ventilación natural"]
+    dimensions: "1.10m x 2.00m (Eje 5–6 × Eje F–G)",
+    area: 2.20,
+    desc: "Sanitario social ubicado en el frente (x = -1.64m a -0.40m, z = 3.00m a 5.00m) sobre el Eje F–G, compartiendo columna montante de agua PPR, desagüe cloacal y pluvial con la Cocina y los 2 baños de Planta Alta.",
+    highlights: ["Alineado al Núcleo Húmedo Vertical Eje F–G", "Ventilación alta hacia fachada Eje G", "Unifica bajadas con los 2 baños de Planta Alta"]
+  },
+  {
+    id: "suite",
+    name: "Planta Alta Completa: 2 Dormitorios + Escritorio/Desk + 2 Baños + Vestidor (Sin Balcón Frontal)",
+    level: "Planta Alta (+102.88m / +5.22m est.)",
+    dimensions: "9.74m x 6.94m interior + Terraza al Río Eje A–B",
+    area: 67.59,
+    desc: "Al desembarcar de la Escalera 2 (Eje 1–2) se ubica el Escritorio / Desk (x=+1.80..+4.87m, z=7.37..9.94m), seguido del Dormitorio 2 (x=-0.74..+1.80m, z=5.26..9.94m) y el Dormitorio Principal en Suite (x=-4.87..-0.74m, z=5.00..9.94m). Sobre el frente Eje F–G (z=3.00..5.00m) se alinean el Vestidor, el Baño en Suite y el Baño 2 PA, con muro frontal cerrado en Eje G (sin balcón ni Blindex frontal) y Terraza al Río en Eje A–B.",
+    highlights: ["2 Dormitorios + Escritorio/Desk al subir Escalera 2", "Vestidor + Baño Suite + Baño 2 alineados en Eje F–G", "Frente Eje G cerrado sin balcón ni Blindex frontal"]
   },
   {
     id: "cochera_muro",
-    name: "Estacionamiento Frontal y Muro de Contención",
+    name: "Cochera Frontal: Portón Balancín 2.30m + Peatonal, Pérgola Antigranizo y Piso de Rejilla Metálica",
     level: "Nivel Calle (+100.00m, z = -4.00m a +3.00m)",
     dimensions: "9.89m x 7.00m",
     area: 69.23,
-    desc: "Doble cochera frontal entre la línea municipal de Calle Guillermo Arias (z = -4.00m) y la fachada Eje G (z = +3.00m), contenida por muro ciclópeo/armado y relleno compactado.",
-    highlights: ["Muro de contención de 30cm con viga de fundación", "Relleno compactado con drenaje francés", "Portón vehicular sobre cul-de-sac Guillermo Arias"]
+    desc: "Cochera frontal con Muro Frontal 100% Ciego, Portón Balancín existente de 2.30m (x=+1.20..+3.50m) y Portoncito Peatonal haciendo juego de 0.95m (x=-2.20..-1.25m) en chapa gris grafito (100% ciegos hacia adentro). Incorpora Pérgola de Madera para Enredadera + Techo Translúcido Antigranizo sobre el vehículo y Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre el hueco de oxigenación del subsuelo (z=1.50m..3.00m).",
+    highlights: ["Portón Balancín 2.30m + Portoncito 0.95m gris grafito 100% ciego", "Piso de Rejilla Metálica Electroforjada en z=1.50m..3.00m", "Pérgola de madera p/ enredadera + techo translúcido antigranizo"]
   },
   {
     id: "subsuelo_depto",
-    name: "Departamento Autónomo Subsuelo",
+    name: "Subsuelo (+97.66m): Lavadero, Depósito y Parrillita / Quincho Inferior hacia el Patio",
     level: "Nivel Subsuelo (+97.66m / -2.34m)",
-    dimensions: "6.50m x 8.00m",
-    area: 52.00,
-    desc: "Unidad independiente bajo la Losa 1 (Pórticos 1 a 7 y Escalera 1 ya ejecutados). Requiere aislación de medianera Eje 9 y solución cloacal por cota inferior a la calle.",
-    highlights: ["Vigas Pórticos 1-7 y Escalera 1 ya ejecutadas", "Salida a patio inferior (+96.20m)", "Requiere cámara séptica/pozo o bombeo cloacal"]
+    dimensions: "9.74m x 10.34m (100.71 m² bajo Losa 1)",
+    area: 100.71,
+    desc: "Nivel inferior con vigas de Pórticos 1 a 7 y llegada de Escalera 1 en Eje 8–9 ya ejecutadas, ventilado e iluminado por el foso de oxigenación frontal (z=1.50m..3.00m bajo el piso de rejilla metálica). Aloja el Lavadero, el Depósito, la Cisterna de 1.000L y la Parrillita / Quincho Inferior hacia el patio (x=-4.87..-1.64m, z=11.50..13.34m).",
+    highlights: ["Parrillita / Quincho ubicada abajo hacia el patio", "Escalera 1 en Eje 8–9 ya ejecutada", "Oxigenación natural bajo piso de rejilla metálica en z=1.50..3.00m"]
   }
 ];
 
 // Structural Foundation & Slab Registry (Updated with Forensic Audit & Acta 29/12/2025)
 export const STRUCTURAL_ITEMS = [
   { id: "Z1_Z4", name: "Zapatas Ejes F-G y Medianeras (P1 a P20)", type: "Zapatas Aisladas/Combinadas + VC.T-1", desc: "Fundadas a cota +95.36m (-4.64m, profundizadas 1.00m extra) con vigas centradoras 40x50cm", status: "Ejecutado 100%" },
-  { id: "Z5_Z12", name: "Vigas de Subsuelo (Pórticos 1 a 7)", type: "Vigas H°A° HA-25 (Cota +97.66m)", desc: "Arriostramiento completo en nivel -2.34m y arranque de Escalera 1", status: "Ejecutado 100%" },
-  { id: "Z13_Z20", name: "Pilares P1 a P20 (Tramo Subsuelo a PB)", type: "Hormigón Armado HA-25 (240-265 kg/cm²)", desc: "20 pilares ejecutados hasta Losa 1; P12, P13 y P15 mueren en PB por diseño", status: "Ejecutado 100%" },
-  { id: "pilares", name: "Losa 1 Completa (L1 Galería + L2-L4 PB + Escalera 1)", type: "Losa Maciza H°A° Visto (305-325 kg/cm²)", desc: "100% ejecutada (Galería a -0.45m y PB a +0.00m). 0 m² de paredes de ladrillo", status: "Ejecutado 100%" },
-  { id: "losa_fase1", name: "Continuación 17 Pilares a Planta Alta (+2.88m)", type: "H°A° HA-25 + Puente Epóxico Sikadur-32", desc: "Elevación de 17 pilares desde Losa 1 (pelos de espera existentes) hasta +2.88m y +5.64m", status: "Próxima Etapa Crítica" },
-  { id: "muro_cochera", name: "Muro Contención Estacionamiento (z = -4m a +3m)", type: "Mampostería Armada 30cm / Ciclópeo", desc: "Muro de retención sobre calle Guillermo Arias con viga de fundación y drenaje francés", status: "Próxima Etapa Crítica" },
-  { id: "losa_fase2", name: "Losa 2do Piso / Planta Alta (Cota +102.88m)", type: "Losa H°A° L1-L11 / Loza Rap (+2.88m)", desc: "Entrepiso de Planta Alta con voladizo frontal a z = 2.15m y visual sobre techos vecinos", status: "Próxima Etapa Crítica" },
-  { id: "techo", name: "Vigas de Techo y Cubierta (+105.64m)", type: "Isopanel PIR + Estructura Metálica / H°A°", desc: "Coronamiento en cota +5.64m s/calle con canaletas y bajadas pluviales", status: "Próxima Etapa Crítica" }
+  { id: "Z5_Z12", name: "Vigas de Subsuelo (Pórticos 1 a 7) + Escalera 1 (Eje 8–9)", type: "Vigas H°A° HA-25 (Cota +97.66m)", desc: "Arriostramiento completo en nivel -2.34m y Escalera 1 en Eje 8–9 ejecutada al 100%", status: "Ejecutado 100%" },
+  { id: "Z13_Z20", name: "20 Pilares en Subsuelo + 17 Pilares de PB ya Hormigonados hasta +2.88m", type: "Hormigón Armado HA-25 (240-265 kg/cm²)", desc: "P12, P13 y P15 mueren en PB (+0.00m); los otros 17 pilares de PB ya están hormigonados hasta +2.88m (+102.88m)", status: "Ejecutado 100%" },
+  { id: "pilares", name: "Losa 1: Galería L1 (-0.45m) + Losa Maciza L4 (+0.00m) + Vacío 38.00 m²", type: "Losa H°A° Visto (305-325 kg/cm²) + Hueco entre Vigas", desc: "L1 y L4 hormigonadas; cuadrante Eje B–G × Eje 1–5 (38.00 m²) abierto entre vigas para cerrar con Loza Rap en Etapa 1", status: "L1/L4 Ejecutadas • 38 m² A Cerrar" },
+  { id: "losa_fase1", name: "Cerramiento Loza Rap 38.00 m² en Losa 1 (PB) + Escalera 2 (Eje 1–2)", type: "Viguetas Pretensadas Loza Rap + H°A°", desc: "Cierre obligatorio en Etapa 1 del hueco de 38.00 m² en Planta Baja (Estar Social) y Escalera 2 hacia Planta Alta", status: "Próxima Etapa Crítica" },
+  { id: "muro_cochera", name: "Muro Contención Cochera (z=+1.50m) + Rejilla Metálica + Pérgola Antigranizo", type: "Mampostería Armada 30cm + Rejilla Electroforjada", desc: "Muro en z=+1.50m, piso de rejilla metálica transitable sobre foso de oxigenación (z=1.50..3.00m) y pérgola de madera", status: "Próxima Etapa Crítica" },
+  { id: "losa_fase2", name: "Losa 2do Piso / Planta Alta (Cota +102.88m — Sin Balcón Frontal)", type: "Losa H°A° / Loza Rap (+2.88m) s/ 17 Pilares Existentes", desc: "Entrepiso de Planta Alta apoyado sobre los 17 pilares de PB ya hormigonados hasta +2.88m (frente en Eje G sin voladizo)", status: "Próxima Etapa Crítica" },
+  { id: "techo", name: "Elevación 14 Pilares a +5.64m, Vigas de Coronamiento y Cubierta (+105.64m)", type: "Isopanel PIR / Tejas Tobatí + Estructura Portante", desc: "Coronamiento en cota +5.64m s/calle con canaletas y bajadas pluviales por Eje F–G y Eje A", status: "Próxima Etapa Crítica" }
 ];
 
 // Transcripción Íntegra y Exacta (0 omisiones) de los 2 Presupuestos de EDIFICA STUDIO E.A.S. — Arquitectura y Construcción
@@ -988,10 +989,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "hormigon_vigas_losa",
     categoria: "Estructura Losa",
-    item: "2.2 Continuación 17 Pilares HA-25 y Vigas de Planta Alta (+2.88m)",
+    item: "2.2 Vigas de Planta Alta (+2.88m), Escalera 2 (Eje 1–2) y Elevación de 14 Pilares a Techo (+5.64m)",
     unidad: "m3",
     cantidad: 11.50,
-    formulaDim: "17 pilares (h=2.88m) + vigas V201–V214 = 11.50 m³",
+    formulaDim: "Vigas PA V201–V214 + Escalera 2 (Eje 1–2) + 14 pilares (+2.88m a +5.64m) = 11.50 m³",
     precioUnitarioGs: 2200000,
     puJivesaGs: 2450000,
     puLgrbGs: 2200000,
@@ -1001,9 +1002,9 @@ export const PRESUPUESTO_PARTIDAS = [
     subtotalGs: 25300000,
     esencial: true,
     origenTipo: "IA_AUDITORIA",
-    origenLabel: "🤖 Incluido por IA (Análisis Técnico)",
-    camposEstimadosIA: ["Volumen (11.50 m³) y P.U. (Gs. 2.200.000/m³) calculados por IA sobre los 17 pilares que suben en Plano E4/E9 (En Edifica Studio PB #2 figura global Gs. 45.750.000 = Gs. 3.978.260/m³)"],
-    desc: "Hormigón estructural cargado con bomba para los 17 pilares que suben desde Losa 1 y vigas de Planta Alta (En Edifica Studio PB #2 figura global Gs. 45.750.000)."
+    origenLabel: "🤖 Incluido por IA (17 Pilares PB ya en +2.88m • Vigas PA + Escalera 2 + Pilares a Techo)",
+    camposEstimadosIA: ["Volumen (11.50 m³) y P.U. (Gs. 2.200.000/m³) calculados por IA: los 17 pilares de PB ya están hormigonados hasta +2.88m; cubre vigas de PA, Escalera 2 (Eje 1–2) y elevación a +5.64m"],
+    desc: "Los 17 pilares de Planta Baja ya están hormigonados hasta +2.88m. Esta partida cubre el hormigón estructural de las vigas de Planta Alta (+2.88m), la Escalera 2 en Eje 1–2 (que sube a PA) y la elevación de los 14 pilares hasta el techo (+5.64m)."
   },
 
   // Prioridad 3: Techo y Cubierta Termoacústica (+105.64m / +5.64m)
@@ -1154,10 +1155,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "parrilla_ducto",
     categoria: "Galería y Exterior",
-    item: "5.2 Parrilla Construida de Ladrillo Refractario y Campana (ÚLTIMA PRIORIDAD / OPCIONAL)",
+    item: "5.2 Parrillita / Quincho Inferior Fijo hacia el Patio en Subsuelo (ÚLTIMA PRIORIDAD / OPCIONAL — Galería PB al Río va sin parrilla fija)",
     unidad: "un",
     cantidad: 1,
-    formulaDim: "1.60m × 0.85m × 2.88m h en Galería Eje A-B (Opcional)",
+    formulaDim: "3.23m × 1.84m en Subsuelo hacia Patio (x = -4.87m..-1.64m, z = 11.50m..13.34m) — Galería PB limpia",
     precioUnitarioGs: 7500000,
     puJivesaGs: 8200000,
     puLgrbGs: 7500000,
@@ -1167,9 +1168,9 @@ export const PRESUPUESTO_PARTIDAS = [
     subtotalGs: 7500000,
     esencial: false,
     origenTipo: "PLANILLA_JIVESA_LGRB",
-    origenLabel: "📄 Planilla JIVESA / LG-RB (Opcional — Última Inversión)",
-    camposEstimadosIA: ["Marcada como ÚLTIMA PRIORIDAD / OPCIONAL: el propietario ya dispone de parrilla portátil; se priorizan baño, cocina, lavadero e interiores"],
-    desc: "Última prioridad de inversión (Opcional): el propietario ya dispone de parrilla portátil; se priorizan siempre los detalles internos de habitabilidad (baño, cocina, lavadero, pisos, aberturas y confort interior)."
+    origenLabel: "📄 Planilla JIVESA / LG-RB (Opcional — En Subsuelo hacia el Patio)",
+    camposEstimadosIA: ["Según plano original de Instalación Sanitaria, la Galería PB al Río (Eje A-B) NO lleva parrilla fija; la parrillita fija con mesada húmeda se ubica abajo en el Subsuelo mirando al patio"],
+    desc: "De acuerdo con los planos originales, la Galería PB al Río (Eje A–B) queda 100% despejada sin parrilla de material (allí puede usarse parrilla portátil), mientras que la Parrillita / Quincho fijo con bacha se ubica en el Subsuelo (+97.66m) vinculada directamente al patio e integrada al núcleo húmedo."
   },
   {
     id: "vidrios_templados_galeria",
@@ -1214,10 +1215,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "instalaciones_sanitarias_desagues",
     categoria: "Instalaciones",
-    item: "7.2 Instalación Hidráulica (PPR termofusión Frío/Caliente) y Desagüe Cloacal Baño/Cocina/Lavadero",
+    item: "7.2 Instalación Hidráulica (PPR termofusión Frío/Caliente) y Desagüe Cloacal en Núcleo Húmedo Eje F-G",
     unidad: "gl",
     cantidad: 1,
-    formulaDim: "Red PPR Fría/Caliente + PVC Cloacal 100/50/40mm + Cámaras",
+    formulaDim: "Pleno Vertical Eje F-G (z = 3.00m..5.00m): PPR Fría/Caliente + PVC Cloacal 100/50/40mm + Cámaras",
     precioUnitarioGs: 14800000,
     puJivesaGs: 19200000,
     puLgrbGs: 14800000,
@@ -1228,8 +1229,8 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: true,
     origenTipo: "PLANILLA_JIVESA_LGRB",
     origenLabel: "📄 Planilla JIVESA / LG-RB (Esencial Habitabilidad)",
-    camposEstimadosIA: ["Incluye agua fría y caliente PPR para Baño, Cocina y Lavadero (En Edifica Studio rubros #16, #17 y #18 suman Gs. 21.612.500 en PB pero advierten 'solo frío')"],
-    desc: "Cañerías PVC cloacal 100/50/40mm en niveles superiores (+0.00m y +2.88m), cámaras de inspección y red agua fría/caliente para baño, cocina y lavadero."
+    camposEstimadosIA: ["Incluye agua fría y caliente PPR para el Núcleo Húmedo vertical Eje F-G (PB: Baño Social y Cocina; PA: Vestidor, Baño en Suite y Baño 2; Subsuelo: Lavadero)"],
+    desc: "Cañerías PVC cloacal 100/50/40mm y montantes PPR agua fría/caliente concentradas en el Núcleo Húmedo vertical del frente (Eje F–G, z = 3.00m..5.00m), optimizando recorridos entre PB, PA y Subsuelo."
   },
   {
     id: "pisos_porcelanato",
@@ -1237,7 +1238,7 @@ export const PRESUPUESTO_PARTIDAS = [
     item: "8.1 Contrapiso, Carpeta y Piso Porcelanato 60x60 en Planta Habitable",
     unidad: "m2",
     cantidad: 80.00,
-    formulaDim: "80.00 m² interiores (Estar, Cocina, Suite, Baño y Lavadero)",
+    formulaDim: "80.00 m² interiores (Estar Social, Cocina/Comedor, Baño Social, Suite, Dormitorio 2 y Escritorio)",
     precioUnitarioGs: 180000,
     puJivesaGs: 215000,
     puLgrbGs: 180000,
@@ -1249,15 +1250,15 @@ export const PRESUPUESTO_PARTIDAS = [
     origenTipo: "PLANILLA_JIVESA_LGRB",
     origenLabel: "📄 Planilla JIVESA / LG-RB (Esencial Habitabilidad)",
     camposEstimadosIA: ["Metraje (80.00 m²) verificado en plano PB (En Edifica Studio PB #9 Pisos = Gs. 18.937.500 en Opción A / Gs. 15.937.500 en Opción B = Gs. 199.219/m²)"],
-    desc: "Carpeta niveladora sobre Losa L2-L4 y colocación de porcelanato rectificado 60x60 con pastina y zócalos."
+    desc: "Carpeta niveladora sobre Losa 1 (incluyendo los 38.00 m² cerrados con Loza Rap) y colocación de porcelanato rectificado 60x60 con pastina y zócalos."
   },
   {
     id: "porton_cochera_automatizado",
     categoria: "Contención y Estacionamiento",
-    item: "9.1 Compra e Instalación de Motor Automatizador para Portón Balancín Existente (Kit Basculante Rápido PPA/Peccinin + Traba Eléctrica + Fotocélula + Controles + Mano de Obra)",
+    item: "9.1 Motorización de Portón Balancín Existente (2.30m en Chapa Grafito Ciega) + Portoncito Peatonal Haciendo Juego (0.95m × 2.18m c/ Cerradura Eléctrica) + Pérgola de Madera p/ Enredadera y Techo Antigranizo",
     unidad: "kit",
     cantidad: 1,
-    formulaDim: "Kit Motor 1/2 HP JetFlex + Riel 1.50m + Traba + Fotocélula (Gs. 1.950.000) + Instalación/Cableado (Gs. 700.000)",
+    formulaDim: "Motor Portón Balancín 2.30m (x=+1.20..+3.50m) + Portoncito Peatonal 0.95m en chapa grafito ciega (x=-2.20..-1.25m) + Pérgola Madera/Policarbonato Antigranizo",
     precioUnitarioGs: 2650000,
     puJivesaGs: 2850000,
     puLgrbGs: 2650000,
@@ -1267,9 +1268,9 @@ export const PRESUPUESTO_PARTIDAS = [
     subtotalGs: 2650000,
     esencial: true,
     origenTipo: "IA_AUDITORIA",
-    origenLabel: "🤖 Incluido por IA según Análisis — Costo Mercado Asunción (Portón Balancín ya instalado)",
-    camposEstimadosIA: ["El Portón Balancín ya está instalado en obra (⚫ Negro Gs. 0 vs. Gs. 11.740.000 que cotizaba Edifica Studio por portón nuevo); solo se presupuesta el Kit de Motorización Rápida PPA/Peccinin + Traba + Fotocélula (Materiales Gs. 1.950.000 + Mano de Obra Gs. 700.000 = Gs. 2.650.000)"],
-    desc: "El portón balancín (basculante) ya se encuentra instalado en el frente. Esta partida cubre la compra e instalación del motor basculante rápido de 1/2 HP (tipo PPA JetFlex / Peccinin), riel accionador de 1.50m, central electrónica, 2 controles remotos, traba electromagnética de seguridad, fotocélula anti-aplastamiento (para la Chery T2 Pro y mascotas Emma y Serafina) y mano de obra de montaje y cableado."
+    origenLabel: "🤖 Incluido por IA según Análisis — Portón Balancín 2.30m ya instalado + Portoncito Peatonal 0.95m haciendo juego",
+    camposEstimadosIA: ["El Portón Balancín de 2.30m de ancho (x=+1.20m a +3.50m, z=-4.00m) en chapa plegada grafito oscuro 100% ciega hacia adentro ya está instalado en obra (⚫ Negro Gs. 0); se presupuesta el Kit de Motorización Rápida PPA/Peccinin + Traba + Fotocélula y la integración con el Portoncito Peatonal haciendo juego de 0.95m (x=-2.20m a -1.25m) en la misma chapa grafito ciega sobre muralla frontal 100% ciega"],
+    desc: "Sobre la muralla frontal 100% ciega (z = -4.00m), el Portón Balancín existente de 2.30m de ancho (x = +1.20m..+3.50m) en chapa plegada color grafito oscuro (100% opaco/ciego hacia el interior) se equipa con motor basculante rápido 1/2 HP PPA JetFlex, traba electromagnética y fotocélula, acompañado del Portoncito Peatonal haciendo juego de 0.95m de ancho (x = -2.20m..-1.25m) en la misma chapa grafito ciega y pérgola de madera para enredadera con techo translúcido antigranizo sobre la cochera."
   },
   {
     id: "bano_suite_sanitarios",
@@ -1640,10 +1641,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "forense_omision_fila9_lozarrap",
     categoria: "Auditoría Forense (Omisiones)",
-    item: "13.4 Cerramiento con Loza Rap 38.00 m² (Fila 9 sin precio en Excel LG-RB)",
+    item: "13.4 Cerramiento del Vacío Estructural de 38,00 m² en Losa 1 con Loza Rap (Eje 1–5 × Eje B–G, Fila 9 sin precio en Excel LG-RB)",
     unidad: "m2",
     cantidad: 38.00,
-    formulaDim: "9.74m ancho × 3.90m sector complementario = 38.00 m²",
+    formulaDim: "5.61m (Eje 1-5: x=-0.74..+4.87m) × 6.94m (Eje B-G: z=3.00..9.94m) = 38.00 m² netos",
     precioUnitarioGs: 380000,
     puJivesaGs: 410000,
     puLgrbGs: 0,
@@ -1651,16 +1652,16 @@ export const PRESUPUESTO_PARTIDAS = [
     puIaGs: 380000,
     fuenteRecomendada: "IA",
     subtotalGs: 14440000,
-    esencial: false,
+    esencial: true,
     origenTipo: "IA_AUDITORIA",
-    origenLabel: "🤖 Incluido por IA (Análisis Técnico)",
-    camposEstimadosIA: ["Precio Unitario (Gs. 380.000/m²) y Subtotal (Gs. 14.440.000) completados por IA (la Fila 9 del Excel LG-RB traía 38.00 m² pero precio en blanco)"],
-    desc: "Solución a Omisión #4: partida de 38.00 m² en Fila 9 de 'Planilla computo LG-RB + Lozarrap.xlsx' cuyo precio unitario fue omitido en el PDF PPTO LG-RB-1."
+    origenLabel: "🤖 Esencial Etapa 1 — Cierra el Vacío Estructural de 38,00 m² en Losa 1",
+    camposEstimadosIA: ["Precio Unitario (Gs. 380.000/m²) y Subtotal (Gs. 14.440.000) completados por IA (la Fila 9 del Excel LG-RB traía 38.00 m² pero precio en blanco). Hoy en obra ese paño de 38.00 m² sobre el Estar Social y Escalera 2 está abierto entre vigas"],
+    desc: "Solución a Omisión #4 (Esencial Etapa 1): En la Losa 1 (+0.00m) actualmente solo están hormigonadas la Losa L1 (Galería) y la Losa L4 (Cocina/Comedor), quedando un vacío abierto entre vigas de 38.00 m² (x = -0.74m..+4.87m, z = 3.00m..9.94m). Esta partida ejecuta su cerramiento con viguetas pretensadas Loza Rap, bovedillas y capa de compresión HA-25 para conformar el piso del Estar Social."
   },
   {
     id: "forense_tabiqueria_liviana_apeo",
     categoria: "Auditoría Forense (Omisiones)",
-    item: "13.5 Tabiquería Liviana en Planta Alta sobre Ejes de Pilares P12, P13 y P15 (Mueren en PB)",
+    item: "13.5 Tabiquería Liviana en Planta Alta sobre Ejes de Pilares P12, P13 y P15 (Mueren en 0.00m)",
     unidad: "m2",
     cantidad: 28.00,
     formulaDim: "9.72 ml tabique Durlock W112 × 2.88m h = 28.00 m²",
@@ -1674,16 +1675,16 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: false,
     origenTipo: "IA_AUDITORIA",
     origenLabel: "🤖 Incluido por IA (Análisis Técnico)",
-    camposEstimadosIA: ["Partida, Cant. (28.00 m²) y P.U. (Gs. 150.000) incluidos por IA tras verificar en Planos E4 y E9 que P12, P13 y P15 mueren en PB"],
-    desc: "Solución a Restricción #5: P12, P13 y P15 terminan en Planta Baja (+0.00m); las divisiones de 2do piso fuera de los pórticos principales deben ser livianas."
+    camposEstimadosIA: ["Partida, Cant. (28.00 m²) y P.U. (Gs. 150.000) incluidos por IA tras verificar en Planos E4 y E9 que P12, P13 y P15 mueren en 0.00m mientras los otros 17 pilares ya están hormigonados hasta +2.88m"],
+    desc: "Solución a Restricción #5: P12, P13 y P15 terminan en cota +0.00m (los 17 pilares restantes ya están hormigonados hasta +2.88m); las divisiones de Planta Alta fuera de los pórticos principales se ejecutan en tabiquería liviana."
   },
   {
     id: "forense_barandas_seguridad",
     categoria: "Auditoría Forense (Omisiones)",
-    item: "13.6 Barandas de Seguridad en Galería Eje A (Caída 3.20m) y Escalera 1 (Rubro 33.1 en 0 Gs)",
+    item: "13.6 Barandas en Galería Eje A, Escaleras 1 y 2 + Piso de Rejilla Metálica Electroforjada Transitable y Rejas Laterales sobre Foso de Ventilación (z=1.50..3.00m)",
     unidad: "ml",
     cantidad: 16.00,
-    formulaDim: "9.74m Eje A al barranco + 6.26m Escalera 1 = 16.00 ml",
+    formulaDim: "9.74m Eje A + Escaleras 1 y 2 + Rejilla Electroforjada Transitable y Rejas Laterales en Foso z=1.50..3.00m",
     precioUnitarioGs: 700000,
     puJivesaGs: 0,
     puLgrbGs: 740000,
@@ -1693,9 +1694,9 @@ export const PRESUPUESTO_PARTIDAS = [
     subtotalGs: 11200000,
     esencial: true,
     origenTipo: "IA_AUDITORIA",
-    origenLabel: "🤖 Incluido por IA (Análisis Técnico)",
-    camposEstimadosIA: ["Cant. (16.00 ml) y P.U. (Gs. 700.000) estimados por IA (En JIVESA Rubro 33.1 figuraba en 0 Gs pese al desnivel de 3.20m)"],
-    desc: "Solución a Omisión #10 (Rubro 33.1 en 0 Gs): baranda de seguridad obligatoria en borde de Galería L1 (desnivel 3.20m al barranco) y Escalera 1."
+    origenLabel: "🤖 Incluido por IA (Seguridad Galería, Escaleras y Rejilla Electroforjada sobre Foso)",
+    camposEstimadosIA: ["Incluye barandas de Galería Eje A, Escalera 1 (Eje 8-9), Escalera 2 (Eje 1-2) y el Piso de Rejilla Metálica Electroforjada Transitable con Rejas Laterales de Seguridad sobre el foso de ventilación del subsuelo (z = 1.50m..3.00m)"],
+    desc: "Solución integral de seguridad (Rubro 33.1 en 0 Gs en JIVESA): 1) Baranda de seguridad en Galería L1 (desnivel 3.20m al barranco) y en Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2); 2) Piso de Rejilla Metálica Electroforjada Transitable a nivel +0.00m con Rejas Laterales de Seguridad cubriendo el foso de oxigenación/ventilación del subsuelo entre el Muro de Contención (z = +1.50m) y el Eje G (z = +3.00m)."
   },
 
   // Rubros Específicos de EDIFICA STUDIO E.A.S. y Ajustes Reales de Frente (Vereda + Basurero + Sobreelevación Lateral 3m×2m)
@@ -1884,10 +1885,10 @@ export const PRESUPUESTO_PARTIDAS = [
   {
     id: "puertas_acceso_principal_servicio",
     categoria: "Aberturas y Terminaciones",
-    item: "15.1 Puerta Principal Pivotante + Puerta de Servicio Independiente (Sobre Eje G alineada a Escalera 1)",
+    item: "15.1 Puerta Principal Pivotante + Puerta de Servicio Independiente sobre Eje G (Pasando sobre Piso de Rejilla Electroforjada)",
     unidad: "un",
     cantidad: 2,
-    formulaDim: "1 Pivotante 1.20×2.20m (Eje G Estar) + 1 Servicio 0.90×2.10m (Eje G Escalera 1/Cocina)",
+    formulaDim: "1 Pivotante 1.20×2.20m (Eje G Estar Social) + 1 Servicio 0.90×2.10m (Eje G hacia Cocina/Escalera 1)",
     precioUnitarioGs: 4750000,
     puJivesaGs: 5100000,
     puLgrbGs: 4750000,
@@ -1898,16 +1899,16 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: false,
     origenTipo: "EDIFICA_STUDIO",
     origenLabel: "📐 Edifica Studio / Planos Arq. (Clave Etapas Futuras)",
-    camposEstimadosIA: ["Ubicación estratégica sobre Eje G: Puerta Principal al Estar y Puerta de Servicio frente a Escalera 1 (Ejes 1-2) para que futuras etapas en 2do Piso o Subsuelo entren sin pisar la vivienda de Ruth y Leo"],
-    desc: "Puerta principal pivotante + Puerta de Servicio independiente sobre Eje G alineada a Escalera 1: permite que operarios o visitas entren directo al Subsuelo o 2do Piso sin cruzar el hogar de Ruth y Leo."
+    camposEstimadosIA: ["Ubicación estratégica sobre Eje G (z=3.00m): acceso desde la cochera cruzando el Piso de Rejilla Metálica Electroforjada Transitable (z=1.50m..3.00m) hacia el Estar Social (Escalera 2 en Eje 1-2 sube a PA) y hacia Cocina/Escalera 1 (Eje 8-9 baja a Subsuelo)"],
+    desc: "Puerta principal pivotante + Puerta de Servicio independiente sobre Eje G (z = 3.00m), con ingreso seguro sobre el Piso de Rejilla Metálica Electroforjada Transitable del foso de ventilación."
   },
   {
     id: "blindex_habitaciones",
     categoria: "Aberturas y Terminaciones",
-    item: "15.2 Aberturas de Vidrio Templado (Blindex) en Habitaciones (Suite PB, Dormitorios PA y Subsuelo)",
+    item: "15.2 Aberturas de Vidrio Templado (Blindex) hacia el Río en Planta Alta (Dormitorio en Suite, Dormitorio 2 y Escritorio en Eje B — Frente Eje G sin Blindex)",
     unidad: "m2",
     cantidad: 18.50,
-    formulaDim: "Suite PB (4.8m²) + 2 Dorm. PA (8.2m²) + Subsuelo (5.5m²) = 18.50 m²",
+    formulaDim: "Dormitorio Suite PA + Dormitorio 2 PA + Escritorio PA sobre Eje B al Río + Subsuelo = 18.50 m² (Frente PA Eje G es muro ciego con banderolas)",
     precioUnitarioGs: 690000,
     puJivesaGs: 740000,
     puLgrbGs: 690000,
@@ -1918,16 +1919,16 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: false,
     origenTipo: "EDIFICA_STUDIO",
     origenLabel: "📐 Edifica Studio / Planilla LG-RB",
-    camposEstimadosIA: ["Metraje desglosado por IA (18.50 m²) para ventanas corredizas Blindex 10mm con cierre hermético y premarcos en dormitorios"],
-    desc: "Ventanas y puertas-ventana corredizas de vidrio templado 10mm con perfiles de aluminio negro en Suite Principal, Escritorio/Dormitorio 2 y dormitorios de Planta Alta."
+    camposEstimadosIA: ["Metraje desglosado por IA (18.50 m²) para puertas-ventana corredizas Blindex 10mm hacia el Río Paraguay (Eje B: salida a Deck 2 desde Suite, Dormitorio 2 y Escritorio). En el frente de PA (Eje G, z=3.00m) NO hay Blindex ni balcón, sino muro de mampostería con ventilaciones altas de baños y vestidor"],
+    desc: "Puertas-ventana corredizas de vidrio templado 10mm sobre el Eje B (z = 9.94m) que conectan el Dormitorio en Suite, el Dormitorio 2 y el Escritorio con el Deck 2 / Terraza al Río. En la fachada frontal de Planta Alta (Eje G, z = 3.00m) NO lleva Blindex sino pared de mampostería con banderolas altas para Vestidor, Baño en Suite y Baño 2."
   },
   {
     id: "rejas_balcones_seguridad",
     categoria: "Aberturas y Terminaciones",
-    item: "15.3 Rejas y Barandas Metálicas de Seguridad en Balcones (Frente y Contrafrente PB/PA)",
+    item: "15.3 Barandas Metálicas de Seguridad en Deck 2 / Terraza al Río (PA Eje A-B) y Rejas Laterales de Seguridad en Foso Frontal (z=1.50..3.00m)",
     unidad: "ml",
     cantidad: 19.50,
-    formulaDim: "9.74m balcón contrafrente PA + 9.76m frente y laterales = 19.50 ml",
+    formulaDim: "9.74m Deck 2 contrafrente al Río PA + 9.76m Rejas Laterales de Seguridad en Foso Frontal y vanos = 19.50 ml (Sin balcón frontal en PA)",
     precioUnitarioGs: 620000,
     puJivesaGs: 0,
     puLgrbGs: 640000,
@@ -1938,8 +1939,8 @@ export const PRESUPUESTO_PARTIDAS = [
     esencial: false,
     origenTipo: "EDIFICA_STUDIO",
     origenLabel: "📐 Edifica Studio Herrería #14 / Rubro 33.1",
-    camposEstimadosIA: ["Desglosado en ml (19.50 ml × Gs. 620.000) a partir de Herrería Edifica Studio PB #14 y Sub #13 (Omitido en 0 Gs en JIVESA 33.1)"],
-    desc: "Rejas de protección y barandas de perfiles tubulares con tratamiento epóxico anticorrosivo en balcones de Planta Alta (+2.88m) y vanos vulnerables."
+    camposEstimadosIA: ["Desglosado en ml (19.50 ml × Gs. 620.000): incluye baranda del Deck 2 al Río en PA (en el frente de PA NO hay balcón) y las Rejas Laterales de Seguridad del foso de ventilación frontal (z=1.50m..3.00m)"],
+    desc: "Barandas de protección en el Deck 2 / Terraza al Río de Planta Alta (+2.88m, Eje A–B) y Rejas Laterales de Seguridad en los bordes del Piso de Rejilla Metálica Electroforjada Transitable sobre el foso de ventilación frontal (z = 1.50m..3.00m). En el frente de Planta Alta (Eje G) no existe balcón en voladizo."
   },
   {
     id: "jardin_cesped_patio",
@@ -2555,6 +2556,7 @@ export const ITEMS_CREDITO_300M = [
   "forense_aislacion_medianera_eje9",
   "forense_cloaca_subsuelo_bombeo",
   "forense_puente_adherencia_epoxico",
+  "forense_omision_fila9_lozarrap",
   "forense_tabiqueria_liviana_apeo",
   "forense_barandas_seguridad"
 ];
@@ -2578,17 +2580,18 @@ export const ITEMS_CREDITO_440M = [
 export const ESCENARIOS_INVERSION = {
   hoy_en_obra: {
     id: "hoy_en_obra",
-    nombre: "Hoy en Obra (163,8M): Esqueleto H°A° + 100 m² Libres en Subsuelo + Escalera 1",
+    nombre: "Hoy en Obra (163,8M): 17 Pilares PB hasta +2.88m + Losa L1/L4 (c/ Vacío 38 m²) + Escalera 1 Eje 8–9",
     montoObjetivoGs: 163820972,
+    montoAbonadoGs: 142313711,
     montoEstimadoGs: 163820972,
     costoM2ConstruidoGs: 1590495,
     semaforo: "ok",
-    objetivoPrincipal: "Estado real certificado s/ Acta 29/12/2025 (JIVESA S.A. / PROBETI #17671): 20 pilares P1-P20, 14 zapatas (-4.64m), vigas VC.T-1, los 100.71 m² de Subsuelo totalmente libres debajo de la Losa 1 (sin relleno) y Escalera 1 terminada.",
+    objetivoPrincipal: "Estado real certificado s/ Acta 29/12/2025 (JIVESA S.A. / PROBETI #17671): 20 pilares en Subsuelo y 17 pilares de PB ya hormigonados hasta +2.88m (+102.88m), 14 zapatas (-4.64m), vigas VC.T-1, Losa L1 (Galería) y Losa L4 (Cocina/Comedor) hormigonadas dejando el vacío abierto de 38.00 m² entre vigas sobre el Estar Social (a cerrar con Loza Rap), y Escalera 1 terminada en Eje 8–9.",
     itemsIncluidos: [],
     ventajas: [
-      "Los 100.71 m² bajo la Losa 1 (9.74m × 10.34m) están hoy 100% libres y aprovechables para Lavadero, Depósito y futuro Quincho",
-      "Escalera 1 de H°A° conectando Subsuelo (-2.34m) y Planta Nivel Calle (+0.00m) ya construida",
-      "17 pilares con pelos de espera Ø12 listos para subir al 2do Piso (+102.88m) donde irá el Dormitorio de Ruth y Leo"
+      "Los 17 pilares principales de Planta Baja ya están hormigonados hasta +2.88m (+102.88m), listos para recibir las vigas y la Losa de Planta Alta",
+      "Escalera 1 de H°A° sobre pared derecha Eje 8–9 (x = -4.87m..-3.90m) ya construida conectando Subsuelo (-2.34m) y Planta Baja (+0.00m)",
+      "Losa L1 (Galería 33.42 m²) y Losa L4 (Cocina/Comedor 28.66 m²) ya hormigonadas con resistencia PROBETI 315 kg/cm² (resta cerrar el vacío de 38.00 m² con Loza Rap en Etapa 1)"
     ]
   },
   escenario300: {
@@ -2948,12 +2951,12 @@ export const ALL_BLUEPRINTS_CATALOG = [
     id: "E4",
     code: "E4",
     category: "Estructurales",
-    title: "E4 — Encofrado Losa Planta Alta / 2do Piso (+5.22m est.)",
+    title: "E4 — Encofrado Losa Planta Alta / 2do Piso (+102.88m / +2.88m)",
     author: "Ing. Gustavo Velázquez (Reg. N° 3135 M.O.P.C.)",
     url: "./assets/planos/estructural_e4_planta_alta.png",
     scale: "1:50",
-    status: "A Construir",
-    desc: "Losa de 2do Piso (L1 a L11 en cota +102.88m / +2.88m s/calle) con voladizo frontal hasta z = 2.15m. Muestra que P12, P13 y P15 ya no suben a este nivel."
+    status: "A Construir (17 Pilares ya en +2.88m)",
+    desc: "Losa de Planta Alta (L1 a L11 en cota +102.88m / +2.88m s/calle) alineada al frente sobre Eje G (z = 3.00m, sin balcón frontal) y con Deck 2 al Río. Muestra que P12, P13 y P15 mueren en 0.00m mientras los otros 17 pilares ya están hormigonados hasta +2.88m."
   },
   {
     id: "E5",
@@ -3786,11 +3789,11 @@ export const REQUISITOS_BANCO_Y_CUOTAS = {
     rubros: [
       { codigo: "E-01", item: "Excavación, Desmonte y Sondeos Geotécnicos SPT (GEO-STAN #2956)", unidad: "gl", cantidad: 1, montoGs: 14850000, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
       { codigo: "E-02", item: "14 Zapatas de H°A° Profundizadas a Cota +95.36m (-4.64m) y Vigas Centradoras VC.T-1", unidad: "gl", cantidad: 1, montoGs: 42650000, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
-      { codigo: "E-03", item: "20 Pilares P1–P20 y Pórticos 1 a 7 en Subsuelo (+97.66m a +100.00m — PROBETI 240–265 kg/cm²)", unidad: "gl", cantidad: 1, montoGs: 48920972, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
-      { codigo: "E-04", item: "Primera Losa Maciza H°A° Visto L1–L4 (+100.00m / Galería L1 -0.45m — PROBETI 315 kg/cm²)", unidad: "m2", cantidad: 124.42, montoGs: 46200000, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
-      { codigo: "E-05", item: "Escalera 1 de H°A° Ejecutada (Conecta Subsuelo +97.66m con Planta Nivel Calle +100.00m)", unidad: "un", cantidad: 1, montoGs: 11200000, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
-      { codigo: "E-06", item: "Murallas Perimetrales Existentes alrededor del Terreno (Solo se sobreelevan 3m × 2m en un lateral)", unidad: "gl", cantidad: 1, montoGs: 0, colorBanco: "NEGRO", estado: "YA EXISTENTE (Gs. 0 a solicitar)" },
-      { codigo: "E-07", item: "Portón Balancín (Basculante) Metálico ya Instalado en Frente (Solo se compra e instala el motor)", unidad: "un", cantidad: 1, montoGs: 0, colorBanco: "NEGRO", estado: "YA INSTALADO (Gs. 0 en portón)" }
+      { codigo: "E-03", item: "20 Pilares en Subsuelo (-2.34m a 0.00m) + 17 Pilares de Planta Baja ya Hormigonados hasta +2.88m (+102.88m; P12/P13/P15 mueren en 0.00m — PROBETI 240–265 kg/cm²)", unidad: "gl", cantidad: 1, montoGs: 48920972, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
+      { codigo: "E-04", item: "Primera Losa Maciza H°A° Visto L1 (Galería -0.45m, 33.42 m²) y L4 (Cocina/Comedor +0.00m, 28.66 m²) + Pórticos 1 a 7 (Queda vacío abierto de 38.00 m² a cerrar con Loza Rap — PROBETI 315 kg/cm²)", unidad: "m2", cantidad: 62.08, montoGs: 46200000, colorBanco: "NEGRO", estado: "EJECUTADO (Resta cerrar vacío 38 m² con Loza Rap)" },
+      { codigo: "E-05", item: "Escalera 1 de H°A° Ejecutada sobre Pared Derecha Eje 8–9 (x = -4.87m..-3.90m, conecta Subsuelo +97.66m con PB +100.00m)", unidad: "un", cantidad: 1, montoGs: 11200000, colorBanco: "NEGRO", estado: "EJECUTADO 100%" },
+      { codigo: "E-06", item: "Murallas Perimetrales Existentes alrededor del Terreno (Frente 100% ciego; solo se sobreelevan 3m × 2m en un lateral)", unidad: "gl", cantidad: 1, montoGs: 0, colorBanco: "NEGRO", estado: "YA EXISTENTE (Gs. 0 a solicitar)" },
+      { codigo: "E-07", item: "Portón Balancín Metálico de 2.30m (Chapa Grafito Ciega, x=+1.20..+3.50m) + Portoncito Peatonal Haciendo Juego de 0.95m (x=-2.20..-1.25m)", unidad: "cjto", cantidad: 1, montoGs: 0, colorBanco: "NEGRO", estado: "YA INSTALADO (Solo se motoriza)" }
     ]
   },
   tablaCuotasPorMillon: {
@@ -4094,23 +4097,23 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
     id: "esp_civil",
     icono: "🏗️",
     especialidad: "1. Ingeniero Civil y Estructural (MOPC / Reg. Asunción)",
-    profesionalRol: "Auditoría de Losa 1 Expuesta, Pilares que Mueren en PB (P12/P13/P15), Escalera al 2do Piso y Contención",
-    calificacionActual: "94/100 (Con 3 ajustes críticos incorporados)",
-    resumenDictamen: "La estructura basal ejecutada por JIVESA S.A. es sobresaliente (hormigón HA-25 con rotura de probetas PROBETI de 305 a 325 kg/cm² en Losa 1 y zapatas fundadas en arenisca firme Nspt > 50). Sin embargo, para subir al 2do Piso sin fisuras ni choques de cabezada se aplican 3 correcciones:",
+    profesionalRol: "Auditoría de 17 Pilares ya a +2.88m, Vacío 38 m² en Losa 1 (Loza Rap), Escalera 1 (Eje 8–9) vs. Escalera 2 (Eje 1–2) y Contención",
+    calificacionActual: "96/100 (Alineado 100% con planos estructurales E3/E4/E5)",
+    resumenDictamen: "La estructura basal ejecutada por JIVESA S.A. es sobresaliente: los 20 pilares en Subsuelo y los 17 pilares principales de Planta Baja ya están hormigonados hasta +2.88m (+102.88m), mientras que P12, P13 y P15 mueren en 0.00m. En Losa 1 (+0.00m) están hormigonadas L1 (Galería) y L4 (Cocina/Comedor), quedando el vacío abierto de 38.00 m² entre vigas sobre el Estar Social para cerrar con Loza Rap:",
     huecosDetectadosYSoluciones: [
       {
-        severidad: "CRÍTICO RESUELTO EN 3D",
-        hallazgo: "Cabezada de Escalera 1 vs. Escalera al 2do Piso (+102.88m)",
-        solucion: "Si el tramo al 2do Piso arranca exactamente encima del arranque de la Escalera 1 (x=3.84..4.87m, z=5.26m), deja 0,00m de altura de paso al bajar al Subsuelo. Se desplaza lateralmente el tramo superior al vano contiguo (x=2.84..3.84m junto a Eje 2 y P9) logrando 2,88m de altura libre (>2,15m exigidos por RGC Asunción) y estructura mixta liviana UPN 160 + peldaños de Lapacho.",
+        severidad: "CRÍTICO RESUELTO EN PLANO E5",
+        hallazgo: "Escaleras en Lados Opuestos sin Superposición (Escalera 1 en Eje 8–9 y Escalera 2 en Eje 1–2) + Cerramiento 38 m² Loza Rap",
+        solucion: "Conforme al plano estructural original (estructural_e5_subsuelo_escalera.png) y sanitario (instalacion_sanitaria_agua.png), las dos escaleras NO se superponen: la Escalera 1 (baja al Subsuelo, ya construida en H°A°) va recostada sobre la pared derecha entre Eje 8 y Eje 9 (x = -4.87m..-3.90m, z = 5.26m..8.56m, 3.30m × 0.90m), mientras que la Escalera 2 (sube a Planta Alta y desemboca en el Escritorio) va en el extremo opuesto sobre la pared izquierda entre Eje 1 y Eje 2 (x = +3.84m..+4.87m, z = 5.26m..9.16m, 3.90m × 0.80m). El vacío abierto de 38.00 m² en Losa 1 (Eje 1–5 × Eje B–G) se cierra con Loza Rap.",
         costoMaterialesGs: 8200000,
         costoManoObraGs: 5300000,
         subtotalGs: 13500000,
-        incluidoEnPartida: "hormigon_vigas_losa / forense_barandas_seguridad"
+        incluidoEnPartida: "forense_omision_fila9_lozarrap / hormigon_vigas_losa"
       },
       {
         severidad: "ALTO (INCLUIDO EN 300M)",
-        hallazgo: "Pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) mueren en Planta Baja",
-        solucion: "Prohibido levantar paredes pesadas de ladrillo macizo en el 2do Piso sobre las líneas de P12, P13 y P15. Se incorpora desde el escalón de 300M la partida 13.5 (Tabiquería liviana Durlock W112 c/ lana mineral + refuerzo de viga chata en Losa 2do Piso).",
+        hallazgo: "Pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) mueren en 0.00m (los otros 17 pilares ya llegan a +2.88m)",
+        solucion: "Prohibido levantar paredes pesadas de ladrillo macizo en Planta Alta fuera de los pórticos de los 17 pilares que ya llegan a +2.88m. Se incorpora desde el escalón de 300M la partida 13.5 (Tabiquería liviana Durlock W112 c/ lana mineral sobre los ejes donde P12, P13 y P15 mueren en PB).",
         costoMaterialesGs: 2850000,
         costoManoObraGs: 1740000,
         subtotalGs: 4590000,
@@ -4118,41 +4121,41 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       },
       {
         severidad: "ALTO (INCLUIDO EN 300M)",
-        hallazgo: "Arriostramiento del Muro de Contención de Cochera (z=+1.50m) para la SUV Chery T2 Pro 2026 (2.150 kg)",
-        solucion: "Vincular la viga de coronamiento del muro de contención (z=+1.50m) con las vigas del Eje G (z=+3.00m) mediante las losas puente de acceso peatonal/servicio y 3 puntales de H°A° 20×20cm sobre el Pasillo Antihumedad, reduciendo el momento flector vehicular en un 78% + 14 barbacanas PVC Ø50mm.",
+        hallazgo: "Muro de Contención de Cochera (z=+1.50m) + Foso de Ventilación (z=1.50..3.00m) con Piso de Rejilla Metálica Electroforjada Transitable",
+        solucion: "El muro de contención en z=+1.50m sostiene el relleno compactado de la cochera para la SUV Chery T2 Pro 2026 (2.150 kg), dejando entre z=+1.50m y el Eje G (z=+3.00m) el foso de ventilación/oxigenación del subsuelo cubierto a nivel +0.00m por un Piso de Rejilla Metálica Electroforjada Transitable con Rejas Laterales de Seguridad.",
         costoMaterialesGs: 1450000,
         costoManoObraGs: 950000,
         subtotalGs: 2400000,
-        incluidoEnPartida: "viga_fundacion_muro (1.2)"
+        incluidoEnPartida: "viga_fundacion_muro (1.2) / forense_barandas_seguridad (13.6)"
       }
     ],
     checklistControlPropietario: [
-      "Verificar que cepillen a metal blanco los pelos de espera Ø12mm de los 17 pilares y apliquen Sikadur-32 Gel menos de 45 minutos antes de colar.",
-      "Prohibir terminantemente picar viguetas pretensadas de Losa Rap ni vigas principales para pasar caños.",
-      "Exigir compactación del relleno de cochera en capas de 20 cm y 14 barbacanas Ø50mm con geotextil antes de hormigonar el contrapiso."
+      "Verificar el apuntalamiento y hormigonado de la capa de compresión de los 38.00 m² de Loza Rap sobre el Estar Social en Losa 1.",
+      "Prohibir terminantemente picar viguetas pretensadas de Loza Rap ni vigas principales para pasar caños.",
+      "Exigir compactación del relleno de cochera hasta z=+1.50m en capas de 20 cm y montaje nivelado de la Rejilla Metálica Electroforjada Transitable entre z=1.50m y z=3.00m."
     ]
   },
   {
     id: "esp_interior",
     icono: "🛋️",
     especialidad: "2. Arquitecta de Interiores y Confort Bioclimático",
-    profesionalRol: "Auditoría de Ergonomía, Triángulo de Cocina, Seguridad de Garrafa GLP y Diseño Pet-Friendly (Emma y Serafina)",
-    calificacionActual: "96/100 (Colisiones 3D corregidas a costo Gs. 0)",
-    resumenDictamen: "La zonificación de los 3 niveles para Ruth y Leo es excelente: reservar toda la Planta Nivel Calle (+100.00m) como gran salón social sin dormitorios pequeños da una espacialidad de casa de categoría superior, y contar con Toilette Social en PB + Baño en Suite en 2do Piso evita subir escaleras con visitas.",
+    profesionalRol: "Auditoría de Distribución Fiel al Plano Original (PB Social + PA 2 Dormitorios, Escritorio, 2 Baños y Vestidor)",
+    calificacionActual: "97/100 (Distribución 100% fiel a planos originales)",
+    resumenDictamen: "La zonificación respeta rigurosamente el plano original de arquitectura e instalación sanitaria: en Planta Baja (+0.00m) Estar Social (4.95×4.80m), Cocina/Comedor (6.20×2.75m), Baño Social en Eje F–G y Galería al Río sin parrilla fija; y en Planta Alta (+2.88m) Escritorio al llegar de Escalera 2, Dormitorio 2, Dormitorio Principal en Suite con Vestidor y 2 Baños sobre el núcleo húmedo Eje F–G.",
     huecosDetectadosYSoluciones: [
       {
-        severidad: "CORREGIDO EN 3D (COSTO Gs. 0)",
-        hallazgo: "Reubicación exacta de Biblioteca PB, Biblioteca PA, Máquina de Coser y 2da Silla de Estudio",
-        solucion: "Se reubicó en el modelo 3D la Biblioteca de Nivel Calle al muro Oeste seco y sin sol directo (x=-4.66m, z=8.65m), la Biblioteca del 2do Piso al tabique interior (x=-0.34m, z=4.30m liberando el ventanal Blindex frontal), la Máquina de Coser Antigua junto a la luz natural del Eje 1 (x=+4.42m, z=4.15m) y se sumó la 2da silla ergonómica para el doble escritorio.",
+        severidad: "CORREGIDO EN 3D Y 2D (COSTO Gs. 0)",
+        hallazgo: "Alineación exacta de Planta Alta: 2 Dormitorios + Escritorio + Vestidor + 2 Baños (Sin balcón ni Blindex frontal en Eje G)",
+        solucion: "En Planta Alta (+2.88m), al subir por la Escalera 2 (Eje 1–2) se llega al Escritorio / Estudio (2.50×3.05m) con salida al Deck 2; al centro se ubica el Dormitorio 2 (2.54×3.40m) con su Baño 2 PA enfrente; y a la derecha el Dormitorio Principal en Suite (4.13×4.94m) con Vestidor (2.07×2.00m) y Baño en Suite (3.30×2.00m). La fachada frontal Eje G (z=3.00m) es pared de mampostería con banderolas altas (sin balcón frontal ni Blindex).",
         costoMaterialesGs: 0,
         costoManoObraGs: 0,
         subtotalGs: 0,
-        incluidoEnPartida: "Ajuste de Diseño 3D (Gs. 0)"
+        incluidoEnPartida: "Ajuste de Diseño 3D/2D (Gs. 0)"
       },
       {
         severidad: "CRÍTICO DE SEGURIDAD (GLP + CAMPANA)",
-        hallazgo: "Garrafa de Gas GLP (13 kg) dentro de Cocina Integrada con Escalera Abierta al Subsuelo",
-        solucion: "El gas GLP (propano/butano) es más pesado que el aire: ante una pérdida en el interior, fluiría por la Escalera 1 acumulándose en el Subsuelo (-2.34m). Se instala una Casilla Exterior Ventilada para 2 garrafas de 13 kg del lado del Pasillo Antihumedad (Eje G, x=-4.45m, z=2.78m) con caño de cobre/Sigas embutido y llave de corte interior + Campana Extractora Inox con ducto exterior Ø150mm para no engrasar los libros de la biblioteca.",
+        hallazgo: "Garrafa de Gas GLP (13 kg) en Cocina/Comedor junto a Escalera 1 (Eje 8–9) hacia el Subsuelo",
+        solucion: "El gas GLP (propano/butano) es más pesado que el aire: ante una pérdida en el interior, fluiría por la Escalera 1 (Eje 8–9) acumulándose en el Subsuelo (-2.34m). Se instala una Casilla Exterior Ventilada para 2 garrafas de 13 kg hacia el foso ventilado frontal (Eje G, x=-4.45m, z=2.78m) con caño de cobre/Sigas embutido y llave de corte interior + Campana Extractora Inox.",
         costoMaterialesGs: 2150000,
         costoManoObraGs: 950000,
         subtotalGs: 3100000,
@@ -4160,8 +4163,8 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       },
       {
         severidad: "CONFORT PET-FRIENDLY (EMMA Y SERAFINA)",
-        hallazgo: "Resbaladicidad de pisos para Emma (caniche) y protección anticaída en 2do Piso para Serafina (gata calicó)",
-        solucion: "1) Especificar al comprar el Porcelanato 60×60 acabado Satinado/Mate Natural R9–R10 (mismo precio Gs. 0 de diferencia vs. pulido espejo) para evitar displasia/patinaje de Emma; 2) Malla de protección UV traslúcida en balcones del 2do Piso (+6m sobre el patio trasero) y barrote de reja cada <=10 cm; 3) Gatera vaivén 4 vías en la puerta del Lavadero del Subsuelo hacia su arenero ventilado.",
+        hallazgo: "Resbaladicidad de pisos para Emma (caniche) y protección anticaída en Deck 2 al Río para Serafina (gata calicó)",
+        solucion: "1) Especificar al comprar el Porcelanato 60×60 acabado Satinado/Mate Natural R9–R10 (Gs. 0 de diferencia vs. pulido espejo) para evitar patinaje de Emma; 2) Malla de protección UV traslúcida en el Deck 2 al Río (+2.88m) y barrotes cada <=10 cm en las rejas laterales del foso frontal.",
         costoMaterialesGs: 1150000,
         costoManoObraGs: 650000,
         subtotalGs: 1800000,
@@ -4170,22 +4173,22 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
     ],
     checklistControlPropietario: [
       "Pedir en tienda Porcelanato 60×60 Rectificado Satinado/Natural (nunca Pulido Brillante en zonas de circulación y escaleras).",
-      "Exigir que la garrafa de 13 kg quede en el nicho ventilado exterior hacia el pasillo de 1,50m antes de revocar el muro Eje G.",
-      "Dejar caños de desagüe de condensado PVC Ø25mm embutidos hacia pluvial para los 3 aires acondicionados Split."
+      "Exigir que la garrafa de 13 kg quede en el nicho ventilado exterior hacia el foso de 1,50m antes de revocar el muro Eje G.",
+      "Dejar caños de desagüe de condensado PVC Ø25mm embutidos hacia pluvial para los aires acondicionados Split."
     ]
   },
   {
     id: "esp_exterior",
     icono: "🌿",
     especialidad: "3. Arquitecto de Exterior, Envolvente y Paisajismo Urbano",
-    profesionalRol: "Auditoría de Rampa/Portón p/ Chery T2 Pro 2026, Protección Antigranizo, Goterones y Talud del Patio",
-    calificacionActual: "95/100 (Con replanteo normativo de Pozo Ciego vs. Piscina)",
-    resumenDictamen: "La implantación en el cul-de-sac de Calle Tte. Guillermo Arias aprovecha magistralmente el desnivel de -3,80m hacia el Norte. Se verificó la geometría de barrido del portón balancín y el retiro municipal del pozo absorbente:",
+    profesionalRol: "Auditoría de Portón Balancín 2.30m + Portoncito Peatonal 0.95m (Chapa Grafito Ciega), Pérgola Madera c/ Techo Antigranizo y Rejilla Electroforjada",
+    calificacionActual: "96/100 (Frente y Subsuelo 100% alineados)",
+    resumenDictamen: "Sobre la línea municipal (z=-4.00m) la muralla frontal es 100% ciega con el Portón Balancín existente de 2.30m y el Portoncito Peatonal haciendo juego de 0.95m (ambos en chapa plegada grafito oscuro 100% ciega hacia adentro). La cochera cuenta con Pérgola de Madera para enredadera + Techo Translúcido Antigranizo y Piso de Rejilla Metálica Electroforjada Transitable sobre el foso (z=1.50..3.00m):",
     huecosDetectadosYSoluciones: [
       {
-        severidad: "CORREGIDO EN 3D (COSTO Gs. 0)",
-        hallazgo: "Tope de Rueda p/ Chery T2 Pro 2026 ante el barrido del Portón Balancín + Retiro de 1,62m del Pozo Ciego",
-        solucion: "1) La hoja del portón balancín (2,18m) barre hacia adentro entre z=-4.00m y z=-2.95m; estacionando la Chery T2 Pro 2026 (largo 4,20m) con topes de rueda en z=+0.65m queda a z=-3.55m con 45cm libres; 2) Se desplazó en el modelo 3D el eje del Pozo Ciego a x=-3.25m, z=20.20m (>1,50m de la medianera Oeste s/ Ord. 468/66) y la Piscina a x=+0.50m, z=18.80m (>2,15m de separación limpia).",
+        severidad: "CORREGIDO EN 3D Y 2D (COSTO Gs. 0)",
+        hallazgo: "Portón Balancín de 2.30m (x=+1.20..+3.50m) + Portoncito Peatonal Haciendo Juego de 0.95m (x=-2.20..-1.25m) en Chapa Grafito Ciega",
+        solucion: "1) El Portón Balancín existente tiene 2,30m de ancho libre (x=+1.20m a +3.50m, z=-4.00m) en chapa plegada grafito oscuro 100% ciega hacia el interior, acompañado del Portoncito Peatonal de 0,95m (x=-2.20m a -1.25m) en la misma chapa grafito ciega; 2) Sobre la cochera (x=-0.50m..+4.50m, z=-3.80m..+2.80m) se proyecta la Pérgola de Madera para enredadera con Techo Translúcido Antigranizo protegiendo la SUV Chery T2 Pro.",
         costoMaterialesGs: 220000,
         costoManoObraGs: 130000,
         subtotalGs: 350000,
@@ -4193,31 +4196,31 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       },
       {
         severidad: "RECOMENDADO EXTERIOR",
-        hallazgo: "Goterones (Cortagotas) en Losas + Tapa Traslúcida sobre Pasillo Antihumedad + Escalinata de 9 Peldaños al Jardín",
-        solucion: "1)Ranurado cortagotas de 15×10mm bajo los bordes de Losa 1 y Losa 2do Piso para que la lluvia con viento no escurra hacia los Blindex; 2) Cenefa de policarbonato alveolar ventilada sobre el Pasillo Antihumedad (z=+1.50..+3.00m) para que no entren 2.400 L de lluvia directa por tormenta; 3) Escalinata exterior de 9 peldaños (16,2cm × 30cm) salvando el desnivel real de 1,46m entre Subsuelo (+97.66m) y Jardín (+96.20m) con barreras vivas de Vetiver.",
+        hallazgo: "Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre Foso de Ventilación (z=1.50..3.00m) y Parrillita en Subsuelo al Patio",
+        solucion: "1) Entre el muro de contención (z=+1.50m) y el frente Eje G (z=+3.00m) se instala a nivel +0.00m un Piso de Rejilla Metálica Electroforjada Transitable con Rejas Laterales de Seguridad, permitiendo caminar con total seguridad sobre el foso mientras ventila e ilumina el Subsuelo; 2) En el Subsuelo (+97.66m, x=-4.87m..-1.64m, z=11.50m..13.34m) se ubica la Parrillita / Quincho fijo mirando al patio trasero.",
         costoMaterialesGs: 3400000,
         costoManoObraGs: 2100000,
         subtotalGs: 5500000,
-        incluidoEnPartida: "jardin_cesped_patio / hidro_drenaje_frances"
+        incluidoEnPartida: "forense_barandas_seguridad / jardin_cesped_patio"
       }
     ],
     checklistControlPropietario: [
-      "Verificar el perfil de rampa en la vereda de 2,00m con transición suave (máx. 8,5%) para que la Chery T2 Pro no toque el paragolpes.",
-      "Exigir perfil goterón plástico o ranura de amoladora a 3 cm del borde inferior de todos los balcones y voladizos."
+      "Verificar el perfil de rampa en la vereda de 2,00m frente al Portón Balancín de 2,30m (x=+1.20..+3.50m) para ingreso suave de la Chery T2 Pro.",
+      "Exigir perfil goterón plástico o ranura cortagotas a 3 cm del borde inferior de las losas de Galería L1 y Deck 2."
     ]
   },
   {
     id: "esp_seguridad",
     icono: "🛡️",
     especialidad: "4. Técnico en Seguridad Física y Electrónica Residencial",
-    profesionalRol: "Auditoría Antirrobo en Cul-de-Sac, Sensores Anti-Serafina (Gata Trepadora), Cierre de Escalera 1 y Backup 4G",
+    profesionalRol: "Auditoría Antirrobo en Frente Ciego, Sensores Anti-Serafina, Cierre de Escalera 1 (Eje 8–9) y Backup 4G",
     calificacionActual: "97/100 (Blindaje físico + electrónico completo)",
-    resumenDictamen: "En una calle sin salida (cul-de-sac) con barranco posterior y una gata ágil (Serafina) que trepa a la biblioteca de 2,02m, un sistema de alarma estándar daría falsas alarmas cada noche y el subsuelo abierto en Etapa 1 dejaría acceso libre a la escalera interna.",
+    resumenDictamen: "La muralla frontal 100% ciega con el Portón Balancín de 2.30m y el Portoncito Peatonal de 0.95m en chapa grafito ciega brinda máxima privacidad desde la calle. En el interior se asegura el pie de la Escalera 1 en el Subsuelo (Eje 8–9) y se calibran sensores de cortina aptos para Emma y Serafina.",
     huecosDetectadosYSoluciones: [
       {
         severidad: "CRÍTICO FÍSICO (INCLUIDO EN 3D)",
-        hallazgo: "Bloqueo de Intrusión desde el Subsuelo Abierto hacia la Escalera 1 (Etapa 1)",
-        solucion: "Mientras los 100 m² del Subsuelo estén parcialmente abiertos hacia el jardín trasero, un intruso que salte al patio podría subir por la Escalera 1 directo a la Sala o al 2do Piso. Se instala una Puerta-Reja de Seguridad en hierro negro con cerradura doble paleta al pie de la Escalera 1 en el Subsuelo (x=3.84..4.87m, z=9.94m), creando un anillo blindado para dormir tranquilos.",
+        hallazgo: "Bloqueo de Intrusión desde el Subsuelo hacia la Escalera 1 (Pared Derecha Eje 8–9)",
+        solucion: "Mientras el Subsuelo esté vinculado al jardín trasero, se instala una Puerta-Reja de Seguridad en hierro negro con cerradura doble paleta al pie de la Escalera 1 en el Subsuelo (Eje 8–9, x=-4.87m..-3.90m, z=8.56m), creando un anillo blindado hacia la Planta Baja y Planta Alta.",
         costoMaterialesGs: 1450000,
         costoManoObraGs: 750000,
         subtotalGs: 2200000,
@@ -4226,16 +4229,16 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       {
         severidad: "CRÍTICO ELECTRÓNICO (CALIBRACIÓN SERAFINA)",
         hallazgo: "Falsas Alarmas por Serafina (Gata Calicó) al trepar a >1,20m de altura sobre muebles y biblioteca",
-        solucion: "Los sensores PIR Pet-Immune volumétricos comunes fallan cuando un gato sube a una biblioteca de 2,02m porque entra en el haz superior a corta distancia. Se reemplazan los PIR interiores de Sala y 2do Piso por Sensores PIR de Cortina Doble Tecnología (PIR + Microondas) rasantes al vidrio de los ventanales Blindex: así Emma y Serafina pueden saltar sobre cualquier mueble o biblioteca toda la noche con la alarma activada en Modo Noche sin dispararla jamás.",
+        solucion: "Se instalan Sensores PIR de Cortina Doble Tecnología (PIR + Microondas) rasantes al vidrio de los ventanales Blindex del Eje B: así Emma y Serafina pueden circular libremente por el Estar Social, Escritorio y Dormitorios toda la noche con la alarma activada en Modo Noche sin dispararla.",
         costoMaterialesGs: 350000,
         costoManoObraGs: 0,
         subtotalGs: 350000,
         incluidoEnPartida: "debil_alarma_barreras (12.5)"
       },
       {
-        severidad: "ALTO (PORTÓN Y RESPALDO 4G)",
-        hallazgo: "Doble Traba Electromecánica en Portón Balancín de 6,50m + Mini-UPS Fibra + Botón S.O.S.",
-        solucion: "Un portón balancín de 6,50m con una sola traba al centro puede palanquearse en las esquinas inferiores: se instalan 2 cerrojos electromecánicos tipo Dog Steel (uno en cada esquina inferior) + Reflector LED 50W con sensor de movimiento en calle + Mini-UPS DC LiFePO4 para el router de fibra + Pulsador Antipánico silencioso en la mesa de luz de Ruth y Leo.",
+        severidad: "ALTO (PORTONES GRAFITO CIEGOS Y RESPALDO 4G)",
+        hallazgo: "Doble Traba Electromecánica en Portón Balancín de 2,30m + Cerradura Electromagnética en Portoncito Peatonal 0,95m + Mini-UPS",
+        solucion: "El Portón Balancín de 2,30m (chapa grafito ciega) lleva traba electromecánica Dog Steel y el Portoncito Peatonal haciendo juego de 0,95m lleva cerradura eléctrica vinculada al Portero Visor IP + Reflector LED 50W en calle + Mini-UPS DC LiFePO4 para el router.",
         costoMaterialesGs: 1280000,
         costoManoObraGs: 420000,
         subtotalGs: 1700000,
@@ -4243,22 +4246,22 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       }
     ],
     checklistControlPropietario: [
-      "Probar el Modo Noche («Stay») haciendo que Serafina suba a la biblioteca de 2,02m y verificando que los sensores de cortina en los Blindex no se activen.",
-      "Cerrar con llave la Puerta-Reja del pie de la Escalera 1 en el Subsuelo cada noche."
+      "Probar el Modo Noche («Stay») verificando que los sensores de cortina en los Blindex del Eje B no se activen con las mascotas.",
+      "Cerrar con llave la Puerta-Reja del pie de la Escalera 1 (Eje 8–9) en el Subsuelo cada noche."
     ]
   },
   {
     id: "esp_electricista",
     icono: "⚡",
     especialidad: "5. Ingeniero Electricista Categoría A (Norma ANDE BT / INTN NP 2 028 96)",
-    profesionalRol: "Auditoría de Acometida Trifásica, Pases en Losa 1 Maciza sin Agujeros, Tableros con DPS y Circuitos 20A",
+    profesionalRol: "Auditoría de Acometida Trifásica, Pleno Vertical en Eje F–G (z=3.00..5.00m), Tableros con DPS y Circuitos 20A",
     calificacionActual: "98/100 (Todos los ductos, pases de losa y enchufes modelados en 3D y 2D)",
-    resumenDictamen: "Con 3 Aires Split, Termocalefón 80L (2.000W), Air Fryer Xiaomi 6L (1.500W), Microondas (1.400W), Lavarropas (2.200W) y Motor de Portón, la carga instalada supera los 16,8 kW (demanda simultánea ~11,2 kW). Una acometida monofásica colapsaría en verano: se requiere Acometida Trifásica ANDE 3×40A (380/220V).",
+    resumenDictamen: "Con 3 Aires Split, Termocalefón 80L (2.000W), Air Fryer Xiaomi 6L (1.500W), Microondas (1.400W), Lavarropas (2.200W) y Motor de Portón, la carga instalada supera los 16,8 kW. Se proyecta Acometida Trifásica ANDE 3×40A (380/220V) y troncales verticales concentrados en el Núcleo Eje F–G.",
     huecosDetectadosYSoluciones: [
       {
         severidad: "CRÍTICO CONSTRUCTIVO (VISUALIZADO EN 3D/2D)",
-        hallazgo: "La Losa 1 existente NO está agujereada: cómo pasar los ductos eléctricos y de datos sin debilitar la losa",
-        solucion: "Prohibido acanalar la cara inferior de la Losa 1 (cortaría la armadura de tracción) ni picar con maza. Se ejecutan 2 Pases Verticales con Sacabocado de Copa Diamantada Ø50mm junto al pleno del Pilar P12 (Eje 6-C): Pase #1 (x=-1.64m, z=4.65m) para el troncal eléctrico 5×6mm² y Pase #2 (x=-1.64m, z=5.35m, separado 70cm por norma ANDE/INTN) para Fibra/UTP Cat6/Alarma. La distribución horizontal en Nivel Calle va por el contrapiso/carpeta (caño corrugado pesado naranja ¾\" antes de pegar el porcelanato) y por las paredes nuevas de ladrillo Tobatí; en el Subsuelo va por cañería galvanizada vista prolija adosada al lateral de las vigas.",
+        hallazgo: "Pleno Vertical Eléctrico y de Datos en Eje F–G (z=3.00..5.00m) + Aprovechamiento del Cerramiento Loza Rap 38 m²",
+        solucion: "Se ejecutan 2 Pases Verticales con Sacabocado de Copa Diamantada Ø50mm en el pleno del Eje F–G junto a P14 (x=-1.64m): Pase #1 (x=-1.64m, z=4.65m) para el troncal eléctrico 5×6mm² (TP-PB ↔ TS-PA y TS-SUB) y Pase #2 (x=-1.64m, z=5.35m) para Fibra/UTP Cat6/Alarma. Además, al cerrar los 38.00 m² del Estar Social con Loza Rap, los caños corrugados de iluminación y tomas de ese sector se tienden directamente en la capa de compresión antes de hormigonar.",
         costoMaterialesGs: 1950000,
         costoManoObraGs: 1450000,
         subtotalGs: 3400000,
@@ -4267,7 +4270,7 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       {
         severidad: "CRÍTICO DE PROTECCIÓN (TORMENTAS EN EL RÍO)",
         hallazgo: "Protector de Sobretensiones atmosféricas (DPS Clase II 40kA) + 3 Disyuntores Diferenciales 30mA + 2 Jabalinas Copperweld",
-        solucion: "En el barranco de Itá Pytã Punta sobre el Río Paraguay las descargas atmosféricas queman placas de portón, heladeras e inverters si no hay DPS. Se instala en el Tablero Principal TP-PB (36 módulos DIN) un DPS Tetrapolar Clase II 40kA + 3 Diferenciales de 30mA (protección de vida para Ruth, Leo, Emma y Serafina) + Subtablero TS-PA (2do Piso, 18 DIN) + Subtablero TS-SUB (Subsuelo IP65, 12 DIN) + 2 Jabalinas Copperweld tratadas con gel electrolítico en la arenisca seca.",
+        solucion: "Se instala en el Tablero Principal TP-PB (36 módulos DIN, en Eje F) un DPS Tetrapolar Clase II 40kA + 3 Diferenciales de 30mA + Subtablero TS-PA (Planta Alta, 18 DIN) + Subtablero TS-SUB (Subsuelo IP65, 12 DIN) + 2 Jabalinas Copperweld.",
         costoMaterialesGs: 3200000,
         costoManoObraGs: 1300000,
         subtotalGs: 4500000,
@@ -4275,8 +4278,8 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       },
       {
         severidad: "FUNCIONALIDAD DIARIA",
-        hallazgo: "Circuito Dedicado 20A (4 mm²) en Mesada Cocina + Llaves Combinadas (3-Way) y 3 Luces de Emergencia en Escaleras",
-        solucion: "La Air Fryer Xiaomi 6L (1.500W) + Microondas (1.400W) operando juntos consumen 13,2A continuos y derriten tomas comunes de 10A: se tiende línea dedicada de 4 mm² con tomas de 20A rojos sobre mesada. Además, se instalan llaves conmutadas (3-Way) al pie y cabezal de ambas escaleras y 3 luminarias autónomas LED de emergencia.",
+        hallazgo: "Circuito Dedicado 20A (4 mm²) en Mesada Cocina + Llaves Combinadas (3-Way) en Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2)",
+        solucion: "Se tiende línea dedicada de 4 mm² con tomas de 20A rojos sobre la mesada de Cocina/Comedor (Eje 6–9) para Air Fryer Xiaomi 6L y Microondas. Se instalan llaves conmutadas (3-Way) al pie y cabezal de la Escalera 1 (Eje 8–9) y de la Escalera 2 (Eje 1–2) con luces autónomas LED de emergencia.",
         costoMaterialesGs: 1100000,
         costoManoObraGs: 650000,
         subtotalGs: 1750000,
@@ -4285,30 +4288,30 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
     ],
     checklistControlPropietario: [
       "Enterrar los 2 caños camisa PVC Ø50mm (ANDE) y Ø32mm (Fibra) bajo la cochera ANTES de compactar el relleno y hacer el contrapiso.",
-      "Verificar el cable Verde-Amarillo de 2,5 mm² conectado al tercer borne de absolutamente todos los enchufes de los 3 niveles."
+      "Verificar el cable Verde-Amarillo de 2,5 mm² conectado al tercer borne de todos los enchufes de los 3 niveles."
     ]
   },
   {
     id: "esp_plomero",
     icono: "🚰",
     especialidad: "6. Maestro Plomero e Ingeniero Hidrosanitario (Norma ESSAP / NP)",
-    profesionalRol: "Auditoría de Presión de Agua en 2do Piso, Termofusión Fría/Caliente, Pases Sanitarios en Losa 1 y Cloaca al Fondo",
-    calificacionActual: "98/100 (Cisterna, Presurizadora, PPR Frío/Caliente y Cloaca en 3D)",
-    resumenDictamen: "En la loma de Itá Pytã Punta la presión de ESSAP cae en verano a < 6 m.c.a.: sin cisterna y presurizadora el agua no subiría a la ducha ni al termocalefón del 2do Piso (+104.80m). Además, se corrigió el error de Edifica Studio que cotizaba «Solo Agua Fría».",
+    profesionalRol: "Auditoría del Núcleo Húmedo Vertical en Eje F–G (z=3.00..5.00m), Presurizadora, PPR Frío/Caliente y Desagües Pluviales",
+    calificacionActual: "99/100 (Núcleo Húmedo Eje F–G 100% alineado con plano instalacion_sanitaria_agua.png)",
+    resumenDictamen: "Tal como establece el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están alineados verticalmente sobre el frente en el Eje F–G (z = 3.00m..5.00m): en Planta Baja el Baño Social (1.10×2.00m) y la cabecera de Cocina; en Planta Alta el Vestidor, el Baño en Suite y el Baño 2 PA; y en el Subsuelo la Cisterna/Bomba y conexión al Lavadero.",
     huecosDetectadosYSoluciones: [
       {
-        severidad: "CRÍTICO DE CONFORT (PRESIÓN EN 2DO PISO)",
-        hallazgo: "Tanque Cisterna Tricapa 1.000 L en Subsuelo (+97.66m) + Bomba Presurizadora Inteligente Rowa/Pedrollo",
-        solucion: "Al ubicar el Tanque Cisterna de 1.000 L en el Subsuelo (-2.34m bajo la calle), se llena por gravedad las 24 hs aun cuando ESSAP tenga mínima presión en el barrio. Una bomba presurizadora inteligente con doble by-pass impulsa el agua a 2,0 bar constantes hasta la ducha lluvia del 2do Piso (+104.80m), la Cocina y el Lavadero, sin cargar 1.000 kg de peso sobre el techo.",
+        severidad: "CRÍTICO DE CONFORT (PRESIÓN EN PLANTA ALTA)",
+        hallazgo: "Tanque Cisterna Tricapa 1.000 L en Subsuelo (+97.66m) + Bomba Presurizadora Inteligente bajo Núcleo Eje F–G",
+        solucion: "Al ubicar el Tanque Cisterna de 1.000 L en el Subsuelo (-2.34m bajo el Eje F–G), se llena por gravedad desde ESSAP las 24 hs. Una bomba presurizadora inteligente impulsa el agua a 2,0 bar constantes en línea recta vertical hacia el Baño Social y Cocina en PB y hacia el Baño en Suite y Baño 2 en Planta Alta (+102.88m).",
         costoMaterialesGs: 3150000,
         costoManoObraGs: 950000,
         subtotalGs: 4100000,
         incluidoEnPartida: "instalaciones_sanitarias_desagues (7.2)"
       },
       {
-        severidad: "CRÍTICO CONSTRUCTIVO (PASES #3 Y #4 EN LOSA 1)",
-        hallazgo: "Perforación Diamantada Ø115mm (Columna Cloacal Ø100mm) y Ø63mm (Montantes Agua PPR Fría/Caliente) en Losa 1",
-        solucion: "Como la Losa 1 existente es maciza y no tiene pases sanitarios, se ejecutan con copa diamantada en el rincón técnico del Toilette/Cocina (Eje 9-C): Pase #3 (Ø115mm en x=-4.65m, z=7.20m) para la columna cloacal vertical PVC Ø100mm insonorizada (que baja del Baño del 2do Piso hacia el Subsuelo y el Pozo Ciego) y Pase #4 (Ø63mm en x=-4.65m, z=6.65m) para las montantes de Agua Fría PPR Ø25mm y Agua Caliente PPR PN20 Ø20mm con aislación térmica que baja desde el Termocalefón de 80L del 2do Piso hasta la Bacha de Cocina.",
+        severidad: "CRÍTICO CONSTRUCTIVO (PASES #3 Y #4 EN NÚCLEO HÚMEDO EJE F–G)",
+        hallazgo: "Pleno Hidrosanitario Unificado en Eje F–G (z=3.00..5.00m): Bajada Cloacal Ø100mm, Montantes PPR Fría/Caliente y Bajadas Pluviales",
+        solucion: "Concentrar los baños de Planta Alta (Baño en Suite x=-2.80..+0.50m y Baño 2 PA x=+1.69..+3.84m) y el Baño Social de PB (x=-1.64..-0.40m) en la franja frontal Eje F–G (z=3.00m..5.00m) permite que el Pase #3 (Cloaca Ø115mm en x=-1.64m, z=3.45m) y el Pase #4 (Agua PPR Fría/Caliente Ø63mm en x=-1.64m, z=3.95m) resuelvan los 3 niveles con mínimo recorrido de cañerías y bajadas pluviales directas desde las canaletas.",
         costoMaterialesGs: 1850000,
         costoManoObraGs: 1250000,
         subtotalGs: 3100000,
@@ -4316,8 +4319,8 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       },
       {
         severidad: "OPERACIÓN CAMIÓN CISTERNA",
-        hallazgo: "Ventilación Sanitaria Ø75mm a los 4 Vientos (+106.15m) + Toma Rápida a Rosca Ø100mm para Camión Atmosférico",
-        solucion: "Se prolonga la columna cloacal con caño de ventilación PVC Ø75mm hasta superar 0,50m el techo (+106.15m) evitando malos olores y desifonaje. En el patio trasero, el recorrido de manguera desde el camión cisterna en la calle por la Puerta de Servicio y la Escalera Lateral 1 hasta el Pozo Ciego suma 28,8 metros lineales (dentro del rango estándar de 35–40m de los camiones en Asunción), dejando una Toma Rápida a Rosca Ø100mm para aspirar sin romper ni levantar la losa del pozo.",
+        hallazgo: "Ventilación Sanitaria Ø75mm a los 4 Vientos (+106.15m) + Colector Cloacal a Cámara Séptica y Pozo Ciego en Fondo",
+        solucion: "Se prolonga la columna cloacal del Eje F–G con caño de ventilación PVC Ø75mm sobre el techo (+106.15m). En el Subsuelo, el colector cloacal recibe también el Lavadero y la bacha de la Parrillita inferior y corre con pendiente >=2% hacia la Cámara Séptica y el Pozo Ciego del patio posterior.",
         costoMaterialesGs: 680000,
         costoManoObraGs: 420000,
         subtotalGs: 1100000,
@@ -4325,8 +4328,8 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
       }
     ],
     checklistControlPropietario: [
-      "Exigir prueba hidráulica manométrica a 6 kg/cm² (6 bar) durante 24 horas en todas las cañerías verdes PPR de agua fría y caliente antes de tapar las canaletas de pared.",
-      "Verificar pendiente mínima del 2% (2 cm por metro) en el colector PVC Ø100mm hacia la Cámara Séptica y que la Cocina/Lavadero pasen primero por la Cámara Desengrasadora."
+      "Exigir prueba hidráulica manométrica a 6 kg/cm² (6 bar) durante 24 horas en todas las cañerías verdes PPR del núcleo húmedo Eje F–G antes de tapar canaletas.",
+      "Verificar pendiente mínima del 2% (2 cm por metro) en el colector PVC Ø100mm desde el Eje F–G hacia la Cámara Séptica."
     ]
   }
 ];
@@ -4337,51 +4340,51 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
 // ============================================================================
 export const DUCTOS_PASES_ENCHUFES_DATOS = {
   resumenTecnico:
-    "Dado que la Primera Losa ya hormigonada en obra (Cota +100.00m / Y=0.00m, resistencia 315 kg/cm²) NO tiene agujeros ni caños embutidos, toda la ingeniería de ductos se diseña con: (1) 4 Perforaciones puntuales con Sacabocado de Copa Diamantada en zonas neutras junto a pilares (cero corte de viguetas ni vigas), (2) Distribución horizontal sobre Losa 1 embutida en los 5 cm del contrapiso/carpeta niveladora antes de colocar el porcelanato, (3) Subidas verticales por mampostería nueva de ladrillo Tobatí, y (4) Cañería vista industrial/galvanizada por el lateral de vigas en el Subsuelo.",
+    "De acuerdo con el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están concentrados verticalmente en el Núcleo Húmedo del frente (Eje F–G, z = 3.00m..5.00m): Baño Social y cabecera de Cocina en Planta Baja; Vestidor, Baño en Suite y Baño 2 en Planta Alta; y Cisterna/Bomba en el Subsuelo. Las 4 perforaciones verticales en Losa 1 (eléctrica, datos, cloaca Ø115mm y agua PPR Ø63mm) se ejecutan con Sacabocado de Copa Diamantada dentro del pleno técnico del Eje F–G sin tocar vigas, mientras que los 38.00 m² de Loza Rap sobre el Estar Social permiten embutir cañerías en su capa de compresión.",
   pasesLosa1Diamantados: [
     {
       id: "PASE_LOSA1_01_ELECTRICO",
       codigo: "PASE #1 (Ø 50 mm)",
-      nombre: "Pase Diamantado #1 en Losa 1 Existente — Troncal Eléctrico Principal (TP-PB ↔ Subsuelo y 2do Piso)",
+      nombre: "Pase Diamantado #1 en Losa 1 — Troncal Eléctrico Principal en Núcleo Eje F–G (TP-PB ↔ Subsuelo y Planta Alta)",
       diametroMm: 50,
       pos3D: [-1.64, 0.0, 4.65],
-      ejeRef: "Junto a Pilar P14/P12 (Eje 6, x = -1.64m, z = 4.65m)",
+      ejeRef: "Pleno Eje F / Eje 6 (x = -1.64m, z = 4.65m — Junto a Pilar P14)",
       colorHex: 0xf97316,
       conductores: "Cable subterráneo NYY 4×10 mm² + PE 10 mm² desde Pilastra ANDE y alimentador 5×6 mm² hacia TS-SUB y TS-PA + Sellado Cortafuego Intumescente.",
-      metodoEjecucion: "Perforación vertical con máquina sacabocado de copa diamantada Ø 50mm húmeda, a 18 cm de la cara del pilar y fuera del alma de la viga."
+      metodoEjecucion: "Perforación vertical con máquina sacabocado de copa diamantada Ø 50mm húmeda, a 18 cm de la cara del pilar P14 y fuera del alma de la viga."
     },
     {
       id: "PASE_LOSA1_02_DATOS",
       codigo: "PASE #2 (Ø 50 mm)",
-      nombre: "Pase Diamantado #2 en Losa 1 Existente — Señales Débiles, Fibra Óptica, UTP Cat6 y Alarma",
+      nombre: "Pase Diamantado #2 en Losa 1 — Señales Débiles, Fibra Óptica, UTP Cat6 y Alarma en Eje F–G",
       diametroMm: 50,
       pos3D: [-1.64, 0.0, 5.35],
       ejeRef: "Eje 6 (x = -1.64m, z = 5.35m — Separado 70 cm del Pase Eléctrico s/ Norma ANDE/INTN)",
       colorHex: 0xa855f7,
-      conductores: "Fibra óptica + 6 cables UTP Cat6 100% cobre (CCTV PoE / Wi-Fi 6 Mesh) + Bus de sensores de Alarma Pet-Immune.",
+      conductores: "Fibra óptica + 6 cables UTP Cat6 100% cobre (CCTV PoE / Wi-Fi 6 Mesh / Escritorio PA) + Bus de sensores de Alarma Pet-Immune.",
       metodoEjecucion: "Perforación con sacabocado de copa diamantada Ø 50mm con camisa PVC pesada y boquilla anti-filo."
     },
     {
       id: "PASE_LOSA1_03_CLOACA",
       codigo: "PASE #3 (Ø 115 mm)",
-      nombre: "Pase Diamantado #3 en Losa 1 Existente — Columna de Bajada Cloacal Vertical PVC Ø 100mm + Ventilación",
+      nombre: "Pase Diamantado #3 en Losa 1 — Columna de Bajada Cloacal Vertical PVC Ø 100mm en Núcleo Húmedo Eje F–G",
       diametroMm: 115,
-      pos3D: [-4.65, 0.0, 7.20],
-      ejeRef: "Rincón Técnico Eje 9 / Eje C (x = -4.65m, z = 7.20m — Interior Mocheta Toilette PB)",
+      pos3D: [-1.64, 0.0, 3.45],
+      ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.45m — Pleno Baño Social PB y Baño en Suite / Baño 2 PA)",
       colorHex: 0xd97706,
-      conductores: "Columna montante cloacal PVC reforzado Ø 100mm (descarga de Baño Suite 2do Piso y Toilette PB hacia Subsuelo y Cámara Séptica) envuelta en manta acústica.",
-      metodoEjecucion: "Perforación con copa diamantada Ø 115mm en esquina de losa junto al muro medianero Eje 9, sellada con mástic poliuretánico Sikaflex-1A."
+      conductores: "Columna montante cloacal PVC reforzado Ø 100mm (unifica descargas de Baño en Suite PA, Baño 2 PA y Baño Social PB hacia Subsuelo y Cámara Séptica) + Bajadas pluviales.",
+      metodoEjecucion: "Perforación con copa diamantada Ø 115mm en pleno técnico del Eje F–G, sellada con mástic poliuretánico Sikaflex-1A."
     },
     {
       id: "PASE_LOSA1_04_AGUA_PPR",
       codigo: "PASE #4 (Ø 63 mm)",
-      nombre: "Pase Diamantado #4 en Losa 1 Existente — Montantes de Agua Fría Presurizada (PPR Ø25mm) y Agua Caliente (PPR Ø20mm)",
+      nombre: "Pase Diamantado #4 en Losa 1 — Montantes de Agua Fría Presurizada (PPR Ø25mm) y Caliente (PPR Ø20mm) en Eje F–G",
       diametroMm: 63,
-      pos3D: [-4.65, 0.0, 6.65],
-      ejeRef: "Rincón Técnico Eje 9 (x = -4.65m, z = 6.65m — Entre Cocina y Toilette PB)",
+      pos3D: [-1.64, 0.0, 3.95],
+      ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.95m — Entre Cocina y Baño Social PB)",
       colorHex: 0x0284c7,
-      conductores: "Subida de Agua Fría Presurizada PPR PN20 Ø 25mm desde la Cisterna/Presurizadora del Subsuelo hasta el 2do Piso + Bajada de Agua Caliente PPR PN20 Ø 20mm aislada desde el Termocalefón 80L del 2do Piso a la Bacha de Cocina.",
-      metodoEjecucion: "Perforación con copa diamantada Ø 63mm encamisada con caño PVC Ø 63mm."
+      conductores: "Subida de Agua Fría Presurizada PPR PN20 Ø 25mm desde la Cisterna/Presurizadora del Subsuelo hacia PB y PA + distribución de Agua Caliente PPR PN20 Ø 20mm aislada para Baño en Suite, Baño 2, Baño Social y Cocina.",
+      metodoEjecucion: "Perforación con copa diamantada Ø 63mm encamisada con caño PVC Ø 63mm en pleno Eje F–G."
     }
   ],
   tablerosYEquiposPrincipales: [
@@ -4389,7 +4392,7 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
       id: "TAB_PILASTRA_ANDE",
       codigo: "M-ANDE 3×40A",
       nombre: "Pilastra Reglamentaria de Acometida Trifásica ANDE (3×380/220V — TM 3×40A) + 2 Jabalinas Copperweld",
-      nivel: "Frente / Línea Municipal (z = -4.00m)",
+      nivel: "Frente / Línea Municipal Ciega (z = -4.00m)",
       pos3D: [-4.72, 1.35, -3.95],
       colorHex: 0xf59e0b,
       especificacion: "Caja polimérica homologada ANDE p/ medidor electrónico trifásico + Llave limitadora TM 3×40A + Puesta a tierra de servicio."
@@ -4397,8 +4400,8 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     {
       id: "TAB_TP_PB",
       codigo: "TP-PB (36 DIN)",
-      nombre: "Tablero Principal Planta Nivel Calle (36 Módulos DIN + DPS Clase II 40kA + 3 Diferenciales 30mA)",
-      nivel: "Planta Nivel Calle (+100.00m)",
+      nombre: "Tablero Principal Planta Baja en Núcleo Eje F–G (36 Módulos DIN + DPS Clase II 40kA + 3 Diferenciales 30mA)",
+      nivel: "Planta Baja (+100.00m)",
       pos3D: [-1.55, 1.55, 4.65],
       colorHex: 0xef4444,
       especificacion: "Corte general 4×40A + Protector de Sobretensiones DPS Tetrapolar Clase II 40kA + 3 Disyuntores Diferenciales 30mA + 12 llaves termomagnéticas sectorizadas."
@@ -4406,20 +4409,20 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
     {
       id: "TAB_TS_PA",
       codigo: "TS-PA (18 DIN)",
-      nombre: "Subtablero Seccional 2do Piso (+102.88m — Dormitorio Suite, Estudio, 2 Splits AA y Termocalefón 80L)",
-      nivel: "Segundo Piso (+102.88m)",
+      nombre: "Subtablero Seccional Planta Alta (+102.88m — Suite, Dormitorio 2, Escritorio, 2 Baños, Splits AA y Termocalefón 80L)",
+      nivel: "Planta Alta (+102.88m)",
       pos3D: [-0.55, 4.45, 4.65],
       colorHex: 0xef4444,
-      especificacion: "Gabinete embutido 18 DIN con Diferencial 2×40A 30mA dedicado para Suite, Estudio/Home-Office y circuito exclusivo del Termocalefón 80L."
+      especificacion: "Gabinete embutido 18 DIN en Eje F con Diferencial 2×40A 30mA dedicado para Dormitorio en Suite, Dormitorio 2, Escritorio y Termocalefón 80L."
     },
     {
       id: "TAB_TS_SUB",
       codigo: "TS-SUB (12 DIN IP65)",
-      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m — Lavarropas, Bomba Presurizadora y Exterior)",
+      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m — Lavarropas, Bomba Presurizadora, Parrillita y Exterior)",
       nivel: "Subsuelo (+97.66m)",
       pos3D: [-1.64, -0.85, 4.65],
       colorHex: 0xef4444,
-      especificacion: "Gabinete estanco IP65 de 12 DIN con Diferencial 30mA dedicado para Lavarropas, Bomba Presurizadora Rowa/Pedrollo, iluminación y patio."
+      especificacion: "Gabinete estanco IP65 de 12 DIN con Diferencial 30mA dedicado para Lavarropas, Bomba Presurizadora Rowa/Pedrollo, Parrillita inferior y patio."
     },
     {
       id: "HID_MEDIDOR_ESSAP",
@@ -4434,53 +4437,53 @@ export const DUCTOS_PASES_ENCHUFES_DATOS = {
       id: "HID_CISTERNA_BOMBA",
       codigo: "CISTERNA 1.000L + BOMBA",
       nombre: "Tanque Cisterna Tricapa Antibacteriano 1.000 L + Bomba Presurizadora Inteligente Rowa/Pedrollo (2.0 bar)",
-      nivel: "Subsuelo (+97.66m)",
+      nivel: "Subsuelo (+97.66m — Bajo Núcleo Húmedo Eje F–G)",
       pos3D: [-4.25, -1.65, 3.65],
       colorHex: 0x0284c7,
-      especificacion: "Se llena por gravedad desde la red ESSAP (al estar a -2.34m bajo la calle) e impulsa agua a presión constante a los 3 niveles incluyendo la ducha del 2do Piso (+104.80m)."
+      especificacion: "Se llena por gravedad desde la red ESSAP (al estar a -2.34m bajo la calle) e impulsa agua a presión constante por el pleno Eje F–G a los 3 niveles."
     }
   ],
   enchufesYTomacorrientes: [
-    // Planta Nivel Calle (Y = 0.00m): Tomas de 20A (Rojos) y 16A (Azules)
-    { id: "TOMA_PB_01_AF_MW", codigo: "20A-COC-1", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.32, 1.12, 3.08], label: "Doble Toma 20A (Cable 4mm²) sobre Mesada — Air Fryer Xiaomi 6L (1500W)" },
-    { id: "TOMA_PB_02_MW_RACK", codigo: "20A-COC-2", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-4.76, 1.05, 4.55], label: "Doble Toma 20A (Cable 4mm²) — Mueble de Microondas y Horno" },
-    { id: "TOMA_PB_03_HELADERA", codigo: "16A-HEL", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.65, 5.25], label: "Toma 16A Dedicado — Heladera con Freezer de Ruth y Leo" },
+    // Planta Baja (Y = 0.00m): Tomas de 20A (Rojos) y 16A (Azules)
+    { id: "TOMA_PB_01_AF_MW", codigo: "20A-COC-1", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.32, 1.12, 3.08], label: "Doble Toma 20A (Cable 4mm²) sobre Mesada Eje G — Air Fryer Xiaomi 6L (1500W)" },
+    { id: "TOMA_PB_02_MW_RACK", codigo: "20A-COC-2", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-4.76, 1.05, 4.55], label: "Doble Toma 20A (Cable 4mm²) — Mueble de Microondas y Horno en Cocina" },
+    { id: "TOMA_PB_03_HELADERA", codigo: "16A-HEL", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.65, 5.10], label: "Toma 16A Dedicado — Heladera con Freezer de Ruth y Leo" },
     { id: "TOMA_PB_04_CAMPANA", codigo: "16A-EXT", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 1.85, 3.92], label: "Toma 16A Alto (h=1.85m) — Campana Extractora de Cocina y Chispero" },
-    { id: "TOMA_PB_05_ISLA", codigo: "16A-ISLA", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-2.10, 0.82, 4.65], label: "Doble Toma 16A + USB-C en Isla Desayunadora (Ducto por Carpeta Losa 1)" },
-    { id: "TOMA_PB_06_TV32", codigo: "16A-TV", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.75, 0.55, 5.45], label: "Doble Toma 16A + Boca RJ45 Cat6 — Mesa Máquina de Coser y TV 32\"" },
-    { id: "TOMA_PB_07_VAPOR", codigo: "16A-SALA-1", tipo: "toma_16a", nivel: "planta_baja", pos3D: [0.25, 0.35, 3.12], label: "Toma 16A — Mesa Cuadrada de Florero/Libros y Vaporizador Xiaomi" },
-    { id: "TOMA_PB_08_PURIF", codigo: "16A-SALA-2", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.42, 0.35, 3.12], label: "Toma 16A — Purificador de Aire Xiaomi Smart Air Purifier" },
-    { id: "TOMA_PB_09_BIBLIO_PB", codigo: "16A-BIB-PB", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.35, 8.65], label: "Doble Toma 16A — Lectura junto a Biblioteca de 4 Estantes (Nivel Calle)" },
-    { id: "TOMA_PB_10_AA_SALA", codigo: "20A-AA-PB", tipo: "toma_20a", nivel: "planta_baja", pos3D: [4.76, 2.35, 7.20], label: "Toma 20A Alto — Split Aire Acondicionado 18.000 BTU Gran Sala-Comedor" },
-    { id: "TOMA_PB_11_GALERIA", codigo: "16A-GAL-IP55", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.45, 11.45], label: "Doble Toma Estanco IP55 en Galería L1 (-0.45m) — Junto a Parrilla Portátil" },
-    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [4.55, 1.45, -3.85], label: "Alimentación 20A Estanca — Motor Portón Balancín y Doble Traba Dog Steel" },
+    { id: "TOMA_PB_05_ISLA", codigo: "16A-ISLA", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-2.10, 0.82, 4.85], label: "Doble Toma 16A + USB-C en Isla / Comedor (Ducto por Carpeta Losa L4)" },
+    { id: "TOMA_PB_06_TV32", codigo: "16A-TV", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.75, 0.55, 5.45], label: "Doble Toma 16A + Boca RJ45 Cat6 — Estar Social (4.95×4.80m) TV 32\"" },
+    { id: "TOMA_PB_07_VAPOR", codigo: "16A-SALA-1", tipo: "toma_16a", nivel: "planta_baja", pos3D: [0.25, 0.35, 5.12], label: "Toma 16A — Estar Social y Vaporizador Xiaomi" },
+    { id: "TOMA_PB_08_PURIF", codigo: "16A-SALA-2", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.42, 0.35, 5.12], label: "Toma 16A — Purificador de Aire Xiaomi Smart Air Purifier" },
+    { id: "TOMA_PB_09_BIBLIO_PB", codigo: "16A-BIB-PB", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.35, 9.10], label: "Doble Toma 16A — Comedor / Lectura junto a Biblioteca de 4 Estantes" },
+    { id: "TOMA_PB_10_AA_SALA", codigo: "20A-AA-PB", tipo: "toma_20a", nivel: "planta_baja", pos3D: [4.76, 2.35, 7.20], label: "Toma 20A Alto — Split Aire Acondicionado 18.000 BTU Estar Social" },
+    { id: "TOMA_PB_11_GALERIA", codigo: "16A-GAL-IP55", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.45, 11.45], label: "Doble Toma Estanco IP55 en Galería al Río (-0.45m, sin parrilla fija)" },
+    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [3.45, 1.45, -3.85], label: "Alimentación 20A Estanca — Motor Portón Balancín 2.30m (x=+1.20..+3.50m) y Cerradura Portoncito Peatonal 0.95m" },
 
-    // Segundo Piso (Y = +2.88m): Dormitorio en Suite, Baño Principal y Estudio/Home-Office
-    { id: "TOMA_PA_01_MESALUZ_N", codigo: "16A-ML-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 8.89], label: "Doble Toma 16A + Llave Conmutada — Mesa de Luz #1 (Sommier 1,40m)" },
-    { id: "TOMA_PA_02_MESALUZ_S", codigo: "16A-ML-2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 10.81], label: "Doble Toma 16A + Botón S.O.S. — Mesa de Luz #2 (Sommier 1,40m)" },
-    { id: "TOMA_PA_03_TOCADOR1", codigo: "16A-TOC-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-0.62, 3.85, 8.85], label: "Doble Toma 16A — Tocador #1 con Espejo en Suite 2do Piso" },
-    { id: "TOMA_PA_04_AA_SUITE", codigo: "20A-AA-SUITE", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-4.76, 5.15, 9.85], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Suite 2do Piso" },
-    { id: "TOMA_PA_05_TERMOCAL", codigo: "20A-TERMO-80L", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-4.76, 4.95, 6.10], label: "Conexión 20A Dedicada — Termocalefón 80L en Baño Suite 2do Piso" },
-    { id: "TOMA_PA_06_VANITORY_PA", codigo: "16A-BANO-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-2.65, 4.05, 7.45], label: "Toma 16A c/ Tapa Húmeda + Luz Espejo LED — Vanitory Baño 2do Piso" },
-    { id: "TOMA_PA_07_ESCRITORIO1", codigo: "16A-DESK-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [0.35, 3.55, 6.30], label: "Cuádruple Toma 16A + 2 Bocas RJ45 Cat6 — Escritorio Home-Office #1" },
-    { id: "TOMA_PA_08_ESCRITORIO2", codigo: "16A-DESK-2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [1.45, 3.55, 6.30], label: "Cuádruple Toma 16A + 2 Bocas RJ45 Cat6 — Escritorio Home-Office #2" },
-    { id: "TOMA_PA_09_COSTURA", codigo: "16A-COSER", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.76, 3.55, 4.15], label: "Doble Toma 16A — Rincón de Máquina de Coser Antigua y Plancha" },
-    { id: "TOMA_PA_10_AA_ESTUDIO", codigo: "20A-AA-EST", tipo: "toma_20a", nivel: "planta_alta", pos3D: [4.76, 5.15, 8.50], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Estudio 2do Piso" },
+    // Planta Alta (Y = +2.88m): Dormitorio en Suite + Vestidor + Dormitorio 2 + Escritorio + 2 Baños en Eje F-G
+    { id: "TOMA_PA_01_MESALUZ_N", codigo: "16A-ML-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 6.80], label: "Doble Toma 16A + Llave Conmutada — Mesa de Luz #1 en Suite Principal (4.13×4.94m)" },
+    { id: "TOMA_PA_02_MESALUZ_S", codigo: "16A-ML-2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 8.60], label: "Doble Toma 16A + Botón S.O.S. — Mesa de Luz #2 en Suite Principal" },
+    { id: "TOMA_PA_03_VESTIDOR", codigo: "16A-VEST", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-3.80, 3.85, 3.12], label: "Doble Toma 16A — Vestidor (2.07×2.00m en Eje F–G) y Tocador" },
+    { id: "TOMA_PA_04_AA_SUITE", codigo: "20A-AA-SUITE", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-4.76, 5.15, 7.70], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Dormitorio en Suite" },
+    { id: "TOMA_PA_05_TERMOCAL", codigo: "20A-TERMO-80L", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-1.64, 4.95, 3.15], label: "Conexión 20A Dedicada — Termocalefón 80L en Núcleo Húmedo Eje F–G (Baño Suite / Baño 2)" },
+    { id: "TOMA_PA_06_VANITORY_PA", codigo: "16A-BANO-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-1.20, 4.05, 3.15], label: "Toma 16A c/ Tapa Húmeda + Luz Espejo LED — Baño en Suite y Baño 2 PA (Eje F–G)" },
+    { id: "TOMA_PA_07_DORM2", codigo: "16A-DORM2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [0.50, 3.55, 5.40], label: "Doble Toma 16A + Boca RJ45 Cat6 — Dormitorio 2 Central (2.54×3.40m)" },
+    { id: "TOMA_PA_08_ESCRITORIO", codigo: "16A-DESK-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [3.20, 3.55, 7.50], label: "Cuádruple Toma 16A + 2 Bocas RJ45 Cat6 — Escritorio / Estudio PA (2.50×3.05m al llegar de Escalera 2)" },
+    { id: "TOMA_PA_09_COSTURA", codigo: "16A-COSER", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.76, 3.55, 8.20], label: "Doble Toma 16A — Rincón de Estudio y Máquina de Coser en Escritorio PA" },
+    { id: "TOMA_PA_10_AA_DORM2_EST", codigo: "20A-AA-EST", tipo: "toma_20a", nivel: "planta_alta", pos3D: [1.80, 5.15, 7.50], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Dormitorio 2 / Escritorio" },
 
-    // Subsuelo (Y = -2.34m): Lavadero, Depósito y Bomba Presurizadora
-    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-3.25, -1.25, 7.25], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Subsuelo" },
-    { id: "TOMA_SUB_02_BOMBA", codigo: "20A-PRESUR", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-4.72, -1.15, 3.65], label: "Alimentación 20A Estanca — Bomba Presurizadora Inteligente Rowa/Pedrollo" },
-    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-DEP-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [-1.72, -1.25, 4.20], label: "Doble Toma 16A Estanco IP55 — Depósito de Herramientas en Subsuelo" },
-    { id: "TOMA_SUB_04_PATIO", codigo: "16A-PATIO-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [2.35, -1.25, 9.85], label: "Doble Toma Estanco IP55 — Salida a Jardín y Futuro Quincho" }
+    // Subsuelo (Y = -2.34m): Lavadero, Depósito, Bomba Presurizadora y Parrillita hacia el Patio
+    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-3.25, -1.25, 4.80], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Lavadero Subsuelo" },
+    { id: "TOMA_SUB_02_BOMBA", codigo: "20A-PRESUR", tipo: "toma_20a", nivel: "subsuelo", pos3D: [-4.25, -1.15, 3.65], label: "Alimentación 20A Estanca — Bomba Presurizadora Inteligente bajo Núcleo Eje F–G" },
+    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-DEP-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [1.50, -1.25, 4.20], label: "Doble Toma 16A Estanco IP55 — Depósito y Planta Libre en Subsuelo" },
+    { id: "TOMA_SUB_04_PARRILLITA", codigo: "16A-QUINCHO-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [-3.20, -1.25, 12.20], label: "Doble Toma Estanco IP55 — Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m)" }
   ],
   llavesYConmutadas3Way: [
-    { id: "LLAVE_3W_ESC1_PB", codigo: "3W-ESC1-PB", pos3D: [3.80, 1.15, 5.15], nivel: "planta_baja", label: "Llave Combinada 3-Way + Luz Emergencia LED #1 — Arranque Escalera 1 al Subsuelo" },
-    { id: "LLAVE_3W_ESC1_SUB", codigo: "3W-ESC1-SUB", pos3D: [3.80, -1.15, 9.85], nivel: "subsuelo", label: "Llave Combinada 3-Way + Luz Emergencia LED #2 — Pie de Escalera 1 en Subsuelo" },
-    { id: "LLAVE_3W_ESCPA_PB", codigo: "3W-PA-PB", pos3D: [2.80, 1.15, 5.15], nivel: "planta_baja", label: "Llave Combinada 3-Way — Arranque Escalera Principal al 2do Piso" },
-    { id: "LLAVE_3W_ESCPA_PA", codigo: "3W-PA-ALTA", pos3D: [2.80, 4.05, 9.85], nivel: "planta_alta", label: "Llave Combinada 3-Way + Luz Emergencia LED #3 — Desembarco Escalera en 2do Piso" },
-    { id: "LLAVE_ACCESO_PB", codigo: "LL-ACCESO", pos3D: [0.28, 1.15, 3.12], nivel: "planta_baja", label: "Llave Triple Encendido — Recibidor Puerta Principal, Sala, Comedor y Cochera" },
-    { id: "LLAVE_COCINA_PB", codigo: "LL-COCINA", pos3D: [-3.05, 1.15, 5.80], nivel: "planta_baja", label: "Llave Doble — Iluminación Mesada/Isla Cocina y Toilette Social" },
-    { id: "LLAVE_SUITE_PA", codigo: "LL-SUITE-PA", pos3D: [-0.65, 4.05, 10.15], nivel: "planta_alta", label: "Llave Combinada 3-Way — Acceso a Dormitorio en Suite 2do Piso (con corte desde la cama)" }
+    { id: "LLAVE_3W_ESC1_PB", codigo: "3W-ESC1-PB", pos3D: [-3.90, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way + Luz Emergencia LED #1 — Arranque Escalera 1 al Subsuelo (Pared Derecha Eje 8–9)" },
+    { id: "LLAVE_3W_ESC1_SUB", codigo: "3W-ESC1-SUB", pos3D: [-3.90, -1.15, 8.56], nivel: "subsuelo", label: "Llave Combinada 3-Way + Luz Emergencia LED #2 — Pie de Escalera 1 en Subsuelo (Eje 8–9)" },
+    { id: "LLAVE_3W_ESCPA_PB", codigo: "3W-ESC2-PB", pos3D: [3.84, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way — Arranque Escalera 2 a Planta Alta (Pared Izquierda Eje 1–2)" },
+    { id: "LLAVE_3W_ESCPA_PA", codigo: "3W-ESC2-PA", pos3D: [3.84, 4.05, 7.37], nivel: "planta_alta", label: "Llave Combinada 3-Way + Luz Emergencia LED #3 — Llegada Escalera 2 al Escritorio en Planta Alta (Eje 1–2)" },
+    { id: "LLAVE_ACCESO_PB", codigo: "LL-ACCESO", pos3D: [0.85, 1.15, 3.12], nivel: "planta_baja", label: "Llave Triple Encendido — Puerta Principal Eje G, Estar Social y Rejilla Frontal" },
+    { id: "LLAVE_COCINA_PB", codigo: "LL-COCINA", pos3D: [-1.64, 1.15, 5.00], nivel: "planta_baja", label: "Llave Doble — Iluminación Cocina/Comedor y Baño Social (Núcleo Eje F–G)" },
+    { id: "LLAVE_SUITE_PA", codigo: "LL-SUITE-PA", pos3D: [-0.74, 4.05, 5.20], nivel: "planta_alta", label: "Llave Combinada 3-Way — Acceso a Dormitorio en Suite, Vestidor y Baño Suite" }
   ]
 };
 
@@ -4615,4 +4618,170 @@ export const ESTRATEGIA_COMPRA_CHINA_DOMOTICA_ELECTRICA = {
   ]
 };
 
-
+// ============================================================================
+// REPOSITORIO ESTRUCTURADO DE ARCHIVOS ORIGINALES, PLANOS, INFORMES Y GITHUB
+// ============================================================================
+export const REPOSITORIO_ARCHIVOS_PROYECTO = {
+  titulo: "Repositorio Documental Oficial — Residencia Itá Pytã Punta (Planos Originales, Informes Técnicos y Código 3D)",
+  githubRepoUrl: "https://github.com/leoberniga/itapytapunta-3d",
+  githubPagesUrl: "https://leoberniga.github.io/itapytapunta-3d/",
+  categorias: [
+    {
+      id: "planos_arquitectura",
+      nombre: "📐 Planos Originales de Arquitectura y Adecuación",
+      archivos: [
+        {
+          id: "arq_ga_leo",
+          codigo: "ARQ-GA-LEO",
+          titulo: "Lámina General de Arquitectura Original (Modelo Ga-Leo: PB, PA y Cortes)",
+          autor: "Arq. Gabriela Rolón",
+          tipo: "PNG / CAD",
+          url: "./assets/planos/arquitectura_ga_leo_modelo.png",
+          descripcion: "Plantas originales con PB social (Estar 4.95×4.80m, Cocina/Comedor 6.20×2.75m, Baño Social 1.10×2.00m y Galería al Río) y PA (Escritorio, Dormitorio 2, Suite con Vestidor y 2 Baños sobre Eje F–G)."
+        },
+        {
+          id: "arq_lg_rb",
+          codigo: "ARQ-LG-RB",
+          titulo: "Proyecto de Adecuación y Cerramiento Primera Etapa (LG-RB + Loza Rap)",
+          autor: "Arq. Gabriela Rolón",
+          tipo: "PNG / CAD",
+          url: "./assets/planos/arquitectura_lg_rb.png",
+          descripcion: "Lámina de adecuación vinculada al cerramiento del vacío de 38.00 m² con Loza Rap en Losa 1."
+        },
+        {
+          id: "arq_acotado_svg",
+          codigo: "ARQ-VEC-1",
+          titulo: "Planta Arquitectónica Acotada Vectorial (SVG / PNG)",
+          autor: "Arq. Gabriela Rolón",
+          tipo: "SVG / PNG",
+          url: "./assets/plano_acotado.svg",
+          urlAlternativa: "./assets/plano_acotado-1.png",
+          descripcion: "Relevamiento acotado de ejes estructurales 1–9 y A–G (9.74m × 10.34m)."
+        },
+        {
+          id: "sub_ejec_1",
+          codigo: "SUB-1 / SUB-2",
+          titulo: "Subsuelo Ejecutivo — Planta y Cortes (+97.66m / -2.34m)",
+          autor: "Arq. Gabriela Rolón",
+          tipo: "PNG",
+          url: "./assets/subsuelo_ejecutivo_1-1.png",
+          urlAlternativa: "./assets/planos/subsuelo_ejecutivo_2.png",
+          descripcion: "Planta de Subsuelo con llegada de Escalera 1 en Eje 8–9, Lavadero, Depósito y Parrillita hacia el patio."
+        }
+      ]
+    },
+    {
+      id: "planos_estructurales",
+      nombre: "🏗️ Planos Estructurales Oficiales (Ing. Gustavo Velázquez — Reg. MOPC N° 3135)",
+      archivos: [
+        {
+          id: "est_e1_e2",
+          codigo: "E1 / E2",
+          titulo: "E1 y E2 — Replanteo de Cimentación, 14 Zapatas (-4.64m) y Vigas Centradoras VC.T-1",
+          autor: "Ing. Gustavo Velázquez",
+          tipo: "PNG",
+          url: "./assets/planos/estructural_e1_cimentacion.png",
+          urlAlternativa: "./assets/planos/estructural_e2_fundaciones.png",
+          descripcion: "Fundaciones ejecutadas al 100% en estrato de arenisca cementada (Nspt > 50)."
+        },
+        {
+          id: "est_e3",
+          codigo: "E3",
+          titulo: "E3 — Encofrado Primera Losa sobre Subsuelo (+100.00m / Galería L1 -0.45m)",
+          autor: "Ing. Gustavo Velázquez",
+          tipo: "PNG",
+          url: "./assets/planos/estructural_e3_losa_planta_baja.png",
+          descripcion: "Muestra Losa L1 (Galería 33.42 m²) y Losa L4 (Cocina/Comedor 28.66 m²) hormigonadas y el vacío de 38.00 m² entre vigas sobre el Estar Social."
+        },
+        {
+          id: "est_e4",
+          codigo: "E4",
+          titulo: "E4 — Encofrado Losa Planta Alta (+102.88m / +2.88m) y 17 Pilares que Suben",
+          autor: "Ing. Gustavo Velázquez",
+          tipo: "PNG",
+          url: "./assets/planos/estructural_e4_planta_alta.png",
+          descripcion: "Losa de Planta Alta alineada al frente en Eje G (z=3.00m) y verifica que P12, P13 y P15 mueren en 0.00m mientras los otros 17 pilares ya están hormigonados hasta +2.88m."
+        },
+        {
+          id: "est_e5_e9",
+          codigo: "E5 / E9",
+          titulo: "E5 (Pórticos 1–7 y Escalera 1 en Eje 8–9) + E9 (Cuadro de 20 Pilares P1–P20)",
+          autor: "Ing. Gustavo Velázquez",
+          tipo: "PNG",
+          url: "./assets/planos/estructural_e5_subsuelo_escalera.png",
+          urlAlternativa: "./assets/planos/estructural_e9_cuadro_pilares.png",
+          descripcion: "Geometría exacta de la Escalera 1 en Eje 8–9 y armaduras de los 20 pilares."
+        }
+      ]
+    },
+    {
+      id: "planos_instalaciones",
+      nombre: "🚰⚡ Planos de Instalaciones (Hidrosanitaria Eje F–G, Pluvial, Eléctrica y Señales Débiles)",
+      archivos: [
+        {
+          id: "inst_sanitaria",
+          codigo: "IS / IH",
+          titulo: "Instalación Sanitaria Cloacal y Agua Fría/Caliente (Núcleo Húmedo Eje F–G)",
+          autor: "Arq. Gabriela Rolón / Equipo Técnico",
+          tipo: "PNG",
+          url: "./assets/planos/instalacion_sanitaria_agua.png",
+          descripcion: "Plano rector que alinea verticalmente el Baño Social y Cocina (PB) con el Vestidor, Baño en Suite y Baño 2 (PA) sobre el Eje F–G, las escaleras opuestas (Escalera 1 en Eje 8–9 y Escalera 2 en Eje 1–2) y la Parrillita en el Subsuelo mirando al patio."
+        },
+        {
+          id: "inst_pluvial",
+          codigo: "IAA",
+          titulo: "Instalación de Desagüe Pluvial y Canaletas",
+          autor: "Arq. Gabriela Rolón / Equipo Técnico",
+          tipo: "PNG",
+          url: "./assets/planos/instalacion_desague_pluvial.png",
+          descripcion: "Evacuación pluvial de cubiertas, bajadas verticales y drenaje del foso frontal."
+        },
+        {
+          id: "inst_electrica",
+          codigo: "IE-1 / IE-2 / ISD",
+          titulo: "Instalación Eléctrica (Plantas y Unifilar Trifásico) + Señales Débiles (ISD)",
+          autor: "Arq. Gabriela Rolón / Equipo Técnico",
+          tipo: "PNG",
+          url: "./assets/planos/instalacion_electrica_plantas.png",
+          urlAlternativa: "./assets/planos/instalacion_senales_debiles.png",
+          descripcion: "Circuitos de iluminación, tomas, AA Split, esquema unifilar ANDE y red de datos/CCTV."
+        }
+      ]
+    },
+    {
+      id: "informes_certificaciones_presupuestos",
+      nombre: "📋 Estudio Geotécnico, Ensayos PROBETI, Acta de Recepción y Planillas de Presupuesto",
+      archivos: [
+        {
+          id: "geo_stan_2956",
+          codigo: "GEO-STAN #2956",
+          titulo: "Estudio Geotécnico SPT (Sondeos S1, S2 y S3) y Perfil del Barranco",
+          autor: "GEO-STAN S.R.L.",
+          tipo: "SVG / PNG",
+          url: "./assets/corte_terreno.svg",
+          urlAlternativa: "./assets/ubicacion_terreno.svg",
+          descripcion: "Certifica el rechazo SPT (Nspt > 50) en arenisca a -4.64m y las cotas reales del terreno (+100.00m a +96.20m)."
+        },
+        {
+          id: "probeti_acta_jivesa",
+          codigo: "PROBETI #17671 / ACTA",
+          titulo: "Ensayos de Rotura de Hormigón PROBETI (315 kg/cm² en Losa 1) y Acta de Recepción JIVESA (29/12/2025)",
+          autor: "Laboratorio PROBETI / JIVESA S.A.",
+          tipo: "Certificación Oficial",
+          url: "https://github.com/leoberniga/itapytapunta-3d",
+          descripcion: "Certifica la resistencia característica fck >= 305–325 kg/cm² en Losa 1 y 240–265 kg/cm² en los 17 pilares de PB ya hormigonados hasta +2.88m (Total ejecutado Gs. 163.820.972)."
+        },
+        {
+          id: "edifica_studio_planillas",
+          codigo: "EDIFICA A/B",
+          titulo: "Presupuestos Escaneados Edifica Studio E.A.S. (Opción A Gs. 573,9M y Opción B Gs. 460,1M)",
+          autor: "Arq. Lissie Amarilla & Arq. Roque León",
+          tipo: "PNG",
+          url: "./assets/planos/edifica_studio_573m_pag1.png",
+          urlAlternativa: "./assets/planos/edifica_studio_460m_completo.png",
+          descripcion: "Planillas comparativas referenciales desglosadas ítem por ítem en el simulador."
+        }
+      ]
+    }
+  ]
+};

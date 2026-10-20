@@ -101,9 +101,15 @@
     </div>
 
     <div class="header-actions">
-      <a id="btn-download-pdf-top" href="./assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" target="_blank" download="Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" class="btn-header glass-panel" style="border-color:rgba(244,63,94,0.65); background:linear-gradient(135deg, rgba(225,29,72,0.28), rgba(159,18,57,0.38)); color:#ffe4e6; font-weight:700; text-decoration:none;" title="Abrir / Descargar Presentación Ejecutiva PDF de la Residencia Itá Pytã Punta (Ruth y Leo)">
-        <span>📕 Presentación Ejecutiva PDF</span>
-      </a>
+      <button id="btn-toggle-game-mode" class="btn-header glass-panel" data-game-active="off" style="border-color:rgba(16,185,129,0.75); background:linear-gradient(135deg, rgba(16,185,129,0.28), rgba(5,150,105,0.42)); color:#ecfdf5; font-weight:800;" title="Activar Modo Juego / Recorrido Hiperrealista Estilo GTA VI con radar minimapa, niveles e interacciones en vivo">
+        <span>🎮 Modo Juego (Recorrido GTA)</span>
+      </button>
+      <button id="btn-live-cad-sheets" class="btn-header glass-panel" style="border-color:rgba(56,189,248,0.65); background:linear-gradient(135deg, rgba(2,132,199,0.28), rgba(3,105,161,0.38)); color:#e0f2fe; font-weight:700;" title="Regenerar y abrir los 4 Planos Oficiales CAD Vivos actualizados según los ajustes actuales">
+        <span>📐 Regenerar Planos CAD Vivo</span>
+      </button>
+      <button id="btn-open-repo-links" class="btn-header glass-panel" style="border-color:rgba(168,85,247,0.55); background:rgba(88,28,135,0.28); color:#f3e8ff; font-weight:700;" title="Abrir vínculo directo al Repositorio de Archivos Originales e Históricos de Obra">
+        <span>🗂️ Repositorio</span>
+      </button>
       <button id="btn-toggle-bank-colors" class="btn-header glass-panel" data-bank-colors="off" style="border-color:rgba(245,158,11,0.55); color:#fde68a; font-weight:700;" title="Activar Código de Colores Normativo del Banco en el Modelo 3D y Editor 2D: ⚫ Negro (Ya construido) | 🟢 Verde (Hormigón) | 🔴 Rojo (A construir) | 🟡 Amarillo (A refaccionar/adecuar)">
         <span>🎨 Colores Banco: OFF</span>
       </button>
@@ -120,6 +126,163 @@
       </button>
     </div>
   </header>
+
+  <!-- ===================================================================== -->
+  <!-- MODO JUEGO / RECORRIDO HIPERREALISTA ESTILO GTA VI HUD (#gta-game-hud) -->
+  <!-- ===================================================================== -->
+  <div id="gta-game-hud" class="gta-game-hud" style="display:none;">
+    <!-- Top Right Level & Location Indicator -->
+    <div class="gta-hud-location glass-panel">
+      <div class="gta-loc-badge">MODO RECORRIDO GTA VI • EN VIVO</div>
+      <div id="gta-hud-level-title" class="gta-loc-title">Nivel Calle +100.00m — Estar</div>
+      <div id="gta-hud-coords" class="gta-loc-coords">X: 0.00m · Z: 6.50m · Cota: +100.00m</div>
+      <div class="gta-level-Pills">
+        <button class="gta-lvl-btn" data-gta-level="1" title="Bajar al Subsuelo (+97.66m) [Tecla 1]">1 · Subsuelo (+97.66m)</button>
+        <button class="gta-lvl-btn active" data-gta-level="2" title="Ir a Planta Baja Nivel Calle (+100.00m) [Tecla 2]">2 · Planta Baja (+100.00m)</button>
+        <button class="gta-lvl-btn" data-gta-level="3" title="Subir a Planta Alta (+102.88m) [Tecla 3]">3 · Planta Alta (+102.88m)</button>
+        <button id="btn-gta-exit" class="gta-lvl-btn gta-exit-btn" title="Salir del Modo Juego (ESC)">ESC · Salir</button>
+      </div>
+    </div>
+
+    <!-- Center Crosshair -->
+    <div class="gta-crosshair">
+      <span class="gta-crosshair-dot"></span>
+    </div>
+
+    <!-- Contextual Interaction Prompt ([E] Abrir/Cerrar...) -->
+    <div id="gta-interaction-prompt" class="gta-interaction-prompt glass-panel">
+      <span class="gta-key-badge">E</span>
+      <span id="gta-prompt-text">[E] Abrir/Cerrar Portón Balancín 2.30m</span>
+      <div class="gta-quick-actions">
+        <button class="gta-action-chip" data-gta-action="porton_balancin">[E] Abrir/Cerrar Portón Balancín 2.30m</button>
+        <button class="gta-action-chip" data-gta-action="porton_peatonal">[E] Abrir Portoncito Peatonal</button>
+        <button class="gta-action-chip" data-gta-action="luces_domotica">[E] Encender/Apagar Luces</button>
+        <button class="gta-action-chip" data-gta-action="griferia_ducha">[E] Probar Grifería/Ducha</button>
+        <button class="gta-action-chip" data-gta-action="parrilla_subsuelo">[E] Encender Parrilla Subsuelo</button>
+      </div>
+    </div>
+
+    <!-- Bottom Left Circular Radar Minimap -->
+    <div class="gta-radar-wrapper glass-panel">
+      <div class="gta-radar-ring">
+        <canvas id="gta-radar-canvas" width="210" height="210"></canvas>
+        <span class="gta-compass-n">N (RÍO)</span>
+        <span class="gta-compass-s">S (CALLE)</span>
+      </div>
+      <div class="gta-radar-bars">
+        <div class="gta-bar-hp" title="Confort Estructural 100%"><span></span></div>
+        <div class="gta-bar-armor" title="Protección Hidrófuga & Eléctrica 100%"><span></span></div>
+        <div class="gta-bar-stamina" id="gta-cam-mode-badge" title="Modo de Cámara (Tecla C)">1ra Persona</div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls Bar -->
+    <div class="gta-controls-bar glass-panel">
+      <span><strong>WASD / Flechas:</strong> Caminar</span>
+      <span>·</span>
+      <span><strong>Shift:</strong> Correr</span>
+      <span>·</span>
+      <span><strong>Mouse:</strong> Mirar</span>
+      <span>·</span>
+      <span><strong>E:</strong> Interactuar</span>
+      <span>·</span>
+      <span><strong>C:</strong> 1ra/3ra Persona</span>
+      <span>·</span>
+      <span><strong>1/2/3:</strong> Subsuelo / PB / PA</span>
+      <span>·</span>
+      <span><strong>ESC:</strong> Salir</span>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- SIMULADOR INTERACTIVO POR CAPAS MEP (#mep-interactive-simulator)       -->
+  <!-- ===================================================================== -->
+  <div id="mep-interactive-simulator" class="mep-sim-floating">
+    <div id="mep-sim-panel" class="mep-sim-panel glass-panel" style="display:none;">
+      <div class="mep-sim-header">
+        <div>
+          <span class="mep-sim-tag">SIMULADOR INTERACTIVO EN VIVO 3D</span>
+          <h3 class="mep-sim-title">⚡💧 Instalaciones por Capas (Eléctrica + Pluvial/Sanitaria)</h3>
+        </div>
+        <button id="btn-close-mep-sim" class="modal-close-btn" title="Minimizar panel">&times;</button>
+      </div>
+
+      <!-- Controles de Simulación Hidrosanitaria y Pluvial -->
+      <div class="mep-sim-section">
+        <div class="mep-sim-sec-title" style="color:#38bdf8;">
+          <span>💧 Simulador Pluvial y Núcleo Húmedo Eje F-G</span>
+          <span id="mep-live-pluvial-badge" class="badge-pill" style="margin:0; font-size:9.5px;">En Espera</span>
+        </div>
+        <div class="mep-sim-buttons">
+          <button class="mep-sim-btn" id="btn-sim-rain-165" data-pluv-sim="tormenta">
+            <span>🌧️ Simular Tormenta 165 mm/h (Techo + Pérgola -> 4 Bajadas Ø100mm -> Drenaje Francés)</span>
+          </button>
+          <button class="mep-sim-btn" id="btn-sim-water-pressure" data-pluv-sim="presion_agua">
+            <span>🚰 Simular Presión Agua Fría/Caliente (Cisterna 1000L + Rowa -> Cocina y 3 Baños Superpuestos Eje F-G)</span>
+          </button>
+          <button class="mep-sim-btn" id="btn-sim-sewer-flush" data-pluv-sim="descarga_cloacal">
+            <span>🚽 Simular Descarga Cloacal Vertical (Baños PA + PB -> Columna Ø100mm -> Cámara Séptica y Pozo Ciego)</span>
+          </button>
+        </div>
+        <div class="mep-sim-metrics-grid">
+          <div class="mep-sim-metric">
+            <span>Caudal Evacuado</span>
+            <strong id="mep-metric-flow" style="color:#38bdf8;">0.00 L/s</strong>
+          </div>
+          <div class="mep-sim-metric">
+            <span>Presión Red Rowa</span>
+            <strong id="mep-metric-pressure" style="color:#34d399;">2.8 bar</strong>
+          </div>
+          <div class="mep-sim-metric">
+            <span>Columna Eje F-G</span>
+            <strong id="mep-metric-sewer" style="color:#fde68a;">Normal</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles de Simulación Eléctrica y Domótica -->
+      <div class="mep-sim-section" style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+        <div class="mep-sim-sec-title" style="color:#c084fc;">
+          <span>⚡ Simulador Eléctrico Trifásico y Prevención Activa</span>
+          <span id="mep-live-elec-badge" class="badge-pill" style="margin:0; font-size:9.5px; border-color:#10b981; color:#6ee7b7;">DIN Normal (220V)</span>
+        </div>
+        <div class="mep-sim-buttons">
+          <button class="mep-sim-btn active" id="btn-sim-fase-r" data-elec-sim="fase_r">
+            <span>❄️ Activar Fase R (Aires Acondicionados Suite / Dorm 2 / Estar)</span>
+          </button>
+          <button class="mep-sim-btn active" id="btn-sim-fase-s" data-elec-sim="fase_s">
+            <span>🍳 Activar Fase S (Cocina 20A / Termocalefón 80L / Lavadero)</span>
+          </button>
+          <button class="mep-sim-btn active" id="btn-sim-fase-t" data-elec-sim="fase_t">
+            <span>💡 Activar Fase T (Iluminación + Rack PoE + Portón Balancín)</span>
+          </button>
+          <button class="mep-sim-btn mep-sim-alert-btn" id="btn-sim-fuga-30ma" data-elec-sim="fuga_30ma">
+            <span>⚠️ Simular Fuga Diferencial 30mA (Corte Automático DIN)</span>
+          </button>
+          <button class="mep-sim-btn mep-sim-alert-btn" id="btn-sim-sobretemp-65c" data-elec-sim="sobretemp_65c">
+            <span>🔥 Simular Sobretemperatura &gt;65°C en Toma 20A</span>
+          </button>
+          <button class="mep-sim-btn mep-sim-alert-btn" id="btn-sim-inundacion-sub" data-elec-sim="inundacion_subsuelo">
+            <span>🌊 Simular Alerta Inundación Subsuelo</span>
+          </button>
+        </div>
+        <div class="mep-sim-metrics-grid">
+          <div class="mep-sim-metric">
+            <span>Potencia Total</span>
+            <strong id="mep-metric-kw" style="color:#fde68a;">4.85 kW</strong>
+          </div>
+          <div class="mep-sim-metric">
+            <span>Fases R / S / T</span>
+            <strong id="mep-metric-amps" style="color:#e9d5ff;">9.2A / 8.4A / 4.5A</strong>
+          </div>
+          <div class="mep-sim-metric">
+            <span>Disyuntor Smart DIN</span>
+            <strong id="mep-metric-breaker" style="color:#34d399;">Cerrado OK</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Left Sidebar Controls -->
   <aside id="left-sidebar" class="left-sidebar glass-panel">
@@ -149,8 +312,16 @@
     <!-- Recorrido por Habitación y Detalle (3 Niveles de Ruth y Leo) -->
     <div class="panel-section">
       <div class="panel-section-title">
-        <span>Recorrido 3D por Nivel y Habitación</span>
+        <span>Recorrido 3D y Modo Juego GTA</span>
         <i data-lucide="compass" style="width:14px;height:14px;color:var(--accent-cyan);"></i>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:8px;">
+        <button id="btn-sidebar-game-mode" class="btn-primary" style="flex:1; padding:8px 10px; font-size:11.5px; font-weight:800; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🎮 Modo Juego (Recorrido GTA)</span>
+        </button>
+        <button id="btn-sidebar-mep-sim" class="btn-header glass-panel" style="padding:8px 10px; font-size:11px; font-weight:700; border-color:rgba(56,189,248,0.55); color:#67e8f9;" title="Abrir Simulador Funcional por Capas (Eléctrica + Pluvial)">
+          <span>⚡💧 Simular</span>
+        </button>
       </div>
       <div class="room-tour-grid" id="room-tour-buttons">
         <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio en Suite de Ruth y Leo (Sommier 1.40m, 2 Tocadores, Placard) y Balcón con Vista al Río">
@@ -416,9 +587,9 @@
       <i data-lucide="calculator"></i>
       <span style="color:#e9d5ff; font-weight:700;">Cómputo 300M / 350M / 440M</span>
     </button>
-    <button class="dock-item" data-modal="modal-planos">
-      <i data-lucide="file-text"></i>
-      <span>Planos &amp; Presup. (23)</span>
+    <button class="dock-item" data-modal="modal-planos" style="background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45);">
+      <i data-lucide="file-text" style="color:#38bdf8;"></i>
+      <span style="color:#e0f2fe; font-weight:700;">Planos CAD Vivos &amp; Repo</span>
     </button>
     <button class="dock-item" data-modal="modal-geotech">
       <i data-lucide="activity"></i>
@@ -496,11 +667,17 @@
               <button class="sat-img-pill active" data-sat-img="./assets/entorno/contexto_satelital_anotado.png" data-sat-caption="Contexto Satelital Anotado: Calle Tte. Guillermo Arias (sin salida), Molinos Harineros al Sur y Río Paraguay a 85–96m al Noroeste.">
                 Ortofoto Anotada
               </button>
-              <button class="sat-img-pill" data-sat-img="./assets/entorno/satelital_lote_zoom19.jpg" data-sat-caption="Ortofoto Satelital Zoom 19 (Esri World Imagery): Detalle de cumbreras vecinas de tejas y barranco de Itá Pytã Punta.">
-                Satelital Zoom 19
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/streetview_guillermo_arias_280h.png" data-sat-caption="Google Street View Real (1950 Tte. Guillermo Arias esq. Pedro Melo de Portugal mirando al Oeste 280°): Calzada de empedrado basáltico + arena rojiza, muralla blanca de Molinos Harineros a la izquierda (Sur), postes ANDE y casitas vecinas a la derecha (Norte).">
+                📸 Street View Calle (280°)
               </button>
-              <button class="sat-img-pill" data-sat-img="./assets/entorno/mapa_urbano_osm.png" data-sat-caption="Cartografía Urbana y Vial (OpenStreetMap): Tramo cul-de-sac al Oeste de Pedro Melo de Portugal y Mirador Itá Pytã Punta.">
-                Mapa Urbano OSM
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/streetview_guillermo_arias_zoom.png" data-sat-caption="Google Street View Zoom hacia el Fondo del Cul-de-Sac (Tte. Guillermo Arias): Vista directa hacia nuestro lote en la acera Norte y la arboleda del barranco al fondo.">
+                🔭 Street View Fondo Cuadra
+              </button>
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/streetview_mirador_acantilado.png" data-sat-caption="Google Street View desde el Mirador Itá Pytã Punta mirando al Sur (160°): El farallón de piedra arenisca roja (Itá Pytã) y la ladera donde se asienta nuestro lote.">
+                🪨 Street View Mirador (Acantilado)
+              </button>
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/gmaps_satellite_zoom_max.png" data-sat-caption="Google Maps Satélite Zoom Máximo (20z): Vista aérea real del callejón Tte. Guillermo Arias, el galpón de Molinos Harineros al Sur y la costa del Río Paraguay.">
+                🛰️ Google Satélite 20z
               </button>
               <button class="sat-img-pill" data-sat-img="./assets/ubicacion_02-1.png" data-sat-caption="Plano Oficial de Ubicación de Sondeos S1, S2, S3 y Punto RN (GEO-STAN S.R.L. Estudio N° 2956 — UTM 21S 433024E, 7203554N).">
                 Croquis GEO-STAN UTM
@@ -898,72 +1075,39 @@
         <button class="modal-close-btn">&times;</button>
       </div>
 
-      <!-- 0. PANEL PRINCIPAL: EL CRÉDITO NUEVO (CAJA MUTUAL 250M / 300M / 350M / 440M) + TABLA 6,5% VS 9,9% + PROTOCOLO LOSA 1 + ALARMA + CLOACA DUAL -->
+      <!-- 0. PANEL PRINCIPAL: PRESUPUESTO VIVO «EL CRÉDITO NUEVO» (CAJA MUTUAL 250M / 300M / 350M / 440M) + CÓDIGO DE COLORES BANCO -->
       <div id="bank-credit-and-requirements-host"></div>
 
-      <!-- PANEL 1: 🛡️ CONTROL DEL PROPIETARIO Y NEGOCIACIÓN CON ARQUITECTO -->
+      <!-- PANEL 1: 🛡️ CONTROL DE OBRA POR HITOS QUINCENALES (20% C/U) Y REGLAS DE CONTRATACIÓN -->
       <div id="owner-control-architect-host"></div>
 
-      <!-- PANEL 2: 📦⚡ EVALUACIÓN DE COMPRA DIRECTA EN CHINA: TABLERO INTELIGENTE DIN + DOMÓTICA ZIGBEE CON NEUTRO + PREVENCIÓN ACTIVA DE FALLAS -->
+      <!-- PANEL 2: 📦⚡ COMPRA DIRECTA DOMÓTICA Y TABLERO INTELIGENTE DIN + PREVENCIÓN ACTIVA -->
       <div id="china-smart-electrical-host"></div>
 
-      <!-- PANEL 3: 👷‍♂️🔍 AUDITORÍA MULTIDISCIPLINARIA DE 6 ESPECIALISTAS + TABLA DE PASES DIAMANTADOS EN LOSA 1 EXISTENTE -->
+      <!-- PANEL 3: 👷‍♂️🔍 AUDITORÍA MULTIDISCIPLINARIA Y TABLA DE 4 PASES DIAMANTADOS EN LOSA 1 -->
       <div id="six-specialists-and-ducts-host"></div>
 
-      <!-- 1. COMPARADOR MULTI-PRESUPUESTO LADO A LADO + TRANSCRIPCIÓN ÍNTEGRA EDIFICA STUDIO -->
-      <div class="multi-budget-box">
-        <div class="multi-budget-header">
+      <!-- 1. REFERENCIAS HISTÓRICAS Y CORRECCIONES FORENSES (COMPACTADAS CON VÍNCULO AL REPOSITORIO) -->
+      <div class="multi-budget-box" style="margin-bottom:14px; padding:12px 14px; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.3);">
+        <div class="multi-budget-header" style="margin-bottom:0;">
           <div>
-            <h3>📊 Comparador Lado a Lado de los 6 Presupuestos del Proyecto</h3>
-            <p>Contraste directo entre lo ejecutado en obra (Acta 29/12/2025), las planillas de JIVESA/LG-RB, las 2 propuestas referenciales de 1 solo nivel de <strong>Edifica Studio E.A.S.</strong> y la Tabla Maestra de 3 niveles auditada por IA:</p>
+            <h3 style="font-size:14px; color:#e2e8f0;">🗂️ Referencias Históricas de Presupuestos y Correcciones Forenses Incorporadas</h3>
+            <p style="font-size:11px; color:#94a3b8;">Los presupuestos pasados (JIVESA/LG-RB y Edifica Studio) quedan archivados en el Repositorio. Aquí solo opera el Presupuesto Vivo actualizado.</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button id="btn-toggle-edifica-table" class="btn-header glass-panel" style="padding:7px 12px; font-size:11px; border-color:#3b82f6; color:#93c5fd; font-weight:700;">
-              📐 Ver Planillas Íntegras Edifica Studio (573.8M vs 460.1M Gs)
+            <button id="btn-add-all-forensic" class="btn-primary" style="padding:6px 12px; font-size:11px; border-radius:6px; cursor:pointer;">
+              ✓ Verificar Partidas Forenses en Cómputo
+            </button>
+            <button id="btn-toggle-edifica-table" class="btn-header glass-panel" style="padding:6px 12px; font-size:11px; border-color:#3b82f6; color:#93c5fd;">
+              📊 Ver Comparativa Histórica (Opcional)
             </button>
           </div>
         </div>
 
-        <div id="comparador-multi-grid" class="comparador-multi-grid">
-          <!-- Populated dynamically from COMPARADOR_MULTI_PRESUPUESTO -->
-        </div>
-
-        <!-- Desplegable con la Transcripción Exacta e Íntegra de Edifica Studio (Opción A y Opción B) -->
-        <div id="edifica-full-transcription-panel" class="edifica-transcription-panel" style="display:none;">
-          <div class="edifica-panel-top">
-            <div>
-              <h4 style="color:#93c5fd; font-size:14px; font-weight:800;">
-                📐 Transcripción Exacta e Íntegra — EDIFICA STUDIO E.A.S. (Arq. Lissie Amarilla R.P. 4.688 &amp; Arq. Roque León R.P. 4.598)
-              </h4>
-              <p style="font-size:11px; color:#cbd5e1; margin-top:2px;">
-                Presupuesto estrictamente referencial de 1 solo nivel (sin 2do Piso). En los documentos originales de Edifica Studio las columnas <code>Unid.</code>, <code>Cantidad</code> y <code>Precio Unitario</code> vienen <strong>en blanco</strong> (solo consignan <code>Precio Total</code> global con materiales y mano de obra incluidos).
-              </p>
-            </div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <a href="./assets/planos/edifica_studio_573m_pag1.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#3b82f6; color:#93c5fd;">🔍 Hoja 1 (573.8M)</a>
-              <a href="./assets/planos/edifica_studio_573m_pag2.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#3b82f6; color:#93c5fd;">🔍 Hoja 2 y Firmas (573.8M)</a>
-              <a href="./assets/planos/edifica_studio_460m_completo.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#60a5fa; color:#bfdbfe;">🔍 Planilla Reducida (460.1M)</a>
-            </div>
-          </div>
-          <div id="edifica-sections-container">
-            <!-- Populated dynamically from EDIFICA_STUDIO_BUDGETS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. SECCIÓN DESTACADA: 10 CUESTIONES FUNDAMENTALES OMITIDAS EN PLANILLAS ORIGINALES -->
-      <div class="forensic-omissions-box">
-        <div class="forensic-omissions-header">
-          <div>
-            <h3>⚠️ Alerta de Ingeniería: 10 Cuestiones Fundamentales Omitidas en Planillas Originales</h3>
-            <p>Hallazgos de la auditoría cruzada entre el Estudio Geotécnico GEO-STAN #2956, el Cálculo Estructural E1-E9, los Informes Técnicos 2/3 y las planillas de presupuesto:</p>
-          </div>
-          <button id="btn-add-all-forensic" class="btn-primary" style="padding:7px 12px; font-size:11px; border-radius:6px; cursor:pointer; white-space:nowrap;">
-            ✓ Incluir las Correcciones Forenses en Cómputo
-          </button>
-        </div>
-        <div id="omisiones-criticas-grid" class="omisiones-grid">
-          <!-- Populated dynamically from OMISIONES_CRITICAS_PRESUPUESTO -->
+        <div id="edifica-full-transcription-panel" class="edifica-transcription-panel" style="display:none; margin-top:12px;">
+          <div id="comparador-multi-grid" class="comparador-multi-grid" style="margin-bottom:12px;"></div>
+          <div id="omisiones-criticas-grid" class="omisiones-grid" style="margin-bottom:12px;"></div>
+          <div id="edifica-sections-container"></div>
         </div>
       </div>
 
@@ -999,14 +1143,17 @@
           <button class="btn-header btn-primary" id="btn-export-computo-xlsx" style="font-size:11px; padding:7px 14px; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; font-weight:700;">
             <span>📊 Descargar Planilla Excel (.XLSX — 6 Hojas c/ Fórmulas + Formato LG-RB)</span>
           </button>
-          <a id="btn-download-pdf-modal" href="./assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" target="_blank" download="Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" class="btn-header glass-panel" style="font-size:11px; padding:7px 12px; border-color:rgba(244,63,94,0.65); background:rgba(225,29,72,0.22); color:#ffe4e6; font-weight:700; text-decoration:none;">
-            <span>📕 Presentación Ejecutiva PDF</span>
-          </a>
+          <button class="btn-header glass-panel" id="btn-modal-live-cad-sheets" style="font-size:11px; padding:7px 12px; border-color:rgba(56,189,248,0.65); background:rgba(2,132,199,0.22); color:#e0f2fe; font-weight:700;">
+            <span>📐 Regenerar Planos CAD Vivo</span>
+          </button>
+          <button class="btn-header glass-panel" id="btn-modal-repo-link" style="font-size:11px; padding:7px 12px; border-color:rgba(168,85,247,0.55); background:rgba(88,28,135,0.22); color:#f3e8ff; font-weight:700;">
+            <span>🗂️ Repositorio de Archivos</span>
+          </button>
           <button class="btn-header glass-panel" id="btn-export-computo-csv" style="font-size:11px; padding:7px 12px;">
             <span>📥 Exportar Planilla Bancaria CSV (Colores + Mat./M.O.)</span>
           </button>
           <button class="btn-header glass-panel" id="btn-print-computo" style="font-size:11px; padding:7px 12px;">
-            <span>🖨️ Imprimir Carpeta PDF para el Banco</span>
+            <span>🖨️ Imprimir Carpeta para el Banco</span>
           </button>
         </div>
       </div>
@@ -1055,77 +1202,127 @@
     </div>
   </div>
 
-  <!-- Modal 2: VISOR DE LOS 23 PLANOS CAD, TÉCNICOS Y PRESUPUESTOS ESCANEADOS (#modal-planos) -->
+  <!-- Modal 2: GENERADOR DE PLANOS OFICIALES VIVOS + VÍNCULO AL REPOSITORIO (#modal-planos) -->
   <div id="modal-planos" class="modal-overlay">
-    <div class="modal-content glass-panel" style="max-width:1140px;">
+    <div class="modal-content glass-panel" style="max-width:1180px;">
       <div class="modal-header">
         <div>
           <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
             <i data-lucide="file-text" style="color:var(--accent-cyan);"></i>
-            Repositorio Completo de 23 Planos Ejecutivos CAD, MEP, Geotécnicos y Presupuestos
+            Generador de Planos Oficiales Vivos (Rehechos Dinámicamente según Ajustes Actuales)
           </h2>
           <p style="font-size:11.5px; color:var(--text-muted);">
-            Láminas oficiales de Cálculo Estructural (E1–E9 Ing. Gustavo Velázquez), Instalaciones MEP (IS/IH, IAA, ISD, IE), Arquitectura (Arq. Gabriela Rolón), Geotecnia (GEO-STAN #2956) y Presupuestos Edifica Studio.
+            Las 4 láminas ejecutivas se dibujan en tiempo real a partir de los ajustes vigentes del modelo BIM/CAD 2D/3D (Hueco 38m² Losa Rap, Núcleo Húmedo Eje F-G, 2 Dormitorios + Vestidor + Desk en PA, Subsuelo con Parrilla y Rejilla de Oxigenación).
           </p>
         </div>
         <button class="modal-close-btn">&times;</button>
       </div>
 
-      <!-- Filtros por Categoría -->
-      <div class="blueprint-controls-bar">
-        <div class="computo-filters" id="bp-category-filters">
-          <button class="computo-filter-btn active" data-bp-cat="ALL">Todos (23)</button>
-          <button class="computo-filter-btn" data-bp-cat="Estructurales">Estructural (6)</button>
-          <button class="computo-filter-btn" data-bp-cat="Instalaciones">Instalaciones MEP (5)</button>
-          <button class="computo-filter-btn" data-bp-cat="Arquitectura">Arquitectura (5)</button>
-          <button class="computo-filter-btn" data-bp-cat="Geotecnia y Entorno">Geotecnia y Satelital (4)</button>
-          <button class="computo-filter-btn" data-bp-cat="Presupuestos">Presupuestos Edifica Studio (3)</button>
+      <!-- SECCIÓN PRINCIPAL: GENERADOR DE LAS 4 LÁMINAS OFICIALES EN VIVO (SVG/PNG) -->
+      <div class="live-cad-generator-box" style="background:rgba(15,23,42,0.86); border:1px solid rgba(56,189,248,0.45); border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;" id="live-sheet-tabs">
+            <button class="computo-filter-btn active" data-live-sheet="sheet_pb">
+              1. Planta Baja +100.00m (Hueco 38m² Losa Rap y Núcleo Húmedo Eje F-G)
+            </button>
+            <button class="computo-filter-btn" data-live-sheet="sheet_pa">
+              2. Planta Alta +102.88m (2 Dorm., Vestidor, 2 Baños y Desk al subir escalera)
+            </button>
+            <button class="computo-filter-btn" data-live-sheet="sheet_sub">
+              3. Subsuelo +97.66m (Parrilla al Patio y Rejilla de Oxigenación)
+            </button>
+            <button class="computo-filter-btn" data-live-sheet="sheet_mep">
+              4. Esquema Integrado Eléctrico y Pluvial/Sanitario Vertical
+            </button>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="btn-download-live-svg" class="btn-primary" style="padding:7px 12px; font-size:11px; border-radius:6px; font-weight:700; cursor:pointer;">
+              📐 Descargar Lámina Viva (.SVG)
+            </button>
+            <button id="btn-download-live-png" class="btn-header glass-panel" style="padding:7px 12px; font-size:11px; border-color:#34d399; color:#6ee7b7; font-weight:700; cursor:pointer;">
+              🖼️ Descargar Lámina Viva (.PNG)
+            </button>
+            <button id="btn-export-pack-4-sheets" class="btn-header glass-panel" style="padding:7px 12px; font-size:11px; border-color:#fbbf24; color:#fde68a; font-weight:700; cursor:pointer;">
+              📦 Regenerar Pack 4 Láminas CAD
+            </button>
+          </div>
         </div>
 
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <!-- Selector de Contraste -->
-          <div class="blueprint-themes-group" id="blueprint-contrast-group">
-            <button class="theme-pill-btn active" id="btn-theme-white" data-bp-theme="original">Papel Blanco</button>
-            <button class="theme-pill-btn" id="btn-theme-blueprint" data-bp-theme="high-contrast">Blueprint Azul</button>
-            <button class="theme-pill-btn" id="btn-theme-dark" data-bp-theme="autocad">Invertido AutoCAD</button>
+        <!-- Lienzo Vectorial Vivo de las 4 Láminas Oficiales -->
+        <div id="live-cad-sheet-viewport" class="blueprint-viewport-wrapper" style="height:470px; background:#071120; border:1px solid rgba(56,189,248,0.35); position:relative; overflow:auto;">
+          <div id="live-cad-svg-host" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
+        </div>
+
+        <div id="live-cad-sheet-meta" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:8px; font-size:11px; color:#cbd5e1;">
+          <span id="live-sheet-status-label">✅ Lámina generada dinámicamente en vivo desde el estado actual de la obra (Escala CAD 1:50).</span>
+          <button id="btn-open-2d-editor-from-planos" class="btn-header glass-panel" style="padding:5px 10px; font-size:10.5px; border-color:#38bdf8; color:#7dd3fc;">
+            ✏️ Editar Muros / Cotas en Editor 2D Vivo
+          </button>
+        </div>
+      </div>
+
+      <!-- VÍNCULO LIMPIO AL REPOSITORIO DE ARCHIVOS DE OBRA HISTÓRICOS (COLAPSABLE BAJO DEMANDA) -->
+      <div id="repo-archivos-historicos-section" style="background:rgba(15,23,42,0.75); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:12px 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <strong style="color:#e9d5ff; font-size:13px;">🗂️ Repositorio de Archivos de Obra Históricos (E1–E9, GEO-STAN #2956, Acta PROBETI y Planos Base)</strong>
+            <p style="font-size:11px; color:#94a3b8; margin-top:2px;">
+              Acceso directo de consulta a las 23 láminas históricas escaneadas sin sobrecargar los módulos operativos.
+            </p>
+          </div>
+          <button id="btn-toggle-historical-repo" class="btn-header glass-panel" style="padding:6px 12px; font-size:11px; border-color:#c084fc; color:#e9d5ff; font-weight:700;">
+            📂 Ver / Ocultar Archivos Históricos (23)
+          </button>
+        </div>
+
+        <div id="historical-repo-drawer" style="display:none; margin-top:12px; border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+          <!-- Filtros por Categoría -->
+          <div class="blueprint-controls-bar">
+            <div class="computo-filters" id="bp-category-filters">
+              <button class="computo-filter-btn active" data-bp-cat="ALL">Todos (23)</button>
+              <button class="computo-filter-btn" data-bp-cat="Estructurales">Estructural (6)</button>
+              <button class="computo-filter-btn" data-bp-cat="Instalaciones">Instalaciones MEP (5)</button>
+              <button class="computo-filter-btn" data-bp-cat="Arquitectura">Arquitectura (5)</button>
+              <button class="computo-filter-btn" data-bp-cat="Geotecnia y Entorno">Geotecnia y Satelital (4)</button>
+              <button class="computo-filter-btn" data-bp-cat="Presupuestos">Presupuestos Referenciales (3)</button>
+            </div>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <div class="blueprint-themes-group" id="blueprint-contrast-group">
+                <button class="theme-pill-btn active" id="btn-theme-white" data-bp-theme="original">Papel Blanco</button>
+                <button class="theme-pill-btn" id="btn-theme-blueprint" data-bp-theme="high-contrast">Blueprint Azul</button>
+                <button class="theme-pill-btn" id="btn-theme-dark" data-bp-theme="autocad">Invertido AutoCAD</button>
+              </div>
+              <div class="blueprint-zoom-group">
+                <button class="zoom-btn" id="btn-zoom-out" title="Alejar (-)">-</button>
+                <button class="theme-pill-btn" id="btn-zoom-reset" title="Restaurar 100%"><span id="bp-zoom-level">100%</span></button>
+                <button class="zoom-btn" id="btn-zoom-in" title="Acercar (+)">+</button>
+              </div>
+              <a id="bp-download-btn" href="./assets/planos/estructural_e1_replanteo.png" download class="btn-primary" style="padding:6px 12px; border-radius:6px; font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+                <i data-lucide="download" style="width:13px;height:13px;"></i>
+                <span>Descargar Archivo</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Controles de Zoom -->
-          <div class="blueprint-zoom-group">
-            <button class="zoom-btn" id="btn-zoom-out" title="Alejar (-)">-</button>
-            <button class="theme-pill-btn" id="btn-zoom-reset" title="Restaurar 100%"><span id="bp-zoom-level">100%</span></button>
-            <button class="zoom-btn" id="btn-zoom-in" title="Acercar (+)">+</button>
+          <div id="blueprint-selector-strip" class="blueprint-selector-strip"></div>
+
+          <div id="blueprint-viewport" class="blueprint-viewport-wrapper theme-white" style="height:400px;">
+            <img id="blueprint-img" class="blueprint-img-canvas" src="./assets/planos/estructural_e1_replanteo.png" alt="Plano Técnico">
           </div>
 
-          <!-- Descarga Directa -->
-          <a id="bp-download-btn" href="./assets/planos/estructural_e1_replanteo.png" download class="btn-primary" style="padding:6px 12px; border-radius:6px; font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
-            <i data-lucide="download" style="width:13px;height:13px;"></i>
-            <span>Descargar Lámina</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Selector de Láminas (Pills) -->
-      <div id="blueprint-selector-strip" class="blueprint-selector-strip">
-        <!-- Populated from ALL_BLUEPRINTS_CATALOG -->
-      </div>
-
-      <!-- Visor Principal con Zoom y Contraste -->
-      <div id="blueprint-viewport" class="blueprint-viewport-wrapper theme-white">
-        <img id="blueprint-img" class="blueprint-img-canvas" src="./assets/planos/estructural_e1_replanteo.png" alt="Plano Técnico">
-      </div>
-
-      <!-- Metadatos de la Lámina Activa -->
-      <div id="blueprint-meta-bar" class="blueprint-meta-bar">
-        <div>
-          <span id="bp-meta-code" class="bp-pill-code" style="margin-right:6px;">E1</span>
-          <strong id="bp-meta-title" style="color:#fff; font-size:13px;">E1 — Planta de Fundación y Ejes de Replanteo</strong>
-          <p id="bp-meta-desc" style="font-size:11.5px; color:#94a3b8; margin-top:2px;"></p>
-        </div>
-        <div style="text-align:right; white-space:nowrap;">
-          <span id="bp-meta-author" class="badge-pill">Ing. Gustavo Velázquez</span>
-          <span id="bp-meta-scale" class="badge-pill" style="border-color:var(--accent-gold); color:var(--accent-gold);">Escala 1:50</span>
-          <span id="bp-meta-status" class="badge-pill" style="border-color:#10b981; color:#34d399;">Ejecutado 100%</span>
+          <div id="blueprint-meta-bar" class="blueprint-meta-bar">
+            <div>
+              <span id="bp-meta-code" class="bp-pill-code" style="margin-right:6px;">E1</span>
+              <strong id="bp-meta-title" style="color:#fff; font-size:13px;">E1 — Planta de Fundación y Ejes de Replanteo</strong>
+              <p id="bp-meta-desc" style="font-size:11.5px; color:#94a3b8; margin-top:2px;"></p>
+            </div>
+            <div style="text-align:right; white-space:nowrap;">
+              <span id="bp-meta-author" class="badge-pill">Ing. Gustavo Velázquez</span>
+              <span id="bp-meta-scale" class="badge-pill" style="border-color:var(--accent-gold); color:var(--accent-gold);">Escala 1:50</span>
+              <span id="bp-meta-status" class="badge-pill" style="border-color:#10b981; color:#34d399;">Ejecutado 100%</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

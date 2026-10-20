@@ -2140,6 +2140,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const mepSimPanel = document.getElementById('mep-sim-panel');
+  const btnCloseMepSim = document.getElementById('btn-close-mep-sim');
+  const btnSidebarMepSim = document.getElementById('btn-sidebar-mep-sim');
+
+  const openMepSimPanel = (show = true) => {
+    if (mepSimPanel) {
+      mepSimPanel.style.display = show ? 'block' : 'none';
+    }
+  };
+
+  if (btnCloseMepSim) {
+    btnCloseMepSim.addEventListener('click', () => openMepSimPanel(false));
+  }
+  if (btnSidebarMepSim) {
+    btnSidebarMepSim.addEventListener('click', () => {
+      const isHidden = !mepSimPanel || mepSimPanel.style.display === 'none';
+      openMepSimPanel(isHidden);
+    });
+  }
+
   const layerBindings = [
     { id: 'layer-ductos', name: 'ductos' },
     { id: 'layer-muro-parking', name: 'muroEstacionamiento' },
@@ -2148,9 +2168,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'layer-arch', name: 'architecture' },
     { id: 'layer-subsuelo', name: 'subsuelo' },
     { id: 'layer-struct', name: 'structure' },
-    { id: 'layer-entorno', name: 'entorno' },
+    { id: 'layer-entorno', name: 'entornoUrbano' },
     { id: 'layer-pluvial', name: 'pluvial' },
-    { id: 'layer-senales', name: 'senales' },
+    { id: 'layer-senales', name: 'senalesDebiles' },
     { id: 'layer-geotech', name: 'geotech' },
     { id: 'layer-topo', name: 'topography' }
   ];
@@ -2159,7 +2179,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(b.id);
     if (el) {
       el.addEventListener('change', (e) => {
-        scene.setLayerVisibility(b.name, e.target.checked);
+        const checked = e.target.checked;
+        scene.setLayerVisibility(b.name, checked);
+        // Desplegar automáticamente el Simulador Interactivo por Capas al seleccionar Eléctrica o Pluvial
+        if (checked && (b.id === 'layer-ductos' || b.id === 'layer-senales' || b.id === 'layer-pluvial')) {
+          openMepSimPanel(true);
+        }
       });
     }
   });
@@ -2864,4 +2889,759 @@ document.addEventListener('DOMContentLoaded', () => {
 
     calculateSupplies();
   }
+
+  // =========================================================================
+  // 12. GENERADOR DINÁMICO DE PLANOS OFICIALES VIVOS (4 LÁMINAS CAD) + VÍNCULO AL REPOSITORIO
+  // =========================================================================
+  const liveCadSvgHost = document.getElementById('live-cad-svg-host');
+  const liveSheetStatusLabel = document.getElementById('live-sheet-status-label');
+  let activeLiveSheetKey = 'sheet_pb';
+
+  const LIVE_OFFICIAL_SHEETS = {
+    sheet_pb: {
+      code: 'LAM-01-PB',
+      levelKey: 'planta_baja',
+      title: '1. Planta Baja +100.00m con Hueco 38m² Loza Rap y Núcleo Húmedo Eje F-G',
+      cota: '+100.00m (Galería L1 -0.45m)',
+      highlights: [
+        { x: -1.45, z: 3.10, w: 3.10, d: 1.65, color: '#0ea5e9', label: 'NÚCLEO HÚMEDO EJE F-G (Cocina + Toilette PB + Columna Ø100mm)' },
+        { x: -2.00, z: 5.30, w: 6.80, d: 5.60, color: '#10b981', label: 'HUECO 38m² LOZA RAP (Estar-Comedor Integrado c/ Vista al Río)' },
+        { x: -4.80, z: 1.50, w: 9.60, d: 1.50, color: '#f59e0b', label: 'PASILLO ANTIHUMEDAD 1.50m + REJILLA OXIGENACIÓN SUBSUELO' }
+      ]
+    },
+    sheet_pa: {
+      code: 'LAM-02-PA',
+      levelKey: 'planta_alta',
+      title: '2. Planta Alta +102.88m con 2 Dormitorios, Vestidor, 2 Baños y Desk al subir escalera',
+      cota: '+102.88m (Cubierta +105.64m)',
+      highlights: [
+        { x: 1.80, z: 5.26, w: 2.00, d: 2.20, color: '#38bdf8', label: 'DESK / HOME-OFFICE AL SUBIR ESCALERA 1' },
+        { x: -4.80, z: 7.40, w: 5.20, d: 5.80, color: '#a855f7', label: 'SUITE RUTH & LEO + VESTIDOR + BALCÓN AL RÍO' },
+        { x: -4.80, z: 3.05, w: 4.10, d: 4.20, color: '#10b981', label: 'DORMITORIO 2 + 2 BAÑOS SUPERPUESTOS (EJE F-G)' }
+      ]
+    },
+    sheet_sub: {
+      code: 'LAM-03-SUB',
+      levelKey: 'subsuelo',
+      title: '3. Subsuelo +97.66m con Parrilla al Patio y Rejilla de Oxigenación',
+      cota: '+97.66m (100.71 m² Libres bajo Losa 1)',
+      highlights: [
+        { x: -4.80, z: 1.50, w: 9.60, d: 1.50, color: '#22d3ee', label: 'REJILLA DE OXIGENACIÓN Y CÁMARA DE AIRE FRONTAL (z=1.50..3.00m)' },
+        { x: -3.50, z: 10.10, w: 5.50, d: 3.10, color: '#f97316', label: 'PARRILLA INTEGRADA AL PATIO TRASERO Y GALERÍA INFERIOR' },
+        { x: 1.20, z: 3.20, w: 3.50, d: 4.10, color: '#10b981', label: 'LAVADERO + CISTERNA 1.000L + PRESURIZADORA ROWA' }
+      ]
+    },
+    sheet_mep: {
+      code: 'LAM-04-MEP',
+      levelKey: 'planta_baja',
+      title: '4. Esquema Integrado Eléctrico y Pluvial/Sanitario Vertical',
+      cota: 'Vertical 3 Niveles (+97.66m / +100.00m / +102.88m / +105.64m)',
+      highlights: [
+        { x: -1.60, z: 3.00, w: 3.20, d: 1.80, color: '#ec4899', label: 'COLUMNA VERTICAL EJE F-G (4 Pases Diamantados Losa 1 + Cloaca Ø100mm + PPR)' },
+        { x: -4.85, z: 3.00, w: 9.70, d: 10.34, color: '#0284c7', label: 'RED PLUVIAL 165 mm/h (4 Bajadas Ø100mm -> Drenaje Francés -> Barranco)' },
+        { x: -0.90, z: 4.80, w: 2.80, d: 2.40, color: '#ef4444', label: 'TABLERO SMART DIN TRIFÁSICO (Fases R/S/T + 26 Tomas + PoE Zigbee)' }
+      ]
+    }
+  };
+
+  const buildLiveOfficialSheetSvg = (sheetKey) => {
+    const spec = LIVE_OFFICIAL_SHEETS[sheetKey] || LIVE_OFFICIAL_SHEETS.sheet_pb;
+    const scale = 38;
+    const originX = 210;
+    const originZ = 75;
+    const svgW = 860;
+    const svgH = 740;
+    const toX = (x) => Number((originX + (x + 5.0) * scale).toFixed(1));
+    const toY = (z) => Number((originZ + (z + 1.0) * scale).toFixed(1));
+    const dateStr = new Date().toISOString().slice(0, 10);
+
+    const planMetrics = floorplanEditor && typeof floorplanEditor.computeFullMetrics === 'function'
+      ? floorplanEditor.computeFullMetrics()
+      : { activeRoomsAreaM2: 178.4, mamposteria15M2: 142, mamposteria20M2: 68, blindexM2: 24, totalProjectCostGs: 299832034 };
+
+    const lvlData = floorplanEditor?.planData?.levels?.[spec.levelKey] || { rooms: [], walls: [] };
+    const pases = DUCTOS_PASES_ENCHUFES_DATOS?.pasesLosa1Diamantados || [];
+    const tableros = DUCTOS_PASES_ENCHUFES_DATOS?.tablerosYEquiposPrincipales || [];
+
+    const out = [];
+    out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgW} ${svgH}" width="100%" height="100%" style="background:#071120; font-family:'IBM Plex Mono', monospace;">`);
+    out.push(`<rect x="10" y="10" width="${svgW - 20}" height="${svgH - 20}" fill="#071120" stroke="#38bdf8" stroke-width="1.8"/>`);
+
+    // Ejes X (9..1) y Ejes Z (G..A)
+    const xAxes = [
+      { id: '9', x: -4.87 }, { id: '8', x: -3.35 }, { id: '7', x: -2.02 },
+      { id: '6', x: -1.64 }, { id: '5', x: -0.74 }, { id: '4', x: 1.69 },
+      { id: '3', x: 2.39 }, { id: '2', x: 3.84 }, { id: '1', x: 4.87 }
+    ];
+    const zAxes = [
+      { id: 'G', z: 3.00 }, { id: 'F', z: 3.51 }, { id: 'E', z: 4.77 },
+      { id: 'D', z: 5.26 }, { id: 'C', z: 7.37 }, { id: 'B', z: 9.94 }, { id: 'A', z: 13.34 }
+    ];
+
+    xAxes.forEach((ax) => {
+      const px = toX(ax.x);
+      out.push(`<line x1="${px}" y1="${toY(0.5)}" x2="${px}" y2="${toY(14.2)}" stroke="#0284c7" stroke-width="0.7" stroke-dasharray="3,3" opacity="0.65"/>`);
+      out.push(`<circle cx="${px}" cy="${toY(0.2)}" r="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>`);
+      out.push(`<text x="${px}" y="${toY(0.2) + 3}" fill="#38bdf8" font-size="8.5" font-weight="bold" text-anchor="middle">${ax.id}</text>`);
+    });
+
+    zAxes.forEach((az) => {
+      const py = toY(az.z);
+      out.push(`<line x1="${toX(-5.3)}" y1="${py}" x2="${toX(5.3)}" y2="${py}" stroke="#0284c7" stroke-width="0.7" stroke-dasharray="3,3" opacity="0.65"/>`);
+      out.push(`<circle cx="${toX(-5.6)}" cy="${py}" r="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>`);
+      out.push(`<text x="${toX(-5.6)}" y="${py + 3}" fill="#38bdf8" font-size="8.5" font-weight="bold" text-anchor="middle">${az.id}</text>`);
+      out.push(`<text x="${toX(-6.0)}" y="${py + 3}" fill="#94a3b8" font-size="7.5" text-anchor="end">z=${az.z.toFixed(2)}m</text>`);
+    });
+
+    // Ambientes vivos del nivel
+    (lvlData.rooms || []).forEach((r) => {
+      const rx = toX(r.x);
+      const ry = toY(r.z);
+      const rw = (r.w * scale).toFixed(1);
+      const rd = (r.d * scale).toFixed(1);
+      out.push(`<rect x="${rx}" y="${ry}" width="${rw}" height="${rd}" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.1"/>`);
+      out.push(`<text x="${rx + Number(rw) / 2}" y="${ry + Number(rd) / 2}" fill="#e2e8f0" font-size="8" font-weight="bold" text-anchor="middle">${r.name}</text>`);
+    });
+
+    // Bloques destacados del ajuste actual
+    spec.highlights.forEach((hl) => {
+      const hx = toX(hl.x);
+      const hy = toY(hl.z);
+      const hw = (hl.w * scale).toFixed(1);
+      const hd = (hl.d * scale).toFixed(1);
+      out.push(`<rect x="${hx}" y="${hy}" width="${hw}" height="${hd}" fill="${hl.color}22" stroke="${hl.color}" stroke-width="1.8" stroke-dasharray="5,3"/>`);
+      out.push(`<text x="${hx + Number(hw) / 2}" y="${hy + Number(hd) / 2 + 3}" fill="#ffffff" font-size="8.5" font-weight="bold" text-anchor="middle">${hl.label}</text>`);
+    });
+
+    // Muros vivos del editor
+    (lvlData.walls || []).forEach((w) => {
+      out.push(`<line x1="${toX(w.x1)}" y1="${toY(w.z1)}" x2="${toX(w.x2)}" y2="${toY(w.z2)}" stroke="#f8fafc" stroke-width="3" stroke-linecap="round"/>`);
+    });
+
+    // Pases diamantados y tableros en lámina MEP o PB
+    pases.forEach((p) => {
+      const [px3, , pz3] = p.pos3D || [0, 0, 3.5];
+      const cx = toX(px3);
+      const cy = toY(pz3);
+      out.push(`<circle cx="${cx}" cy="${cy}" r="6" fill="#ec4899" stroke="#fff" stroke-width="1.2"/>`);
+      out.push(`<text x="${cx + 9}" y="${cy + 3}" fill="#f472b6" font-size="7.5" font-weight="bold">${p.codigo}</text>`);
+    });
+
+    if (sheetKey === 'sheet_mep') {
+      tableros.forEach((tb) => {
+        const [tx3, , tz3] = tb.pos3D || [0, 0, 4.0];
+        const tx = toX(tx3);
+        const ty = toY(tz3);
+        out.push(`<rect x="${tx - 6}" y="${ty - 5}" width="12" height="10" fill="#ef4444" stroke="#fff" stroke-width="1"/>`);
+        out.push(`<text x="${tx}" y="${ty + 13}" fill="#fde68a" font-size="7.5" font-weight="bold" text-anchor="middle">${tb.codigo}</text>`);
+      });
+    }
+
+    // Rótulo oficial dinámico al pie
+    const rotY = svgH - 102;
+    out.push(`<rect x="20" y="${rotY}" width="${svgW - 40}" height="84" fill="#0f172a" stroke="#38bdf8" stroke-width="1.4"/>`);
+    out.push(`<text x="34" y="${rotY + 20}" fill="#38bdf8" font-size="11.5" font-weight="bold">PLANO OFICIAL VIVO (${spec.code}): ${spec.title}</text>`);
+    out.push(`<text x="34" y="${rotY + 38}" fill="#e2e8f0" font-size="9.5">COTA: ${spec.cota} | ESCALA CAD: 1:50 | GENERADO EN VIVO: ${dateStr} | ESCENARIO: ${activeScenarioKey.toUpperCase()}</text>`);
+    out.push(`<text x="34" y="${rotY + 56}" fill="#fde68a" font-size="9.5" font-weight="bold">MÉTRICAS VIVAS: Área Activa ${planMetrics.activeRoomsAreaM2} m² · Muros 15cm: ${planMetrics.mamposteria15M2}m² · 20cm: ${planMetrics.mamposteria20M2}m² · Blindex: ${planMetrics.blindexM2}m²</text>`);
+    out.push(`<text x="34" y="${rotY + 73}" fill="#34d399" font-size="9.5" font-weight="bold">PRESUPUESTO SINCRONIZADO: Gs. ${formatGs(planMetrics.totalProjectCostGs)} — Rehecho dinámicamente según ajustes de obra</text>`);
+    out.push(`</svg>`);
+    return out.join('\n');
+  };
+
+  const renderLiveOfficialSheet = (sheetKey) => {
+    activeLiveSheetKey = sheetKey || activeLiveSheetKey;
+    document.querySelectorAll('#live-sheet-tabs [data-live-sheet]').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-live-sheet') === activeLiveSheetKey);
+    });
+    if (liveCadSvgHost) {
+      liveCadSvgHost.innerHTML = buildLiveOfficialSheetSvg(activeLiveSheetKey);
+    }
+    const spec = LIVE_OFFICIAL_SHEETS[activeLiveSheetKey] || LIVE_OFFICIAL_SHEETS.sheet_pb;
+    if (liveSheetStatusLabel) {
+      liveSheetStatusLabel.textContent = `✅ ${spec.title} — Regenerado en vivo (${new Date().toLocaleTimeString('es-PY')}).`;
+    }
+  };
+
+  document.querySelectorAll('#live-sheet-tabs [data-live-sheet]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      renderLiveOfficialSheet(btn.getAttribute('data-live-sheet'));
+    });
+  });
+
+  const downloadLiveSheetSvg = (sheetKey = activeLiveSheetKey) => {
+    const spec = LIVE_OFFICIAL_SHEETS[sheetKey] || LIVE_OFFICIAL_SHEETS.sheet_pb;
+    const svgContent = buildLiveOfficialSheetSvg(sheetKey);
+    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${spec.code}_itapytapunta_vivo.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const btnDownloadLiveSvg = document.getElementById('btn-download-live-svg');
+  if (btnDownloadLiveSvg) {
+    btnDownloadLiveSvg.addEventListener('click', () => downloadLiveSheetSvg(activeLiveSheetKey));
+  }
+
+  const btnDownloadLivePng = document.getElementById('btn-download-live-png');
+  if (btnDownloadLivePng) {
+    btnDownloadLivePng.addEventListener('click', () => {
+      const spec = LIVE_OFFICIAL_SHEETS[activeLiveSheetKey] || LIVE_OFFICIAL_SHEETS.sheet_pb;
+      const svgContent = buildLiveOfficialSheetSvg(activeLiveSheetKey);
+      const img = new Image();
+      const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1720;
+        canvas.height = 1480;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#071120';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = `${spec.code}_itapytapunta_vivo.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      img.src = url;
+    });
+  }
+
+  const triggerLiveCadPackGeneration = () => {
+    if (floorplanEditor && typeof floorplanEditor.exportOfficialBlueprintsPackSVG === 'function') {
+      floorplanEditor.exportOfficialBlueprintsPackSVG();
+    } else {
+      renderLiveOfficialSheet(activeLiveSheetKey);
+      openModal('modal-planos');
+    }
+  };
+
+  const btnLiveCadTop = document.getElementById('btn-live-cad-sheets');
+  const btnModalLiveCad = document.getElementById('btn-modal-live-cad-sheets');
+  const btnExportPack4 = document.getElementById('btn-export-pack-4-sheets');
+
+  if (btnLiveCadTop) {
+    btnLiveCadTop.addEventListener('click', () => {
+      renderLiveOfficialSheet('sheet_pb');
+      openModal('modal-planos');
+      if (floorplanEditor && typeof floorplanEditor.exportOfficialBlueprintsPackSVG === 'function') {
+        floorplanEditor.exportOfficialBlueprintsPackSVG();
+      }
+    });
+  }
+  if (btnModalLiveCad) {
+    btnModalLiveCad.addEventListener('click', () => {
+      closeModal(document.getElementById('modal-simulador'));
+      renderLiveOfficialSheet('sheet_pb');
+      openModal('modal-planos');
+    });
+  }
+  if (btnExportPack4) {
+    btnExportPack4.addEventListener('click', () => {
+      if (floorplanEditor && typeof floorplanEditor.exportOfficialBlueprintsPackSVG === 'function') {
+        floorplanEditor.exportOfficialBlueprintsPackSVG();
+      } else {
+        Object.keys(LIVE_OFFICIAL_SHEETS).forEach((k) => downloadLiveSheetSvg(k));
+      }
+    });
+  }
+
+  const btnOpen2dFromPlanos = document.getElementById('btn-open-2d-editor-from-planos');
+  if (btnOpen2dFromPlanos) {
+    btnOpen2dFromPlanos.addEventListener('click', () => {
+      closeModal(document.getElementById('modal-planos'));
+      openModal('modal-editor-2d');
+    });
+  }
+
+  // Botones de acceso al Repositorio de Archivos Originales
+  const openHistoricalRepository = () => {
+    closeModal(document.getElementById('modal-simulador'));
+    renderLiveOfficialSheet(activeLiveSheetKey);
+    openModal('modal-planos');
+    const drawer = document.getElementById('historical-repo-drawer');
+    if (drawer) {
+      drawer.style.display = 'block';
+      drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const btnOpenRepoTop = document.getElementById('btn-open-repo-links');
+  const btnModalRepoLink = document.getElementById('btn-modal-repo-link');
+  const btnToggleHistoricalRepo = document.getElementById('btn-toggle-historical-repo');
+
+  if (btnOpenRepoTop) btnOpenRepoTop.addEventListener('click', openHistoricalRepository);
+  if (btnModalRepoLink) btnModalRepoLink.addEventListener('click', openHistoricalRepository);
+  if (btnToggleHistoricalRepo) {
+    btnToggleHistoricalRepo.addEventListener('click', () => {
+      const drawer = document.getElementById('historical-repo-drawer');
+      if (drawer) {
+        const isHidden = drawer.style.display === 'none';
+        drawer.style.display = isHidden ? 'block' : 'none';
+      }
+    });
+  }
+
+  renderLiveOfficialSheet('sheet_pb');
+
+  // =========================================================================
+  // 13. MODO JUEGO / RECORRIDO HIPERREALISTA ESTILO GTA VI (#gta-game-hud)
+  // =========================================================================
+  const btnToggleGameModeTop = document.getElementById('btn-toggle-game-mode');
+  const btnSidebarGameMode = document.getElementById('btn-sidebar-game-mode');
+  const btnGtaExit = document.getElementById('btn-gta-exit');
+  const gtaHud = document.getElementById('gta-game-hud');
+  const gtaLevelTitle = document.getElementById('gta-hud-level-title');
+  const gtaCoordsText = document.getElementById('gta-hud-coords');
+  const gtaPromptText = document.getElementById('gta-prompt-text');
+  const gtaCamModeBadge = document.getElementById('gta-cam-mode-badge');
+  const gtaRadarCanvas = document.getElementById('gta-radar-canvas');
+
+  let gtaModeActive = false;
+  let gtaThirdPerson = false;
+  let gtaCurrentLevelNum = 2; // 1 = Subsuelo (+97.66m), 2 = PB (+100.00m), 3 = PA (+102.88m)
+  const gtaPlayer = {
+    x: 0.0,
+    y: 1.65,
+    z: 6.2,
+    yaw: 0.0,
+    pitch: 0.0
+  };
+  const gtaKeys = {};
+  const gtaInteractStates = {
+    porton_balancin: false,
+    porton_peatonal: false,
+    luces_domotica: true,
+    griferia_ducha: false,
+    parrilla_subsuelo: false
+  };
+
+  const GTA_ZONES = [
+    { name: 'Cochera con Pérgola y Portón 2.30m', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 4.9, zMin: -4.0, zMax: 1.5, prompt: '[E] Abrir/Cerrar Portón Balancín 2.30m', action: 'porton_balancin' },
+    { name: 'Pasillo Antihumedad y Rejilla Oxigenación', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 4.9, zMin: 1.5, zMax: 3.0, prompt: '[E] Abrir Portoncito Peatonal', action: 'porton_peatonal' },
+    { name: 'Cocina y Baño Social (Núcleo Eje F-G)', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 2.5, zMin: 3.0, zMax: 5.3, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
+    { name: 'Estar-Comedor (Hueco 38m² Losa Rap)', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 3.8, zMin: 5.3, zMax: 9.94, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'Escalera 1 y Escalera 2 (Ejes 1-2)', level: 2, cota: '+100.00m', xMin: 3.4, xMax: 4.9, zMin: 3.0, zMax: 9.94, prompt: '[1/2/3] Subir a Planta Alta o Bajar al Subsuelo', action: 'luces_domotica' },
+    { name: 'Galería Panorámica al Río Paraguay', level: 2, cota: '+99.55m', xMin: -4.9, xMax: 4.9, zMin: 9.94, zMax: 14.0, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'Escritorio / Desk al Subir Escalera', level: 3, cota: '+102.88m', xMin: 0.8, xMax: 4.9, zMin: 3.0, zMax: 7.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: '2 Baños Superpuestos y Dormitorio 2', level: 3, cota: '+102.88m', xMin: -4.9, xMax: 0.8, zMin: 3.0, zMax: 7.4, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
+    { name: 'Suite Ruth & Leo + Vestidor al Río', level: 3, cota: '+102.88m', xMin: -4.9, xMax: 4.9, zMin: 7.4, zMax: 13.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'Subsuelo — Rejilla Oxigenación y Lavadero', level: 1, cota: '+97.66m', xMin: -4.9, xMax: 4.9, zMin: 1.5, zMax: 8.5, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
+    { name: 'Subsuelo — Parrilla al Patio', level: 1, cota: '+97.66m', xMin: -4.9, xMax: 4.9, zMin: 8.5, zMax: 14.5, prompt: '[E] Encender Parrilla Subsuelo', action: 'parrilla_subsuelo' }
+  ];
+
+  const getActiveGtaZone = () => {
+    const zMatch = GTA_ZONES.find(
+      (zn) =>
+        zn.level === gtaCurrentLevelNum &&
+        gtaPlayer.x >= zn.xMin &&
+        gtaPlayer.x <= zn.xMax &&
+        gtaPlayer.z >= zn.zMin &&
+        gtaPlayer.z <= zn.zMax
+    );
+    if (zMatch) return zMatch;
+    if (gtaCurrentLevelNum === 1) {
+      return { name: 'Subsuelo — Parrilla Patio', cota: '+97.66m', prompt: '[E] Encender Parrilla Subsuelo', action: 'parrilla_subsuelo' };
+    }
+    if (gtaCurrentLevelNum === 3) {
+      return { name: 'Planta Alta — Escritorio y Suite', cota: '+102.88m', prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' };
+    }
+    return { name: 'Nivel Calle — Estar', cota: '+100.00m', prompt: '[E] Abrir/Cerrar Portón Balancín 2.30m', action: 'porton_balancin' };
+  };
+
+  const setGtaLevel = (lvlNum) => {
+    gtaCurrentLevelNum = Number(lvlNum) || 2;
+    if (gtaCurrentLevelNum === 1) {
+      gtaPlayer.y = -0.70; // Subsuelo +97.66m
+      scene.setFloorCutaway('cut_pb');
+    } else if (gtaCurrentLevelNum === 3) {
+      gtaPlayer.y = 4.52; // Planta Alta +102.88m
+      scene.setFloorCutaway('cut_roof');
+    } else {
+      gtaPlayer.y = 1.65; // Nivel Calle +100.00m
+      scene.setFloorCutaway('cut_pa');
+    }
+    document.querySelectorAll('.gta-lvl-btn[data-gta-level]').forEach((b) => {
+      b.classList.toggle('active', Number(b.getAttribute('data-gta-level')) === gtaCurrentLevelNum);
+    });
+  };
+
+  const executeGtaContextualInteraction = (forcedAction = null) => {
+    const zone = getActiveGtaZone();
+    const act = forcedAction || zone.action || 'porton_balancin';
+    gtaInteractStates[act] = !gtaInteractStates[act];
+    const isOn = gtaInteractStates[act];
+
+    if (typeof scene.triggerGameInteraction === 'function') {
+      scene.triggerGameInteraction(act, isOn);
+    }
+
+    if (act === 'luces_domotica') {
+      scene.setTimeOfDay && scene.setTimeOfDay(isOn ? 20.5 : 16.5);
+    } else if (act === 'griferia_ducha') {
+      scene.setLayerVisibility('pluvial', true);
+      if (typeof scene.setPluvialSimulationState === 'function') {
+        scene.setPluvialSimulationState({ mode: 'presion_agua', active: isOn });
+      }
+    }
+
+    const labels = {
+      porton_balancin: isOn ? '✅ Portón Balancín 2.30m ABIERTO' : '🔒 Portón Balancín 2.30m CERRADO',
+      porton_peatonal: isOn ? '✅ Portoncito Peatonal ABIERTO' : '🔒 Portoncito Peatonal CERRADO',
+      luces_domotica: isOn ? '💡 Luces Domótica Zigbee ENCENDIDAS' : '🌑 Luces Domótica APAGADAS',
+      griferia_ducha: isOn ? '🚿 Grifería/Ducha Eje F-G en Prueba (3.2 bar)' : '🚰 Grifería/Ducha Cerrada',
+      parrilla_subsuelo: isOn ? '🔥 Parrilla del Subsuelo ENCENDIDA' : '💨 Parrilla del Subsuelo Apagada'
+    };
+    if (gtaPromptText) {
+      gtaPromptText.textContent = labels[act] || zone.prompt;
+    }
+  };
+
+  const drawGtaRadarMinimap = () => {
+    if (!gtaRadarCanvas) return;
+    const ctx = gtaRadarCanvas.getContext('2d');
+    const w = gtaRadarCanvas.width;
+    const h = gtaRadarCanvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Fondo radar circular
+    ctx.fillStyle = '#071120';
+    ctx.fillRect(0, 0, w, h);
+
+    const mapToRadar = (wx, wz) => ({
+      rx: w / 2 + wx * 12.5,
+      ry: 38 + (wz + 4.0) * 8.2
+    });
+
+    // Sectores del lote en el radar
+    const radarZones = [
+      { label: 'Cochera / Pérgola', x: -4.8, z: -4.0, w: 9.6, d: 5.5, color: 'rgba(148,163,184,0.22)' },
+      { label: 'Rejilla Oxig.', x: -4.8, z: 1.5, w: 9.6, d: 1.5, color: 'rgba(34,211,238,0.25)' },
+      { label: 'Núcleo F-G', x: -4.8, z: 3.0, w: 7.2, d: 2.2, color: 'rgba(14,165,233,0.28)' },
+      { label: 'Estar / Suite', x: -4.8, z: 5.2, w: 8.2, d: 4.7, color: 'rgba(16,185,129,0.24)' },
+      { label: 'Esc. 1-2', x: 3.4, z: 3.0, w: 1.4, d: 6.9, color: 'rgba(245,158,11,0.32)' },
+      { label: 'Parrilla / Galería', x: -4.8, z: 9.9, w: 9.6, d: 3.5, color: 'rgba(249,115,22,0.26)' }
+    ];
+
+    radarZones.forEach((rz) => {
+      const p = mapToRadar(rz.x, rz.z);
+      const rw = rz.w * 12.5;
+      const rd = rz.d * 8.2;
+      ctx.fillStyle = rz.color;
+      ctx.strokeStyle = 'rgba(56,189,248,0.45)';
+      ctx.lineWidth = 1;
+      ctx.fillRect(p.rx, p.ry, rw, rd);
+      ctx.strokeRect(p.rx, p.ry, rw, rd);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
+      ctx.fillText(rz.label, p.rx + 4, p.ry + 11);
+    });
+
+    // Posición y cono de mirada del jugador
+    const pl = mapToRadar(gtaPlayer.x, gtaPlayer.z);
+    ctx.save();
+    ctx.translate(pl.rx, pl.ry);
+    ctx.rotate(gtaPlayer.yaw);
+
+    // Cono de visión
+    ctx.fillStyle = 'rgba(52, 211, 153, 0.28)';
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-16, 28);
+    ctx.lineTo(16, 28);
+    ctx.closePath();
+    ctx.fill();
+
+    // Punto del jugador
+    ctx.fillStyle = '#10b981';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  };
+
+  const setGtaGameMode = (enable) => {
+    gtaModeActive = Boolean(enable);
+    if (typeof scene.toggleGameMode === 'function') {
+      scene.toggleGameMode(gtaModeActive);
+    }
+    if (gtaHud) {
+      gtaHud.style.display = gtaModeActive ? 'block' : 'none';
+    }
+    if (btnToggleGameModeTop) {
+      btnToggleGameModeTop.setAttribute('data-game-active', gtaModeActive ? 'on' : 'off');
+      btnToggleGameModeTop.innerHTML = gtaModeActive
+        ? '<span>🎮 Salir Modo GTA (ESC)</span>'
+        : '<span>🎮 Modo Juego (Recorrido GTA)</span>';
+    }
+    if (gtaModeActive) {
+      setGtaLevel(2);
+      drawGtaRadarMinimap();
+    } else {
+      scene.setFloorCutaway('full');
+    }
+  };
+
+  if (btnToggleGameModeTop) {
+    btnToggleGameModeTop.addEventListener('click', () => setGtaGameMode(!gtaModeActive));
+  }
+  if (btnSidebarGameMode) {
+    btnSidebarGameMode.addEventListener('click', () => setGtaGameMode(!gtaModeActive));
+  }
+  if (btnGtaExit) {
+    btnGtaExit.addEventListener('click', () => setGtaGameMode(false));
+  }
+
+  document.querySelectorAll('.gta-lvl-btn[data-gta-level]').forEach((btn) => {
+    btn.addEventListener('click', () => setGtaLevel(Number(btn.getAttribute('data-gta-level'))));
+  });
+
+  document.querySelectorAll('.gta-action-chip[data-gta-action]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const act = chip.getAttribute('data-gta-action');
+      chip.classList.toggle('active');
+      executeGtaContextualInteraction(act);
+    });
+  });
+
+  if (gtaCamModeBadge) {
+    gtaCamModeBadge.addEventListener('click', () => {
+      gtaThirdPerson = !gtaThirdPerson;
+      gtaCamModeBadge.textContent = gtaThirdPerson ? '3ra Persona' : '1ra Persona';
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (!gtaModeActive) return;
+    const k = e.key.toLowerCase();
+    gtaKeys[k] = true;
+    if (e.key === 'Escape') {
+      setGtaGameMode(false);
+    } else if (k === 'e') {
+      executeGtaContextualInteraction();
+    } else if (k === 'c') {
+      gtaThirdPerson = !gtaThirdPerson;
+      if (gtaCamModeBadge) gtaCamModeBadge.textContent = gtaThirdPerson ? '3ra Persona' : '1ra Persona';
+    } else if (k === '1') {
+      setGtaLevel(1);
+    } else if (k === '2') {
+      setGtaLevel(2);
+    } else if (k === '3') {
+      setGtaLevel(3);
+    }
+  });
+
+  window.addEventListener('keyup', (e) => {
+    gtaKeys[e.key.toLowerCase()] = false;
+  });
+
+  // Loop de actualización del Modo Juego GTA VI
+  const updateGtaWalkLoop = () => {
+    if (gtaModeActive) {
+      const speed = gtaKeys['shift'] ? 0.14 : 0.075;
+      let moveForward = 0;
+      let moveRight = 0;
+      if (gtaKeys['w'] || gtaKeys['arrowup']) moveForward += 1;
+      if (gtaKeys['s'] || gtaKeys['arrowdown']) moveForward -= 1;
+      if (gtaKeys['a'] || gtaKeys['arrowleft']) moveRight -= 1;
+      if (gtaKeys['d'] || gtaKeys['arrowright']) moveRight += 1;
+
+      if (moveForward !== 0 || moveRight !== 0) {
+        // Obtener orientación actual de la cámara
+        const dirX = scene.controls.target.x - scene.camera.position.x;
+        const dirZ = scene.controls.target.z - scene.camera.position.z;
+        const angle = Math.atan2(dirX, dirZ);
+        gtaPlayer.yaw = angle;
+
+        const stepX = (Math.sin(angle) * moveForward - Math.cos(angle) * moveRight) * speed;
+        const stepZ = (Math.cos(angle) * moveForward + Math.sin(angle) * moveRight) * speed;
+
+        gtaPlayer.x = Math.max(-4.6, Math.min(4.6, gtaPlayer.x + stepX));
+        gtaPlayer.z = Math.max(-3.8, Math.min(14.2, gtaPlayer.z + stepZ));
+
+        const camDist = gtaThirdPerson ? 2.6 : 0.05;
+        const camHeightOffset = gtaThirdPerson ? 0.85 : 0.0;
+        scene.camera.position.set(
+          gtaPlayer.x - Math.sin(angle) * camDist,
+          gtaPlayer.y + camHeightOffset,
+          gtaPlayer.z - Math.cos(angle) * camDist
+        );
+        scene.controls.target.set(
+          gtaPlayer.x + Math.sin(angle) * 2.5,
+          gtaPlayer.y,
+          gtaPlayer.z + Math.cos(angle) * 2.5
+        );
+      }
+
+      const zone = getActiveGtaZone();
+      const levelPrefix =
+        gtaCurrentLevelNum === 1
+          ? 'Subsuelo +97.66m'
+          : gtaCurrentLevelNum === 3
+            ? 'Planta Alta +102.88m'
+            : 'Nivel Calle +100.00m';
+      if (gtaLevelTitle) {
+        gtaLevelTitle.textContent = `${levelPrefix} — ${zone.name}`;
+      }
+      if (gtaCoordsText) {
+        gtaCoordsText.textContent = `X: ${gtaPlayer.x.toFixed(2)}m · Z: ${gtaPlayer.z.toFixed(2)}m · Cota: ${zone.cota}`;
+      }
+      if (gtaPromptText && !gtaPromptText.textContent.startsWith('✅') && !gtaPromptText.textContent.startsWith('🔒')) {
+        gtaPromptText.textContent = zone.prompt;
+      }
+
+      drawGtaRadarMinimap();
+    }
+    requestAnimationFrame(updateGtaWalkLoop);
+  };
+  requestAnimationFrame(updateGtaWalkLoop);
+
+  // =========================================================================
+  // 14. SIMULADOR INTERACTIVO POR CAPAS (ELÉCTRICA + PLUVIAL/HIDROSANITARIA)
+  // =========================================================================
+  const pluvialSimState = {
+    tormenta: false,
+    presion_agua: false,
+    descarga_cloacal: false
+  };
+
+  const electricalSimState = {
+    fase_r: true,
+    fase_s: true,
+    fase_t: true,
+    fuga_30ma: false,
+    sobretemp_65c: false,
+    inundacion_subsuelo: false
+  };
+
+  const updatePluvialSimulationUI = () => {
+    const flowEl = document.getElementById('mep-metric-flow');
+    const pressEl = document.getElementById('mep-metric-pressure');
+    const sewerEl = document.getElementById('mep-metric-sewer');
+    const badgeEl = document.getElementById('mep-live-pluvial-badge');
+
+    let flowLs = 0;
+    if (pluvialSimState.tormenta) flowLs += 8.65;
+    if (pluvialSimState.presion_agua) flowLs += 0.85;
+    if (pluvialSimState.descarga_cloacal) flowLs += 1.60;
+
+    const pressureBar = pluvialSimState.presion_agua ? 3.4 : 2.8;
+    const sewerStatus = pluvialSimState.descarga_cloacal ? 'Descargando 1.6 L/s' : 'Libre OK';
+
+    if (flowEl) flowEl.textContent = `${flowLs.toFixed(2)} L/s`;
+    if (pressEl) pressEl.textContent = `${pressureBar.toFixed(1)} bar`;
+    if (sewerEl) sewerEl.textContent = sewerStatus;
+    if (badgeEl) {
+      const anyActive = pluvialSimState.tormenta || pluvialSimState.presion_agua || pluvialSimState.descarga_cloacal;
+      badgeEl.textContent = anyActive ? 'Flujo Activo 3D' : 'En Espera';
+      badgeEl.style.borderColor = anyActive ? '#38bdf8' : '';
+      badgeEl.style.color = anyActive ? '#7dd3fc' : '';
+    }
+
+    // Asegurar visibilidad de las capas pluvial y ductos en el modelo 3D
+    if (pluvialSimState.tormenta || pluvialSimState.presion_agua || pluvialSimState.descarga_cloacal) {
+      scene.setLayerVisibility('pluvial', true);
+      scene.setLayerVisibility('ductos', true);
+      const chkPluv = document.getElementById('layer-pluvial');
+      const chkDuct = document.getElementById('layer-ductos');
+      if (chkPluv) chkPluv.checked = true;
+      if (chkDuct) chkDuct.checked = true;
+    }
+
+    if (typeof scene.setPluvialSimulationState === 'function') {
+      scene.setPluvialSimulationState({ ...pluvialSimState, caudalLs: flowLs, presionBar: pressureBar });
+    }
+  };
+
+  const updateElectricalSimulationUI = () => {
+    const kwEl = document.getElementById('mep-metric-kw');
+    const ampsEl = document.getElementById('mep-metric-amps');
+    const breakerEl = document.getElementById('mep-metric-breaker');
+    const badgeEl = document.getElementById('mep-live-elec-badge');
+
+    const hasFault = electricalSimState.fuga_30ma || electricalSimState.sobretemp_65c || electricalSimState.inundacion_subsuelo;
+
+    const ampR = !hasFault && electricalSimState.fase_r ? 9.2 : 0.0;
+    const ampS = !hasFault && electricalSimState.fase_s ? 8.4 : 0.0;
+    const ampT = !hasFault && electricalSimState.fase_t ? 4.5 : 0.0;
+    const totalKw = ((ampR + ampS + ampT) * 220) / 1000;
+
+    if (kwEl) kwEl.textContent = `${totalKw.toFixed(2)} kW`;
+    if (ampsEl) ampsEl.textContent = `${ampR.toFixed(1)}A / ${ampS.toFixed(1)}A / ${ampT.toFixed(1)}A`;
+
+    if (breakerEl && badgeEl) {
+      if (electricalSimState.fuga_30ma) {
+        breakerEl.textContent = 'CORTE DIF. 30mA';
+        breakerEl.style.color = '#f87171';
+        badgeEl.textContent = '⚠️ Fuga 30mA Cortada';
+        badgeEl.style.borderColor = '#ef4444';
+        badgeEl.style.color = '#fca5a5';
+      } else if (electricalSimState.sobretemp_65c) {
+        breakerEl.textContent = 'CORTE TÉRM. >65°C';
+        breakerEl.style.color = '#fb923c';
+        badgeEl.textContent = '🔥 Alerta >65°C Toma 20A';
+        badgeEl.style.borderColor = '#f97316';
+        badgeEl.style.color = '#fdba74';
+      } else if (electricalSimState.inundacion_subsuelo) {
+        breakerEl.textContent = 'BOMBA BLOQUEADA';
+        breakerEl.style.color = '#38bdf8';
+        badgeEl.textContent = '🌊 Inundación Subsuelo';
+        badgeEl.style.borderColor = '#0284c7';
+        badgeEl.style.color = '#7dd3fc';
+      } else {
+        breakerEl.textContent = 'Cerrado OK';
+        breakerEl.style.color = '#34d399';
+        badgeEl.textContent = 'DIN Normal (220V)';
+        badgeEl.style.borderColor = '#10b981';
+        badgeEl.style.color = '#6ee7b7';
+      }
+    }
+
+    scene.setLayerVisibility('ductos', true);
+    scene.setLayerVisibility('senalesDebiles', true);
+    const chkDuct = document.getElementById('layer-ductos');
+    const chkSen = document.getElementById('layer-senales');
+    if (chkDuct) chkDuct.checked = true;
+    if (chkSen) chkSen.checked = true;
+
+    if (typeof scene.setElectricalSimulationState === 'function') {
+      scene.setElectricalSimulationState({
+        ...electricalSimState,
+        potenciaKw: totalKw,
+        amps: { R: ampR, S: ampS, T: ampT }
+      });
+    }
+  };
+
+  document.querySelectorAll('[data-pluv-sim]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-pluv-sim');
+      if (!key) return;
+      pluvialSimState[key] = !pluvialSimState[key];
+      btn.classList.toggle('active', pluvialSimState[key]);
+      updatePluvialSimulationUI();
+    });
+  });
+
+  document.querySelectorAll('[data-elec-sim]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-elec-sim');
+      if (!key) return;
+      electricalSimState[key] = !electricalSimState[key];
+      btn.classList.toggle('active', electricalSimState[key]);
+      updateElectricalSimulationUI();
+    });
+  });
 });
+

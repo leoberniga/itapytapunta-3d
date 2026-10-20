@@ -19,10 +19,11 @@
 
 import { DUCTOS_PASES_ENCHUFES_DATOS } from './data/projectData.js';
 
-const STORAGE_KEY = 'itapytapunta_bim_floorplan_v5';
+const STORAGE_KEY = 'itapytapunta_bim_floorplan_v6';
 
 /**
- * Grilla Estructural Exacta según planos de encofrado y fundación (`CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`).
+ * Grilla Estructural Exacta según planos de encofrado y fundación (`CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`
+ * + `estructural_e5_subsuelo_escalera.png` + `instalacion_sanitaria_agua.png`).
  */
 export const FIXED_STRUCTURAL_GRID = {
   lot: {
@@ -55,7 +56,7 @@ export const FIXED_STRUCTURAL_GRID = {
   ],
   retainingWallFront: {
     id: 'EJE_MURO_CONTENCION_CALLE',
-    name: 'Muro de Contención del Estacionamiento en z=+1.50m (Deja Pasillo Antihumedad 1.50m frente a Eje G)',
+    name: 'Muro de Contención del Estacionamiento en z=+1.50m (Cámara de Oxigenación 1.50m con Piso de Rejilla Metálica Electroforjada frente a Eje G)',
     x1: -4.87,
     z1: 1.50,
     x2: 4.87,
@@ -65,32 +66,54 @@ export const FIXED_STRUCTURAL_GRID = {
     locked: true
   },
   existingStaircase1: {
-    id: 'ESCALERA_1_HA',
-    name: 'Escalera 1 H°A° Existente (Ejes 1-2 / B-D 🔒)',
+    id: 'ESCALERA_1_SUBSUELO',
+    name: 'Escalera 1 H°A° (Baja a Subsuelo 3.30×0.90m • Costado Izquierdo Eje 8–9 🔒)',
+    x1: -4.87,
+    z1: 5.26,
+    x2: -3.90,
+    z2: 8.56,
+    w: 0.90,
+    d: 3.30,
+    cotaStart: '+97.66m',
+    cotaEnd: '+100.00m',
+    locked: true
+  },
+  existingStaircase2: {
+    id: 'ESCALERA_2_PLANTA_ALTA',
+    name: 'Escalera 2 H°A° (Sube a Planta Alta 3.90×0.80m • Costado Derecho Eje 1–2 🔒)',
     x1: 3.84,
     z1: 5.26,
     x2: 4.87,
-    z2: 9.94,
-    w: 1.03,
-    d: 4.68,
+    z2: 9.16,
+    w: 0.80,
+    d: 3.90,
     cotaStart: '+100.00m',
     cotaEnd: '+102.88m',
     locked: true
   },
+  voidLosa1HoyEnObra: {
+    id: 'VACIO_LOSA1_38M2',
+    name: 'VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap • Eje B a Eje G z=3.00..9.94m y Eje 1 a Eje 5 x=-0.74..+4.87m)',
+    minX: -0.74,
+    maxX: 4.87,
+    minZ: 3.00,
+    maxZ: 9.94,
+    areaM2: 38.00
+  },
   slabs: {
     subsueloBase: {
-      name: 'Subsuelo 100.71 m² Libres bajo Losa 1 (+97.66m / Ejes 9–1 y G–A) + Pasillo Antihumedad 1.50m (z=1.50..3.00m) 🔒',
+      name: 'Subsuelo (+97.66m / Ejes 9–1 y G–A) + Parrillita hacia el Patio + Lavadero + Depósito + Arranque Escalera 1 (Eje 8–9) 🔒',
       minX: -4.87,
       maxX: 4.87,
       minZ: 3.00,
       maxZ: 13.34,
       pasilloMinZ: 1.50,
       pasilloMaxZ: 3.00,
-      cota: '+97.66m (Y=-2.34m • 100.71 m² Libres)',
-      status: '100.71 m² Libres bajo Losa 1 + Pasillo Antihumedad 1.50m 🔒'
+      cota: '+97.66m (Y=-2.34m • Subsuelo + Parrilla al Patio)',
+      status: 'Subsuelo + Parrilla al Patio + Cámara Oxigenación 1.50m 🔒'
     },
     losaPlantaBajaExistente: {
-      name: 'Losas L2/L3/L4 (+100.00m • Sala, Comedor y Cocina) + Losa L1 Galería (-0.45m / +99.55m) Ejecutadas 🔒',
+      name: 'Losa 1 (+100.00m): Losas L1/L2/L3 (z=9.94..13.34m) y L4 (x=-4.87..-0.74m, z=3.00..9.94m) Macizas + Vacío 38.00 m² (Eje 1–5 / B–G a cerrar con Loza Rap) 🔒',
       minX: -4.87,
       maxX: 4.87,
       minZ: 3.00,
@@ -98,16 +121,16 @@ export const FIXED_STRUCTURAL_GRID = {
       galeriaMinZ: 9.94,
       galeriaMaxZ: 13.34,
       cota: '+100.00m (Galería L1 -0.45m)',
-      status: 'Losa 1 H°A° Ejecutada (0 Muros) 🔒'
+      status: 'Losas L1–L4 Hormigonadas + Hueco 38.00 m² (A cerrar con Loza Rap) + 17 Pilares PB hasta +2.88m 🔒'
     },
     losaPlantaAltaNueva: {
-      name: 'Losa 2do Piso (+102.88m • Dormitorio Suite y Estudio Ruth & Leo) + Techo (+105.64m)',
+      name: 'Losa 2do Piso (+102.88m • 2 Dormitorios + Escritorio/Desk al subir Escalera 2 + 2 Baños + Vestidor en Eje F–G • SIN balcón ni Blindex frontal)',
       minX: -4.87,
       maxX: 4.87,
-      minZ: 2.15,
+      minZ: 3.00,
       maxZ: 13.34,
       cota: '+102.88m (Techo +105.64m)',
-      status: '2do Piso: Dormitorio Suite + Estudio + Techo 🎯'
+      status: '2do Piso: 2 Dormitorios + Desk + 2 Baños + Vestidor (Núcleo Húmedo Eje F–G) 🎯'
     }
   }
 };
@@ -611,10 +634,10 @@ export const OPENING_CATALOG = {
   },
   porton_basculante_cochera: {
     id: 'porton_basculante_cochera',
-    name: 'Portón Vehicular Basculante Automatizado (6.00×2.30m)',
-    width: 6.00,
-    height: 2.30,
-    unitCostGs: 14500000,
+    name: 'Portón Balancín Existente (2.30×2.18m Chapa Grafito Ciega) + Portoncito Peatonal Haciendo Juego (0.95×2.18m)',
+    width: 2.30,
+    height: 2.18,
+    unitCostGs: 2650000,
     category: 'Herrería Estructural'
   }
 };
@@ -769,40 +792,41 @@ export const ASUNCION_BUILDING_CODE = {
 
 /**
  * Definición de los 3 Niveles Estructurales según cotas de `CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`
+ * + `estructural_e5_subsuelo_escalera.png` + `instalacion_sanitaria_agua.png`.
  */
 export const LEVEL_DEFINITIONS = {
   subsuelo: {
     id: 'subsuelo',
-    shortTitle: 'Nivel 0: Subsuelo (+97.66m • 100.71 m² Libres + Lavadero/Depósito)',
-    fullTitle: 'Nivel 0: Subsuelo (+97.66m / Y=-2.34m • 100.71 m² Libres bajo Losa 1 + Pasillo Antihumedad 1.50m 🔒)',
+    shortTitle: 'Nivel 0: Subsuelo (+97.66m • Parrilla al Patio + Lavadero + Depósito)',
+    fullTitle: 'Nivel 0: Subsuelo (+97.66m / Y=-2.34m • Parrillita al Patio + Lavadero + Depósito + Arranque Escalera 1 Eje 8–9 🔒)',
     cota: '+97.66 m (Y = -2.34m)',
     elevationY: -2.34,
     wallHeight: 2.34,
-    statusBadge: '100.71 m² Libres + Lavadero/Depósito Día 1 🔒',
+    statusBadge: 'Parrilla en Subsuelo + Lavadero + Depósito + Escalera 1 (Eje 8–9) 🔒',
     statusColor: '#10b981',
-    description: 'Toda la huella de 100.71 m² bajo la Losa 1 (Ejes 9–1 y G–A) está 100% libre hoy en obra. El Muro de Contención en z=+1.50m deja un Pasillo Cámara de Aire Antihumedad de 1.50m (z=1.50..3.00m) frente al Eje G. Aquí funcionan el Lavadero y el Depósito desde el Día 1.'
+    description: 'Subsuelo (+97.66m): Incluye la Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m), Lavadero, Depósito, Arranque de Escalera 1 en costado izquierdo Eje 8–9 (x=-4.87..-3.90m, z=5.26..8.56m) y Cámara de Oxigenación Frontal (z=1.50..3.00m) bajo Piso de Rejilla Metálica Electroforjada Transitable.'
   },
   planta_baja: {
     id: 'planta_baja',
-    shortTitle: 'Nivel 1: Nivel Calle (+100.00m • Sala, Comedor y Cocina)',
-    fullTitle: 'Nivel 1: Planta Nivel Calle (+100.00m • Gran Sala de Estar, Comedor, Cocina y Galería L1 🔒)',
+    shortTitle: 'Nivel 1: Planta Baja (+100.00m • Núcleo Húmedo Eje F–G + Estar + Cocina/Comedor)',
+    fullTitle: 'Nivel 1: Planta Baja (+100.00m • Baño Social y Cocina en Eje F–G + Estar Social + Escaleras 1 y 2 Opuestas + Galería L1 🔒)',
     cota: '+100.00 m (Galería +99.55m)',
     elevationY: 0.00,
     wallHeight: 2.88,
-    statusBadge: 'Sala + Comedor + Cocina Amplia + Galería L1 🔒',
+    statusBadge: '17 Pilares PB Hormigonados (+2.88m) + Hueco 38.00 m² a cerrar c/ Loza Rap 🔒',
     statusColor: '#06b6d4',
-    description: 'Planta Social de Ruth y Leo sin dormitorios que achiquen el espacio: Gran Sala de Estar (Sofá 4 piezas), Comedor (6 sillas), Cocina Integrada amplia, Toilette Social y Galería L1 al Río (-0.45m, 33.12 m²).'
+    description: 'Planta Baja (+100.00m): Cochera Frontal con Muro 100% Ciego (Portón Balancín 2.30m + Portoncito 0.95m), Pérgola de Madera con Enredadera + Techo Translúcido Antigranizo y Piso de Rejilla Metálica Electroforjada sobre cámara de oxigenación (z=1.50..3.00m). Núcleo Húmedo Frontal en Eje F–G: Baño Social (1.10×2.00m) + Cocina/Comedor (6.20×2.75m en Eje 5–9), Estar Social (4.95×4.80m en Eje 1–5), Escalera 1 (baja a Subsuelo en Eje 8–9) y Escalera 2 (sube a PA en Eje 1–2), y Galería al Río en Eje A–B sin parrilla.'
   },
   planta_alta: {
     id: 'planta_alta',
-    shortTitle: 'Nivel 2: 2do Piso (+102.88m • Dormitorio Suite y Estudio)',
-    fullTitle: 'Nivel 2: Segundo Piso (+102.88m • Dormitorio en Suite Ruth & Leo + Estudio/Costura + Vista al Río)',
+    shortTitle: 'Nivel 2: Planta Alta (+102.88m • 2 Dormitorios + Desk + 2 Baños + Vestidor)',
+    fullTitle: 'Nivel 2: Planta Alta (+102.88m • Suite + Vestidor + 2 Baños sobre Eje F–G + Dormitorio 2 + Desk en Escalera 2 • SIN Balcón ni Blindex Frontal)',
     cota: '+102.88 m (Techo +105.64m)',
     elevationY: 2.88,
     wallHeight: 2.76,
-    statusBadge: 'Dormitorio Suite + Estudio Día 1 (⚠️ P12/P13/P15 mueren en PB)',
+    statusBadge: '2 Dormitorios + Desk + 2 Baños + Vestidor en Eje F–G (⚠️ P12/P13/P15 mueren en PB)',
     statusColor: '#f59e0b',
-    description: 'Desde el Día 1 se ubica aquí el Dormitorio Principal en Suite de Ruth y Leo (Sommier 1.40m, 2 tocadores, placares y Baño completo) + Área de Estudio/Costura con vista panorámica al Río Paraguay.'
+    description: 'Planta Alta (+102.88m): 2 Dormitorios + Escritorio/Desk al subir Escalera 2 (Eje 1–2) + 2 Baños + Vestidor. Núcleo Húmedo en Eje F–G (z=3.00..5.00m) exactamente arriba del Baño Social y Cocina de PB: Vestidor (1.55×1.80m), Baño en Suite (2.30×2.00m) y Baño 2 PA (2.30×2.00m). Frente en Eje G (z=3.00m) de mampostería SIN balcón frontal ni Blindex frontal. Hacia el río: Deck 2 / Terraza (Eje A–B).'
   }
 };
 
@@ -825,8 +849,8 @@ function normalizePresetKey(key) {
 }
 
 /**
- * Generador de Presets Arquitectónicos alineados al milímetro con los Ejes 1..9 y A..G
- * de `CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`.
+ * Generador de Presets Arquitectónicos alineados al milímetro con los planos oficiales:
+ * `CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf` + `instalacion_sanitaria_agua.png` + `estructural_e5_subsuelo_escalera.png`.
  * @param {string} rawPresetKey 'hoy_en_obra' | 'cierre_300m' | 'opcion_1_rolon' | 'opcion_2_lgrb'
  */
 export function createPresetPlan(rawPresetKey = 'cierre_300m') {
@@ -834,20 +858,21 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
   const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
   const isZeroWallsState = presetKey === 'hoy_en_obra';
   const is300mStage = presetKey === 'cierre_300m';
+  const activeFlag = !isZeroWallsState;
+  const subsueloActive = !isZeroWallsState;
+  const subsueloFullFinish = !isZeroWallsState && !is300mStage;
 
   // =========================================================================
   // SUBSUELO (+97.66m, Y = -2.34m):
-  // 100.71 m² totalmente libres debajo de la Losa 1 (Ejes 9–1 y G–A) +
-  // Pasillo Cámara de Aire Antihumedad de 1.50m (z = 1.50m a 3.00m) detrás del Muro de Contención en z=+1.50m.
-  // Lavadero y Depósito operativos desde el Día 1 (300M).
+  // - Cámara de Oxigenación Antihumedad 1.50m (z = 1.50m a 3.00m) bajo Piso de Rejilla Metálica Electroforjada Transitable
+  // - Arranque Escalera 1 en costado izquierdo Eje 8–9 (x = -4.87..-3.90m, z = 5.26..8.56m)
+  // - Lavadero, Depósito y Parrillita / Quincho Inferior hacia el Patio (x = -4.87..-1.64m, z = 11.50..13.34m)
   // =========================================================================
-  const subsueloActive = !isZeroWallsState;
-  const subsueloFullFinish = !isZeroWallsState && !is300mStage;
   const baseSubsuelo = {
     rooms: [
       {
         id: 'sub_pasillo_antihumedad',
-        name: 'Pasillo Cámara de Aire Antihumedad 1.50m (Entre Muro Contención z=1.50m y Eje G z=3.00m)',
+        name: 'Cámara Oxigenación Subsuelo 1.50m (Piso Rejilla Metálica Electroforjada + Rejas Laterales • z=1.50..3.00m)',
         codeType: 'exterior',
         x: -4.87,
         z: 1.50,
@@ -860,11 +885,11 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_bano',
-        name: 'Lavadero Operativo Día 1 (Lavarropas propio + Pileta • Ejes 5-1 / E-B)',
+        name: 'Lavadero Operativo Día 1 (Lavarropas + Pileta • Ejes 4-1 / E-B)',
         codeType: 'bano',
         x: 1.69,
         z: 4.77,
-        w: 3.18, // Eje 4 (+1.69) a Eje 1 (+4.87) junto a Escalera 1
+        w: 3.18, // Eje 4 (+1.69) a Eje 1 (+4.87)
         d: 5.17, // Eje E (4.77) a Eje B (9.94)
         floorCostPerM2Gs: 165000,
         equipCostGs: 2837500,
@@ -873,7 +898,7 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_estar_kitch',
-        name: 'Depósito Cerrado Día 1 / Taller (Ejes 9-5 / G-C)',
+        name: 'Depósito Cerrado Día 1 + Arranque Escalera 1 en Eje 8–9 (Ejes 9-4 / G-C)',
         codeType: 'cocina',
         x: -4.87,
         z: 3.00,
@@ -886,20 +911,33 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_dormitorio',
-        name: 'Planta Libre Subsuelo bajo Losa 1 (Futuro Quincho / Huéspedes • Ejes 9-4 / C-A)',
+        name: 'Estar / Planta Libre Subsuelo bajo Losa 1 (Ejes 9-4 / C-B)',
         codeType: 'habitable',
         x: -4.87,
         z: 7.37,
         w: 6.56, // de Eje 9 (-4.87) a Eje 4 (+1.69)
-        d: 5.97, // de Eje C (7.37) a Eje A (13.34)
+        d: 4.13, // de Eje C (7.37) a z=11.50m
         floorCostPerM2Gs: 165000,
         equipCostGs: 3800000,
         activeStage: subsueloFullFinish,
         color: 'rgba(168, 85, 247, 0.16)'
       },
       {
+        id: 'sub_parrilla_quincho',
+        name: 'Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m • Ejes 9-6)',
+        codeType: 'exterior',
+        x: -4.87,
+        z: 11.50,
+        w: 3.23, // x = -4.87m a -1.64m (Eje 9 a Eje 6)
+        d: 1.84, // z = 11.50m a 13.34m (Eje A)
+        floorCostPerM2Gs: 185000,
+        equipCostGs: 4620000,
+        activeStage: subsueloActive,
+        color: 'rgba(245, 158, 11, 0.24)'
+      },
+      {
         id: 'sub_patio_inferior',
-        name: 'Jardín Posterior con Césped (Patio Norte z=13.34..20.50m)',
+        name: 'Jardín Posterior con Césped (Patio Norte z=13.34..20.14m)',
         codeType: 'exterior',
         x: -4.87,
         z: 13.34,
@@ -912,14 +950,14 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_pozo_septica_bombeo',
-        name: 'Cámara Séptica + Pozo Ciego Ø1.80m + Bombeo a Calle (Ejes 8-9 • Libre de Piscina)',
+        name: 'Cámara Séptica + Pozo Ciego Absorbente Ø1.80m (Ejes 8–9 • Libre de Piscina • Desagote Cisterna)',
         codeType: 'bano',
         x: -4.55,
         z: 14.10,
-        w: 2.15, // Corredor izquierdo Ejes 8-9 (-4.55 a -2.40m)
-        d: 4.50, // z=14.10 a 18.60m (>1.80m separado de la Piscina)
+        w: 2.15,
+        d: 4.50,
         floorCostPerM2Gs: 0,
-        equipCostGs: 9400000,
+        equipCostGs: 6800000,
         activeStage: subsueloActive,
         color: 'rgba(245, 158, 11, 0.28)'
       },
@@ -929,8 +967,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
         codeType: 'exterior',
         x: -0.55,
         z: 14.80,
-        w: 4.65, // Sector derecho/central x=-0.55 a +4.10m
-        d: 2.45, // z=14.80 a 17.25m
+        w: 4.65,
+        d: 2.45,
         floorCostPerM2Gs: 0,
         equipCostGs: 0,
         activeStage: subsueloFullFinish,
@@ -938,231 +976,273 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       }
     ],
     walls: [
-      { id: 'w_sub_muro_cont_150', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: 4.87, z2: 1.50, activeStage: subsueloActive, label: 'Muro Contención Estacionamiento z=+1.50m (Pasillo Antihumedad 1.50m)' },
+      { id: 'w_sub_muro_cont_150', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: 4.87, z2: 1.50, activeStage: subsueloActive, label: 'Muro Contención Estacionamiento z=+1.50m (Cámara Oxigenación 1.50m)' },
       { id: 'w_sub_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: subsueloActive, label: 'Muro Frontal Subsuelo Eje G Libre de Humedad (z=3.00m)' },
-      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 9.94, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (P20-P19-P18)' },
+      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (P20-P19-P18-P17 • Escalera 1 y Parrilla)' },
       { id: 'w_sub_lav_div', type: 'ladrillo_15', x1: 1.69, z1: 3.00, x2: 1.69, z2: 9.94, activeStage: subsueloActive, label: 'Cerramiento Lavadero y Depósito Subsuelo (Eje 4)' },
-      { id: 'w_sub_div_c',  type: 'ladrillo_15', x1: -4.87, z1: 7.37, x2: 1.69, z2: 7.37, activeStage: subsueloActive, label: 'Divisorio Depósito Subsuelo Eje C (P15-P12)' },
-      { id: 'w_sub_blindex_b', type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: subsueloFullFinish, label: 'Cerramiento Eje B hacia Galería Inferior y Jardín' }
+      { id: 'w_sub_div_c',  type: 'ladrillo_15', x1: -3.90, z1: 7.37, x2: 1.69, z2: 7.37, activeStage: subsueloActive, label: 'Divisorio Depósito Subsuelo Eje C (P15-P12)' },
+      { id: 'w_sub_parrilla', type: 'ladrillo_15', x1: -4.87, z1: 11.50, x2: -1.64, z2: 11.50, activeStage: subsueloActive, label: 'Mesada y Parrillita Subsuelo hacia el Patio (Ejes 9-6)' },
+      { id: 'w_sub_blindex_b', type: 'blindex_corredizo', x1: -1.64, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: subsueloFullFinish, label: 'Cerramiento Eje B hacia Galería Inferior y Jardín' }
     ],
     mepNodes: isZeroWallsState ? [] : [
-      { id: 'm_sub_dren1', type: 'drenaje_frances', x: -4.50, z: 1.75, label: 'Drenaje Francés en Pasillo Antihumedad (z=1.75m)' },
-      { id: 'm_sub_dren2', type: 'drenaje_frances', x: 4.50,  z: 1.75, label: 'Rejilla y Drenaje Pasillo Antihumedad Este (z=1.75m)' },
+      { id: 'm_sub_dren1', type: 'drenaje_frances', x: -4.50, z: 1.75, label: 'Drenaje Francés en Cámara de Oxigenación (z=1.75m)' },
+      { id: 'm_sub_dren2', type: 'drenaje_frances', x: 4.50,  z: 1.75, label: 'Rejilla y Drenaje Cámara Oxigenación Este (z=1.75m)' },
       { id: 'm_sub_pvc1',  type: 'bajada_pvc100',   x: -4.75, z: 9.85, label: 'Bajada Pluvial P18 (Eje 9-B)' },
-      { id: 'm_sub_bomba_cloaca', type: 'bajada_pvc100', x: -3.50, z: 14.60, label: 'Cámara Séptica + Bomba Impulsión 1 HP hacia Calle Frontal (28m PVC Ø50mm)' },
-      { id: 'm_sub_cctv1', type: 'cctv_poe',        x: -4.75, z: 13.25, label: 'Cámara Barranco P17 (Eje 9-A)' },
+      { id: 'm_sub_bomba_cloaca', type: 'bajada_pvc100', x: -3.50, z: 14.60, label: 'Cámara Séptica + Pozo Ciego Absorbente Ø1.80m en Eje 8–9 (Recibe colector desde Núcleo Eje F–G)' },
+      { id: 'm_sub_cctv1', type: 'cctv_poe',        x: -4.75, z: 13.25, label: 'Cámara Barranco / Parrilla Subsuelo P17 (Eje 9-A)' },
       { id: 'm_sub_wifi1', type: 'wifi_mesh',       x: 2.50,  z: 6.50, label: 'AP Mesh Subsuelo / Lavadero' }
     ]
   };
 
   // =========================================================================
-  // PRESET 1 & 2: OPCIÓN 1 (ARQ. ROLÓN) Y HOY EN OBRA (0 MUROS)
+  // PLANTA BAJA OFICIAL (+100.00m):
+  // - Cochera Frontal (z = -4.00m..3.00m): Muro Frontal 100% Ciego en z=-4.00m
+  //   (Portón Balancín 2.30m x=+1.20..+3.50m + Portoncito Peatonal 0.95m x=-2.20..-1.25m),
+  //   Pérgola de Madera con Enredadera y Techo Translúcido Antigranizo (x=-0.50..+4.50m, z=-3.80..+2.80m),
+  //   Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre cámara de oxigenación (z=1.50..3.00m).
+  // - Núcleo Húmedo Frontal en Eje F–G (z=3.00..5.00m):
+  //   Baño Social / SSHH (1.10m × 2.00m) en x=-1.64..-0.40m, z=3.00..5.00m
+  //   Cocina / Comedor (6.20m × 2.75m) en sector izquierdo Eje 5 a Eje 9 (x=-4.87..-0.74m, z=3.00..9.94m) con bacha sobre Eje F–G.
+  // - Estar Social (4.95m × 4.80m) en sector derecho Eje 1 a Eje 5 (x=-0.74..+3.84m, z=5.00..9.94m).
+  // - Escaleras en Costados Opuestos:
+  //   Escalera 1 (Baja a Subsuelo, 3.30×0.90m) en costado izquierdo Eje 8–9 (x=-4.87..-3.90m, z=5.26..8.56m)
+  //   Escalera 2 (Sube a Planta Alta, 3.90×0.80m) en costado derecho Eje 1–2 (x=+3.84..+4.87m, z=5.26..9.16m)
+  // - Galería al Río (3.50m × 9.55m) en Eje A–B (z=9.94..13.34m), sin parrilla (parrilla va en subsuelo).
+  // =========================================================================
+  const buildPlantaBajaRooms = (prefix) => [
+    {
+      id: `${prefix}_cochera`,
+      name: 'Cochera Frontal (Muro 100% Ciego + Portón Balancín 2.30m + Portoncito 0.95m + Pérgola Madera/Antigranizo + Piso Rejilla Electroforjada z=1.50..3.00m)',
+      codeType: 'exterior',
+      x: -4.87,
+      z: -4.00,
+      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
+      d: 7.00, // Frente lote (-4.00) a Eje G (3.00)
+      floorCostPerM2Gs: 140000,
+      equipCostGs: 14500000,
+      activeStage: activeFlag,
+      color: 'rgba(16, 185, 129, 0.20)'
+    },
+    {
+      id: `${prefix}_bano_social`,
+      name: 'Baño Social / SSHH (1.10m × 2.00m • Núcleo Húmedo Frontal Eje F–G • x=-1.64..-0.40m, z=3.00..5.00m)',
+      codeType: 'bano',
+      x: -1.64,
+      z: 3.00,
+      w: 1.24, // x = -1.64m a -0.40m (1.10m útiles internos)
+      d: 2.00, // z = 3.00m a 5.00m (Eje G a Eje E/D)
+      floorCostPerM2Gs: 195000,
+      equipCostGs: 4200000,
+      activeStage: activeFlag,
+      color: 'rgba(56, 189, 248, 0.22)'
+    },
+    {
+      id: `${prefix}_cocina_comedor`,
+      name: 'Cocina / Comedor (6.20m × 2.75m • Sector Izquierdo Eje 5 a Eje 9 c/ Bacha sobre Eje F–G • Losa L4)',
+      codeType: 'cocina',
+      x: -4.87,
+      z: 3.00,
+      w: 4.13, // x = -4.87m a -0.74m (Eje 9 a Eje 5)
+      d: 6.94, // z = 3.00m a 9.94m (Eje G a Eje B)
+      floorCostPerM2Gs: 185000,
+      equipCostGs: 8500000,
+      activeStage: activeFlag,
+      color: 'rgba(245, 158, 11, 0.20)'
+    },
+    {
+      id: `${prefix}_estar_social`,
+      name: isZeroWallsState
+        ? 'VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap • Cuadrante Eje 1 a Eje 5 / Eje B a Eje G)'
+        : 'Estar Social (4.95m × 4.80m • Sector Derecho Eje 1 a Eje 5 sobre Loza Rap 38.00 m²)',
+      codeType: 'habitable',
+      x: -0.74,
+      z: 5.00,
+      w: 4.58, // x = -0.74m a +3.84m (Eje 5 a Eje 2, libre de Escalera 2)
+      d: 4.94, // z = 5.00m a 9.94m (Eje D a Eje B)
+      floorCostPerM2Gs: 185000,
+      equipCostGs: 7800000,
+      activeStage: activeFlag,
+      color: 'rgba(6, 182, 212, 0.22)'
+    },
+    {
+      id: `${prefix}_galeria_rio`,
+      name: 'Galería al Río (3.50m × 9.55m • Eje A–B z=9.94..13.34m • Sin Parrilla — Parrilla en Subsuelo)',
+      codeType: 'exterior',
+      x: -4.87,
+      z: 9.94,
+      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
+      d: 3.40, // Eje B (9.94) a Eje A (13.34) -> 33.12 m²
+      floorCostPerM2Gs: 180000,
+      equipCostGs: 4620000,
+      activeStage: activeFlag,
+      color: 'rgba(16, 185, 129, 0.22)'
+    }
+  ];
+
+  const buildPlantaBajaWalls = (wPrefix) => [
+    { id: `${wPrefix}_muro_ciego_calle`, type: 'ladrillo_20', x1: -4.87, z1: -4.00, x2: 4.87, z2: -4.00, activeStage: activeFlag, label: 'Muro Frontal 100% Ciego Línea Municipal (z=-4.00m • Portón Balancín 2.30m + Portoncito 0.95m)' },
+    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (z=3.00m • Núcleo Húmedo Eje F–G + Acceso Principal)' },
+    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Oeste Eje 9 (P20-P19-P18 • Costado Escalera 1 a Subsuelo)' },
+    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Este Eje 1 (P4-P3-P2 • Costado Escalera 2 a Planta Alta)' },
+    { id: `${wPrefix}_bano_soc_s`, type: 'ladrillo_15', x1: -1.64, z1: 5.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Sur Baño Social SSHH (z=5.00m • Eje F–G)' },
+    { id: `${wPrefix}_bano_soc_e`, type: 'ladrillo_15', x1: -0.40, z1: 3.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Este Baño Social SSHH (x=-0.40m)' },
+    { id: `${wPrefix}_bano_soc_o`, type: 'ladrillo_15', x1: -1.64, z1: 3.00, x2: -1.64, z2: 5.00, activeStage: activeFlag, label: 'Divisorio Baño Social / Bacha Cocina en Eje 6 (x=-1.64m)' },
+    { id: `${wPrefix}_esc1_caja`,  type: 'ladrillo_15', x1: -3.90, z1: 5.26, x2: -3.90, z2: 8.56, activeStage: activeFlag, label: 'Baranda / Cierre Escalera 1 a Subsuelo (Eje 8–9 • 3.30×0.90m)' },
+    { id: `${wPrefix}_esc2_caja`,  type: 'ladrillo_15', x1: 3.84,  z1: 5.26, x2: 3.84,  z2: 9.16, activeStage: activeFlag, label: 'Cierre Caja Escalera 2 a Planta Alta (Eje 1–2 • 3.90×0.80m)' },
+    { id: `${wPrefix}_blindex_b`,  type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: activeFlag, label: 'Ventanal Corredizo Eje B hacia Galería al Río (P18-P16-P9-P5)' },
+    { id: `${wPrefix}_baranda_a`,  type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Borde Galería al Río Eje A (P17-P11-P8-P1)' }
+  ];
+
+  // =========================================================================
+  // PLANTA ALTA OFICIAL (+102.88m — 2 Dormitorios + Desk al subir escalera + 2 Baños + Vestidor,
+  // SIN balcón ni Blindex frontal, apoyada sobre Eje G z=3.00m):
+  // - Escritorio / Desk (3.50m × 2.30m) en el desembarco de Escalera 2 (Eje 1–2, x=+1.80..+4.87m, z=7.37..9.94m)
+  // - Dormitorio 2 (3.85m × 3.00m) al centro (x=-0.74..+1.80m, z=5.26..9.94m)
+  // - Baño 2 Planta Alta (2.30m × 2.00m) sobre el núcleo húmedo frontal Eje F–G (x=+1.69..+3.84m, z=3.00..5.26m)
+  // - Dormitorio Principal en Suite (5.00m × 3.95m) en Eje 5–9 (x=-4.87..-0.74m, z=5.00..9.94m)
+  // - Vestidor (1.55m × 1.80m) en x=-4.87..-2.80m, z=3.00..5.00m
+  // - Baño en Suite (2.30m × 2.00m) en x=-2.80..+0.50m, z=3.00..5.00m (exactamente arriba del Baño Social y Cocina PB)
+  // - Deck 2 / Terraza al Río (4.15m × 7.00m) en Eje A–B (z=9.94..13.34m)
+  // =========================================================================
+  const buildPlantaAltaRooms = (prefix) => [
+    {
+      id: `${prefix}_vestidor_suite`,
+      name: 'Vestidor Suite (1.55m × 1.80m • Eje 7–9 / Eje F–G • x=-4.87..-2.80m, z=3.00..5.00m)',
+      codeType: 'bano',
+      x: -4.87,
+      z: 3.00,
+      w: 2.07, // x = -4.87m a -2.80m
+      d: 2.00, // z = 3.00m a 5.00m (Frente Eje G sin voladizo)
+      floorCostPerM2Gs: 185000,
+      equipCostGs: 3600000,
+      activeStage: activeFlag,
+      color: 'rgba(56, 189, 248, 0.20)'
+    },
+    {
+      id: `${prefix}_bano_suite`,
+      name: 'Baño en Suite (2.30m × 2.00m • Núcleo Húmedo Eje F–G arriba de Baño Social/Cocina PB • x=-2.80..+0.50m, z=3.00..5.00m)',
+      codeType: 'bano',
+      x: -2.80,
+      z: 3.00,
+      w: 3.30, // x = -2.80m a +0.50m
+      d: 2.00, // z = 3.00m a 5.00m
+      floorCostPerM2Gs: 195000,
+      equipCostGs: 6800000,
+      activeStage: activeFlag,
+      color: 'rgba(16, 185, 129, 0.22)'
+    },
+    {
+      id: `${prefix}_bano_2`,
+      name: 'Baño 2 Planta Alta (2.30m × 2.00m • Núcleo Húmedo Frontal Eje F–G • x=+1.69..+3.84m, z=3.00..5.26m)',
+      codeType: 'bano',
+      x: 1.69,
+      z: 3.00,
+      w: 2.15, // x = +1.69m a +3.84m (Eje 4 a Eje 2)
+      d: 2.26, // z = 3.00m a 5.26m (Eje G a Eje D)
+      floorCostPerM2Gs: 195000,
+      equipCostGs: 5400000,
+      activeStage: activeFlag,
+      color: 'rgba(6, 182, 212, 0.22)'
+    },
+    {
+      id: `${prefix}_master_suite`,
+      name: 'Dormitorio Principal en Suite (5.00m × 3.95m • Eje 5–9 / z=5.00..9.94m)',
+      codeType: 'habitable',
+      x: -4.87,
+      z: 5.00,
+      w: 4.13, // x = -4.87m a -0.74m (Eje 9 a Eje 5)
+      d: 4.94, // z = 5.00m a 9.94m (Eje D a Eje B)
+      floorCostPerM2Gs: 190000,
+      equipCostGs: 9800000,
+      activeStage: activeFlag,
+      color: 'rgba(168, 85, 247, 0.22)'
+    },
+    {
+      id: `${prefix}_dorm_2`,
+      name: 'Dormitorio 2 (3.85m × 3.00m • Centro x=-0.74..+1.80m, z=5.26..9.94m)',
+      codeType: 'habitable',
+      x: -0.74,
+      z: 5.26,
+      w: 2.54, // x = -0.74m a +1.80m
+      d: 4.68, // z = 5.26m a 9.94m (Eje D a Eje B)
+      floorCostPerM2Gs: 185000,
+      equipCostGs: 6400000,
+      activeStage: activeFlag,
+      color: 'rgba(245, 158, 11, 0.20)'
+    },
+    {
+      id: `${prefix}_escritorio_desk`,
+      name: 'Escritorio / Desk al Subir Escalera 2 (3.50m × 2.30m • Eje 1–4 / x=+1.80..+4.87m, z=7.37..9.94m)',
+      codeType: 'habitable',
+      x: 1.80,
+      z: 7.37,
+      w: 3.07, // x = +1.80m a +4.87m (Desembarco Escalera 2)
+      d: 2.57, // z = 7.37m a 9.94m (Eje C a Eje B)
+      floorCostPerM2Gs: 180000,
+      equipCostGs: 4800000,
+      activeStage: activeFlag,
+      color: 'rgba(56, 189, 248, 0.20)'
+    },
+    {
+      id: `${prefix}_terraza_rio`,
+      name: 'Deck 2 / Terraza al Río (4.15m × 7.00m • Eje A–B z=9.94..13.34m)',
+      codeType: 'exterior',
+      x: -4.87,
+      z: 9.94,
+      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
+      d: 3.40, // Eje B (9.94) a Eje A (13.34)
+      floorCostPerM2Gs: 175000,
+      equipCostGs: 4620000,
+      activeStage: activeFlag,
+      color: 'rgba(16, 185, 129, 0.20)'
+    }
+  ];
+
+  const buildPlantaAltaWalls = (wPrefix) => [
+    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: activeFlag, label: 'Muro Frontal Mampostería PA en Eje G (z=3.00m • SIN Balcón ni Blindex Frontal)' },
+    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 (P20-P19-P18)' },
+    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (P4-P3-P2 • Escalera 2 y Desk)' },
+    { id: `${wPrefix}_nucleo_fg`, type: 'ladrillo_15', x1: -4.87, z1: 5.00, x2: 3.84, z2: 5.00, activeStage: activeFlag, label: 'Tabique Divisor Núcleo Húmedo Eje F–G (Vestidor + Baño Suite + Baño 2 PA)' },
+    { id: `${wPrefix}_vest_bano`, type: 'ladrillo_15', x1: -2.80, z1: 3.00, x2: -2.80, z2: 5.00, activeStage: activeFlag, label: 'Tabique Vestidor / Baño en Suite (x=-2.80m)' },
+    { id: `${wPrefix}_bano_suite_e`, type: 'ladrillo_15', x1: 0.50, z1: 3.00, x2: 0.50, z2: 5.00, activeStage: activeFlag, label: 'Cierre Este Baño en Suite (x=+0.50m)' },
+    { id: `${wPrefix}_bano2_o`,   type: 'ladrillo_15', x1: 1.69,  z1: 3.00, x2: 1.69,  z2: 5.26, activeStage: activeFlag, label: 'Cierre Oeste Baño 2 PA en Eje 4 (x=+1.69m)' },
+    { id: `${wPrefix}_eje5_suite`, type: 'ladrillo_15', x1: -0.74, z1: 5.00, x2: -0.74, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio Suite / Dormitorio 2 en Eje 5 (x=-0.74m)' },
+    { id: `${wPrefix}_dorm2_desk`, type: 'ladrillo_15', x1: 1.80,  z1: 5.26, x2: 1.80,  z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 / Escritorio Desk al subir Escalera 2 (x=+1.80m)' },
+    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B hacia Deck 2 / Terraza al Río (P18-P16-P9-P5-P2)' },
+    { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Eje A (P17-P11-P8-P1)' }
+  ];
+
+  // =========================================================================
+  // PRESET 1 & 2: OPCIÓN 1 (ARQ. ROLÓN) Y HOY EN OBRA (0 MUROS + HUECO 38.00 m²)
   // =========================================================================
   if (presetKey === 'opcion_1_rolon' || presetKey === 'hoy_en_obra') {
-    const activeFlag = !isZeroWallsState;
     return {
       presetId: presetKey,
       presetName: isZeroWallsState
-        ? 'Hoy en Obra: Solo Esqueleto H°A° P1..P20 + Losas L1–L4 (0 Muros Construidos)'
-        : 'Opción 1: Arq. Gabriela Rolón (Alineado a Ejes 1..9 y A..G)',
+        ? 'Hoy en Obra: 17 Pilares PB Hormigonados (+2.88m) + Losas L1–L4 + Hueco Abierto 38.00 m² en Losa 1 (A cerrar c/ Loza Rap)'
+        : 'Opción 1: Arq. Gabriela Rolón (Núcleo Húmedo Eje F–G + 2 Dormitorios y Desk en PA + Parrilla en Subsuelo)',
       levels: {
         subsuelo: deepClone(baseSubsuelo),
         planta_baja: {
-          rooms: [
-            {
-              id: 'pb_cochera',
-              name: 'Cochera Frontal Doble (z=-4.00 a Eje G z=3.00)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: -4.00,
-              w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-              d: 7.00, // Frente lote (-4.00) a Eje G (3.00)
-              floorCostPerM2Gs: 140000,
-              equipCostGs: 14500000,
-              activeStage: activeFlag,
-              color: 'rgba(148, 163, 184, 0.18)'
-            },
-            {
-              id: 'pb_vestidor_acceso',
-              name: 'Vestidor / Acceso Suite PB (Ejes 9-6 / G-E)',
-              codeType: 'bano',
-              x: -4.87,
-              z: 3.00,
-              w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-              d: 1.77, // Eje G (3.00) a Eje E (4.77, P19-P13)
-              floorCostPerM2Gs: 180000,
-              equipCostGs: 3600000,
-              activeStage: activeFlag,
-              color: 'rgba(56, 189, 248, 0.16)'
-            },
-            {
-              id: 'pb_bano_suite',
-              name: 'Baño en Suite + Social (Ejes 9-6 / E-C • P19 a P15/P12)',
-              codeType: 'bano',
-              x: -4.87,
-              z: 4.77,
-              w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-              d: 2.60, // Eje E (4.77) a Eje C (7.37, P15-P12)
-              floorCostPerM2Gs: 195000,
-              equipCostGs: 6800000,
-              activeStage: activeFlag,
-              color: 'rgba(16, 185, 129, 0.18)'
-            },
-            {
-              id: 'pb_dorm_suite',
-              name: 'Dormitorio en Suite PB (Ejes 9-6 / C-B • P15/P12 a P18/P16)',
-              codeType: 'habitable',
-              x: -4.87,
-              z: 7.37,
-              w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-              d: 2.57, // Eje C (7.37) a Eje B (9.94)
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 6200000,
-              activeStage: activeFlag,
-              color: 'rgba(168, 85, 247, 0.18)'
-            },
-            {
-              id: 'pb_cocina',
-              name: 'Cocina Integrada con Isla (Ejes 6-4 / G-D • P14-P10)',
-              codeType: 'cocina',
-              x: -1.64,
-              z: 3.00,
-              w: 3.33, // Eje 6 (-1.64) a Eje 4 (+1.69)
-              d: 2.26, // Eje G (3.00) a Eje D (5.26)
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 11500000,
-              activeStage: activeFlag,
-              color: 'rgba(245, 158, 11, 0.18)'
-            },
-            {
-              id: 'pb_estar_comedor',
-              name: 'Gran Estar / Comedor Social (Ejes 6-2 / G-B)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 5.26,
-              w: 5.48, // Eje 6 (-1.64) a Eje 2 (+3.84)
-              d: 4.68, // Eje D (5.26) a Eje B (9.94)
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 9800000,
-              activeStage: activeFlag,
-              color: 'rgba(6, 182, 212, 0.20)'
-            },
-            {
-              id: 'pb_galeria_rio',
-              name: 'Galería Panorámica y Parrilla L1 (-0.45m • Eje B a Eje A • 33.12 m²)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: 9.94,
-              w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-              d: 3.40, // Eje B (9.94) a Eje A (13.34) -> 33.12 m² exactos
-              floorCostPerM2Gs: 210000,
-              equipCostGs: 19500000,
-              activeStage: activeFlag,
-              color: 'rgba(16, 185, 129, 0.22)'
-            }
-          ],
-          walls: [
-            { id: 'w_pb_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (P20-P7-P4)' },
-            { id: 'w_pb_oeste_9',  type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Oeste Eje 9 (P20-P19-P18)' },
-            { id: 'w_pb_este_1',   type: 'ladrillo_20', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Este Eje 1 (P4-P3-P2)' },
-            { id: 'w_pb_eje6_suite', type: 'ladrillo_15', x1: -1.64, z1: 3.51, x2: -1.64, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Suite Eje 6 (P14-P12)' },
-            { id: 'w_pb_ejec_bano',  type: 'ladrillo_15', x1: -4.87, z1: 7.37, x2: -1.64, z2: 7.37, activeStage: activeFlag, label: 'Divisorio Baño/Dorm Eje C (P15-P12)' },
-            { id: 'w_pb_ejee_vest',  type: 'ladrillo_15', x1: -4.87, z1: 4.77, x2: -0.74, z2: 4.77, activeStage: activeFlag, label: 'Divisorio Vestidor/Baño Eje E (P19-P13)' },
-            { id: 'w_pb_eje2_esc',   type: 'ladrillo_15', x1: 3.84,  z1: 3.00, x2: 3.84,  z2: 9.94, activeStage: activeFlag, label: 'Cierre Caja Escalera 1 Eje 2 (P7-P6-P5)' },
-            { id: 'w_pb_blindex_b',  type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: activeFlag, label: 'Gran Blindex Eje B a Galería L1 (P18-P16-P9-P5)' },
-            { id: 'w_pb_baranda_a',  type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Cristal Borde Galería Eje A (P17-P11-P8-P1)' }
-          ],
+          rooms: buildPlantaBajaRooms('pb'),
+          walls: buildPlantaBajaWalls('w_pb'),
           mepNodes: isZeroWallsState ? [] : [
-            { id: 'm_pb_cctv_calle', type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Portón Guillermo Arias' },
+            { id: 'm_pb_cctv_calle', type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Portón Balancín Guillermo Arias' },
             { id: 'm_pb_cctv_gal',   type: 'cctv_poe',        x: 4.65,  z: 13.10, label: 'CCTV Galería Río (P1 Eje 1-A)' },
-            { id: 'm_pb_wifi_estar', type: 'wifi_mesh',       x: 1.00,  z: 7.37,  label: 'Wi-Fi 6 Estar Principal' },
-            { id: 'm_pb_cat6_tv',    type: 'cat6_rj45',       x: -1.50, z: 7.37,  label: 'Boca Cat6 Smart TV (P12)' },
-            { id: 'm_pb_rej_coch',   type: 'rejilla_pluvial', x: 0.00,  z: 2.80,  label: 'Rejilla Pluvial Frente Eje G' },
-            { id: 'm_pb_pvc_gal',    type: 'bajada_pvc100',   x: 4.75,  z: 13.20, label: 'Bajada Pluvial PVC 100 (P1)' }
+            { id: 'm_pb_wifi_estar', type: 'wifi_mesh',       x: 1.00,  z: 7.37,  label: 'Wi-Fi 6 Estar Social' },
+            { id: 'm_pb_cat6_tv',    type: 'cat6_rj45',       x: -0.74, z: 7.37,  label: 'Boca Cat6 Smart TV Estar' },
+            { id: 'm_pb_rej_coch',   type: 'rejilla_pluvial', x: 0.00,  z: 2.25,  label: 'Piso Rejilla Metálica Electroforjada Cámara Oxigenación (z=1.50..3.00m)' },
+            { id: 'm_pb_pvc_gal',    type: 'bajada_pvc100',   x: -1.60, z: 3.30,  label: 'Columna Montante y Bajada Pluvial/Cloacal Núcleo Eje F–G' }
           ]
         },
         planta_alta: {
-          rooms: [
-            {
-              id: 'pa_dorm_2',
-              name: 'Dormitorio 2 con Voladizo Frontal (Ejes 9-6 / z=2.15 a Eje C)',
-              codeType: 'habitable',
-              x: -4.87,
-              z: 2.15,
-              w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-              d: 5.22, // Voladizo frontal (2.15) a Eje C (7.37)
-              floorCostPerM2Gs: 180000,
-              equipCostGs: 6400000,
-              activeStage: activeFlag,
-              color: 'rgba(56, 189, 248, 0.18)'
-            },
-            {
-              id: 'pa_dorm_3',
-              name: 'Dormitorio 3 Frontal + Baño (Ejes 6-4 / z=2.15 a Eje D)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 2.15,
-              w: 3.33, // Eje 6 (-1.64) a Eje 4 (+1.69)
-              d: 3.11, // Voladizo (2.15) a Eje D (5.26)
-              floorCostPerM2Gs: 180000,
-              equipCostGs: 7200000,
-              activeStage: activeFlag,
-              color: 'rgba(245, 158, 11, 0.18)'
-            },
-            {
-              id: 'pa_estar_intimo',
-              name: 'Estar Íntimo Superior (Ejes 6-2 / Eje D a Eje B)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 5.26,
-              w: 5.48, // Eje 6 (-1.64) a Eje 2 (+3.84)
-              d: 4.68, // Eje D (5.26) a Eje B (9.94)
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 6500000,
-              activeStage: activeFlag,
-              color: 'rgba(16, 185, 129, 0.18)'
-            },
-            {
-              id: 'pa_master_suite',
-              name: 'Suite Master Superior (Ejes 9-6 / Eje C a Eje B)',
-              codeType: 'habitable',
-              x: -4.87,
-              z: 7.37,
-              w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-              d: 2.57, // Eje C (7.37) a Eje B (9.94)
-              floorCostPerM2Gs: 195000,
-              equipCostGs: 12500000,
-              activeStage: activeFlag,
-              color: 'rgba(168, 85, 247, 0.22)'
-            },
-            {
-              id: 'pa_terraza_rio',
-              name: 'Terraza Balcón Panorámica al Río (Eje B z=9.94 a Eje A z=13.34)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: 9.94,
-              w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-              d: 3.40, // Eje B (9.94) a Eje A (13.34) -> 33.12 m²
-              floorCostPerM2Gs: 175000,
-              equipCostGs: 8500000,
-              activeStage: activeFlag,
-              color: 'rgba(6, 182, 212, 0.18)'
-            }
-          ],
-          walls: [
-            { id: 'w_pa_voladizo', type: 'ladrillo_20', x1: -4.87, z1: 2.15, x2: 4.87,  z2: 2.15, activeStage: activeFlag, label: 'Cerramiento Voladizo Frontal PA (z=2.15m)' },
-            { id: 'w_pa_oeste_9',  type: 'ladrillo_20', x1: -4.87, z1: 2.15, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Oeste PA Eje 9 (P20-P19-P18)' },
-            { id: 'w_pa_este_1',   type: 'ladrillo_20', x1: 4.87,  z1: 2.15, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Este PA Eje 1 (P4-P3-P2)' },
-            { id: 'w_pa_eje6',     type: 'ladrillo_15', x1: -1.64, z1: 2.15, x2: -1.64, z2: 9.94, activeStage: activeFlag, label: 'Tabique Eje 6 sobre Viga PA (P14-P16)' },
-            { id: 'w_pa_ejed',     type: 'ladrillo_15', x1: -1.64, z1: 5.26, x2: 3.84,  z2: 5.26, activeStage: activeFlag, label: 'Tabique Eje D PA (hacia P6)' },
-            { id: 'w_pa_blindex_b', type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B a Terraza Río (P18-P16-P9-P5-P2)' },
-            { id: 'w_pa_baranda_a', type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Cristal Terraza Eje A (P17-P11-P8-P1)' }
-          ],
+          rooms: buildPlantaAltaRooms('pa'),
+          walls: buildPlantaAltaWalls('w_pa'),
           mepNodes: isZeroWallsState ? [] : [
-            { id: 'm_pa_wifi',       type: 'wifi_mesh',       x: 0.50,  z: 7.00,  label: 'AP Wi-Fi 6 Estar Íntimo PA' },
-            { id: 'm_pa_cat6_suite', type: 'cat6_rj45',       x: -3.20, z: 9.60,  label: 'Boca Red Cat6 Suite PA' },
-            { id: 'm_pa_rej_terr',   type: 'rejilla_pluvial', x: 0.00,  z: 13.00, label: 'Desagüe Terraza Eje A' },
-            { id: 'm_pa_pvc_1',      type: 'bajada_pvc100',   x: -4.75, z: 13.20, label: 'Bajada Pluvial P17 (Eje 9-A)' }
+            { id: 'm_pa_wifi',       type: 'wifi_mesh',       x: 2.40,  z: 8.20,  label: 'AP Wi-Fi 6 Escritorio / Desk PA (Desembarco Escalera 2)' },
+            { id: 'm_pa_cat6_suite', type: 'cat6_rj45',       x: -3.20, z: 7.50,  label: 'Boca Red Cat6 Dormitorio Suite PA' },
+            { id: 'm_pa_rej_terr',   type: 'rejilla_pluvial', x: 0.00,  z: 13.00, label: 'Desagüe Deck 2 / Terraza Eje A' },
+            { id: 'm_pa_pvc_1',      type: 'bajada_pvc100',   x: -1.60, z: 3.30,  label: 'Columna Sanitaria y Pluvial Vertical Eje F–G (Baño Suite + Baño 2 PA)' }
           ]
         }
       }
@@ -1170,196 +1250,32 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
   }
 
   // =========================================================================
-  // PRESET 3: OPCIÓN 2 (LG-RB: SUITE PB + ESCRITORIO + GALERÍA L1 AL RÍO)
+  // PRESET 3: OPCIÓN 2 (LG-RB ALINEADO A PLANOS OFICIALES EJE F-G + LOZA RAP 38 m²)
   // =========================================================================
   if (presetKey === 'opcion_2_lgrb') {
     return {
       presetId: 'opcion_2_lgrb',
-      presetName: 'Opción 2: LG-RB (Suite en Ejes 9-6 + Estudio + Estar/Cocina Ejes 6-2 + Galería L1)',
+      presetName: 'Opción 2: LG-RB (Cierre Loza Rap 38.00 m² + Núcleo Húmedo Eje F–G + 2 Dormitorios y Desk PA + Parrilla Subsuelo)',
       levels: {
         subsuelo: deepClone(baseSubsuelo),
         planta_baja: {
-          rooms: [
-            {
-              id: 'pb2_cochera',
-              name: 'Cochera Frontal + Muro Contención (z=-4.00 a Eje G z=3.00)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: -4.00,
-              w: 9.74,
-              d: 7.00,
-              floorCostPerM2Gs: 140000,
-              equipCostGs: 14500000,
-              activeStage: true,
-              color: 'rgba(148, 163, 184, 0.18)'
-            },
-            {
-              id: 'pb2_vestidor_suite',
-              name: 'Vestidor Privado Suite (Ejes 9-6 / Eje G a Eje E • P20-P19)',
-              codeType: 'bano',
-              x: -4.87,
-              z: 3.00,
-              w: 3.23,
-              d: 1.77,
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 4200000,
-              activeStage: true,
-              color: 'rgba(56, 189, 248, 0.18)'
-            },
-            {
-              id: 'pb2_bano_suite',
-              name: 'Baño Suite + Toilette (Ejes 9-6 / Eje E a Eje C • P19-P15/P12)',
-              codeType: 'bano',
-              x: -4.87,
-              z: 4.77,
-              w: 3.23,
-              d: 2.60,
-              floorCostPerM2Gs: 195000,
-              equipCostGs: 8200000,
-              activeStage: true,
-              color: 'rgba(16, 185, 129, 0.18)'
-            },
-            {
-              id: 'pb2_suite_master',
-              name: 'Suite Principal en PB (Ejes 9-6 / Eje C a Eje B • P15/P12 a P18/P16)',
-              codeType: 'habitable',
-              x: -4.87,
-              z: 7.37,
-              w: 3.23,
-              d: 2.57,
-              floorCostPerM2Gs: 190000,
-              equipCostGs: 9800000,
-              activeStage: true,
-              color: 'rgba(168, 85, 247, 0.20)'
-            },
-            {
-              id: 'pb2_cocina_estudio',
-              name: 'Cocina + Escritorio LG (Ejes 6-2 / Eje G a Eje D • P14-P10-P6)',
-              codeType: 'cocina',
-              x: -1.64,
-              z: 3.00,
-              w: 5.48,
-              d: 2.26,
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 11200000,
-              activeStage: true,
-              color: 'rgba(245, 158, 11, 0.18)'
-            },
-            {
-              id: 'pb2_estar_comedor',
-              name: 'Estar / Comedor Social al Río (Ejes 6-2 / Eje D a Eje B)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 5.26,
-              w: 5.48,
-              d: 4.68,
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 10500000,
-              activeStage: true,
-              color: 'rgba(6, 182, 212, 0.20)'
-            },
-            {
-              id: 'pb2_galeria_l1',
-              name: 'Galería Panorámica y Parrilla L1 (-0.45m • Eje B a Eje A • 33.12 m²)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: 9.94,
-              w: 9.74,
-              d: 3.40,
-              floorCostPerM2Gs: 210000,
-              equipCostGs: 22500000,
-              activeStage: true,
-              color: 'rgba(16, 185, 129, 0.22)'
-            }
-          ],
-          walls: [
-            { id: 'w2_pb_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: true, label: 'Muro Frontal Eje G (P20-P7-P4)' },
-            { id: 'w2_pb_oeste_9',  type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: true, label: 'Muro Oeste Eje 9 (P20-P19-P18)' },
-            { id: 'w2_pb_este_1',   type: 'ladrillo_20', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: true, label: 'Muro Este Eje 1 (P4-P3-P2)' },
-            { id: 'w2_pb_eje6',     type: 'ladrillo_20', x1: -1.64, z1: 3.00, x2: -1.64, z2: 9.94, activeStage: true, label: 'Muro Acústico Eje 6 (P14-P12)' },
-            { id: 'w2_pb_ejee',     type: 'ladrillo_15', x1: -4.87, z1: 4.77, x2: -1.64, z2: 4.77, activeStage: true, label: 'Tabique Vestidor Eje E (P19-P13)' },
-            { id: 'w2_pb_ejec',     type: 'ladrillo_15', x1: -4.87, z1: 7.37, x2: -1.64, z2: 7.37, activeStage: true, label: 'Tabique Baño Suite Eje C (P15-P12)' },
-            { id: 'w2_pb_ejed',     type: 'ladrillo_15', x1: -1.64, z1: 5.26, x2: 3.84,  z2: 5.26, activeStage: true, label: 'Divisorio Cocina/Estar Eje D (hacia P6)' },
-            { id: 'w2_pb_eje2_esc', type: 'ladrillo_15', x1: 3.84,  z1: 5.26, x2: 3.84,  z2: 9.94, activeStage: true, label: 'Muro Escalera 1 Eje 2 (P6-P5)' },
-            { id: 'w2_pb_blindex_b', type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: true, label: 'Blindex Eje B a Galería L1 (P18-P16-P9-P5)' },
-            { id: 'w2_pb_baranda_a', type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: true, label: 'Baranda al Río Eje A (P17-P11-P8-P1)' }
-          ],
+          rooms: buildPlantaBajaRooms('pb2'),
+          walls: buildPlantaBajaWalls('w2_pb'),
           mepNodes: [
-            { id: 'm2_pb_cctv1',  type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Acceso Vehicular' },
-            { id: 'm2_pb_cctv2',  type: 'cctv_poe',        x: 4.65,  z: 13.10, label: 'CCTV Quincho Río (P1)' },
-            { id: 'm2_pb_wifi1',  type: 'wifi_mesh',       x: 1.69,  z: 5.26,  label: 'AP Wi-Fi 6 Estudio/Estar (Eje 4-D)' },
-            { id: 'm2_pb_cat6_1', type: 'cat6_rj45',       x: 1.69,  z: 3.51,  label: 'Doble Boca Cat6 (P10 Eje 4-F)' },
-            { id: 'm2_pb_cat6_2', type: 'cat6_rj45',       x: -1.64, z: 7.37,  label: 'Boca Cat6 Living/Suite (P12 Eje 6-C)' },
-            { id: 'm2_pb_rej1',   type: 'rejilla_pluvial', x: 0.00,  z: 13.10, label: 'Desagüe Lineal Galería Eje A' }
+            { id: 'm2_pb_cctv1',  type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Portón Balancín 2.30m' },
+            { id: 'm2_pb_cctv2',  type: 'cctv_poe',        x: 4.65,  z: 13.10, label: 'CCTV Galería Río (P1)' },
+            { id: 'm2_pb_wifi1',  type: 'wifi_mesh',       x: 1.69,  z: 6.50,  label: 'AP Wi-Fi 6 Estar Social (Eje 4)' },
+            { id: 'm2_pb_cat6_1', type: 'cat6_rj45',       x: -1.64, z: 3.51,  label: 'Núcleo Húmedo Eje F–G (Baño Social + Bacha Cocina)' },
+            { id: 'm2_pb_cat6_2', type: 'cat6_rj45',       x: -0.74, z: 7.37,  label: 'Boca Cat6 Living/Comedor (Eje 5-C)' },
+            { id: 'm2_pb_rej1',   type: 'rejilla_pluvial', x: 0.00,  z: 2.25,  label: 'Rejilla Metálica Electroforjada sobre Cámara Oxigenación (z=1.50..3.00m)' }
           ]
         },
         planta_alta: {
-          rooms: [
-            {
-              id: 'pa2_master_suite',
-              name: 'Suite Master Superior con Voladizo (Ejes 9-6 / z=2.15 a Eje B)',
-              codeType: 'habitable',
-              x: -4.87,
-              z: 2.15,
-              w: 3.23,
-              d: 7.79,
-              floorCostPerM2Gs: 190000,
-              equipCostGs: 11500000,
-              activeStage: true,
-              color: 'rgba(168, 85, 247, 0.20)'
-            },
-            {
-              id: 'pa2_dorm_2',
-              name: 'Dormitorio 2 Frontal (Ejes 6-2 / z=2.15 a Eje D)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 2.15,
-              w: 5.48,
-              d: 3.11,
-              floorCostPerM2Gs: 185000,
-              equipCostGs: 8500000,
-              activeStage: true,
-              color: 'rgba(56, 189, 248, 0.20)'
-            },
-            {
-              id: 'pa2_dorm_3_estar',
-              name: 'Dormitorio 3 + Estar Íntimo PA (Ejes 6-2 / Eje D a Eje B)',
-              codeType: 'habitable',
-              x: -1.64,
-              z: 5.26,
-              w: 5.48,
-              d: 4.68,
-              floorCostPerM2Gs: 180000,
-              equipCostGs: 7200000,
-              activeStage: false,
-              color: 'rgba(245, 158, 11, 0.16)'
-            },
-            {
-              id: 'pa2_terraza',
-              name: 'Terraza Balcón al Río (Eje B z=9.94 a Eje A z=13.34 • 33.12 m²)',
-              codeType: 'exterior',
-              x: -4.87,
-              z: 9.94,
-              w: 9.74,
-              d: 3.40,
-              floorCostPerM2Gs: 175000,
-              equipCostGs: 6800000,
-              activeStage: true,
-              color: 'rgba(16, 185, 129, 0.18)'
-            }
-          ],
-          walls: [
-            { id: 'w2_pa_frente',  type: 'ladrillo_20', x1: -4.87, z1: 2.15, x2: 4.87,  z2: 2.15, activeStage: true, label: 'Cierre Voladizo Frontal PA (z=2.15m)' },
-            { id: 'w2_pa_oeste',   type: 'ladrillo_20', x1: -4.87, z1: 2.15, x2: -4.87, z2: 9.94, activeStage: true, label: 'Cierre Oeste PA Eje 9 (P20-P19-P18)' },
-            { id: 'w2_pa_este',    type: 'ladrillo_20', x1: 4.87,  z1: 2.15, x2: 4.87,  z2: 9.94, activeStage: true, label: 'Cierre Este PA Eje 1 (P4-P3-P2)' },
-            { id: 'w2_pa_eje6',    type: 'ladrillo_15', x1: -1.64, z1: 2.15, x2: -1.64, z2: 9.94, activeStage: true, label: 'Tabique Eje 6 sobre Viga (P14-P16)' },
-            { id: 'w2_pa_ejed',    type: 'ladrillo_15', x1: -1.64, z1: 5.26, x2: 3.84,  z2: 5.26, activeStage: true, label: 'Divisorio Eje D (hacia P6)' },
-            { id: 'w2_pa_blindex', type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: true, label: 'Blindex PA Eje B a Terraza (P18-P16-P9-P5-P2)' },
-            { id: 'w2_pa_baranda', type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: true, label: 'Baranda Terraza Eje A (P17-P11-P8-P1)' }
-          ],
+          rooms: buildPlantaAltaRooms('pa2'),
+          walls: buildPlantaAltaWalls('w2_pa'),
           mepNodes: [
-            { id: 'm2_pa_wifi', type: 'wifi_mesh',     x: 1.69, z: 7.37,  label: 'AP Mesh Planta Alta' },
-            { id: 'm2_pa_pvc',  type: 'bajada_pvc100', x: 4.75, z: 13.20, label: 'Bajada Pluvial Cumbrera (P1)' }
+            { id: 'm2_pa_wifi', type: 'wifi_mesh',     x: 2.50, z: 8.20,  label: 'AP Mesh Escritorio / Desk PA (Escalera 2)' },
+            { id: 'm2_pa_pvc',  type: 'bajada_pvc100', x: -1.60, z: 3.30, label: 'Bajadas Sanitarias y Pluviales Eje F–G (Baño Suite + Baño 2)' }
           ]
         }
       }
@@ -1367,134 +1283,29 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
   }
 
   // =========================================================================
-  // PRESET 4 (DEFAULT): PROYECTO RUTH & LEO (3 NIVELES DESDE DÍA 1)
+  // PRESET 4 (DEFAULT): PROYECTO RUTH & LEO (cierre_300m ALINEADO A PLANOS OFICIALES)
   // =========================================================================
   return {
     presetId: 'cierre_300m',
-    presetName: 'Proyecto Ruth & Leo: 2do Piso Dormitorio/Estudio • Nivel Calle Sala/Comedor/Cocina • Subsuelo Lavadero/Depósito',
+    presetName: 'Proyecto Ruth & Leo: PA 2 Dormitorios + Desk + 2 Baños/Vestidor (Eje F–G) • PB Baño Social + Cocina/Comedor + Estar • Subsuelo Parrilla/Lavadero',
     levels: {
       subsuelo: deepClone(baseSubsuelo),
       planta_baja: {
-        rooms: [
-          {
-            id: 'pb3_cochera',
-            name: 'Cochera Doble Nivel Calle (z=-4.00 a Muro Contención z=+1.50m) + Puente s/ Pasillo Antihumedad',
-            codeType: 'exterior',
-            x: -4.87,
-            z: -4.00,
-            w: 9.74,
-            d: 5.50,
-            floorCostPerM2Gs: 140000,
-            equipCostGs: 14500000,
-            activeStage: true,
-            color: 'rgba(16, 185, 129, 0.22)'
-          },
-          {
-            id: 'pb3_sector_suite_bano',
-            name: 'Cocina Integrada Amplia + Toilette Social (Mesada, Garrafa, Heladera, Air Fryer 6L • Ejes 9-6)',
-            codeType: 'cocina',
-            x: -4.87,
-            z: 3.00,
-            w: 3.23, // Eje 9 (-4.87) a Eje 6 (-1.64)
-            d: 6.94, // Eje G (3.00) a Eje B (9.94)
-            floorCostPerM2Gs: 180000,
-            equipCostGs: 4850000,
-            activeStage: true,
-            color: 'rgba(245, 158, 11, 0.20)'
-          },
-          {
-            id: 'pb3_estar_cocina',
-            name: 'Gran Sala de Estar (Sofá 4 pzas) y Comedor (6 sillas) (Sin dormitorios abajo • Ejes 6-2 / G-B)',
-            codeType: 'habitable',
-            x: -1.64,
-            z: 3.00,
-            w: 5.48, // Eje 6 (-1.64) a Eje 2 (+3.84)
-            d: 6.94, // Eje G (3.00) a Eje B (9.94)
-            floorCostPerM2Gs: 180000,
-            equipCostGs: 6800000,
-            activeStage: true,
-            color: 'rgba(6, 182, 212, 0.22)'
-          },
-          {
-            id: 'pb3_galeria_futura',
-            name: 'Galería Panorámica L1 al Río (-0.45m • Parrilla Portátil • Eje B a Eje A • 33.12 m²)',
-            codeType: 'exterior',
-            x: -4.87,
-            z: 9.94,
-            w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-            d: 3.40, // Eje B (9.94) a Eje A (13.34) = 33.12 m² exactos
-            floorCostPerM2Gs: 180000,
-            equipCostGs: 4620000,
-            activeStage: true,
-            color: 'rgba(16, 185, 129, 0.20)'
-          }
-        ],
-        walls: [
-          { id: 'w3_pb_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: true,  label: 'Fachada Frontal Eje G (Puerta Principal + Puerta Servicio)' },
-          { id: 'w3_pb_oeste_9',  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: true,  label: 'Cierre Perimetral Oeste Eje 9 (P20-P19-P18)' },
-          { id: 'w3_pb_este_1',   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: true,  label: 'Cierre Perimetral Este Eje 1 (P4-P3-P2)' },
-          { id: 'w3_pb_fondo_b',  type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84,  z2: 9.94, activeStage: true,  label: 'Cerramiento Eje B hacia Galería Panorámica L1' },
-          { id: 'w3_pb_ejec_div', type: 'ladrillo_15', x1: -4.87, z1: 4.77, x2: -1.64, z2: 4.77, activeStage: true,  label: 'Cerramiento Toilette Social Nivel Calle (Eje E)' }
-        ],
+        rooms: buildPlantaBajaRooms('pb3'),
+        walls: buildPlantaBajaWalls('w3_pb'),
         mepNodes: [
-          { id: 'm3_pb_cctv1', type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Calle Guillermo Arias' },
-          { id: 'm3_pb_cat6',  type: 'cat6_rj45',       x: -0.74, z: 7.37,  label: 'Punto Red Cat6 TV 32" Sala' },
-          { id: 'm3_pb_dren',  type: 'drenaje_frances', x: 0.00,  z: 1.75,  label: 'Drenaje Francés Pasillo Antihumedad (z=1.75m)' },
-          { id: 'm3_pb_pvc',   type: 'bajada_pvc100',   x: 4.75,  z: 9.85,  label: 'Bajada Pluvial P2 (Eje 1-B)' }
+          { id: 'm3_pb_cctv1', type: 'cctv_poe',        x: -4.65, z: -1.65, label: 'CCTV Calle Guillermo Arias (Portón Balancín 2.30m)' },
+          { id: 'm3_pb_cat6',  type: 'cat6_rj45',       x: -0.74, z: 7.37,  label: 'Punto Red Cat6 TV Sala Estar' },
+          { id: 'm3_pb_dren',  type: 'drenaje_frances', x: 0.00,  z: 2.25,  label: 'Piso Rejilla Metálica Electroforjada + Cámara Oxigenación (z=1.50..3.00m)' },
+          { id: 'm3_pb_pvc',   type: 'bajada_pvc100',   x: -1.60, z: 3.30,  label: 'Columna Vertical Desagües Núcleo Húmedo Eje F–G' }
         ]
       },
       planta_alta: {
-        rooms: [
-          {
-            id: 'pa3_planta_libre_frente',
-            name: 'Estudio / Home-Office (2 Escritorios) + Costura y Cama 1 Plaza (2do Piso • z=2.15 a Eje C)',
-            codeType: 'habitable',
-            x: -4.87,
-            z: 2.15,
-            w: 8.71, // Eje 9 (-4.87) a Eje 2 (+3.84)
-            d: 5.22, // Voladizo (2.15) a Eje C (7.37)
-            floorCostPerM2Gs: 180000,
-            equipCostGs: 4800000,
-            activeStage: true,
-            color: 'rgba(56, 189, 248, 0.20)'
-          },
-          {
-            id: 'pa3_planta_libre_rio',
-            name: 'Dormitorio Principal en Suite Ruth & Leo + Baño Completo + Placard (Vista al Río • Eje C a Eje B)',
-            codeType: 'habitable',
-            x: -4.87,
-            z: 7.37,
-            w: 8.71,
-            d: 2.57,
-            floorCostPerM2Gs: 185000,
-            equipCostGs: 14600000,
-            activeStage: true,
-            color: 'rgba(168, 85, 247, 0.22)'
-          },
-          {
-            id: 'pa3_terraza_cubierta',
-            name: 'Terraza Balcón de Suite con Vista al Río Paraguay (Eje B z=9.94 a Eje A z=13.34 • 33.12 m²)',
-            codeType: 'exterior',
-            x: -4.87,
-            z: 9.94,
-            w: 9.74,
-            d: 3.40,
-            floorCostPerM2Gs: 110000,
-            equipCostGs: 4620000,
-            activeStage: true,
-            color: 'rgba(16, 185, 129, 0.22)'
-          }
-        ],
-        walls: [
-          { id: 'w3_pa_frente', type: 'ladrillo_15', x1: -4.87, z1: 2.15, x2: 4.87,  z2: 2.15, activeStage: true,  label: 'Cerramiento Exterior Voladizo PA (z=2.15m)' },
-          { id: 'w3_pa_oeste',  type: 'ladrillo_15', x1: -4.87, z1: 2.15, x2: -4.87, z2: 9.94, activeStage: true,  label: 'Cerramiento Exterior PA Oeste Eje 9 (P20-P18)' },
-          { id: 'w3_pa_este',   type: 'ladrillo_15', x1: 4.87,  z1: 2.15, x2: 4.87,  z2: 9.94, activeStage: true,  label: 'Cerramiento Exterior PA Este Eje 1 (P4-P2)' },
-          { id: 'w3_pa_fondo',  type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87,  z2: 9.94, activeStage: true,  label: 'Ventanal Suite 2do Piso hacia Balcón al Río (Eje B)' },
-          { id: 'w3_pa_div_f',  type: 'ladrillo_15', x1: -1.64, z1: 2.15, x2: -1.64, z2: 9.94, activeStage: true,  label: 'Divisorio Suite / Baño Principal y Estudio en 2do Piso' }
-        ],
+        rooms: buildPlantaAltaRooms('pa3'),
+        walls: buildPlantaAltaWalls('w3_pa'),
         mepNodes: [
-          { id: 'm3_pa_rej', type: 'rejilla_pluvial', x: 0.00,  z: 13.10, label: 'Embudo Pluvial Losa 2do Piso (Eje A)' },
-          { id: 'm3_pa_pvc', type: 'bajada_pvc100',   x: -4.75, z: 13.20, label: 'Bajada Pluvial Canaleta Cumbrera (P17)' }
+          { id: 'm3_pa_rej', type: 'rejilla_pluvial', x: 0.00,  z: 13.10, label: 'Embudo Pluvial Deck 2 / Terraza (Eje A)' },
+          { id: 'm3_pa_pvc', type: 'bajada_pvc100',   x: -1.60, z: 3.30,  label: 'Columna Vertical Eje F–G (Baño Suite + Vestidor + Baño 2 PA)' }
         ]
       }
     }
@@ -1833,43 +1644,43 @@ export class FloorplanEditor {
         <!-- Banner de Realidad Estructural Verificada en CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf -->
         <div class="fpe-reality-banner">
           <div>
-            <strong style="color:#fff; font-size:12px;">📐 Grilla Estructural Exacta (Cálculo L.G.):</strong>
+            <strong style="color:#fff; font-size:12px;">📐 Grilla Estructural Exacta (Cálculo L.G. + Planos Sanitarios/E5):</strong>
             <span style="color:#cbd5e1; margin-left:4px;">9 Ejes X (<strong>Eje 9 a Eje 1 • 9.74m</strong>) × 7 Ejes Z (<strong>Eje G z=3.00m a Eje A z=13.34m • 10.34m</strong>).</span>
           </div>
           <div class="fpe-reality-steps">
-            <span class="fpe-step-pill done">🔒 20 Pilares P1..P20 + 14 Zapatas (6 Combinadas) + Escalera 1</span>
-            <span class="fpe-step-pill now">⚠️ P12, P13 y P15 Mueren en PB (0.00m)</span>
-            <span class="fpe-step-pill progressive">🎯 Losa PA (+102.88m) + Techo (+105.64m)</span>
+            <span class="fpe-step-pill done">🔒 17 Pilares PB Hormigonados (+2.88m) + Losas L1–L4 + Escaleras 1 y 2</span>
+            <span class="fpe-step-pill now">🕳️ Vacío Losa 1: 38.00 m² (A cerrar c/ Loza Rap) • ⚠️ P12, P13 y P15 Mueren en PB</span>
+            <span class="fpe-step-pill progressive">🎯 Núcleo Húmedo Eje F–G + PA 2 Dorm/Desk/2 Baños/Vestidor</span>
           </div>
         </div>
 
         <!-- Barra 1: Conmutador de los 3 Niveles + Presets Arquitectónicos -->
         <div class="fpe-top-controls">
           <div class="fpe-btn-group" id="fpe-level-tabs">
-            <button class="fpe-btn" data-level="subsuelo" title="Nivel 0 (+97.66m / Y=-2.34m): 100.71 m² libres + Lavadero/Depósito Día 1 + Pasillo Antihumedad 1.50m.">
-              <span>Nivel 0: Subsuelo (+97.66m • Lavadero/Depósito)</span>
+            <button class="fpe-btn" data-level="subsuelo" title="Nivel 0 (+97.66m / Y=-2.34m): Parrillita hacia el Patio + Lavadero + Depósito + Arranque Escalera 1 (Eje 8-9) + Cámara Oxigenación 1.50m.">
+              <span>Nivel 0: Subsuelo (+97.66m • Parrilla/Lavadero/Depósito)</span>
             </button>
-            <button class="fpe-btn active" data-level="planta_baja" title="Nivel 1 (+100.00m): Gran Sala de Estar, Comedor, Biblioteca 4 estantes 2m y Cocina + Galería L1 (-0.45m, 33.12m²).">
-              <span>🔒 Nivel 1: Nivel Calle (+100.00m • Sala/Comedor/Cocina)</span>
+            <button class="fpe-btn active" data-level="planta_baja" title="Nivel 1 (+100.00m): Cochera c/ Portón Balancín 2.30m + Rejilla Electroforjada + Núcleo Húmedo Eje F-G (Baño Social + Cocina/Comedor) + Estar + Escaleras 1 y 2 + Galería al Río.">
+              <span>🔒 Nivel 1: Planta Baja (+100.00m • Eje F–G Baño/Cocina + Estar)</span>
             </button>
-            <button class="fpe-btn gold" data-level="planta_alta" title="Nivel 2 (+102.88m): Dormitorio en Suite Ruth & Leo + Estudio/Costura + Balcón al Río.">
-              <span>🎯 Nivel 2: 2do Piso (+102.88m • Dormitorio Suite/Estudio)</span>
+            <button class="fpe-btn gold" data-level="planta_alta" title="Nivel 2 (+102.88m): 2 Dormitorios + Desk al subir Escalera 2 + 2 Baños + Vestidor sobre Eje F-G (SIN balcón ni Blindex frontal).">
+              <span>🎯 Nivel 2: Planta Alta (+102.88m • 2 Dorm + Desk + 2 Baños/Vestidor)</span>
             </button>
           </div>
 
           <div class="fpe-btn-group">
             <span style="font-size:11px; color:#94a3b8; font-weight:600;">Preset:</span>
-            <button class="fpe-btn" data-preset="hoy_en_obra" title="Muestra únicamente lo construido hoy en obra: Esqueleto H°A° P1..P20, Escalera 1 y Losas con 0 muros">
-              🔒 Hoy en Obra (0 Muros)
+            <button class="fpe-btn" data-preset="hoy_en_obra" title="Muestra lo construido hoy en obra: 17 Pilares PB hormigonados hasta +2.88m, Losas L1-L4 macizas y Hueco Abierto de 38.00 m² en Losa 1 (a cerrar con Loza Rap)">
+              🔒 Hoy en Obra (Hueco 38m² + 17 Pilares PB)
             </button>
-            <button class="fpe-btn gold active" data-preset="cierre_300m" title="Proyecto Principal Ruth & Leo: 2do Piso Dormitorio/Estudio + Nivel Calle Sala/Comedor/Cocina + Subsuelo Lavadero/Depósito">
-              Ruth & Leo (3 Niveles Día 1)
+            <button class="fpe-btn gold active" data-preset="cierre_300m" title="Proyecto Ruth & Leo alineado a Planos Oficiales: Núcleo Húmedo Eje F-G, 2 Dormitorios + Desk en PA, Escaleras opuestas y Parrilla en Subsuelo">
+              Ruth & Leo (Oficial Eje F–G)
             </button>
-            <button class="fpe-btn" data-preset="opcion_1_rolon" title="Opción 1: Arq. Gabriela Rolón alineada a Ejes 1..9 y A..G">
+            <button class="fpe-btn" data-preset="opcion_1_rolon" title="Opción 1: Arq. Gabriela Rolón alineada a Planos Oficiales Eje F-G y E5">
               Opción 1 (Arq. Rolón)
             </button>
-            <button class="fpe-btn" data-preset="opcion_2_lgrb" title="Opción 2: LG-RB Suite en Ejes 9-6 + Estudio + Galería L1 (33.12 m²)">
-              Opción 2 (LG-RB)
+            <button class="fpe-btn" data-preset="opcion_2_lgrb" title="Opción 2: LG-RB Cierre Loza Rap 38.00 m² + Núcleo Húmedo Eje F-G + 2 Dormitorios y Desk PA">
+              Opción 2 (LG-RB Loza Rap)
             </button>
           </div>
         </div>
@@ -1908,7 +1719,7 @@ export class FloorplanEditor {
               <option value="drenaje_frances">🛡️ Tubo Drenaje Francés</option>
             </select>
 
-            <button class="fpe-btn" data-tool="delete" title="Eliminar muro o nodo de instalación (Pilares P1..P20 y Escalera 1 están protegidos 🔒)">
+            <button class="fpe-btn" data-tool="delete" title="Eliminar muro o nodo de instalación (Pilares P1..P20 y Escaleras 1 y 2 están protegidos 🔒)">
               🗑️ Borrar
             </button>
           </div>
@@ -1937,8 +1748,11 @@ export class FloorplanEditor {
             <button class="fpe-btn" id="fpe-btn-save-local" title="Guardar diseño en navegador (localStorage)">
               💾 Guardar
             </button>
-            <button class="fpe-btn gold" id="fpe-btn-export-svg" title="Exportar plano técnico en formato SVG Vectorial a escala CAD con rótulo, ejes 1..9 / A..G y leyenda del Banco">
-              📐 Exportar SVG (CAD Vectorial)
+            <button class="fpe-btn gold" id="fpe-btn-export-svg" title="Exportar plano técnico del nivel activo en formato SVG Vectorial a escala CAD con rótulo, ejes 1..9 / A..G y leyenda del Banco">
+              📐 Exportar SVG Nivel
+            </button>
+            <button class="fpe-btn gold" id="fpe-btn-export-pack-svg" title="Generar y descargar en tiempo real el Pack Completo de 4 Láminas Oficiales SVG (Lámina 1 PB +100.00m, Lámina 2 PA +102.88m, Lámina 3 Subsuelo +97.66m, Lámina 4 Instalaciones Eje F-G)">
+              📑 Pack 4 Planos Oficiales SVG
             </button>
             <button class="fpe-btn" id="fpe-btn-export-png" title="Descargar imagen PNG de alta resolución del plano editado">
               🖼️ PNG
@@ -1953,9 +1767,9 @@ export class FloorplanEditor {
         <div id="fpe-bank-legend-bar" style="display:none; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; border-radius:9px; background:rgba(15,23,42,0.95); border:1px solid rgba(239,68,68,0.45); font-size:11px;">
           <div style="font-weight:700; color:#fde68a;">🏦 CÓDIGO DE COLORES NORMATIVO EXIGIDO POR EL BANCO (Planos y Cómputo):</div>
           <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-            <span style="padding:3px 8px; border-radius:6px; background:#1e293b; border:1px solid #94a3b8; color:#f8fafc; font-weight:700;">⚫ NEGRO: Ya Construido (Zapatas, Pilares PB, Escalera 1, Losa 1, Murallas, Portón)</span>
-            <span style="padding:3px 8px; border-radius:6px; background:rgba(22,163,74,0.22); border:1px solid #22c55e; color:#86efac; font-weight:700;">🟢 VERDE: Hormigón Armado (Losa 2do Piso +102.88m, Pilares PA, Vigas H°A°)</span>
-            <span style="padding:3px 8px; border-radius:6px; background:rgba(220,38,38,0.22); border:1px solid #ef4444; color:#fca5a5; font-weight:700;">🔴 ROJO: Obra Nueva a Construir (Mampostería, Techo, Blindex, Baño, Cocina, Lavadero)</span>
+            <span style="padding:3px 8px; border-radius:6px; background:#1e293b; border:1px solid #94a3b8; color:#f8fafc; font-weight:700;">⚫ NEGRO: Ya Construido (Zapatas, 17 Pilares PB +2.88m, Losas L1–L4, Murallas, Portón Balancín)</span>
+            <span style="padding:3px 8px; border-radius:6px; background:rgba(22,163,74,0.22); border:1px solid #22c55e; color:#86efac; font-weight:700;">🟢 VERDE: Hormigón Armado / Loza Rap (Cierre 38m² Losa 1, Losa PA +102.88m, Pilares PA)</span>
+            <span style="padding:3px 8px; border-radius:6px; background:rgba(220,38,38,0.22); border:1px solid #ef4444; color:#fca5a5; font-weight:700;">🔴 ROJO: Obra Nueva a Construir (Mampostería, Techo, Núcleo Húmedo Eje F–G, Rejilla Electroforjada)</span>
             <span style="padding:3px 8px; border-radius:6px; background:rgba(217,119,6,0.24); border:1px solid #f59e0b; color:#fde68a; font-weight:700;">🟡 AMARILLO: A Refaccionar / Adecuar (Cuidado Losa 1 Expuesta, Sikadur-32, Medianera Eje 9)</span>
           </div>
         </div>
@@ -1978,7 +1792,7 @@ export class FloorplanEditor {
 
             <div class="fpe-canvas-footer">
               <div class="fpe-hud-pill" style="font-size:10.5px;">
-                <span>🔒 <strong>Ejes 9..1 (9.74m) × Ejes G..A (z=3.00..13.34m)</strong> • Escalera 1 (Ejes 1-2 / B-D)</span>
+                <span>🔒 <strong>Ejes 9..1 (9.74m) × Ejes G..A (z=3.00..13.34m)</strong> • Esc. 1 (Eje 8–9 Subsuelo) • Esc. 2 (Eje 1–2 PA)</span>
                 <span>• ⚠️ P12, P13 y P15 mueren en PB • Rueda: Zoom • Clic der./Shift: Paneo</span>
               </div>
             </div>
@@ -2055,7 +1869,7 @@ export class FloorplanEditor {
   }
 
   /**
-   * Conecta los botones de niveles, presets, herramientas y exportación (SVG, PNG, JSON)
+   * Conecta los botones de niveles, presets, herramientas y exportación (SVG, Pack 4 Láminas, PNG, JSON)
    */
   bindUIControls() {
     // Botón Toggle Ductos, Pases Losa 1 y Enchufes (26 Tomas + 4 Pases)
@@ -2163,7 +1977,7 @@ export class FloorplanEditor {
       this.recalculateAndNotify();
     });
 
-    // Guardar y Exportar (SVG, PNG, JSON)
+    // Guardar y Exportar (SVG, Pack 4 Planos Oficiales SVG, PNG, JSON)
     this.container.querySelector('#fpe-btn-save-local').addEventListener('click', () => {
       this.saveToStorage();
     });
@@ -2172,6 +1986,13 @@ export class FloorplanEditor {
     if (btnSvg) {
       btnSvg.addEventListener('click', () => {
         this.exportSVG();
+      });
+    }
+
+    const btnPackSvg = this.container.querySelector('#fpe-btn-export-pack-svg');
+    if (btnPackSvg) {
+      btnPackSvg.addEventListener('click', () => {
+        this.exportOfficialBlueprintsPackSVG();
       });
     }
 
@@ -2576,7 +2397,7 @@ export class FloorplanEditor {
         z: sw.pos3D[2]
       }));
 
-    // Trazados de electroductos embutidos en contrapiso (5 cm) y muros por nivel
+    // Trazados de electroductos embutidos en contrapiso (5 cm) y muros por nivel (alineados al Núcleo Húmedo Eje F-G)
     let conduitRoutes = [];
     if (levelKey === 'planta_baja') {
       conduitRoutes = [
@@ -2587,69 +2408,69 @@ export class FloorplanEditor {
         },
         {
           color: '#f97316',
-          label: 'Ducto Contrapiso 5cm (20A Cocina)',
-          pts: [[-1.55, 4.65], [-2.10, 4.65], [-2.32, 3.08], [-4.76, 3.92], [-4.76, 4.55], [-4.76, 5.25]]
+          label: 'Ducto Contrapiso 5cm (20A Cocina Eje F–G)',
+          pts: [[-1.55, 4.65], [-2.10, 4.85], [-2.32, 3.08], [-4.76, 3.92], [-4.76, 4.55], [-4.76, 5.10]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Contrapiso 5cm (Sala/Comedor/TV)',
-          pts: [[-1.55, 4.65], [0.25, 3.12], [3.42, 3.12], [3.75, 5.45], [4.76, 7.20]]
+          label: 'Ducto Loza Rap 38m² (Estar Social / TV)',
+          pts: [[-1.55, 4.65], [0.25, 5.12], [3.42, 5.12], [3.75, 5.45], [4.76, 7.20]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Contrapiso 5cm (Biblioteca/Galería L1)',
-          pts: [[-4.76, 5.25], [-4.76, 8.65], [-4.76, 11.45]]
+          label: 'Ducto Contrapiso 5cm (Comedor / Galería L1)',
+          pts: [[-4.76, 5.10], [-4.76, 9.10], [-4.76, 11.45]]
         },
         {
           color: '#38bdf8',
-          label: 'Ducto 3-Way Escaleras y Acceso',
-          pts: [[-1.55, 4.65], [0.28, 3.12], [2.80, 5.15], [3.80, 5.15]]
+          label: 'Ducto 3-Way Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2)',
+          pts: [[-3.90, 5.26], [-1.55, 4.65], [0.85, 3.12], [3.84, 5.26]]
         },
         {
           color: '#0284c7',
-          label: 'Agua PPR Fría/Caliente (Pase #4)',
-          pts: [[-3.40, -4.15], [-4.65, 6.65], [-3.15, 3.42]]
+          label: 'Agua PPR Fría/Caliente en Núcleo Húmedo Eje F–G (Pase #4)',
+          pts: [[-3.40, -4.15], [-1.64, 3.95], [-1.02, 3.95], [-2.80, 3.45]]
         }
       ];
     } else if (levelKey === 'planta_alta') {
       conduitRoutes = [
         {
           color: '#f97316',
-          label: 'Ducto 20A Termocalefón 80L + Splits AA',
-          pts: [[-0.55, 4.65], [-4.76, 6.10], [-4.76, 8.89], [-4.76, 9.85], [-4.76, 10.81]]
+          label: 'Ducto 20A Termocalefón 80L (Eje F–G) + Splits AA Suite/Dorm2',
+          pts: [[-0.55, 4.65], [-1.64, 3.15], [-4.76, 7.70], [1.80, 7.50]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Contrapiso 5cm (Suite y Vanitory)',
-          pts: [[-0.55, 4.65], [-2.65, 7.45], [-0.62, 8.85], [-0.65, 10.15]]
+          label: 'Ducto Contrapiso 5cm (Vestidor, Baño Suite y Suite PA)',
+          pts: [[-0.55, 4.65], [-1.20, 3.15], [-3.80, 3.12], [-4.76, 6.80], [-4.76, 8.60]]
         },
         {
           color: '#38bdf8',
-          label: 'Ducto Estudio Home-Office + Costura + 3-Way',
-          pts: [[-0.55, 4.65], [0.35, 6.30], [1.45, 6.30], [4.76, 4.15], [4.76, 8.50], [2.80, 9.85]]
+          label: 'Ducto Dormitorio 2 + Escritorio (Escalera 2 Eje 1–2) + 3-Way',
+          pts: [[-0.55, 4.65], [0.50, 5.40], [3.20, 7.50], [3.84, 7.37], [4.76, 8.20]]
         }
       ];
     } else if (levelKey === 'subsuelo') {
       conduitRoutes = [
         {
           color: '#f97316',
-          label: 'Ducto Galvanizado Lateral Viga (Bomba + Lavarropas 20A)',
-          pts: [[-1.64, 4.65], [-4.25, 3.65], [-4.72, 3.65], [-3.25, 7.25]]
+          label: 'Ducto Galvanizado Lateral Viga (Bomba Eje F–G + Lavarropas 20A)',
+          pts: [[-1.64, 4.65], [-4.25, 3.65], [-3.25, 4.80]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Subsuelo (Depósito + Patio + 3-Way Escalera 1)',
-          pts: [[-1.64, 4.65], [-1.72, 4.20], [2.35, 9.85], [3.80, 9.85]]
+          label: 'Ducto Subsuelo (Depósito + Parrillita al Patio + 3-Way Escalera 1 Eje 8–9)',
+          pts: [[-1.64, 4.65], [1.50, 4.20], [-3.90, 8.56], [-3.20, 12.20]]
         },
         {
           color: '#0284c7',
-          label: 'Impulsión Agua PPR Ø25mm (Cisterna 1000L → Pase #4)',
-          pts: [[-4.25, 3.65], [-4.65, 6.65], [-2.85, 6.90]]
+          label: 'Impulsión Agua PPR Ø25mm (Cisterna 1000L → Pase #4 Eje F–G)',
+          pts: [[-4.25, 3.65], [-1.64, 3.95], [2.50, 5.50], [-3.20, 11.80]]
         },
         {
           color: '#d97706',
-          label: 'Colector Cloacal PVC Ø100mm (Pase #3 → Cámara Séptica)',
-          pts: [[-4.65, 7.20], [-3.65, 14.55], [-3.45, 17.20]]
+          label: 'Colector Cloacal PVC Ø100mm (Pase #3 Eje F–G → Cámara Séptica y Pozo Ciego)',
+          pts: [[-1.64, 3.45], [-3.45, 11.80], [-3.45, 14.80], [-3.45, 17.20]]
         }
       ];
     }
@@ -2712,10 +2533,14 @@ export class FloorplanEditor {
       }
     }
 
-    // Escalera 1 H°A° existente (Ejes 1-2 / B-D)
-    const st = FIXED_STRUCTURAL_GRID.existingStaircase1;
-    if (this.currentLevel !== 'subsuelo' && wx >= st.x1 && wx <= st.x2 && wz >= st.z1 && wz <= st.z2) {
-      return { kind: 'stair', item: st, locked: true };
+    // Escalera 1 (Baja a Subsuelo en Eje 8–9) y Escalera 2 (Sube a Planta Alta en Eje 1–2)
+    const st1 = FIXED_STRUCTURAL_GRID.existingStaircase1;
+    if (this.currentLevel !== 'planta_alta' && wx >= st1.x1 && wx <= st1.x2 && wz >= st1.z1 && wz <= st1.z2) {
+      return { kind: 'stair', item: st1, locked: true };
+    }
+    const st2 = FIXED_STRUCTURAL_GRID.existingStaircase2;
+    if (st2 && this.currentLevel !== 'subsuelo' && wx >= st2.x1 && wx <= st2.x2 && wz >= st2.z1 && wz <= st2.z2) {
+      return { kind: 'stair', item: st2, locked: true };
     }
 
     for (let i = lvl.rooms.length - 1; i >= 0; i--) {
@@ -3007,7 +2832,7 @@ export class FloorplanEditor {
           <p style="font-size:10.5px; color:#cbd5e1; margin-bottom:6px;">
             ${p.diesInPB
               ? '⚠️ ADVERTENCIA ESTRUCTURAL: Este pilar nace en la zapata y MUERE en la Losa de Planta Baja (0.00m). No continúa en Planta Alta.'
-              : `Pilar H°A° verificado en plano estructural. Continúa hasta cota +${p.topCotaM.toFixed(2)}m (${p.topLevel === 'techo' ? 'Techo +105.64m' : 'Losa PA +102.88m'}).`}
+              : `Pilar H°A° YA HORMIGONADO en Planta Baja hasta +2.88m. Continúa hasta cota +${p.topCotaM.toFixed(2)}m (${p.topLevel === 'techo' ? 'Techo +105.64m' : 'Losa PA +102.88m'}).`}
           </p>
           <div class="fpe-metric-row"><span>Coordenada Eje ${p.axisLabel}:</span><strong>X=${p.x.toFixed(2)}m, Z=${p.z.toFixed(2)}m</strong></div>
           <div class="fpe-metric-row"><span>Sección H°A° / Armadura:</span><strong>${(p.colW * 100).toFixed(0)}×${(p.colD * 100).toFixed(0)}cm • ${p.rebarSpec}</strong></div>
@@ -3018,9 +2843,9 @@ export class FloorplanEditor {
         tagEl.textContent = '🔒 ESCALERA H°A°';
         inspectorEl.innerHTML = `
           <div style="font-weight:700; color:#67e8f9; margin-bottom:4px;">🔒 ${st.name}</div>
-          <div class="fpe-metric-row"><span>Ubicación Ejes:</span><strong>Eje 1-2 (X=3.84..4.87m) / Eje B-D (Z=5.26..9.94m)</strong></div>
-          <div class="fpe-metric-row"><span>Dimensiones Caja:</span><strong>${st.w.toFixed(2)}m × ${st.d.toFixed(2)}m (${(st.w * st.d).toFixed(2)} m²)</strong></div>
-          <div class="fpe-metric-row"><span>Desnivel Salvado:</span><strong>${st.cotaStart} → ${st.cotaEnd} (2.88m)</strong></div>
+          <div class="fpe-metric-row"><span>Coordenadas X / Z:</span><strong>X=${st.x1.toFixed(2)}..${st.x2.toFixed(2)}m / Z=${st.z1.toFixed(2)}..${st.z2.toFixed(2)}m</strong></div>
+          <div class="fpe-metric-row"><span>Dimensiones Caja:</span><strong>${st.d.toFixed(2)}m × ${st.w.toFixed(2)}m (${(st.w * st.d).toFixed(2)} m²)</strong></div>
+          <div class="fpe-metric-row"><span>Desnivel Salvado:</span><strong>${st.cotaStart} → ${st.cotaEnd}</strong></div>
         `;
       } else if (this.selectedElement.kind === 'pase_losa1') {
         const p = this.selectedElement.item;
@@ -3231,18 +3056,19 @@ export class FloorplanEditor {
     ctx.strokeRect(lotTL.px, lotTL.py, lotBR.px - lotTL.px, lotBR.py - lotTL.py);
     ctx.restore();
 
-    // 4. Contorno de Losa según Nivel Activo
+    // 4. Contorno de Losa según Nivel Activo (y Hueco 38.00 m² en Hoy en Obra)
     ctx.save();
     if (this.currentLevel === 'subsuelo') {
-      const subTL = this.worldToScreen(-4.87, 4.77);
-      const subBR = this.worldToScreen(-0.74, 9.94);
+      const subTL = this.worldToScreen(-4.87, 3.00);
+      const subBR = this.worldToScreen(4.87, 13.34);
       ctx.fillStyle = this.bankColorMode ? 'rgba(30, 41, 59, 0.25)' : 'rgba(16, 185, 129, 0.08)';
       ctx.fillRect(subTL.px, subTL.py, subBR.px - subTL.px, subBR.py - subTL.py);
       ctx.strokeStyle = this.bankColorMode ? '#94a3b8' : '#10b981';
       ctx.lineWidth = 1.6;
       ctx.strokeRect(subTL.px, subTL.py, subBR.px - subTL.px, subBR.py - subTL.py);
     } else if (this.currentLevel === 'planta_alta') {
-      const paTL = this.worldToScreen(-4.87, 2.15);
+      // Planta Alta sin balcón frontal ni Blindex frontal: inicia exactamente en Eje G (z=3.00m)
+      const paTL = this.worldToScreen(-4.87, 3.00);
       const paBR = this.worldToScreen(4.87, 13.34);
       ctx.fillStyle = this.bankColorMode ? 'rgba(22, 163, 74, 0.22)' : 'rgba(245, 158, 11, 0.06)';
       ctx.fillRect(paTL.px, paTL.py, paBR.px - paTL.px, paBR.py - paTL.py);
@@ -3250,13 +3076,82 @@ export class FloorplanEditor {
       ctx.lineWidth = 1.8;
       ctx.strokeRect(paTL.px, paTL.py, paBR.px - paTL.px, paBR.py - paTL.py);
     } else {
-      const pbTL = this.worldToScreen(-4.87, 3.00);
-      const pbBR = this.worldToScreen(4.87, 13.34);
-      ctx.fillStyle = this.bankColorMode ? 'rgba(245, 158, 11, 0.14)' : 'rgba(6, 182, 212, 0.06)';
-      ctx.fillRect(pbTL.px, pbTL.py, pbBR.px - pbTL.px, pbBR.py - pbTL.py);
-      ctx.strokeStyle = this.bankColorMode ? '#f59e0b' : pal.slabStroke;
-      ctx.lineWidth = 1.6;
-      ctx.strokeRect(pbTL.px, pbTL.py, pbBR.px - pbTL.px, pbBR.py - pbTL.py);
+      if (this.planData.presetId === 'hoy_en_obra') {
+        // En Hoy en Obra: L1/L2/L3 (z=9.94..13.34m) y L4 (x=-4.87..-0.74m, z=3.00..9.94m) como losa maciza ya hormigonada
+        const l4TL = this.worldToScreen(-4.87, 3.00);
+        const l4BR = this.worldToScreen(-0.74, 9.94);
+        const l123TL = this.worldToScreen(-4.87, 9.94);
+        const l123BR = this.worldToScreen(4.87, 13.34);
+
+        ctx.fillStyle = this.bankColorMode ? 'rgba(30, 41, 59, 0.52)' : 'rgba(6, 182, 212, 0.16)';
+        ctx.strokeStyle = this.bankColorMode ? '#94a3b8' : '#06b6d4';
+        ctx.lineWidth = 1.8;
+        ctx.fillRect(l4TL.px, l4TL.py, l4BR.px - l4TL.px, l4BR.py - l4TL.py);
+        ctx.strokeRect(l4TL.px, l4TL.py, l4BR.px - l4TL.px, l4BR.py - l4TL.py);
+        ctx.fillRect(l123TL.px, l123TL.py, l123BR.px - l123TL.px, l123BR.py - l123TL.py);
+        ctx.strokeRect(l123TL.px, l123TL.py, l123BR.px - l123TL.px, l123BR.py - l123TL.py);
+
+        ctx.fillStyle = '#a5f3fc';
+        ctx.font = 'bold 9px IBM Plex Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('LOSA L4 MACIZA HORMIGONADA 🔒', (l4TL.px + l4BR.px) / 2, (l4TL.py + l4BR.py) / 2 - 14);
+        ctx.fillText('LOSAS L1/L2/L3 MACIZAS HORMIGONADAS 🔒', (l123TL.px + l123BR.px) / 2, (l123TL.py + l123BR.py) / 2 + 18);
+
+        // HUECO ABIERTO ENTRE VIGAS DE 38.00 m² en Eje B a Eje G (z=3.00..9.94m) y Eje 1 a Eje 5 (x=-0.74..+4.87m)
+        const voidTL = this.worldToScreen(-0.74, 3.00);
+        const voidBR = this.worldToScreen(4.87, 9.94);
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.14)';
+        ctx.fillRect(voidTL.px, voidTL.py, voidBR.px - voidTL.px, voidBR.py - voidTL.py);
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2.0;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(voidTL.px, voidTL.py, voidBR.px - voidTL.px, voidBR.py - voidTL.py);
+
+        // Diagonales en X de vacío estructural (igual que en el plano E3)
+        ctx.beginPath();
+        ctx.moveTo(voidTL.px, voidTL.py);
+        ctx.lineTo(voidBR.px, voidBR.py);
+        ctx.moveTo(voidBR.px, voidTL.py);
+        ctx.lineTo(voidTL.px, voidBR.py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const vcx = (voidTL.px + voidBR.px) / 2;
+        const vcy = (voidTL.py + voidBR.py) / 2;
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+        ctx.fillRect(vcx - 148, vcy - 22, 296, 40);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.4;
+        ctx.strokeRect(vcx - 148, vcy - 22, 296, 40);
+        ctx.fillStyle = '#fde047';
+        ctx.font = 'bold 9.5px IBM Plex Mono, monospace';
+        ctx.fillText('VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap)', vcx, vcy - 5);
+        ctx.fillStyle = '#fca5a5';
+        ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+        ctx.fillText('Cuadrante Eje B–G (z=3.00..9.94m) × Eje 1–5 (x=-0.74..+4.87m)', vcx, vcy + 10);
+      } else {
+        const pbTL = this.worldToScreen(-4.87, 3.00);
+        const pbBR = this.worldToScreen(4.87, 13.34);
+        ctx.fillStyle = this.bankColorMode ? 'rgba(245, 158, 11, 0.14)' : 'rgba(6, 182, 212, 0.06)';
+        ctx.fillRect(pbTL.px, pbTL.py, pbBR.px - pbTL.px, pbBR.py - pbTL.py);
+        ctx.strokeStyle = this.bankColorMode ? '#f59e0b' : pal.slabStroke;
+        ctx.lineWidth = 1.6;
+        ctx.strokeRect(pbTL.px, pbTL.py, pbBR.px - pbTL.px, pbBR.py - pbTL.py);
+
+        // Indicador de Paño Loza Rap 38,00 m² (Eje 1–5 × Eje B–G) que cierra el vacío de Losa 1 en Etapa 1
+        const lrTL = this.worldToScreen(-0.74, 3.00);
+        const lrBR = this.worldToScreen(4.87, 9.94);
+        ctx.save();
+        ctx.strokeStyle = this.bankColorMode ? '#22c55e' : 'rgba(245, 158, 11, 0.65)';
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(lrTL.px, lrTL.py, lrBR.px - lrTL.px, lrBR.py - lrTL.py);
+        ctx.fillStyle = this.bankColorMode ? '#86efac' : '#fde68a';
+        ctx.font = 'bold 8px IBM Plex Mono, monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('PAÑO LOZA RAP 38,00 m² (Cierre Vacío Losa 1 Eje 1–5 × B–G)', lrBR.px - 6, lrTL.py + 12);
+        ctx.restore();
+      }
     }
     ctx.restore();
 
@@ -3295,7 +3190,7 @@ export class FloorplanEditor {
     });
     ctx.restore();
 
-    // 6. Línea del Muro de Contención Frontal sobre Calle Guillermo Arias 🔒
+    // 6. Línea del Muro de Contención Frontal sobre Calle Guillermo Arias + Elementos de Cochera Frontal 🔒
     const rw = FIXED_STRUCTURAL_GRID.retainingWallFront;
     const rw1 = this.worldToScreen(rw.x1, rw.z1);
     const rw2 = this.worldToScreen(rw.x2, rw.z2);
@@ -3310,12 +3205,91 @@ export class FloorplanEditor {
     ctx.font = 'bold 9px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('🔒 MURO CONTENCIÓN COCHERA (z=+1.50m • 9.89m × 0.30m)', (rw1.px + rw2.px) / 2, rw1.py - 6);
+
+    if (this.currentLevel === 'planta_baja') {
+      // 6a. Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre cámara de oxigenación (z=1.50..3.00m)
+      const rejTL = this.worldToScreen(-4.87, 1.50);
+      const rejBR = this.worldToScreen(4.87, 3.00);
+      ctx.fillStyle = 'rgba(14, 165, 233, 0.14)';
+      ctx.fillRect(rejTL.px, rejTL.py, rejBR.px - rejTL.px, rejBR.py - rejTL.py);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(rejTL.px, rejTL.py, rejBR.px - rejTL.px, rejBR.py - rejTL.py);
+      for (let gx = -4.5; gx <= 4.5; gx += 0.6) {
+        const gp1 = this.worldToScreen(gx, 1.50);
+        const gp2 = this.worldToScreen(gx, 3.00);
+        ctx.beginPath();
+        ctx.moveTo(gp1.px, gp1.py);
+        ctx.lineTo(gp2.px, gp2.py);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#bae6fd';
+      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.fillText(
+        'PISO REJILLA METÁLICA ELECTROFORJADA TRANSITABLE + REJAS LATERALES (z=1.50..3.00m)',
+        (rejTL.px + rejBR.px) / 2,
+        (rejTL.py + rejBR.py) / 2 + 3
+      );
+
+      // 6b. Pérgola de Madera con Enredadera y Techo Translúcido Antigranizo (x=-0.50..+4.50m, z=-3.80..+2.80m)
+      const pergTL = this.worldToScreen(-0.50, -3.80);
+      const pergBR = this.worldToScreen(4.50, 2.80);
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 3]);
+      ctx.strokeRect(pergTL.px, pergTL.py, pergBR.px - pergTL.px, pergBR.py - pergTL.py);
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#6ee7b7';
+      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.fillText(
+        '🌿 PÉRGOLA DE MADERA C/ ENREDADERA + TECHO TRANSLÚCIDO ANTIGRANIZO',
+        (pergTL.px + pergBR.px) / 2,
+        pergTL.py + 14
+      );
+
+      // 6c. Muro Frontal 100% Ciego en z=-4.00m con Portón Balancín 2.30m (x=+1.20..+3.50m) y Portoncito Peatonal 0.95m (x=-2.20..-1.25m)
+      const mf1 = this.worldToScreen(-4.87, -4.00);
+      const mf2 = this.worldToScreen(4.87, -4.00);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(mf1.px, mf1.py);
+      ctx.lineTo(mf2.px, mf2.py);
+      ctx.stroke();
+
+      const porton1 = this.worldToScreen(1.20, -4.00);
+      const porton2 = this.worldToScreen(3.50, -4.00);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(porton1.px, porton1.py);
+      ctx.lineTo(porton2.px, porton2.py);
+      ctx.stroke();
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.fillText('PORTÓN BALANCÍN 2.30m (CHAPA GRAFITO CIEGA)', (porton1.px + porton2.px) / 2, porton1.py - 7);
+
+      const peat1 = this.worldToScreen(-2.20, -4.00);
+      const peat2 = this.worldToScreen(-1.25, -4.00);
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(peat1.px, peat1.py);
+      ctx.lineTo(peat2.px, peat2.py);
+      ctx.stroke();
+      ctx.fillStyle = '#fde68a';
+      ctx.fillText('PORTONCITO 0.95m (CIEGO)', (peat1.px + peat2.px) / 2, peat1.py - 7);
+    }
     ctx.restore();
 
     const lvl = this.getActiveLevelData();
 
     // 7. Ambientes Propuestos (Diferenciando Cerrar Ahora vs Etapa Futura y Modo Colores Banco)
     lvl.rooms.forEach((room) => {
+      if (this.planData.presetId === 'hoy_en_obra' && this.currentLevel === 'planta_baja' && room.id.endsWith('_estar_social')) {
+        // El vacío de 38.00 m² ya se dibuja con sus diagonales estructurales X en Hoy en Obra
+        return;
+      }
       const tl = this.worldToScreen(room.x, room.z);
       const br = this.worldToScreen(room.x + room.w, room.z + room.d);
       const rwPx = br.px - tl.px;
@@ -3373,24 +3347,23 @@ export class FloorplanEditor {
       ctx.restore();
     });
 
-    // 7a-bis. Geometría explícita del Pozo Ciego Ø1.80m + Cámara Séptica + Cañería de Impulsión hacia la Calle (en Subsuelo)
+    // 7a-bis. Geometría explícita del Pozo Ciego Ø1.80m + Cámara Séptica + Colector Cloacal desde Núcleo Eje F–G (en Subsuelo)
     if (this.currentLevel === 'subsuelo') {
       const pozoCenter = this.worldToScreen(-3.45, 17.20);
       const pozoRadiusPx = 0.90 * this.zoom; // Ø 1.80m
       const camTL = this.worldToScreen(-4.15, 14.35);
       const camBR = this.worldToScreen(-2.75, 15.65);
-      const pumpStart = this.worldToScreen(-3.45, 14.35);
-      const pumpVereda = this.worldToScreen(-3.45, -3.80);
+      const colStart = this.worldToScreen(-1.64, 3.45);
+      const colMid = this.worldToScreen(-3.45, 11.80);
+      const colEnd = this.worldToScreen(-3.45, 14.35);
 
       ctx.save();
-      // Cámara Séptica rectangular
       ctx.fillStyle = this.bankColorMode ? 'rgba(220, 38, 38, 0.35)' : 'rgba(245, 158, 11, 0.32)';
       ctx.strokeStyle = this.bankColorMode ? '#ef4444' : '#fbbf24';
       ctx.lineWidth = 1.6;
       ctx.fillRect(camTL.px, camTL.py, camBR.px - camTL.px, camBR.py - camTL.py);
       ctx.strokeRect(camTL.px, camTL.py, camBR.px - camTL.px, camBR.py - camTL.py);
 
-      // Pozo Ciego Absorbente circular Ø 1.80m
       ctx.beginPath();
       ctx.arc(pozoCenter.px, pozoCenter.py, pozoRadiusPx, 0, Math.PI * 2);
       ctx.fill();
@@ -3401,37 +3374,38 @@ export class FloorplanEditor {
       ctx.textAlign = 'center';
       ctx.fillText('POZO CIEGO Ø1.80m', pozoCenter.px, pozoCenter.py + 3);
 
-      // Línea punteada de impulsión cloacal PVC Ø50mm hacia la vereda frontal
       ctx.strokeStyle = this.bankColorMode ? '#ef4444' : '#fb923c';
       ctx.lineWidth = 2;
       ctx.setLineDash([6, 4]);
       ctx.beginPath();
-      ctx.moveTo(pumpStart.px, pumpStart.py);
-      ctx.lineTo(pumpVereda.px, pumpVereda.py);
+      ctx.moveTo(colStart.px, colStart.py);
+      ctx.lineTo(colMid.px, colMid.py);
+      ctx.lineTo(colEnd.px, colEnd.py);
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = '#fdba74';
-      ctx.fillText('⬆️ Impulsión Cloacal Ø50mm a Vereda Calle (28 ml)', pumpVereda.px + 95, pumpVereda.py + 12);
+      ctx.fillText('⬇️ Colector Cloacal PVC Ø100mm desde Núcleo Eje F–G (Pendiente >=2%)', colMid.px + 120, colMid.py);
       ctx.restore();
     }
 
-    // 7b. Huella de la Escalera 1 H°A° Existente (Eje 1-2, entre Eje B y Eje D: x=3.84..4.87, z=5.26..9.94) 🔒
-    if (this.currentLevel !== 'subsuelo') {
-      const st = FIXED_STRUCTURAL_GRID.existingStaircase1;
+    // 7b. Escaleras en Costados Opuestos:
+    // - Escalera 1 (Baja a Subsuelo, 3.30×0.90m) en costado izquierdo Eje 8–9 (x=-4.87..-3.90m, z=5.26..8.56m)
+    // - Escalera 2 (Sube a Planta Alta, 3.90×0.80m) en costado derecho Eje 1–2 (x=+3.84..+4.87m, z=5.26..9.16m)
+    const drawStaircaseBox = (st, labelTop, labelBottom) => {
+      if (!st) return;
       const stl = this.worldToScreen(st.x1, st.z1);
       const sbr = this.worldToScreen(st.x2, st.z2);
       const sw = sbr.px - stl.px;
       const sh = sbr.py - stl.py;
 
       ctx.save();
-      ctx.fillStyle = this.bankColorMode ? 'rgba(15, 23, 42, 0.78)' : 'rgba(14, 165, 233, 0.20)';
+      ctx.fillStyle = this.bankColorMode ? 'rgba(15, 23, 42, 0.78)' : 'rgba(14, 165, 233, 0.22)';
       ctx.strokeStyle = this.bankColorMode ? '#94a3b8' : '#38bdf8';
       ctx.lineWidth = 1.6;
       ctx.fillRect(stl.px, stl.py, sw, sh);
       ctx.strokeRect(stl.px, stl.py, sw, sh);
 
-      // Peldaños de hormigón
-      const steps = 14;
+      const steps = 12;
       ctx.strokeStyle = this.bankColorMode ? 'rgba(148, 163, 184, 0.55)' : 'rgba(125, 211, 252, 0.55)';
       ctx.lineWidth = 1;
       for (let i = 1; i < steps; i++) {
@@ -3443,11 +3417,26 @@ export class FloorplanEditor {
       }
 
       ctx.fillStyle = '#e0f2fe';
-      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.font = 'bold 8px IBM Plex Mono, monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(this.bankColorMode ? '⚫ ESCALERA 1 (NEGRO)' : '🔒 ESCALERA 1', stl.px + sw / 2, stl.py + sh / 2 - 4);
-      ctx.fillText('1.03×4.68m', stl.px + sw / 2, stl.py + sh / 2 + 8);
+      ctx.fillText(labelTop, stl.px + sw / 2, stl.py + sh / 2 - 4);
+      ctx.fillText(labelBottom, stl.px + sw / 2, stl.py + sh / 2 + 8);
       ctx.restore();
+    };
+
+    if (this.currentLevel === 'subsuelo' || this.currentLevel === 'planta_baja') {
+      drawStaircaseBox(
+        FIXED_STRUCTURAL_GRID.existingStaircase1,
+        '🔒 ESCALERA 1 (Eje 8–9)',
+        'Baja a Subsuelo 3.30×0.90m'
+      );
+    }
+    if (this.currentLevel === 'planta_baja' || this.currentLevel === 'planta_alta') {
+      drawStaircaseBox(
+        FIXED_STRUCTURAL_GRID.existingStaircase2,
+        '🔒 ESCALERA 2 (Eje 1–2)',
+        'Sube a PA 3.90×0.80m'
+      );
     }
 
     // 8. Muros Propuestos Editables y Ventanales Blindex
@@ -3517,10 +3506,10 @@ export class FloorplanEditor {
     }
 
     // 9. 14 Zapatas (incluyendo combinadas) y 20 Pilares H°A° (P1..P20)
-    // En Planta Alta, P12, P13 y P15 se muestran con borde punteado ámbar y etiqueta P12(Muere PB)
+    // En Hoy en Obra / Planta Baja se destacan los 17 pilares PB YA HORMIGONADOS hasta +2.88m.
+    // En Planta Alta, P12, P13 y P15 se muestran con borde punteado ámbar y etiqueta P12(Muere PB).
     const drawnCombinedFootings = new Set();
     FIXED_COLUMNS_AND_FOOTINGS.forEach((col) => {
-      // Dibujar zapata (evitando duplicar zapatas combinadas Z5, Z6, Z7, Z11, Z12, Z13)
       if (!col.combinedGroup || !drawnCombinedFootings.has(col.combinedGroup)) {
         if (col.combinedGroup) drawnCombinedFootings.add(col.combinedGroup);
         const zCenter = this.worldToScreen(col.zapCenterX, col.zapCenterZ);
@@ -3547,7 +3536,6 @@ export class FloorplanEditor {
 
       ctx.save();
       if (isDeadInPA) {
-        // Borde punteado ámbar advirtiendo que el pilar muere en Planta Baja
         ctx.fillStyle = 'rgba(245, 158, 11, 0.18)';
         ctx.strokeStyle = '#f59e0b';
         ctx.lineWidth = 1.8;
@@ -3561,12 +3549,14 @@ export class FloorplanEditor {
         ctx.textAlign = 'left';
         ctx.fillText(`${col.pilarId}(Muere PB)`, center.px + colW / 2 + 3, center.py + 2);
       } else {
-        // En Modo Banco: Pilares en Subsuelo/PB son ⚫ NEGRO (Ya construidos); en PA son 🟢 VERDE (Hormigón nuevo)
+        const isPBHormigonado288 = !col.diesInPB && this.currentLevel === 'planta_baja';
         const pillarFill = isHoveredSnap
           ? '#fbbf24'
           : this.bankColorMode
             ? (this.currentLevel === 'planta_alta' ? '#16a34a' : '#1e293b')
-            : '#06b6d4';
+            : isPBHormigonado288 && this.planData.presetId === 'hoy_en_obra'
+              ? '#10b981'
+              : '#06b6d4';
         const pillarStroke = this.bankColorMode
           ? (this.currentLevel === 'planta_alta' ? '#86efac' : '#f8fafc')
           : '#083344';
@@ -3579,7 +3569,10 @@ export class FloorplanEditor {
         ctx.fillStyle = this.theme === 'white_paper' ? '#0f172a' : (this.bankColorMode ? '#f8fafc' : '#a5f3fc');
         ctx.font = 'bold 9px IBM Plex Mono, monospace';
         ctx.textAlign = 'left';
-        ctx.fillText(`${col.pilarId}🔒`, center.px + colW / 2 + 3, center.py - 1);
+        const pTag = this.planData.presetId === 'hoy_en_obra' && isPBHormigonado288
+          ? `${col.pilarId}🔒(+2.88m)`
+          : `${col.pilarId}🔒`;
+        ctx.fillText(pTag, center.px + colW / 2 + 3, center.py - 1);
       }
       ctx.restore();
     });
@@ -3614,7 +3607,6 @@ export class FloorplanEditor {
     if (this.showConduitsAndOutlets) {
       const { pases, tableros, enchufes, llaves, conduitRoutes } = this.getConduitsAndOutletsForLevel(this.currentLevel);
 
-      // 11A. Líneas punteadas de electroductos embutidos en contrapiso (5 cm) y muros
       ctx.save();
       conduitRoutes.forEach((route) => {
         if (!route.pts || route.pts.length < 2) return;
@@ -3632,7 +3624,6 @@ export class FloorplanEditor {
       });
       ctx.restore();
 
-      // 11B. Los 4 Pases de Losa con Sacabocado Diamantado en la Losa 1 Existente (icono circular fucsia/magenta #ec4899 y etiqueta PASE #1..#4)
       pases.forEach((pase) => {
         const pt = this.worldToScreen(pase.x, pase.z);
         const isSel = this.selectedElement?.item?.id === pase.id;
@@ -3645,7 +3636,6 @@ export class FloorplanEditor {
         ctx.fill();
         ctx.stroke();
 
-        // Anillo concéntrico indicando corte de copa diamantada
         ctx.strokeStyle = '#fbcfe8';
         ctx.lineWidth = 1;
         ctx.setLineDash([2, 2]);
@@ -3666,7 +3656,6 @@ export class FloorplanEditor {
         ctx.restore();
       });
 
-      // 11C. Tableros Eléctricos Inteligentes (TP-PB 36-48 DIN Smart, TS-PA 24 DIN, TS-SUB 12 DIN, Pilar ANDE Trifásico, Tanque 1.000L + Presurizadora)
       tableros.forEach((tab) => {
         const pt = this.worldToScreen(tab.x, tab.z);
         const isSel = this.selectedElement?.item?.id === tab.id;
@@ -3690,7 +3679,6 @@ export class FloorplanEditor {
         ctx.restore();
       });
 
-      // 11D. Enchufes / Tomacorrientes de 20A (naranja #f97316) y 16A (verde #10b981)
       enchufes.forEach((toma) => {
         const pt = this.worldToScreen(toma.x, toma.z);
         const is20A = toma.tipo === 'toma_20a';
@@ -3716,7 +3704,6 @@ export class FloorplanEditor {
         ctx.restore();
       });
 
-      // 11E. Llaves Inteligentes Zigbee con Neutro / Conmutadas 3-Way (#38bdf8)
       llaves.forEach((sw) => {
         const pt = this.worldToScreen(sw.x, sw.z);
         const isSel = this.selectedElement?.item?.id === sw.id;
@@ -3758,7 +3745,7 @@ export class FloorplanEditor {
   }
 
   /**
-   * Guarda el estado actual en localStorage (v4)
+   * Guarda el estado actual en localStorage (v6)
    */
   saveToStorage() {
     try {
@@ -3775,7 +3762,7 @@ export class FloorplanEditor {
   }
 
   /**
-   * Carga el diseño guardado en localStorage (v4) si existe
+   * Carga el diseño guardado en localStorage (v6) si existe
    */
   loadFromStorage() {
     try {
@@ -3792,11 +3779,14 @@ export class FloorplanEditor {
   }
 
   /**
-   * Exporta el plano técnico actual en formato SVG Vectorial a Escala CAD (1m = 50px)
-   * con rótulo técnico (Proyecto, Nivel, Cota, Escala, Fecha, Cómputo de Muros en m² y Gs.),
-   * grilla de ejes 1..9 y A..G, pilares P1..P20, ambientes acotados, muros a escala y cotas.
+   * Genera el documento SVG vectorial a Escala CAD 1:50 para cualquier lámina del proyecto
+   * (`planta_baja`, `planta_alta`, `subsuelo` o `instalaciones_eje_fg`).
    */
-  exportSVG() {
+  generateSheetSVG(sheetSpec = {}) {
+    const levelKey = sheetSpec.levelKey || this.currentLevel;
+    const sheetTitle = sheetSpec.sheetTitle || LEVEL_DEFINITIONS[levelKey]?.fullTitle || 'Lámina CAD';
+    const forceMepOverlay = Boolean(sheetSpec.forceMepOverlay);
+
     const scale = 50; // 1 metro = 50 unidades SVG (Escala CAD 1:50)
     const originX = 220;
     const originZ = 240;
@@ -3806,8 +3796,8 @@ export class FloorplanEditor {
     const toX = (x) => Number((originX + (x + 5.0) * scale).toFixed(2));
     const toY = (z) => Number((originZ + z * scale).toFixed(2));
 
-    const def = LEVEL_DEFINITIONS[this.currentLevel];
-    const lvl = this.getActiveLevelData();
+    const def = LEVEL_DEFINITIONS[levelKey] || LEVEL_DEFINITIONS.planta_baja;
+    const lvl = this.planData.levels[levelKey] || this.getActiveLevelData();
     const metrics = this.computeFullMetrics();
     const formatGs = (n) => Math.round(n).toLocaleString('es-PY');
     const dateStr = new Date().toISOString().slice(0, 10);
@@ -3859,15 +3849,53 @@ export class FloorplanEditor {
       lines.push(`  <text x="${x1 - 34}" y="${yPx + 3}" fill="#94a3b8" font-size="8" text-anchor="end">z=${az.z.toFixed(2)}m (${az.planCoordM.toFixed(2)}m)</text>`);
     });
 
+    // En Hoy en Obra + Planta Baja: dibujar Losas L1/L2/L3 y L4 macizas + HUECO ABIERTO 38.00 m² con diagonales X
+    if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja') {
+      const vx = toX(-0.74);
+      const vy = toY(3.00);
+      const vw = Number(((4.87 - -0.74) * scale).toFixed(2));
+      const vd = Number(((9.94 - 3.00) * scale).toFixed(2));
+      lines.push(`  <rect x="${vx}" y="${vy}" width="${vw}" height="${vd}" fill="rgba(239,68,68,0.16)" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>`);
+      lines.push(`  <line x1="${vx}" y1="${vy}" x2="${vx + vw}" y2="${vy + vd}" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="6,4"/>`);
+      lines.push(`  <line x1="${vx + vw}" y1="${vy}" x2="${vx}" y2="${vy + vd}" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="6,4"/>`);
+      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 - 4}" fill="#fde047" font-size="10" font-weight="bold" text-anchor="middle">VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap)</text>`);
+      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 + 10}" fill="#fca5a5" font-size="8.5" text-anchor="middle">Cuadrante Eje B a Eje G (z=3.00..9.94m) × Eje 1 a Eje 5 (x=-0.74..+4.87m)</text>`);
+    }
+
+    // Elementos de Cochera Frontal en Planta Baja (Muro 100% Ciego, Portón Balancín 2.30m, Portoncito 0.95m, Pérgola y Rejilla Electroforjada)
+    if (levelKey === 'planta_baja') {
+      const rejX = toX(-4.87);
+      const rejY = toY(1.50);
+      const rejW = Number((9.74 * scale).toFixed(2));
+      const rejD = Number((1.50 * scale).toFixed(2));
+      lines.push(`  <rect x="${rejX}" y="${rejY}" width="${rejW}" height="${rejD}" fill="rgba(14,165,233,0.16)" stroke="#38bdf8" stroke-width="1.4"/>`);
+      lines.push(`  <text x="${rejX + rejW / 2}" y="${rejY + rejD / 2 + 3}" fill="#bae6fd" font-size="8.5" font-weight="bold" text-anchor="middle">PISO DE REJILLA METÁLICA ELECTROFORJADA TRANSITABLE + REJAS LATERALES (z=1.50..3.00m)</text>`);
+
+      const pergX = toX(-0.50);
+      const pergY = toY(-3.80);
+      const pergW = Number((5.00 * scale).toFixed(2));
+      const pergD = Number((6.60 * scale).toFixed(2));
+      lines.push(`  <rect x="${pergX}" y="${pergY}" width="${pergW}" height="${pergD}" fill="none" stroke="#10b981" stroke-width="1.4" stroke-dasharray="6,4"/>`);
+      lines.push(`  <text x="${pergX + pergW / 2}" y="${pergY + 14}" fill="#6ee7b7" font-size="8.5" font-weight="bold" text-anchor="middle">PÉRGOLA DE MADERA CON ENREDADERA + TECHO TRANSLÚCIDO ANTIGRANIZO</text>`);
+
+      lines.push(`  <line x1="${toX(1.20)}" y1="${toY(-4.00)}" x2="${toX(3.50)}" y2="${toY(-4.00)}" stroke="#38bdf8" stroke-width="5"/>`);
+      lines.push(`  <text x="${toX(2.35)}" y="${toY(-4.00) - 6}" fill="#7dd3fc" font-size="8" font-weight="bold" text-anchor="middle">PORTÓN BALANCÍN 2.30m (CIEGO)</text>`);
+      lines.push(`  <line x1="${toX(-2.20)}" y1="${toY(-4.00)}" x2="${toX(-1.25)}" y2="${toY(-4.00)}" stroke="#fbbf24" stroke-width="5"/>`);
+      lines.push(`  <text x="${toX(-1.725)}" y="${toY(-4.00) - 6}" fill="#fde68a" font-size="8" font-weight="bold" text-anchor="middle">PORTONCITO 0.95m</text>`);
+    }
+
     // Ambientes acotados
     lvl.rooms.forEach((r) => {
+      if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja' && r.id.endsWith('_estar_social')) {
+        return;
+      }
       const rx = toX(r.x);
       const ry = toY(r.z);
       const rw = Number((r.w * scale).toFixed(2));
       const rd = Number((r.d * scale).toFixed(2));
       const area = (r.w * r.d).toFixed(2);
       const isYellow = r.id === 'sub_camara_aislacion_frontal';
-      const isGreen = r.id === 'sub_piscina_futura' || this.currentLevel === 'planta_alta';
+      const isGreen = r.id === 'sub_piscina_futura' || levelKey === 'planta_alta';
       const stroke = this.bankColorMode
         ? (isYellow ? '#f59e0b' : isGreen ? '#22c55e' : '#ef4444')
         : (r.activeStage !== false ? '#38bdf8' : '#64748b');
@@ -3876,21 +3904,28 @@ export class FloorplanEditor {
         : 'rgba(56,189,248,0.08)';
       const dash = r.activeStage !== false ? '' : 'stroke-dasharray="5,4"';
       lines.push(`  <rect x="${rx}" y="${ry}" width="${rw}" height="${rd}" fill="${fill}" stroke="${stroke}" stroke-width="1.3" ${dash}/>`);
-      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 - 4}" fill="#f8fafc" font-size="9.5" font-weight="bold" text-anchor="middle">${escXml(r.name)}</text>`);
+      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 - 4}" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">${escXml(r.name)}</text>`);
       lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 + 10}" fill="#67e8f9" font-size="8.5" text-anchor="middle">${area} m² (${r.w.toFixed(2)}m × ${r.d.toFixed(2)}m)</text>`);
     });
 
-    // Escalera 1 H°A° existente (Ejes 1-2 / B-D)
-    if (this.currentLevel !== 'subsuelo') {
-      const st = FIXED_STRUCTURAL_GRID.existingStaircase1;
-      const sx = toX(st.x1);
-      const sy = toY(st.z1);
-      const sw = Number((st.w * scale).toFixed(2));
-      const sd = Number((st.d * scale).toFixed(2));
-      const stFill = this.bankColorMode ? 'rgba(15,23,42,0.85)' : 'rgba(14,165,233,0.18)';
-      const stStroke = this.bankColorMode ? '#94a3b8' : '#38bdf8';
-      lines.push(`  <rect x="${sx}" y="${sy}" width="${sw}" height="${sd}" fill="${stFill}" stroke="${stStroke}" stroke-width="1.5"/>`);
-      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="8.5" font-weight="bold" text-anchor="middle">${this.bankColorMode ? 'ESCALERA 1 (NEGRO)' : `ESCALERA 1 (${st.w}x${st.d}m)`}</text>`);
+    // Escaleras en costados opuestos: Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2)
+    if (levelKey === 'subsuelo' || levelKey === 'planta_baja') {
+      const st1 = FIXED_STRUCTURAL_GRID.existingStaircase1;
+      const sx = toX(st1.x1);
+      const sy = toY(st1.z1);
+      const sw = Number(((st1.x2 - st1.x1) * scale).toFixed(2));
+      const sd = Number(((st1.z2 - st1.z1) * scale).toFixed(2));
+      lines.push(`  <rect x="${sx}" y="${sy}" width="${sw}" height="${sd}" fill="rgba(14,165,233,0.20)" stroke="#38bdf8" stroke-width="1.5"/>`);
+      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="8" font-weight="bold" text-anchor="middle">ESCALERA 1 EJE 8-9 (3.30x0.90m)</text>`);
+    }
+    if ((levelKey === 'planta_baja' || levelKey === 'planta_alta') && FIXED_STRUCTURAL_GRID.existingStaircase2) {
+      const st2 = FIXED_STRUCTURAL_GRID.existingStaircase2;
+      const sx = toX(st2.x1);
+      const sy = toY(st2.z1);
+      const sw = Number(((st2.x2 - st2.x1) * scale).toFixed(2));
+      const sd = Number(((st2.z2 - st2.z1) * scale).toFixed(2));
+      lines.push(`  <rect x="${sx}" y="${sy}" width="${sw}" height="${sd}" fill="rgba(14,165,233,0.20)" stroke="#38bdf8" stroke-width="1.5"/>`);
+      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="8" font-weight="bold" text-anchor="middle">ESCALERA 2 EJE 1-2 (3.90x0.80m)</text>`);
     }
 
     // Muros a escala y cotas
@@ -3914,11 +3949,11 @@ export class FloorplanEditor {
       const cy = toY(col.z);
       const cw = Math.max(6, col.colW * scale);
       const cd = Math.max(6, col.colD * scale);
-      const isDeadPA = this.currentLevel === 'planta_alta' && col.diesInPB;
+      const isDeadPA = levelKey === 'planta_alta' && col.diesInPB;
       const fill = isDeadPA
         ? 'rgba(245,158,11,0.25)'
         : this.bankColorMode
-          ? (this.currentLevel === 'planta_alta' ? '#16a34a' : '#1e293b')
+          ? (levelKey === 'planta_alta' ? '#16a34a' : '#1e293b')
           : '#06b6d4';
       const stroke = isDeadPA ? '#f59e0b' : (this.bankColorMode ? '#f8fafc' : '#083344');
       const dash = isDeadPA ? 'stroke-dasharray="3,2"' : '';
@@ -3928,14 +3963,24 @@ export class FloorplanEditor {
       lines.push(`  <text x="${(cx + cw / 2 + 4).toFixed(1)}" y="${(cy + 3).toFixed(1)}" fill="${isDeadPA ? '#fbbf24' : '#a5f3fc'}" font-size="8" font-weight="bold">${escXml(label)}</text>`);
     });
 
-    // Exportación Vectorial de Ductos, 4 Pases Diamantados en Losa 1, Tableros Smart DIN y 26 Enchufes/Llaves 3-Way
-    if (this.showConduitsAndOutlets) {
-      const { pases, tableros, enchufes, llaves, conduitRoutes } = this.getConduitsAndOutletsForLevel(this.currentLevel);
+    // Exportación Vectorial de Instalaciones Eléctricas, Pluviales e Hidrosanitarias Superpuestas en Eje F–G
+    if (this.showConduitsAndOutlets || forceMepOverlay) {
+      const { pases, tableros, enchufes, llaves, conduitRoutes } = this.getConduitsAndOutletsForLevel(levelKey);
+
+      if (forceMepOverlay) {
+        // Destacar Núcleo Húmedo Vertical Eje F–G (z=3.00..5.00m) donde coinciden Baño Social + Cocina PB y Baño Suite + Vestidor + Baño 2 PA
+        const fgX = toX(-4.87);
+        const fgY = toY(3.00);
+        const fgW = Number((8.71 * scale).toFixed(2));
+        const fgD = Number((2.00 * scale).toFixed(2));
+        lines.push(`  <rect x="${fgX}" y="${fgY}" width="${fgW}" height="${fgD}" fill="rgba(14,165,233,0.16)" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,3"/>`);
+        lines.push(`  <text x="${fgX + fgW / 2}" y="${fgY + 14}" fill="#7dd3fc" font-size="9.5" font-weight="bold" text-anchor="middle">NÚCLEO HÚMEDO VERTICAL EJE F–G (z=3.00..5.00m): BAÑO SOCIAL + COCINA (PB) ↕ VESTIDOR + BAÑO SUITE + BAÑO 2 (PA)</text>`);
+      }
 
       conduitRoutes.forEach((route) => {
         if (!route.pts || route.pts.length < 2) return;
         const ptsAttr = route.pts.map(([rx, rz]) => `${toX(rx)},${toY(rz)}`).join(' ');
-        lines.push(`  <polyline points="${ptsAttr}" fill="none" stroke="${route.color || '#f97316'}" stroke-width="1.6" stroke-dasharray="4,3" opacity="0.85"/>`);
+        lines.push(`  <polyline points="${ptsAttr}" fill="none" stroke="${route.color || '#f97316'}" stroke-width="1.8" stroke-dasharray="4,3" opacity="0.9"/>`);
       });
 
       pases.forEach((pase) => {
@@ -3972,14 +4017,24 @@ export class FloorplanEditor {
     // Rótulo Técnico Oficial (abajo)
     const rotY = svgH - 165;
     lines.push(`  <rect x="30" y="${rotY}" width="${svgW - 60}" height="135" fill="#0f172a" stroke="#38bdf8" stroke-width="1.6"/>`);
-    lines.push(`  <text x="48" y="${rotY + 24}" fill="#38bdf8" font-size="13.5" font-weight="bold">PROYECTO: RESIDENCIA ITÁ PYTÃ PUNTA — PLANO ESTRUCTURAL Y ARQUITECTÓNICO CAD/BIM (RUTH &amp; LEO)</text>`);
-    lines.push(`  <text x="48" y="${rotY + 44}" fill="#e2e8f0" font-size="10.5">NIVEL: ${escXml(def.fullTitle)} | COTA: ${escXml(def.cota)} | ESCALA CAD: 1:50 | FECHA: ${dateStr}</text>`);
-    lines.push(`  <text x="48" y="${rotY + 63}" fill="#cbd5e1" font-size="10">CÓDIGO COLORES BANCO: ⚫ NEGRO = Ya Construido (Gs. 163,8M) | 🟢 VERDE = Hormigón H°A° | 🔴 ROJO = Obra Nueva a Construir | 🟡 AMARILLO = Adecuar/Refaccionar</text>`);
-    lines.push(`  <text x="48" y="${rotY + 84}" fill="#fde68a" font-size="10.5" font-weight="bold">CÓMPUTO DE MUROS: ${totalMurosM2} m² Totales (15cm: ${metrics.mamposteria15M2}m² | 20cm: ${metrics.mamposteria20M2}m² | 30cm: ${metrics.ciclopeo30M2}m² | Blindex: ${metrics.blindexM2}m²) — Costo Muros: Gs. ${formatGs(metrics.murosCostGs)}</text>`);
-    lines.push(`  <text x="48" y="${rotY + 106}" fill="#34d399" font-size="11" font-weight="bold">SUPERFICIE ACTIVA NIVEL: ${metrics.byLevel[this.currentLevel].activeM2} m² | INVERSIÓN TOTAL ETAPA ACTIVA: Gs. ${formatGs(metrics.totalProjectCostGs)}</text>`);
+    lines.push(`  <text x="48" y="${rotY + 24}" fill="#38bdf8" font-size="13" font-weight="bold">PROYECTO: RESIDENCIA ITÁ PYTÃ PUNTA — ${escXml(sheetTitle)}</text>`);
+    lines.push(`  <text x="48" y="${rotY + 44}" fill="#e2e8f0" font-size="10">NIVEL: ${escXml(def.fullTitle)} | COTA: ${escXml(def.cota)} | ESCALA CAD: 1:50 | FECHA: ${dateStr}</text>`);
+    lines.push(`  <text x="48" y="${rotY + 63}" fill="#cbd5e1" font-size="9.5">REALIDAD DE OBRA: 17 Pilares PB Hormigonados (+2.88m) | Hueco 38,00 m² en Losa 1 a cerrar c/ Loza Rap | Núcleo Húmedo Eje F–G</text>`);
+    lines.push(`  <text x="48" y="${rotY + 84}" fill="#fde68a" font-size="10" font-weight="bold">CÓMPUTO DE MUROS: ${totalMurosM2} m² Totales (15cm: ${metrics.mamposteria15M2}m² | 20cm: ${metrics.mamposteria20M2}m² | 30cm: ${metrics.ciclopeo30M2}m² | Blindex: ${metrics.blindexM2}m²) — Costo Muros: Gs. ${formatGs(metrics.murosCostGs)}</text>`);
+    lines.push(`  <text x="48" y="${rotY + 106}" fill="#34d399" font-size="10.5" font-weight="bold">SUPERFICIE ACTIVA NIVEL: ${metrics.byLevel[levelKey]?.activeM2 || 0} m² | INVERSIÓN TOTAL ETAPA ACTIVA: Gs. ${formatGs(metrics.totalProjectCostGs)}</text>`);
     lines.push(`</svg>`);
 
-    const svgContent = lines.join('\n');
+    return lines.join('\n');
+  }
+
+  /**
+   * Exporta el plano técnico actual en formato SVG Vectorial a Escala CAD (1m = 50px)
+   */
+  exportSVG() {
+    const svgContent = this.generateSheetSVG({
+      levelKey: this.currentLevel,
+      sheetTitle: LEVEL_DEFINITIONS[this.currentLevel]?.fullTitle
+    });
     const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -3990,6 +4045,88 @@ export class FloorplanEditor {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     return svgContent;
+  }
+
+  /**
+   * Generador Dinámico de Láminas de Planos Oficiales en Tiempo Real (`exportOfficialBlueprintsPackSVG()`):
+   * Produce en tiempo real desde el estado actual del modelo un juego completo de 4 láminas técnicas vectoriales SVG:
+   * - Lámina 1: Planta Baja +100.00m
+   * - Lámina 2: Planta Alta +102.88m
+   * - Lámina 3: Subsuelo +97.66m
+   * - Lámina 4: Instalaciones Eléctricas, Pluviales y Hidrosanitarias Superpuestas Eje F-G
+   */
+  exportOfficialBlueprintsPackSVG() {
+    const sheets = [
+      {
+        id: 'lamina_1_planta_baja',
+        sheetTitle: 'Lámina 1: Planta Baja +100.00m (Cochera + Núcleo Húmedo Eje F–G + Estar + Escaleras 1 y 2 + Galería)',
+        levelKey: 'planta_baja',
+        forceMepOverlay: false
+      },
+      {
+        id: 'lamina_2_planta_alta',
+        sheetTitle: 'Lámina 2: Planta Alta +102.88m (2 Dormitorios + Desk en Escalera 2 + 2 Baños + Vestidor Eje F–G • Sin Balcón Frontal)',
+        levelKey: 'planta_alta',
+        forceMepOverlay: false
+      },
+      {
+        id: 'lamina_3_subsuelo',
+        sheetTitle: 'Lámina 3: Subsuelo +97.66m (Parrillita hacia el Patio + Lavadero + Depósito + Arranque Escalera 1 Eje 8–9)',
+        levelKey: 'subsuelo',
+        forceMepOverlay: false
+      },
+      {
+        id: 'lamina_4_instalaciones_eje_fg',
+        sheetTitle: 'Lámina 4: Instalaciones Eléctricas, Pluviales y Hidrosanitarias Superpuestas Eje F-G',
+        levelKey: 'planta_baja',
+        forceMepOverlay: true
+      }
+    ].map((spec) => ({
+      ...spec,
+      svg: this.generateSheetSVG(spec)
+    }));
+
+    // Descargar cada lámina SVG o paquete HTML/SVG imprimible en tiempo real
+    const htmlPack = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pack 4 Láminas Oficiales CAD/BIM — Residencia Itá Pytã Punta</title>
+  <style>
+    body { margin: 0; padding: 20px; background: #020617; color: #f8fafc; font-family: 'IBM Plex Mono', monospace; }
+    .toolbar { position: sticky; top: 0; z-index: 10; background: rgba(15,23,42,0.95); padding: 12px 18px; border: 1px solid #38bdf8; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .btn { background: #0284c7; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+    .sheet { margin-bottom: 32px; page-break-after: always; display: flex; flex-direction: column; align-items: center; }
+    .sheet h2 { color: #38bdf8; font-size: 15px; margin-bottom: 8px; }
+    .sheet svg { max-width: 100%; height: auto; border: 1px solid #1e293b; border-radius: 8px; }
+    @media print { .toolbar { display: none; } body { background: #fff; padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <strong>📐 PACK OFICIAL DE 4 LÁMINAS CAD/BIM EN TIEMPO REAL — ITÁ PYTÃ PUNTA (RUTH &amp; LEO)</strong>
+      <div style="font-size:12px; color:#94a3b8;">Lámina 1: PB +100.00m • Lámina 2: PA +102.88m • Lámina 3: Subsuelo +97.66m • Lámina 4: Instalaciones Superpuestas Eje F-G</div>
+    </div>
+    <button class="btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF A3</button>
+  </div>
+  ${sheets.map((s) => `<div class="sheet"><h2>${s.sheetTitle}</h2>${s.svg}</div>`).join('\n')}
+</body>
+</html>`;
+
+    if (typeof document !== 'undefined') {
+      const blob = new Blob([htmlPack], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pack_4_laminas_oficiales_itapytapunta_${Date.now()}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    return sheets;
   }
 
   /**
@@ -4014,7 +4151,7 @@ export class FloorplanEditor {
     const payload = {
       project: 'Residencia Itá Pytã Punta',
       location: 'Calle Guillermo Arias, Asunción, Paraguay',
-      structuralSource: 'CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf + GEO-STAN #2956',
+      structuralSource: 'CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf + GEO-STAN #2956 + Planos Sanitarios/E5',
       exportedAt: new Date().toISOString(),
       structuralGrid: FIXED_STRUCTURAL_GRID,
       columnsAndFootings: FIXED_COLUMNS_AND_FOOTINGS,

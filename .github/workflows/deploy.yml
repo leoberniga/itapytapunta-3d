@@ -1,0 +1,52 @@
+name: Despliegue Continuo Nube Gratuita
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: app/package-lock.json
+
+      - name: Instalar Dependencias
+        run: |
+          cd app
+          npm ci
+
+      - name: Compilar Proyecto Vite 3D
+        run: |
+          cd app
+          npm run build
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Subir Artefacto de Compilación
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'app/dist'
+
+      - name: Desplegar en la Nube (GitHub Pages / Google Cloud)
+        id: deployment
+        uses: actions/deploy-pages@v4

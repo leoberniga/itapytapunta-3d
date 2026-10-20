@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Itá Pytã Punta • Explorador BIM 3D y Geotécnico</title>
+  <meta name="description" content="Plataforma de exploración y renderizado 3D para el desarrollo arquitectónico y geotécnico en Itá Pytã Punta, Asunción.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+  <!-- Three.js 3D WebGL Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="top-nav">
+    <div class="brand-section glass-panel">
+      <span class="brand-badge">BIM 3D</span>
+      <div class="brand-title">
+        <h1>Residencia Itá Pytã Punta</h1>
+        <p>Calle Guillermo Arias • Asunción, PY • Río Paraguay</p>
+      </div>
+    </div>
+
+    <div class="header-status-badge glass-panel">
+      <span class="status-dot"></span>
+      <span>Zapatas Z1..Z20: Ejecutadas 100%</span>
+    </div>
+
+    <div class="header-actions">
+      <button id="btn-toggle-ui" class="btn-header glass-panel" title="Ocultar/Mostrar Interfaz">
+        <i data-lucide="eye"></i>
+        <span>UI</span>
+      </button>
+      <button id="btn-open-cloud" class="btn-header btn-primary" title="Nube Google Cloud y Backup">
+        <i data-lucide="cloud"></i>
+        <span>Nube Gratuita</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Left Sidebar Controls -->
+  <aside id="left-sidebar" class="left-sidebar glass-panel">
+    
+    <!-- Design Variant Switcher -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Diseño Arquitectónico</span>
+        <i data-lucide="layers" style="width:14px;height:14px;"></i>
+      </div>
+      <div class="tools-bar">
+        <button id="opt-btn-1" class="tool-btn active">Opción 1</button>
+        <button id="opt-btn-2" class="tool-btn">Opción 2</button>
+        <button id="opt-btn-sub" class="tool-btn">Subsuelo</button>
+      </div>
+    </div>
+
+    <!-- Layers Toggles -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Capas del Modelo 3D</span>
+        <i data-lucide="sliders" style="width:14px;height:14px;"></i>
+      </div>
+      <div class="layers-grid">
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #f8fafc;"></span>
+            <span>Arquitectura Planta Baja</span>
+          </div>
+          <input type="checkbox" id="layer-arch" checked>
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #94a3b8;"></span>
+            <span>Departamento Subsuelo</span>
+          </div>
+          <input type="checkbox" id="layer-subsuelo" checked>
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #06b6d4;"></span>
+            <span>Estructura H°A° (Zapatas/Pilares)</span>
+          </div>
+          <input type="checkbox" id="layer-struct" checked>
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #ef4444;"></span>
+            <span>Geotecnia (Sondeos S1..S3)</span>
+          </div>
+          <input type="checkbox" id="layer-geotech" checked>
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #f59e0b;"></span>
+            <span>Terreno y Curvas de Nivel</span>
+          </div>
+          <input type="checkbox" id="layer-topo" checked>
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #3b82f6;"></span>
+            <span>Puntos de Foto en Obra</span>
+          </div>
+          <input type="checkbox" id="layer-photos" checked>
+        </label>
+      </div>
+    </div>
+
+    <!-- Camera View Presets -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Cámaras y Pistas</span>
+        <i data-lucide="video" style="width:14px;height:14px;"></i>
+      </div>
+      <div class="views-grid">
+        <button class="view-btn" data-cam="aerial">
+          <i data-lucide="globe"></i> Aérea
+        </button>
+        <button class="view-btn" data-cam="street">
+          <i data-lucide="car"></i> Calle
+        </button>
+        <button class="view-btn" data-cam="gallery">
+          <i data-lucide="sunset"></i> Al Río
+        </button>
+        <button class="view-btn" data-cam="soil">
+          <i data-lucide="split"></i> Suelo
+        </button>
+        <button class="view-btn" data-cam="structure">
+          <i data-lucide="box"></i> H°A°
+        </button>
+        <button class="view-btn" data-cam="walk">
+          <i data-lucide="footprints"></i> Paseo
+        </button>
+      </div>
+    </div>
+
+    <!-- Solar Simulation -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Sol y Puesta de Sol</span>
+        <span id="sun-time-display" style="color:var(--accent-gold); font-size:12px;">17:30 (Atardecer)</span>
+      </div>
+      <div class="sun-control">
+        <input type="range" id="sun-slider" min="6" max="19" step="0.5" value="17.5">
+        <div class="sun-labels">
+          <span>06:00 (Amanecer)</span>
+          <span>12:00</span>
+          <span>18:30 (Río Paraguay)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAD Tools (X-Ray & Tape Measurement) -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Herramientas CAD</span>
+        <i data-lucide="compass" style="width:14px;height:14px;"></i>
+      </div>
+      <div class="tools-bar">
+        <button id="btn-xray" class="tool-btn">
+          <i data-lucide="scan"></i> Rayos X
+        </button>
+        <button id="btn-measure" class="tool-btn">
+          <i data-lucide="ruler"></i> Cinta Métrica
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Real-time CAD Measurement Result Card -->
+  <div id="measure-card" class="measure-card glass-panel">
+    <div class="panel-section-title">
+      <span>Medición CAD 3D</span>
+      <button id="btn-clear-measure" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:11px;">Limpiar</button>
+    </div>
+    <p style="font-size:11px; color:var(--text-muted);">Haz clic en 2 puntos del modelo para medir la distancia real en metros:</p>
+    <div class="measure-stat">
+      <span>Distancia Directa:</span>
+      <span id="measure-dist" class="val">-- m</span>
+    </div>
+    <div class="measure-stat">
+      <span>Desnivel Vertical (ΔY):</span>
+      <span id="measure-dy" class="val">-- m</span>
+    </div>
+    <div class="measure-stat">
+      <span>Longitud en Planta:</span>
+      <span id="measure-plan" class="val">-- m</span>
+    </div>
+  </div>
+
+  <!-- Interactive Inspector Popup (When clicking any element) -->
+  <div id="inspector-popup" class="inspector-popup glass-panel">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <span id="inspector-tag" class="inspector-tag">Elemento</span>
+      <button id="inspector-close" style="background:none;border:none;color:var(--text-muted);cursor:pointer;">✕</button>
+    </div>
+    <h3 id="inspector-title" class="inspector-title">Nombre del Objeto</h3>
+    <p id="inspector-desc" class="inspector-desc">Descripción técnica y detalles constructivos.</p>
+    <div id="inspector-meta"></div>
+  </div>
+
+  <!-- Bottom Floating Dock Navigation -->
+  <nav class="bottom-dock glass-panel">
+    <button class="dock-item" data-modal="modal-resumen">
+      <i data-lucide="info"></i>
+      <span>Resumen</span>
+    </button>
+    <button class="dock-item" data-modal="modal-planos">
+      <i data-lucide="file-text"></i>
+      <span>Planos CAD</span>
+    </button>
+    <button class="dock-item" data-modal="modal-geotech">
+      <i data-lucide="activity"></i>
+      <span>Estudio Suelo</span>
+    </button>
+    <button class="dock-item" data-modal="modal-photos">
+      <i data-lucide="camera"></i>
+      <span>Fotos Obra</span>
+    </button>
+    <button class="dock-item" data-modal="modal-presupuesto">
+      <i data-lucide="calculator"></i>
+      <span>Cómputo</span>
+    </button>
+    <button class="dock-item" data-modal="modal-cloud">
+      <i data-lucide="smartphone"></i>
+      <span>Móvil & Nube</span>
+    </button>
+  </nav>
+
+  <!-- Modals -->
+
+  <!-- Modal 1: Resumen General -->
+  <div id="modal-resumen" class="modal-overlay">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h2 style="font-family:var(--font-display); font-size:20px;">Proyecto Residencia Itá Pytã Punta</h2>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <p style="margin-bottom:12px;">
+          Proyecto residencial implantado en el histórico barrio <strong>Itá Pytã Punta de Asunción</strong>, sobre la calle Guillermo Arias, caracterizado por su pronunciado desnivel topográfico hacia el <strong>Río Paraguay</strong> y visuales panorámicas hacia el atardecer.
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin:16px 0;">
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+            <strong style="color:var(--accent-gold);">Superficie del Lote:</strong><br>306.59 m² (9.89m frente x 31.00m fondo)
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+            <strong style="color:var(--accent-cyan);">Desnivel Natural:</strong><br>3.64 metros desde calle (+100m) a fondo (+96.20m)
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+            <strong style="color:var(--accent-emerald);">Estado Estructural:</strong><br>Zapatas Z1..Z20 y pilares ejecutados al 100%
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+            <strong style="color:#a855f7);">Galería Panorámica:</strong><br>3.50m x 9.55m con vista al río y parrilla
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Planos CAD y Editables -->
+  <div id="modal-planos" class="modal-overlay">
+    <div class="modal-content glass-panel" style="max-width:960px;">
+      <div class="modal-header">
+        <h2 style="font-family:var(--font-display); font-size:20px;">Planos Arquitectónicos y Geotécnicos (Vectoriales)</h2>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:14px;">
+        <button class="tool-btn active" id="btn-plano-acotado">Planta Baja Acotada</button>
+        <button class="tool-btn" id="btn-plano-corte">Corte del Terreno</button>
+        <button class="tool-btn" id="btn-plano-ubicacion">Ubicación y Lote</button>
+        <button class="tool-btn" id="btn-plano-subsuelo">Subsuelo Ejecutivo</button>
+      </div>
+      <div id="blueprint-viewer" style="background:#020617; border:1px solid var(--border-subtle); border-radius:12px; height:460px; overflow:auto; display:flex; align-items:center; justify-content:center; padding:10px;">
+        <img id="blueprint-img" src="/assets/plano_acotado.svg" style="max-width:100%; max-height:100%; object-fit:contain;" alt="Plano">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Estudio Geotécnico GEO-STAN -->
+  <div id="modal-geotech" class="modal-overlay">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h2 style="font-family:var(--font-display); font-size:20px;">Estudio Geotécnico Nº 2956 • GEO-STAN S.R.L.</h2>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
+        <p style="margin-bottom:14px;">
+          Se ejecutaron <strong>3 sondeos de penetración estándar (SPT)</strong> hasta 10.05m de profundidad, con nivelación óptica referida a cota +100.00m.
+        </p>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border-subtle); color:var(--accent-cyan);">
+                <th style="padding:8px;">Sondeo</th>
+                <th style="padding:8px;">Ubicación</th>
+                <th style="padding:8px;">Cota Boca</th>
+                <th style="padding:8px;">Prof.</th>
+                <th style="padding:8px;">Estrato Superior</th>
+                <th style="padding:8px;">Rechazo SPT (>50)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                <td style="padding:8px; font-weight:700;">S-1</td>
+                <td style="padding:8px;">Frente (Jardín)</td>
+                <td style="padding:8px;">+99.84 m</td>
+                <td style="padding:8px;">10.05 m</td>
+                <td style="padding:8px;">Arena limosa SM (Nspt 16-20)</td>
+                <td style="padding:8px; color:var(--accent-gold);">5.00 m (Arenisca)</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                <td style="padding:8px; font-weight:700;">S-2</td>
+                <td style="padding:8px;">Centro (Vivienda)</td>
+                <td style="padding:8px;">+97.15 m</td>
+                <td style="padding:8px;">10.04 m</td>
+                <td style="padding:8px;">Arena limosa SM (Nspt 11-18)</td>
+                <td style="padding:8px; color:var(--accent-gold);">5.00 m (Arenisca)</td>
+              </tr>
+              <tr>
+                <td style="padding:8px; font-weight:700;">S-3</td>
+                <td style="padding:8px;">Fondo (Barranco)</td>
+                <td style="padding:8px;">+96.20 m</td>
+                <td style="padding:8px;">10.05 m</td>
+                <td style="padding:8px;">Relleno + Arena SM (Nspt 7-12)</td>
+                <td style="padding:8px; color:var(--accent-gold);">4.50 m (Arenisca)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:8px; padding:12px; margin-top:16px;">
+          <strong style="color:var(--accent-cyan);">Conclusión Geotécnica:</strong> Terreno altamente portante y libre de nivel freático. Las zapatas directas a 1.20m de profundidad sobre suelo SM tienen capacidad portante admisible de <strong>10.0 a 17.9 Tn/m²</strong>, garantizando absoluta estabilidad sin asentamientos diferenciales.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Galería de Fotos de Obra -->
+  <div id="modal-photos" class="modal-overlay">
+    <div class="modal-content glass-panel" style="max-width:980px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:20px;">Registro Fotográfico en Obra</h2>
+          <p style="font-size:11px; color:var(--text-muted);">118 fotografías del avance desde Google Photos</p>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div id="photo-gallery-container" class="photo-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Cómputo y Presupuesto -->
+  <div id="modal-presupuesto" class="modal-overlay">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h2 style="font-family:var(--font-display); font-size:20px;">Cómputo Métrico y Estructura (JIVESA / Lozarrap)</h2>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Zapatas H°A° (Z1 a Z20):</span>
+            <strong style="color:var(--accent-emerald);">20 Unidades • 100% Ejecutadas</strong>
+          </li>
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Pilares H°A° (12x30 y 15x30 cm):</span>
+            <strong style="color:var(--accent-emerald);">20 Unidades • Hormigonados</strong>
+          </li>
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Vigas de Encadenado (15x30 cm):</span>
+            <strong>10.65 ml (Superior e Inferior)</strong>
+          </li>
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Losa Alivianada (Loza Rap):</span>
+            <strong>38.00 m²</strong>
+          </li>
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Mampostería Nivelación Ladrillo Común:</span>
+            <strong>14.20 m² (Espesor 30 cm)</strong>
+          </li>
+          <li style="padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; display:flex; justify-content:space-between;">
+            <span>Mampostería Cerámica Hueca (12x18x25):</span>
+            <strong>135.06 m² (Espesor 15 cm)</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Nube Gratuita y Soberanía de Datos -->
+  <div id="modal-cloud" class="modal-overlay">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h2 style="font-family:var(--font-display); font-size:20px;">Soberanía y Despliegue en la Nube Gratuita</h2>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div style="font-size:13px; line-height:1.7; color:#cbd5e1;">
+        <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <h4 style="color:#34d399; font-size:14px; margin-bottom:4px;">
+            <i data-lucide="check-circle" style="width:16px;height:16px;vertical-align:middle;"></i>
+            Independencia total de suscripciones de Antigravity (100 USD)
+          </h4>
+          <p style="font-size:12px; color:#a7f3d0;">
+            Todo el código, modelos 3D y assets quedan guardados en tu repositorio de GitHub y alojados en Google Cloud / Firebase Hosting en su plan gratuito permanente (Spark Tier: 10 GB almacenamiento, 360 MB/día de transferencia, SSL global incluido).
+          </p>
+        </div>
+
+        <h4 style="color:#fff; margin-bottom:6px;">¿Cómo seguir el proyecto desde el celular cuando apagues la laptop?</h4>
+        <ol style="margin-left:20px; margin-bottom:16px; font-size:12px; color:#94a3b8;">
+          <li style="margin-bottom:6px;">El sitio web está desplegado en una URL pública y segura (ej: <code>https://itapytapunta.web.app</code> o Cloudflare Pages).</li>
+          <li style="margin-bottom:6px;">Abre el enlace en Google Chrome o Safari desde tu teléfono móvil. Funciona con gestos táctiles fluidos (1 dedo para rotar, 2 dedos para zoom y paneo).</li>
+          <li style="margin-bottom:6px;">Si realizas cambios en el código o deseas agregar fotos, un simple <code>git push</code> en GitHub dispara el despliegue automático mediante GitHub Actions sin encender tu laptop.</li>
+        </ol>
+
+        <div style="padding:12px; background:rgba(255,255,255,0.05); border-radius:8px; font-family:monospace; font-size:11px;">
+          git remote add origin https://github.com/leoberniga/itapytapunta-3d.git<br>
+          git push -u origin main
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

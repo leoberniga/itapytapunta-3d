@@ -39,7 +39,11 @@ import {
   filterMetricRows,
   cycleRoofStyle,
   getRoofStyleButtonLabel,
-  isAnyMepSimulationActive
+  isAnyMepSimulationActive,
+  USER_ROLES_CATALOG,
+  getRoleWorkspaceConfig,
+  getRoleBillOfMaterials,
+  generateRoleWorkOrderCsv
 } from './domain/budgetAndSceneService.js';
 import { FloorplanEditor } from './floorplanEditor.js';
 import { AuthManager } from './auth.js';
@@ -145,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeComputoCategoryFilter = 'ALL';
   let activeComputoOriginFilter = 'ALL';
   let customTargetOverrideGs = null;
+  let activeUserRoleId = 'pareja';
+  let renderComputoDrawer = null;
+  let renderActiveRoleWorkbench = null;
 
   // Editable state copy of budget items so user can adjust quantities & unit prices live
   const editablePartidas = PRESUPUESTO_PARTIDAS.map((p) => ({
@@ -499,6 +506,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof renderComputoDrawer === 'function') {
       renderComputoDrawer();
+    }
+    if (typeof renderActiveRoleWorkbench === 'function') {
+      renderActiveRoleWorkbench();
     }
   };
 
@@ -2100,12 +2110,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btnToggleComputoDrawer.setAttribute('data-drawer-open', isOpen ? 'on' : 'off');
       btnToggleComputoDrawer.classList.toggle('active', isOpen);
     }
-    if (isOpen) {
+    if (isOpen && typeof renderComputoDrawer === 'function') {
       renderComputoDrawer();
     }
   };
 
-  function renderComputoDrawer() {
+  renderComputoDrawer = () => {
     if (!computoDrawerTbody) return;
 
     const currentPartidas = editablePartidas.map((p) => ({
@@ -2142,6 +2152,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const cdCountPrevistos = document.getElementById('cd-count-previstos');
     const cdCuotaBnf = document.getElementById('cd-cuota-bnf');
 
+    const badgePrevistos = document.getElementById('cd-badge-previstos');
+    const badgeYaEsta = document.getElementById('cd-badge-ya-esta');
+    const badgeAll = document.getElementById('cd-badge-all');
+    const badgeNoInc = document.getElementById('cd-badge-no-inc');
+
+    if (badgePrevistos) badgePrevistos.textContent = String(breakdown.summary.includedItemsCount);
+    if (badgeYaEsta) badgeYaEsta.textContent = String(breakdown.summary.alreadyBuiltCount);
+    if (badgeAll) badgeAll.textContent = String(breakdown.allRows.length);
+    if (badgeNoInc) badgeNoInc.textContent = String(breakdown.summary.excludedItemsCount ?? breakdown.summary.notIncludedCount ?? 0);
+
     const scenarioShortName =
       activeScenarioKey === 'hoy_en_obra'
         ? 'Hoy en Obra (Solo H°A° Ejecutado)'
@@ -2156,12 +2176,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cdTargetCredito) cdTargetCredito.textContent = `Gs. ${formatGs(breakdown.summary.targetCreditGs)}`;
     if (cdDiffCredito) {
       const diff = breakdown.summary.differenceGs;
-      cdDiffCredito.textContent = `${diff >= 0 ? '+' : '-'} Gs. ${formatGs(Math.abs(diff))}`;
+      cdDiffCredito.textContent = `Disponible: ${diff >= 0 ? '+' : '-'}Gs. ${formatGs(Math.abs(diff))}`;
       cdDiffCredito.style.color = diff >= 0 ? '#34d399' : '#f87171';
     }
     if (cdTotalYaObra) cdTotalYaObra.textContent = `Gs. ${formatGs(breakdown.summary.totalAlreadyBuiltGs)}`;
     if (cdCountPrevistos) {
-      cdCountPrevistos.textContent = `${breakdown.summary.includedItemsCount} previstos / ${breakdown.summary.alreadyBuiltCount} ya en obra`;
+      cdCountPrevistos.textContent = `${breakdown.summary.includedItemsCount} previstos / ${breakdown.summary.alreadyBuiltCount} ya está`;
     }
 
     const factorBnf = PREVISION_CREDITO_NUEVO?.factorCuotaConSegurosPorMillonGs || 11765.9090909;
@@ -2171,7 +2191,6 @@ document.addEventListener('DOMContentLoaded', () => {
         activeScenarioKey === 'hoy_en_obra' ? 'Gs. 0 / mes (Ya pagado)' : `Gs. ${formatGs(cuotaBnf)} / mes`;
     }
 
-    // Si está en "hoy_en_obra" y el filtro es PREVISTOS, mostramos YA_ESTA automáticamente o todos para que no quede vacío
     const effectiveFilter =
       activeScenarioKey === 'hoy_en_obra' && activeDrawerFilter === 'PREVISTOS'
         ? 'YA_ESTA'
@@ -2185,7 +2204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rows.length === 0) {
       computoDrawerTbody.innerHTML = `
         <tr>
-          <td colspan="6" style="text-align:center; padding:24px; color:#94a3b8;">
+          <td colspan="5" style="text-align:center; padding:24px; color:#94a3b8;">
             No se encontraron ítems para este filtro (${effectiveFilter}). Probá cambiar a «Todos» o «Ya Está».
           </td>
         </tr>
@@ -2201,13 +2220,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (r.alreadyBuilt) {
           rowClass = 'row-ya-esta';
-          statusBadge = `<span class="drawer-status-pill pill-ya-esta" title="${r.statusLabel}">✅ YA ESTÁ</span>`;
+          statusBadge = `<span class="cd-status-badge ya-esta" title="${r.statusLabel}">✅ YA ESTÁ</span>`;
         } else if (r.includedInScenario) {
           rowClass = 'row-previsto';
-          statusBadge = `<span class="drawer-status-pill pill-previsto" title="${r.statusLabel}">🏦 PREVISTO BNF</span>`;
+          statusBadge = `<span class="cd-status-badge previsto" title="${r.statusLabel}">🎯 PREVISTO BNF</span>`;
         } else {
           rowClass = 'row-no-incluido';
-          statusBadge = `<span class="drawer-status-pill pill-no-incluido" title="${r.statusLabel}">⏸️ NO INCLUIDO</span>`;
+          statusBadge = `<span class="cd-status-badge no-incluido" title="${r.statusLabel}">⏸️ NO INCLUIDO</span>`;
         }
 
         const toggleCheckboxHtml = isToggleable
@@ -2217,20 +2236,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return `
           <tr class="${rowClass}">
             <td>
+              <span class="cd-item-name">${r.item}</span>
+              <span class="cd-item-cat">${r.categoria} • <span style="color:#64748b;">${r.code}</span></span>
+            </td>
+            <td class="cd-num">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })} <small style="color:#94a3b8;">${r.unidad}</small></td>
+            <td class="cd-num">${r.precioUnitarioGs > 0 ? formatGs(r.precioUnitarioGs) : '<span style="color:#34d399;">Gs. 0</span>'}</td>
+            <td class="cd-total" style="color:${r.alreadyBuilt ? '#34d399' : r.includedInScenario ? '#fde68a' : '#64748b'};">
+              ${r.subtotalGs > 0 ? `Gs. ${formatGs(r.subtotalGs)}` : 'Gs. 0'}
+            </td>
+            <td>
               <div style="display:flex; align-items:center; gap:4px;">
                 ${toggleCheckboxHtml}
                 ${statusBadge}
               </div>
-            </td>
-            <td>
-              <div class="drawer-item-title">${r.item}</div>
-              <div class="drawer-item-sub">${r.categoria} • <span style="color:#64748b;">${r.code}</span></div>
-            </td>
-            <td class="num-col">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })}</td>
-            <td><span style="font-family:var(--font-mono); font-size:10.5px; color:#94a3b8;">${r.unidad}</span></td>
-            <td class="num-col">${r.precioUnitarioGs > 0 ? `Gs. ${formatGs(r.precioUnitarioGs)}` : '<span style="color:#34d399;">Gs. 0 (Propio)</span>'}</td>
-            <td class="num-col" style="font-weight:700; color:${r.alreadyBuilt ? '#34d399' : r.includedInScenario ? '#fde68a' : '#64748b'};">
-              ${r.subtotalGs > 0 ? `Gs. ${formatGs(r.subtotalGs)}` : 'Gs. 0'}
             </td>
           </tr>
         `;
@@ -2249,7 +2267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recalculateBudget();
       });
     });
-  }
+  };
 
   if (btnToggleComputoDrawer) {
     btnToggleComputoDrawer.addEventListener('click', () => {
@@ -2276,11 +2294,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.querySelectorAll('.computo-drawer-filter-btn[data-drawer-filter]').forEach((btn) => {
+  document.querySelectorAll('.cd-filter-pill[data-cd-filter], .computo-drawer-filter-btn[data-drawer-filter]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.computo-drawer-filter-btn[data-drawer-filter]').forEach((b) => b.classList.remove('active'));
+      document.querySelectorAll('.cd-filter-pill[data-cd-filter], .computo-drawer-filter-btn[data-drawer-filter]').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      activeDrawerFilter = btn.getAttribute('data-drawer-filter') || 'ALL';
+      activeDrawerFilter = btn.getAttribute('data-cd-filter') || btn.getAttribute('data-drawer-filter') || 'ALL';
       renderComputoDrawer();
     });
   });
@@ -3921,5 +3939,353 @@ document.addEventListener('DOMContentLoaded', () => {
       updateElectricalSimulationUI();
     });
   });
+
+  // =========================================================================
+  // 15. MOTOR DE EXPERIENCIA MULTIRROL (7 PERFILES DE USUARIO + 3 PESTAÑAS SIDEBAR)
+  // =========================================================================
+  const switchSidebarTab = (tabId) => {
+    document.querySelectorAll('.sw-tab-btn[data-sidebar-tab]').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-sidebar-tab') === tabId);
+    });
+    document.querySelectorAll('.sidebar-tab-pane, .sidebar-tab-panel').forEach((panel) => {
+      const isMatch = panel.id === tabId;
+      panel.classList.toggle('active', isMatch);
+      panel.style.display = isMatch ? 'block' : 'none';
+    });
+  };
+
+  document.querySelectorAll('.sw-tab-btn[data-sidebar-tab]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-sidebar-tab');
+      if (targetTab) switchSidebarTab(targetTab);
+    });
+  });
+
+  const executeRoleQuickAction = (actionType, target) => {
+    if (actionType === 'focus_room' && target) {
+      if (typeof scene.focusRoom === 'function') {
+        scene.focusRoom(target);
+      }
+      return;
+    }
+    if (actionType === 'cutaway' && target) {
+      scene.setFloorCutaway(target);
+      document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
+        b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === target);
+      });
+      return;
+    }
+    if (actionType === 'toggle_game') {
+      const btnGame = document.getElementById('btn-toggle-game-mode');
+      if (btnGame) btnGame.click();
+      return;
+    }
+    if (actionType === 'open_pdf') {
+      window.open('assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf', '_blank', 'noopener');
+      return;
+    }
+    if (actionType === 'open_modal' && target) {
+      openModal(target);
+      return;
+    }
+    if (actionType === 'toggle_bank_colors') {
+      setGlobalBankColorMode(!scene.bankColorMode);
+      return;
+    }
+    if (actionType === 'open_drawer') {
+      if (target && target !== 'open') {
+        activeDrawerFilter = target;
+        document.querySelectorAll('.cd-filter-pill[data-cd-filter]').forEach((b) => {
+          b.classList.toggle('active', b.getAttribute('data-cd-filter') === target);
+        });
+      }
+      setComputoDrawerOpen(true);
+      return;
+    }
+    if (actionType === 'export_xlsx') {
+      if (btnExportXlsx) btnExportXlsx.click();
+      return;
+    }
+    if (actionType === 'sim_pluvial' && target) {
+      const mepPanel = document.getElementById('mep-sim-panel');
+      if (mepPanel) mepPanel.style.display = 'block';
+      pluvialSimState[target] = !pluvialSimState[target];
+      const btn = document.querySelector(`[data-pluv-sim="${target}"]`);
+      if (btn) btn.classList.toggle('active', pluvialSimState[target]);
+      updatePluvialSimulationUI();
+      return;
+    }
+    if (actionType === 'sim_elec' && target) {
+      const mepPanel = document.getElementById('mep-sim-panel');
+      if (mepPanel) mepPanel.style.display = 'block';
+      electricalSimState[target] = !electricalSimState[target];
+      const btn = document.querySelector(`[data-elec-sim="${target}"]`);
+      if (btn) btn.classList.toggle('active', electricalSimState[target]);
+      updateElectricalSimulationUI();
+      return;
+    }
+    if (actionType === 'stop_sims') {
+      stopAllMepSimulations();
+      return;
+    }
+    if (actionType === 'set_scenario' && target) {
+      applyScenario(target);
+      return;
+    }
+    if (actionType === 'toggle_gates_3d') {
+      if (typeof scene.toggleInteractiveElement === 'function') {
+        scene.toggleInteractiveElement('porton_cochera');
+        scene.toggleInteractiveElement('puerta_peatonal');
+      }
+      if (typeof scene.focusRoom === 'function') {
+        scene.focusRoom('fachada_porton');
+      }
+      return;
+    }
+    if (actionType === 'cycle_roof') {
+      if (btnToggleRoofStyle) btnToggleRoofStyle.click();
+    }
+  };
+
+  renderActiveRoleWorkbench = () => {
+    const host = document.getElementById('role-workbench-host');
+    if (!host) return;
+
+    const currentPartidas = editablePartidas.map((p) => ({
+      ...p,
+      includedInScenario: selectedItemIds.has(p.id),
+      cantidad: p.cantidadActual,
+      precioUnitarioGs: p.precioUnitarioActualGs,
+      subtotalGs: p.subtotalActualGs
+    }));
+
+    const role = getRoleWorkspaceConfig(activeUserRoleId);
+    const bom = getRoleBillOfMaterials(activeUserRoleId, activeScenarioKey, currentPartidas);
+    const accent = role.color || '#38bdf8';
+
+    const actionsHtml = (role.quickActions || [])
+      .map(
+        (act) => `
+        <button class="role-action-btn" data-role-action="${act.type || act.action || ''}" data-role-target="${act.target || ''}">
+          ${act.label}
+        </button>
+      `
+      )
+      .join('');
+
+    const checklistHtml = (role.checklistTecnico || [])
+      .map((item) => `<li>${item}</li>`)
+      .join('');
+
+    const topItems = (bom.items || []).slice(0, 12);
+    const itemsHtml = topItems
+      .map((r) => {
+        const isToggleable = !r.id.startsWith('EXIST-') && !r.id.startsWith('PROPIO-');
+        const isIncluded = selectedItemIds.has(r.id) || Boolean(r.includedInScenario);
+        const statusColor = r.alreadyBuilt
+          ? '#34d399'
+          : isIncluded
+            ? '#fde68a'
+            : '#64748b';
+        const statusTag = r.alreadyBuilt
+          ? '✅ Ya está'
+          : isIncluded
+            ? '🎯 Previsto'
+            : '⏸️ No inc.';
+        const itemTotal = Number(r.precioTotalGs ?? r.subtotalGs ?? 0);
+        return `
+          <div class="role-bom-row">
+            <div style="display:flex; align-items:flex-start; gap:5px; flex:1; min-width:0;">
+              ${
+                isToggleable
+                  ? `<input type="checkbox" class="role-bom-item-chk" data-role-item-id="${r.id}" ${isIncluded ? 'checked' : ''} style="margin-top:2px; accent-color:${accent}; cursor:pointer;" title="Activar/Desactivar en presupuesto" />`
+                  : ''
+              }
+              <div style="min-width:0;">
+                <span class="r-name">${r.item || r.producto}</span>
+                <span class="r-qty">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })} ${r.unidad} • <span style="color:${statusColor};">${statusTag}</span></span>
+              </div>
+            </div>
+            <div class="r-val" style="color:${statusColor};">
+              ${itemTotal > 0 ? `Gs. ${formatGs(itemTotal)}` : 'Gs. 0'}
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
+    host.innerHTML = `
+      <div class="role-wb-card" style="border-color:${accent}55;">
+        <div class="role-wb-header">
+          <span class="role-wb-icon">${role.emoji || '🎯'}</span>
+          <div>
+            <div class="role-wb-badge" style="color:${accent};">${role.badge}</div>
+            <div class="role-wb-title">${role.nombre}</div>
+          </div>
+        </div>
+        <p class="role-wb-desc">${role.resumenEjecutivo}</p>
+
+        <div class="panel-section-title" style="margin-bottom:5px;">
+          <span>⚡ Acciones Rápidas (${role.shortName})</span>
+        </div>
+        <div class="role-actions-grid">
+          ${actionsHtml}
+        </div>
+
+        <div class="role-checklist-box" style="border-left-color:${accent};">
+          <div class="role-checklist-title" style="color:${accent};">
+            📋 Especificaciones y Control en Obra (${role.shortName})
+          </div>
+          <ul class="role-checklist-list">
+            ${checklistHtml}
+          </ul>
+        </div>
+
+        <div class="role-bom-summary">
+          <div class="role-bom-kpi">
+            <span>Total Previsto BNF (${bom.previstoCount} rubros)</span>
+            <strong>Gs. ${formatGs(bom.totalRolePrevistoBnfGs)}</strong>
+          </div>
+          <div class="role-bom-kpi">
+            <span>Materiales / Mano Obra</span>
+            <strong style="color:#7dd3fc;">${formatGs(bom.totalRoleMaterialesGs)} / ${formatGs(bom.totalRoleManoObraGs)}</strong>
+          </div>
+        </div>
+
+        <div class="role-bom-items-mini">
+          ${itemsHtml}
+        </div>
+
+        <div style="display:flex; gap:6px; margin-top:9px;">
+          <button id="btn-export-role-csv" class="role-export-btn" style="flex:1;">
+            📥 Orden de Trabajo ${role.shortName} (.CSV)
+          </button>
+          <button id="btn-role-open-drawer" class="role-action-btn" style="width:auto; padding:7px 9px;" title="Abrir lista completa de costos">
+            🧮 Ver Todo
+          </button>
+        </div>
+      </div>
+    `;
+
+    host.querySelectorAll('.role-action-btn[data-role-action]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const act = btn.getAttribute('data-role-action');
+        const tgt = btn.getAttribute('data-role-target');
+        executeRoleQuickAction(act, tgt);
+      });
+    });
+
+    host.querySelectorAll('.role-bom-item-chk').forEach((chk) => {
+      chk.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-role-item-id');
+        if (!id) return;
+        if (e.target.checked) selectedItemIds.add(id);
+        else selectedItemIds.delete(id);
+        recalculateBudget();
+      });
+    });
+
+    const btnRoleExportCsv = document.getElementById('btn-export-role-csv');
+    if (btnRoleExportCsv) {
+      btnRoleExportCsv.addEventListener('click', () => {
+        const csvContent = generateRoleWorkOrderCsv(
+          activeUserRoleId,
+          activeScenarioKey,
+          currentPartidas
+        );
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `orden_trabajo_${activeUserRoleId}_${activeScenarioKey}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    const btnRoleOpenDrawer = document.getElementById('btn-role-open-drawer');
+    if (btnRoleOpenDrawer) {
+      btnRoleOpenDrawer.addEventListener('click', () => {
+        setComputoDrawerOpen(true);
+      });
+    }
+  };
+
+  const layerCheckboxMap = {
+    muroEstacionamiento: 'layer-muro-parking',
+    losaFase2: 'layer-losa2',
+    techo: 'layer-techo',
+    architecture: 'layer-arch',
+    subsuelo: 'layer-subsuelo',
+    structure: 'layer-struct',
+    entornoUrbano: 'layer-entorno',
+    ductos: 'layer-ductos',
+    pluvial: 'layer-pluvial',
+    senalesDebiles: 'layer-senales',
+    geotech: 'layer-geotech',
+    topography: 'layer-topo'
+  };
+
+  const applyUserRole = (roleId, { skipCamera = false } = {}) => {
+    const profile = getRoleWorkspaceConfig(roleId);
+    activeUserRoleId = profile.id;
+
+    document.querySelectorAll('.role-pill-btn[data-role-id]').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-role-id') === profile.id);
+    });
+
+    switchSidebarTab('tab-role-workbench');
+
+    // Sync 12 CAD layers according to the role's workspace profile
+    if (profile.activeLayers) {
+      Object.entries(profile.activeLayers).forEach(([layerName, isVisible]) => {
+        scene.setLayerVisibility(layerName, Boolean(isVisible));
+        const chkId = layerCheckboxMap[layerName];
+        const chk = chkId ? document.getElementById(chkId) : null;
+        if (chk) chk.checked = Boolean(isVisible);
+      });
+    }
+
+    // Sync floor cutaway preset
+    if (profile.cutawayPreset) {
+      scene.setFloorCutaway(profile.cutawayPreset);
+      document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
+        b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === profile.cutawayPreset);
+      });
+    }
+
+    // Focus 3D camera on the role's primary zone
+    if (!skipCamera && profile.cameraPreset && typeof scene.focusRoom === 'function') {
+      scene.focusRoom(profile.cameraPreset);
+    }
+
+    // Open/close Cómputo Drawer if role is Cost Engineer
+    if (profile.openDrawer) {
+      setComputoDrawerOpen(true);
+    } else if (computoDrawer && computoDrawer.classList.contains('open') && profile.id !== 'ingeniero') {
+      setComputoDrawerOpen(false);
+    }
+
+    // Show/hide MEP interactive simulator panel if role is Plumber or Electrician
+    const mepPanel = document.getElementById('mep-sim-panel');
+    if (mepPanel) {
+      mepPanel.style.display = profile.openMepSim ? 'block' : 'none';
+    }
+
+    renderActiveRoleWorkbench();
+  };
+
+  document.querySelectorAll('.role-pill-btn[data-role-id]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const rId = btn.getAttribute('data-role-id');
+      if (rId) applyUserRole(rId);
+    });
+  });
+
+  // Initialize default role workbench on startup without overriding default camera
+  renderActiveRoleWorkbench();
 });
+
 

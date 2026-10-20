@@ -14,10 +14,15 @@ import {
 
 import {
   ITEM_STATUS,
+  USER_ROLES_CATALOG,
   buildMetricCalculationBreakdown,
+  filterMetricRows,
   cycleRoofStyle,
   normalizePluvialSimulationMode,
-  isAnyMepSimulationActive
+  isAnyMepSimulationActive,
+  getRoleWorkspaceConfig,
+  getRoleBillOfMaterials,
+  generateRoleWorkOrderCsv
 } from '../src/domain/budgetAndSceneService.js';
 
 test('1. BNF Credit Entity: PREVISION_CREDITO_NUEVO and CREDITO_BNF reference Banco Nacional de Fomento (BNF)', () => {
@@ -78,12 +83,18 @@ test('5. Strict BNF Credit Matrix Totals: 300M, 350M, and 440M tiers strictly re
     breakdown300.totalPrevistoCreditoGs > 280000000 && breakdown300.totalPrevistoCreditoGs <= 300000000,
     `300M scenario total (${breakdown300.totalPrevistoCreditoGs}) must be <= 300,000,000`
   );
+  assert.equal(breakdown300.summary.totalCreditSelectedGs, breakdown300.totalPrevistoCreditoGs);
 
-  const breakdown350 = buildMetricCalculationBreakdown('escenario350');
+  // Also test options-object calling convention used by UI drawer
+  const breakdownOpts = buildMetricCalculationBreakdown({
+    scenarioKey: 'escenario350',
+    partidas: PRESUPUESTO_PARTIDAS
+  });
   assert.ok(
-    breakdown350.totalPrevistoCreditoGs > 330000000 && breakdown350.totalPrevistoCreditoGs <= 350000000,
-    `350M scenario total (${breakdown350.totalPrevistoCreditoGs}) must be <= 350,000,000`
+    breakdownOpts.summary.totalCreditSelectedGs > 330000000 && breakdownOpts.summary.totalCreditSelectedGs <= 350000000
   );
+  const filteredPrevistos = filterMetricRows(breakdownOpts.allRows, { statusFilter: 'PREVISTOS', searchQuery: '' });
+  assert.equal(filteredPrevistos.length, breakdownOpts.summary.includedItemsCount);
 
   const breakdown440 = buildMetricCalculationBreakdown('escenario440');
   assert.ok(
@@ -138,4 +149,29 @@ test('6. Roof & Pluvial Simulation State Machines: Rain simulation and Tejas roo
     ),
     false
   );
+});
+
+test('7. Seven User Personas (Roles) Workspace & BOM Engine: Arquitecto, Ingeniero, Pareja, Plomero, Electricista, Albañil, Herrero', () => {
+  const requiredRoles = ['pareja', 'arquitecto', 'ingeniero', 'plomero', 'electricista', 'albanil', 'herrero'];
+  for (const roleId of requiredRoles) {
+    const profile = getRoleWorkspaceConfig(roleId);
+    assert.equal(profile.id, roleId, `Profile ID must match ${roleId}`);
+    assert.ok(profile.nombre.length > 5, `${roleId} must have a descriptive name`);
+    assert.ok(Array.isArray(profile.quickActions) && profile.quickActions.length >= 4, `${roleId} must have at least 4 quickActions`);
+    assert.ok(Array.isArray(profile.checklistTecnico) && profile.checklistTecnico.length >= 4, `${roleId} must have at least 4 technical rules`);
+    assert.ok(typeof profile.activeLayers === 'object', `${roleId} must define activeLayers`);
+
+    const bom = getRoleBillOfMaterials(roleId, 'escenario350');
+    assert.ok(bom.items.length > 0, `${roleId} must have mapped budget items`);
+    assert.ok(bom.totalRolePrevistoBnfGs > 0, `${roleId} must have a positive previsto cost in 350M`);
+    assert.equal(
+      bom.totalRoleMaterialesGs + bom.totalRoleManoObraGs,
+      bom.totalRolePrevistoBnfGs,
+      `${roleId} Materiales + Mano de Obra must equal total previsto Gs`
+    );
+
+    const csv = generateRoleWorkOrderCsv(roleId, 'escenario350');
+    assert.match(csv, /ORDEN DE TRABAJO Y CÓMPUTO MÉTRICO POR ESPECIALIDAD/);
+    assert.ok(csv.includes(profile.nombre), `CSV for ${roleId} must include role name`);
+  }
 });

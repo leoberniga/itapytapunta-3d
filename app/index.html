@@ -131,6 +131,46 @@
   </header>
 
   <!-- ===================================================================== -->
+  <!-- BARRA DE MODO POR ROL / ESPECIALISTA (#role-workspace-bar — UX 2026)   -->
+  <!-- ===================================================================== -->
+  <nav id="role-workspace-bar" class="role-workspace-bar glass-panel" aria-label="Selector de Vista y Herramientas por Perfil de Usuario">
+    <div class="role-bar-kicker">
+      <span class="role-pulse-dot"></span>
+      <span>MODO DE TRABAJO POR ROL:</span>
+    </div>
+    <div class="role-pills-container" id="role-switcher-buttons">
+      <button class="role-pill-btn active" data-role-id="pareja" title="Vista Propietarios (Ruth y Leo): Control de crédito BNF, cuota mensual, recorrido de habitaciones, inventario propio Gs. 0 y modo juego">
+        <span class="rp-emoji">💑</span>
+        <span class="rp-name">Pareja (Ruth y Leo)</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="arquitecto" title="Vista Arquitecto: Editor CAD 2D/3D, cortes de plantas Dollhouse, núcleo húmedo vertical Eje F–G, techo Isopanel/Tejas y 4 Planos Vivos">
+        <span class="rp-emoji">📐</span>
+        <span class="rp-name">Arquitecto</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="ingeniero" title="Vista Ingeniero Calculador de Precios: Abre Lista de Costos producto por producto, desglose Materiales (62%) vs. M.O. (38%), carpeta BNF y Excel .XLSX">
+        <span class="rp-emoji">🧮</span>
+        <span class="rp-name">Ing. Precios</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="plomero" title="Vista Plomero (ESSAP / Pluvial): Aísla red de agua directa ESSAP (medidor en muralla izquierda s/ tanque), bajadas pluviales a calle y pozo ciego trasero">
+        <span class="rp-emoji">🚰</span>
+        <span class="rp-name">Plomero</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="electricista" title="Vista Electricista (ANDE / Domótica China): Aísla acometida trifásica ANDE al costado del portón, tablero Smart DIN 36–48 polos, 26 tomas y red Zigbee">
+        <span class="rp-emoji">⚡</span>
+        <span class="rp-name">Electricista</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="albanil" title="Vista Albañil (H°A° y Mampostería Tobatí): Esqueleto 20 pilares, cierre hueco 38m² con Lozarrap, alerta P12/P13/P15, puente Sikadur-32 y ladrillos Tobatí">
+        <span class="rp-emoji">🧱</span>
+        <span class="rp-name">Albañil</span>
+      </button>
+      <button class="role-pill-btn" data-role-id="herrero" title="Vista Herrero (Portones, Rejilla y Techo): Portón balancín 2.30m + peatonal 0.95m, rejilla metálica en hueco de oxigenación subsuelo, perfiles C y pérgola">
+        <span class="rp-emoji">🛠️</span>
+        <span class="rp-name">Herrero</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===================================================================== -->
   <!-- MODO JUEGO / RECORRIDO HIPERREALISTA ESTILO GTA VI HUD (#gta-game-hud) -->
   <!-- ===================================================================== -->
   <div id="gta-game-hud" class="gta-game-hud" style="display:none;">
@@ -292,13 +332,13 @@
     </div>
   </div>
 
-  <!-- Left Sidebar Controls -->
+  <!-- Left Sidebar Command Center (Tabbed UX 2026) -->
   <aside id="left-sidebar" class="left-sidebar glass-panel">
     
     <!-- KPI Summary Card -->
     <div class="kpi-panel">
       <div class="kpi-header">
-        <span class="kpi-tag" id="kpi-scenario-name">Crédito 300 Millones Gs.</span>
+        <span class="kpi-tag" id="kpi-scenario-name">Crédito BNF 300M</span>
         <span class="kpi-status-badge ok" id="kpi-semaforo">
           <span class="status-dot"></span>
           <span>En Rango</span>
@@ -306,246 +346,270 @@
       </div>
       <div class="kpi-main-metric">
         <span class="currency">Gs.</span>
-        <span class="amount" id="kpi-total-amount">299.832.034</span>
+        <span class="amount" id="kpi-total-amount">298.210.000</span>
       </div>
       <div class="kpi-sub-row">
-        <span>Costo / m² estimado:</span>
-        <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Gs. 1.680.484 / m²</strong>
+        <span>Cuota BNF / Costo m²:</span>
+        <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Cuota BNF: Gs. 3.529.773/mes</strong>
       </div>
       <p id="kpi-objective-desc" class="kpi-desc">
-        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Dormitorio en Suite y Estudio en 2do Piso (+102.88m), Gran Sala-Comedor-Cocina en Nivel Calle (+100.00m) y Lavadero + Salón Abierto en los 100.71 m² libres del Subsuelo (+97.66m) con Pasillo Antihumedad de 1.50m.
+        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Suite, 2do Dormitorio, Desk y 2 Baños arriba (+102.88m), Estar-Comedor-Cocina y Baño Social en Nivel Calle (+100.00m) y Salón + Lavadero en Subsuelo (+97.66m).
       </p>
-      <button id="btn-kpi-open-drawer" class="btn-primary" style="width:100%; margin-top:8px; padding:7px 10px; font-size:11px; font-weight:800; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg, rgba(14,165,233,0.32), rgba(2,132,199,0.52)); border:1px solid rgba(56,189,248,0.65); color:#f0f9ff;">
-        <span>📋 Desplegar Lista de Costos (Cálculo Métrico BNF)</span>
-      </button>
-    </div>
-
-    <!-- Recorrido por Habitación y Detalle (3 Niveles de Ruth y Leo) -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>Recorrido 3D y Modo Juego GTA</span>
-        <i data-lucide="compass" style="width:14px;height:14px;color:var(--accent-cyan);"></i>
-      </div>
-      <div style="display:flex; gap:6px; margin-bottom:8px;">
-        <button id="btn-sidebar-game-mode" class="btn-primary" style="flex:1; padding:8px 10px; font-size:11.5px; font-weight:800; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; display:flex; align-items:center; justify-content:center; gap:6px;">
-          <span>🎮 Modo Juego (Recorrido GTA)</span>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button id="btn-kpi-open-drawer" class="btn-primary" style="flex:1; padding:7px 9px; font-size:10.5px; font-weight:800; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; background:linear-gradient(135deg, rgba(14,165,233,0.32), rgba(2,132,199,0.52)); border:1px solid rgba(56,189,248,0.65); color:#f0f9ff;">
+          <span>📋 Lista de Costos BNF</span>
         </button>
-        <button id="btn-sidebar-mep-sim" class="btn-header glass-panel" style="padding:8px 10px; font-size:11px; font-weight:700; border-color:rgba(56,189,248,0.55); color:#67e8f9;" title="Abrir Simulador Funcional por Capas (Eléctrica + Pluvial)">
+        <button id="btn-sidebar-mep-sim" class="btn-header glass-panel" style="padding:7px 10px; font-size:10.5px; font-weight:700; border-color:rgba(56,189,248,0.55); color:#67e8f9;" title="Abrir Simulador Funcional por Capas (Eléctrica + Pluvial)">
           <span>⚡💧 Simular</span>
         </button>
       </div>
-      <div class="room-tour-grid" id="room-tour-buttons">
-        <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio en Suite de Ruth y Leo (Sommier 1.40m, 2 Tocadores, Placard) y Balcón con Vista al Río">
-          <span class="rt-icon">🛏️</span>
-          <span class="rt-text">2do Piso: Dormitorio Suite al Río</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="planta_alta" title="2do Piso (+102.88m): Área de Estudio / Home-Office (2 Escritorios, Máquina de Coser Antigua y Cama 1 Plaza)">
-          <span class="rt-icon">💻</span>
-          <span class="rt-text">2do Piso: Estudio y Costura</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="estar_comedor" title="Planta Nivel Calle (+100.00m): Gran Sala de Estar (Sofá 4 piezas, TV 32&quot;) y Comedor de 6 Sillas sin dormitorios que achiquen el área social">
-          <span class="rt-icon">🛋️</span>
-          <span class="rt-text">Nivel Calle: Sala y Comedor (6 Sillas)</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="cocina_isla" title="Planta Nivel Calle (+100.00m): Cocina Integrada Amplia (Mesada c/ Bacha, Cocina c/ Garrafa, Heladera, Air Fryer 6L y Alacenas)">
-          <span class="rt-icon">🍳</span>
-          <span class="rt-text">Nivel Calle: Cocina Amplia e Isla</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="bano_suite" title="Baño Principal Completo en Suite (2do Piso) + Toilette Social en Planta Nivel Calle">
-          <span class="rt-icon">🚿</span>
-          <span class="rt-text">Baño Suite 2do Piso y Toilette PB</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="galeria_parrilla" title="Galería L1 (-0.45m) al Río Paraguay con Parrilla Portátil de Ruth y Leo (Parrilla fija opcional)">
-          <span class="rt-icon">🔥</span>
-          <span class="rt-text">Galería al Río y Parrilla Portátil</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="subsuelo_depto" title="Subsuelo (+97.66m • 100.71 m² libres bajo Losa 1): Lavadero (Lavarropas propio + Pileta) y Depósito Cerrado desde el Día 1">
-          <span class="rt-icon">🧺</span>
-          <span class="rt-text">Subsuelo (100m²): Lavadero y Depósito</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="fachada_porton" title="Cochera Frontal (z=-4.00 a +1.50m), Muro de Contención en z=+1.50m y Pasillo Cámara de Aire Antihumedad de 1.50m (z=+1.50 a +3.00m)">
-          <span class="rt-icon">🛡️</span>
-          <span class="rt-text">Muro Contención y Pasillo Antihumedad</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="escalera_subsuelo" title="Puerta Principal + Puerta de Servicio en Eje G alineada con la Escalera 1 de H°A° hacia Subsuelo y 2do Piso">
-          <span class="rt-icon">🪜</span>
-          <span class="rt-text">Puerta Servicio y Escalera 1</span>
-        </button>
-        <button class="room-tour-btn" data-room-focus="piscina_quincho" title="Patio Trasero Norte (+96.20m): Jardín con Césped Esmeralda + Piscina Oficial 4.65m × 2.45m y Quincho (Etapa Opcional)">
-          <span class="rt-icon">🏊</span>
-          <span class="rt-text">Jardín y Piscina 4.65×2.45m (Opc.)</span>
-        </button>
+    </div>
+
+    <!-- 3 Workspace Navigation Tabs inside Left Sidebar -->
+    <div class="sidebar-workspace-tabs" id="sidebar-workspace-tabs">
+      <button class="sw-tab-btn active" data-sidebar-tab="tab-role-workbench">
+        <span>🎯 Rol Activo</span>
+      </button>
+      <button class="sw-tab-btn" data-sidebar-tab="tab-tour-cutaway">
+        <span>🏠 Vistas &amp; Cortes</span>
+      </button>
+      <button class="sw-tab-btn" data-sidebar-tab="tab-cad-layers">
+        <span>🗂️ 12 Capas CAD</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: WORKBENCH DEL ROL ACTIVO (Dinámico para los 7 Perfiles de Usuario) -->
+    <div id="tab-role-workbench" class="sidebar-tab-pane active">
+      <div id="role-workbench-host" class="role-workbench-host">
+        <!-- Renderizado dinámicamente por renderActiveRoleWorkbench() en main.js -->
       </div>
     </div>
 
-    <!-- Corte de Nivel (Dollhouse / Vista Interior por Piso) -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>Corte de Nivel (Vista Interior)</span>
-        <i data-lucide="layers" style="width:14px;height:14px;color:#fbbf24;"></i>
+    <!-- TAB 2: RECORRIDO POR HABITACIÓN, CORTES DOLLHOUSE, CÁMARAS Y SOL -->
+    <div id="tab-tour-cutaway" class="sidebar-tab-pane" style="display:none;">
+      <!-- Corte de Nivel (Dollhouse / Vista Interior por Piso) -->
+      <div class="panel-section" style="margin-bottom:12px;">
+        <div class="panel-section-title">
+          <span>Corte de Planta (Dollhouse 3D)</span>
+          <i data-lucide="layers" style="width:14px;height:14px;color:#fbbf24;"></i>
+        </div>
+        <div class="cutaway-modes-grid" id="cutaway-mode-buttons">
+          <button class="cutaway-btn active" data-cutaway-mode="full" title="Mostrar todos los niveles y techos completos">
+            Completa
+          </button>
+          <button class="cutaway-btn" data-cutaway-mode="cut_roof" title="Ocultar el techo (+105.64m) para ver 2 Dormitorios, Desk y 2 Baños del 2do Piso (+102.88m)">
+            2do Piso (Suite/Desk)
+          </button>
+          <button class="cutaway-btn" data-cutaway-mode="cut_pa" title="Abrir techo y 2do piso para inspeccionar Nivel Calle (+100.00m: Estar, Comedor, Cocina y Baño Social)">
+            Nivel Calle (PB)
+          </button>
+          <button class="cutaway-btn" data-cutaway-mode="cut_pb" title="Abrir niveles superiores para inspeccionar el Salón Subsuelo (+97.66m), Lavadero, Parrilla y Patio">
+            Subsuelo y Patio
+          </button>
+        </div>
       </div>
-      <div class="cutaway-modes-grid" id="cutaway-mode-buttons">
-        <button class="cutaway-btn active" data-cutaway-mode="full" title="Mostrar todos los niveles y techos completos">
-          Completa
-        </button>
-        <button class="cutaway-btn" data-cutaway-mode="cut_roof" title="Ocultar el techo (+105.64m) para ver el Dormitorio en Suite y Estudio del 2do Piso (+102.88m)">
-          2do Piso (Dorm./Estudio)
-        </button>
-        <button class="cutaway-btn" data-cutaway-mode="cut_pa" title="Abrir techo y 2do piso para inspeccionar Nivel Calle (+100.00m: Gran Sala, Comedor 6 sillas y Cocina)">
-          Nivel Calle (Sala/Cocina)
-        </button>
-        <button class="cutaway-btn" data-cutaway-mode="cut_pb" title="Abrir niveles superiores para inspeccionar los 100.71 m² libres del Subsuelo (+97.66m), Pasillo Antihumedad 1.50m, Lavadero y Depósito">
-          Subsuelo (Lavadero/100m²)
-        </button>
-      </div>
-    </div>
 
-    <!-- 12 Capas CAD 3D Toggles -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>12 Capas CAD / BIM 3D</span>
-        <i data-lucide="sliders" style="width:14px;height:14px;"></i>
+      <!-- Recorrido por Habitación y Detalle -->
+      <div class="panel-section" style="margin-bottom:12px;">
+        <div class="panel-section-title">
+          <span>10 Puntos de Inspección 3D</span>
+          <button id="btn-sidebar-game-mode" class="badge-pill" style="cursor:pointer; margin:0; border-color:#10b981; color:#6ee7b7; background:rgba(16,185,129,0.18);">
+            🎮 Modo Juego GTA
+          </button>
+        </div>
+        <div class="room-tour-grid" id="room-tour-buttons">
+          <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio en Suite de Ruth y Leo + Vestidor + Balcón al Río">
+            <span class="rt-icon">🛏️</span>
+            <span class="rt-text">2do Piso: Suite + Vestidor</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="planta_alta" title="2do Piso (+102.88m): Desk / Escritorio al subir la escalera + 2do Dormitorio">
+            <span class="rt-icon">💻</span>
+            <span class="rt-text">2do Piso: Desk y Dorm. 2</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="estar_comedor" title="Planta Nivel Calle (+100.00m): Estar-Comedor y Cierre Lozarrap 38 m²">
+            <span class="rt-icon">🛋️</span>
+            <span class="rt-text">Nivel Calle: Estar y Comedor</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="cocina_isla" title="Planta Nivel Calle (+100.00m): Cocina y Baño Social sobre Núcleo Húmedo Eje F-G">
+            <span class="rt-icon">🍳</span>
+            <span class="rt-text">Nivel Calle: Cocina y Toilette</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="bano_suite" title="2 Baños Superpuestos en Planta Alta + Baño Social en Planta Baja (Eje F-G)">
+            <span class="rt-icon">🚿</span>
+            <span class="rt-text">Núcleo 3 Baños (Eje F-G)</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="galeria_parrilla" title="Galería L1 (-0.45m) Panorámica hacia el Río Paraguay">
+            <span class="rt-icon">🌅</span>
+            <span class="rt-text">Galería Panorámica al Río</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="subsuelo_depto" title="Subsuelo (+97.66m): Gran Salón Libre, Lavadero contra pared y Parrillita hacia el Patio">
+            <span class="rt-icon">🔥</span>
+            <span class="rt-text">Subsuelo: Salón, Lavadero y Parrilla</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="fachada_porton" title="Frente sobre Calle Tte. Guillermo Arias: Portón Balancín 2.30m (+X), Peatonal 0.95m (-X) y Bajada ANDE/ESSAP en muralla (-3.85m)">
+            <span class="rt-icon">🚪</span>
+            <span class="rt-text">Frente: Portones y Bajada ANDE/ESSAP</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="escalera_subsuelo" title="Puerta de Servicio Lateral, Rejilla Metálica en Hueco de Oxigenación y Escalera 1 al Subsuelo">
+            <span class="rt-icon">🪜</span>
+            <span class="rt-text">Rejilla Oxig. y Escalera Subsuelo</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="piscina_quincho" title="Patio Trasero Nivelado (+97.66m): Piscina Transversal 5.80m × 2.40m en el Fondo y Cámara Séptica/Pozo Ciego">
+            <span class="rt-icon">🏊</span>
+            <span class="rt-text">Fondo: Piscina Transversal y Patio</span>
+          </button>
+        </div>
       </div>
-      <div class="layers-grid">
-        <label class="layer-toggle"><input type="checkbox" id="layer-ductos" checked> <span class="check-box"></span> 🔌🚰 Ductos, Pases Losa 1 y Enchufes (26 Tomas + Smart DIN)</label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #f59e0b;"></span>
-            <span>Muro Contención + Pasillo 1.50m</span>
-          </div>
-          <input type="checkbox" id="layer-muro-parking" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #10b981;"></span>
-            <span>Losa 2do Piso +102.88m y Pilares PA</span>
-          </div>
-          <input type="checkbox" id="layer-losa2" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #334155;"></span>
-            <span>Cubierta +105.64m (Isopanel / Tejas)</span>
-          </div>
-          <input type="checkbox" id="layer-techo" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #f8fafc;"></span>
-            <span>Nivel Calle (Sala/Cocina) + 2do Piso</span>
-          </div>
-          <input type="checkbox" id="layer-arch" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #94a3b8;"></span>
-            <span>Subsuelo 100m² (Lavadero y Depósito)</span>
-          </div>
-          <input type="checkbox" id="layer-subsuelo" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #06b6d4;"></span>
-            <span>Esqueleto H°A° Ejes A-G / 1-9</span>
-          </div>
-          <input type="checkbox" id="layer-struct" checked>
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #22d3ee;"></span>
-            <span>Entorno Satelital y Barrio 3D</span>
-          </div>
-          <input type="checkbox" id="layer-entorno">
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #0284c7;"></span>
-            <span>Red Pluvial y Drenaje Francés 3D</span>
-          </div>
-          <input type="checkbox" id="layer-pluvial">
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #a855f7;"></span>
-            <span>Señales Débiles, CCTV y Domótica</span>
-          </div>
-          <input type="checkbox" id="layer-senales">
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #ef4444;"></span>
-            <span>Sondeos Geotécnicos GEO-STAN</span>
-          </div>
-          <input type="checkbox" id="layer-geotech">
-        </label>
-        <label class="layer-item">
-          <div class="layer-info">
-            <span class="layer-dot" style="background: #84cc16;"></span>
-            <span>Terreno y Curvas de Nivel</span>
-          </div>
-          <input type="checkbox" id="layer-topo" checked>
-        </label>
-      </div>
-    </div>
 
-    <!-- Camera View Presets -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>Cámaras Exteriores y Geotecnia</span>
-        <i data-lucide="video" style="width:14px;height:14px;"></i>
+      <!-- Camera View Presets -->
+      <div class="panel-section" style="margin-bottom:12px;">
+        <div class="panel-section-title">
+          <span>Cámaras Exteriores y Barrio</span>
+          <i data-lucide="video" style="width:14px;height:14px;"></i>
+        </div>
+        <div class="views-grid">
+          <button class="view-btn" data-cam="aerial">
+            <i data-lucide="globe"></i> Aérea / Barrio
+          </button>
+          <button class="view-btn" data-cam="parking">
+            <i data-lucide="shield"></i> Frente / Cochera
+          </button>
+          <button class="view-btn" data-cam="losa2">
+            <i data-lucide="layers"></i> 2da Losa/Techo
+          </button>
+          <button class="view-btn" data-cam="gallery">
+            <i data-lucide="sunset"></i> Vista al Río
+          </button>
+          <button class="view-btn" data-cam="soil">
+            <i data-lucide="split"></i> Suelo SPT
+          </button>
+          <button class="view-btn" data-cam="structure">
+            <i data-lucide="box"></i> Esqueleto H°A°
+          </button>
+        </div>
       </div>
-      <div class="views-grid">
-        <button class="view-btn" data-cam="aerial">
-          <i data-lucide="globe"></i> Aérea / Barrio
-        </button>
-        <button class="view-btn" data-cam="parking">
-          <i data-lucide="shield"></i> Muro Cochera
-        </button>
-        <button class="view-btn" data-cam="losa2">
-          <i data-lucide="layers"></i> 2da Losa/Techo
-        </button>
-        <button class="view-btn" data-cam="gallery">
-          <i data-lucide="sunset"></i> Vista al Río
-        </button>
-        <button class="view-btn" data-cam="soil">
-          <i data-lucide="split"></i> Suelo SPT
-        </button>
-        <button class="view-btn" data-cam="structure">
-          <i data-lucide="box"></i> Esqueleto H°A°
-        </button>
-      </div>
-    </div>
 
-    <!-- Solar Simulation -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>Sol y Domótica Nocturna</span>
-        <span id="sun-time-display" style="color:var(--accent-gold); font-size:11px;">17:30 (Atardecer Río)</span>
-      </div>
-      <div class="sun-control">
-        <input type="range" id="sun-slider" min="6" max="21" step="0.5" value="17.5">
-        <div class="sun-labels">
-          <span>06:00</span>
-          <span>12:00</span>
-          <span>17:30 (Río)</span>
-          <span>21:00 (LED)</span>
+      <!-- Solar Simulation -->
+      <div class="panel-section">
+        <div class="panel-section-title">
+          <span>Sol y Domótica Nocturna</span>
+          <span id="sun-time-display" style="color:var(--accent-gold); font-size:11px;">17:30 (Atardecer Río)</span>
+        </div>
+        <div class="sun-control">
+          <input type="range" id="sun-slider" min="6" max="21" step="0.5" value="17.5">
+          <div class="sun-labels">
+            <span>06:00</span>
+            <span>12:00</span>
+            <span>17:30 (Río)</span>
+            <span>21:00 (LED)</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- CAD Tools (X-Ray & Tape Measurement) -->
-    <div class="panel-section">
-      <div class="panel-section-title">
-        <span>Herramientas CAD 3D</span>
-        <i data-lucide="compass" style="width:14px;height:14px;"></i>
+    <!-- TAB 3: 12 CAPAS CAD / BIM 3D & HERRAMIENTAS DE MEDICIÓN -->
+    <div id="tab-cad-layers" class="sidebar-tab-pane" style="display:none;">
+      <div class="panel-section" style="margin-bottom:12px;">
+        <div class="panel-section-title">
+          <span>12 Capas CAD / BIM 3D</span>
+          <i data-lucide="sliders" style="width:14px;height:14px;"></i>
+        </div>
+        <div class="layers-grid">
+          <label class="layer-toggle"><input type="checkbox" id="layer-ductos" checked> <span class="check-box"></span> 🔌🚰 Ductos, Pases Losa 1 y Enchufes (26 Tomas + Smart DIN)</label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #f59e0b;"></span>
+              <span>Muro Contención + Rejilla Oxig.</span>
+            </div>
+            <input type="checkbox" id="layer-muro-parking" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #10b981;"></span>
+              <span>Losa 2do Piso +102.88m y Pilares PA</span>
+            </div>
+            <input type="checkbox" id="layer-losa2" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #334155;"></span>
+              <span>Cubierta +105.64m (Isopanel / Tejas)</span>
+            </div>
+            <input type="checkbox" id="layer-techo" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #f8fafc;"></span>
+              <span>Nivel Calle (PB) + 2do Piso (PA)</span>
+            </div>
+            <input type="checkbox" id="layer-arch" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #94a3b8;"></span>
+              <span>Subsuelo (Salón, Lavadero y Parrilla)</span>
+            </div>
+            <input type="checkbox" id="layer-subsuelo" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #06b6d4;"></span>
+              <span>Esqueleto H°A° Ejes A-G / 1-9</span>
+            </div>
+            <input type="checkbox" id="layer-struct" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #22d3ee;"></span>
+              <span>Entorno Urbano, Vecinos y Río 3D</span>
+            </div>
+            <input type="checkbox" id="layer-entorno" checked>
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #0284c7;"></span>
+              <span>Red Pluvial (a Calle) y Pozo Ciego</span>
+            </div>
+            <input type="checkbox" id="layer-pluvial">
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #a855f7;"></span>
+              <span>Señales Débiles, CCTV y Domótica</span>
+            </div>
+            <input type="checkbox" id="layer-senales">
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #ef4444;"></span>
+              <span>Sondeos Geotécnicos GEO-STAN</span>
+            </div>
+            <input type="checkbox" id="layer-geotech">
+          </label>
+          <label class="layer-item">
+            <div class="layer-info">
+              <span class="layer-dot" style="background: #84cc16;"></span>
+              <span>Terreno y Curvas de Nivel</span>
+            </div>
+            <input type="checkbox" id="layer-topo" checked>
+          </label>
+        </div>
       </div>
-      <div class="tools-bar">
-        <button id="btn-xray" class="tool-btn">
-          <i data-lucide="scan"></i> Rayos X
-        </button>
-        <button id="btn-measure" class="tool-btn">
-          <i data-lucide="ruler"></i> Cinta Métrica
-        </button>
+
+      <!-- CAD Tools (X-Ray & Tape Measurement) -->
+      <div class="panel-section">
+        <div class="panel-section-title">
+          <span>Herramientas de Inspección CAD 3D</span>
+          <i data-lucide="compass" style="width:14px;height:14px;"></i>
+        </div>
+        <div class="tools-bar">
+          <button id="btn-xray" class="tool-btn">
+            <i data-lucide="scan"></i> Rayos X
+          </button>
+          <button id="btn-measure" class="tool-btn">
+            <i data-lucide="ruler"></i> Cinta Métrica
+          </button>
+        </div>
       </div>
     </div>
   </aside>

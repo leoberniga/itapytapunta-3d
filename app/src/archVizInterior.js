@@ -243,23 +243,25 @@ export function createGtaAsphaltTexture(THREE, repeatX = 4, repeatY = 2) {
 
 /**
  * Textura PBR Procedural Estilo GTA VI #2: Ladrillo Cerámico Paraguayo de Tobatí (`createParaguayanBrickTexture`)
+ * Con oclusión ambiental en juntas de mortero, variación de horneado artesanal y micro-porosidad cerámica.
  */
 export function createParaguayanBrickTexture(THREE, repeatX = 3, repeatY = 2) {
   return makeProceduralTexturePair(
     THREE,
     (ctx, bCtx, s, rCtx) => {
-      ctx.fillStyle = '#cbd5e1';
+      // Junta de mortero cementicio gris arena con sombra de oclusión
+      ctx.fillStyle = '#b6b0a6';
       ctx.fillRect(0, 0, s, s);
-      bCtx.fillStyle = '#262626';
+      bCtx.fillStyle = '#181818';
       bCtx.fillRect(0, 0, s, s);
-      rCtx.fillStyle = '#dcdcdc';
+      rCtx.fillStyle = '#e5e5e5';
       rCtx.fillRect(0, 0, s, s);
 
       const rows = 16;
       const cols = 8;
       const rowH = s / rows;
       const colW = s / cols;
-      const mortar = 6;
+      const mortar = 7;
 
       for (let r = 0; r < rows; r++) {
         const offset = (r % 2) * (colW / 2);
@@ -269,20 +271,41 @@ export function createParaguayanBrickTexture(THREE, repeatX = 3, repeatY = 2) {
           const bw = colW - mortar;
           const bh = rowH - mortar;
 
-          const tone = ((r * 13 + c * 7) % 26) - 13;
-          const red = Math.min(220, Math.max(150, 184 + tone));
-          const green = Math.min(110, Math.max(65, 84 + Math.floor(tone * 0.5)));
-          const blue = Math.min(80, Math.max(42, 56 + Math.floor(tone * 0.3)));
+          const seed = (r * 19 + c * 31 + 53) % 41;
+          const tone = (seed % 28) - 14;
+          const kilnBurn = seed % 7 === 0 ? -18 : 0;
+          const red = Math.min(225, Math.max(138, 186 + tone + kilnBurn));
+          const green = Math.min(115, Math.max(54, 82 + Math.floor(tone * 0.55) + Math.floor(kilnBurn * 0.7)));
+          const blue = Math.min(84, Math.max(36, 52 + Math.floor(tone * 0.35)));
 
-          ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+          // Sombra de contacto en junta inferior/derecha (Ambient Occlusion)
+          ctx.fillStyle = 'rgba(40, 32, 26, 0.35)';
+          ctx.fillRect(bx - 1, by - 1, bw + 3, bh + 3);
+
+          // Cuerpo del ladrillo de Tobatí con gradiente de cocción
+          const bGrad = ctx.createLinearGradient(bx, by, bx, by + bh);
+          bGrad.addColorStop(0, `rgb(${Math.min(235, red + 10)}, ${green + 6}, ${blue + 4})`);
+          bGrad.addColorStop(0.55, `rgb(${red}, ${green}, ${blue})`);
+          bGrad.addColorStop(1, `rgb(${Math.max(120, red - 12)}, ${Math.max(45, green - 8)}, ${Math.max(30, blue - 6)})`);
+          ctx.fillStyle = bGrad;
           ctx.fillRect(bx, by, bw, bh);
 
-          ctx.fillStyle = 'rgba(124, 45, 18, 0.18)';
-          ctx.fillRect(bx + 4, by + 4, bw - 8, bh / 3);
+          // Veta de arcilla cocida y micro-poros
+          ctx.fillStyle = 'rgba(124, 45, 18, 0.16)';
+          ctx.fillRect(bx + 5, by + 4, bw - 10, bh * 0.32);
+          for (let p = 0; p < 14; p++) {
+            const px = bx + ((p * 23 + seed * 7) % Math.max(8, bw - 6)) + 3;
+            const py = by + ((p * 17 + seed * 11) % Math.max(8, bh - 6)) + 3;
+            ctx.fillStyle = p % 2 === 0 ? 'rgba(60,20,10,0.22)' : 'rgba(255,215,180,0.14)';
+            ctx.fillRect(px, py, 3, 2);
+          }
 
-          bCtx.fillStyle = '#dcdcdc';
+          // Relieve biselado en bumpMap + rugosidad mate cerámica
+          bCtx.fillStyle = '#9a9a9a';
           bCtx.fillRect(bx, by, bw, bh);
-          rCtx.fillStyle = '#b4b4b4';
+          bCtx.fillStyle = '#e6e6e6';
+          bCtx.fillRect(bx + 3, by + 3, bw - 6, bh - 6);
+          rCtx.fillStyle = '#bcbcbc';
           rCtx.fillRect(bx, by, bw, bh);
         }
       }
@@ -294,51 +317,65 @@ export function createParaguayanBrickTexture(THREE, repeatX = 3, repeatY = 2) {
 
 /**
  * Textura PBR Procedural Estilo GTA VI #3: Hormigón Visto Encofrado en Tablas (`createBoardFormedConcreteTexture`)
+ * Con veta de tablas fenólicas, juntas de colado, poros de vibrado y conos de tensores metálicos.
  */
 export function createBoardFormedConcreteTexture(THREE, repeatX = 2, repeatY = 2) {
   return makeProceduralTexturePair(
     THREE,
     (ctx, bCtx, s, rCtx) => {
-      ctx.fillStyle = '#949ca6';
+      ctx.fillStyle = '#929aa4';
       ctx.fillRect(0, 0, s, s);
       bCtx.fillStyle = '#808080';
       bCtx.fillRect(0, 0, s, s);
-      rCtx.fillStyle = '#a8a8a8';
+      rCtx.fillStyle = '#adadad';
       rCtx.fillRect(0, 0, s, s);
 
       const plankH = 128;
       for (let y = 0; y < s; y += plankH) {
-        const shade = 140 + ((y * 7) % 18) - 9;
-        ctx.fillStyle = `rgb(${shade}, ${shade + 4}, ${shade + 10})`;
+        const shade = 142 + ((y * 7) % 18) - 9;
+        const pGrad = ctx.createLinearGradient(0, y, 0, y + plankH);
+        pGrad.addColorStop(0, `rgb(${shade + 5}, ${shade + 9}, ${shade + 14})`);
+        pGrad.addColorStop(0.5, `rgb(${shade}, ${shade + 4}, ${shade + 10})`);
+        pGrad.addColorStop(1, `rgb(${shade - 6}, ${shade - 2}, ${shade + 4})`);
+        ctx.fillStyle = pGrad;
         ctx.fillRect(0, y, s, plankH - 2);
 
-        ctx.fillStyle = 'rgba(51, 65, 85, 0.45)';
+        // Rebaba de unión entre tablas de encofrado
+        ctx.fillStyle = 'rgba(30, 41, 59, 0.52)';
         ctx.fillRect(0, y, s, 3);
-        bCtx.fillStyle = '#303030';
+        ctx.fillStyle = 'rgba(241, 245, 249, 0.22)';
+        ctx.fillRect(0, y + 3, s, 2);
+        bCtx.fillStyle = '#242424';
         bCtx.fillRect(0, y, s, 4);
+        bCtx.fillStyle = '#b8b8b8';
+        bCtx.fillRect(0, y + 4, s, 2);
 
-        for (let i = 0; i < 450; i++) {
+        for (let i = 0; i < 520; i++) {
           const rx = (i * 73 + y * 19) % s;
-          const ry = y + ((i * 29) % (plankH - 4));
-          const alpha = (i % 5) * 0.025;
+          const ry = y + ((i * 29) % (plankH - 6)) + 3;
+          const alpha = (i % 5) * 0.028;
           ctx.fillStyle = i % 2 === 0 ? `rgba(255,255,255,${alpha})` : `rgba(30,41,59,${alpha})`;
-          ctx.fillRect(rx, ry, 28, 2);
-          bCtx.fillStyle = i % 2 === 0 ? '#969696' : '#686868';
-          bCtx.fillRect(rx, ry, 18, 2);
-          rCtx.fillStyle = i % 2 === 0 ? '#909090' : '#c0c0c0';
-          rCtx.fillRect(rx, ry, 20, 2);
+          ctx.fillRect(rx, ry, 32, 2);
+          bCtx.fillStyle = i % 2 === 0 ? '#9c9c9c' : '#646464';
+          bCtx.fillRect(rx, ry, 20, 2);
+          rCtx.fillStyle = i % 2 === 0 ? '#8c8c8c' : '#c4c4c4';
+          rCtx.fillRect(rx, ry, 22, 2);
         }
       }
 
       [256, 768].forEach((cx) => {
         [192, 448, 704, 960].forEach((cy) => {
           ctx.beginPath();
-          ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-          ctx.fillStyle = '#64748b';
+          ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(30, 41, 59, 0.45)';
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+          ctx.fillStyle = '#475569';
           ctx.fill();
           bCtx.beginPath();
-          bCtx.arc(cx, cy, 10, 0, Math.PI * 2);
-          bCtx.fillStyle = '#202020';
+          ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+          bCtx.fillStyle = '#181818';
           bCtx.fill();
         });
       });

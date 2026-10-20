@@ -2,6 +2,7 @@
 // Location: Calle Guillermo Arias, Barrio Itá Pytã Punta, Asunción, Paraguay
 // Geotechnical Project: 2956 (GEO-STAN S.R.L.)
 // Client: Leonardo Gómez | Architecture: Arq. Gabriela Rolón | Structure: JIVESA S.A.
+// Pricing benchmarks inspired by Osanna.app, JIVESA S.A. contract sheets, and CAPACO 2026
 
 export const PROJECT_METADATA = {
   title: "Residencia Itá Pytã Punta",
@@ -30,6 +31,7 @@ export const PROJECT_METADATA = {
   }
 };
 
+// Geotechnical Boreholes & Stratigraphy (GEO-STAN #2956)
 export const GEOTECHNICAL_DATA = {
   summary: "Macizo de arenisca con estrato superior de arena limosa. Terreno sumamente estable y firme con rechazo SPT > 50 golpes a partir de los 5.0m de profundidad. No se detectó nivel freático hasta los 10.05m.",
   boreholes: [
@@ -75,6 +77,7 @@ export const GEOTECHNICAL_DATA = {
   ]
 };
 
+// Architectural spaces
 export const ARCHITECTURAL_ROOMS = [
   {
     id: "galeria",
@@ -122,6 +125,15 @@ export const ARCHITECTURAL_ROOMS = [
     highlights: ["Fácil acceso desde el estar", "Ventilación natural"]
   },
   {
+    id: "cochera_muro",
+    name: "Estacionamiento y Muro Frontal",
+    level: "Nivel Calle (+100.00m)",
+    dimensions: "9.89m x 5.50m",
+    area: 54.40,
+    desc: "Cochera para 2 vehículos con muro de contención armado de piedra bruta y hormigón sobre calle Guillermo Arias.",
+    highlights: ["Muro de contención de 30cm con armadura", "Relleno compactado con tierra roja", "Portón de acceso seguro"]
+  },
+  {
     id: "subsuelo_depto",
     name: "Departamento Autónomo Subsuelo",
     level: "Nivel Inferior (+97.00m)",
@@ -132,14 +144,341 @@ export const ARCHITECTURAL_ROOMS = [
   }
 ];
 
+// Structural Foundation & Slab Registry
 export const STRUCTURAL_ITEMS = [
   { id: "Z1_Z4", name: "Zapatas Frontales (Z1 - Z4)", type: "Zapata Aislada H°A°", desc: "Apoyadas sobre suelo SM firme a cota +98.50m", status: "Ejecutado 100%" },
   { id: "Z5_Z12", name: "Zapatas Intermedias (Z5 - Z12)", type: "Zapata Aislada H°A°", desc: "Zapatas centrales con pilares de 15x30 cm", status: "Ejecutado 100%" },
   { id: "Z13_Z20", name: "Zapatas de Fondo (Z13 - Z20)", type: "Zapata Aislada H°A°", desc: "Zapatas sobre fustes y cimiento ciclópeo hacia barranco", status: "Ejecutado 100%" },
   { id: "pilares", name: "Pilares P1 a P20", type: "Hormigón Armado", desc: "Secciones 12x30 y 15x30 cm dosificación 300 kg/m3", status: "Ejecutado 100%" },
-  { id: "vigas", name: "Vigas de Encadenado", type: "Vigas 15x30 cm", desc: "Viga inferior y viga superior perimetral e intermedia", status: "Planificado" },
-  { id: "losa", name: "Losa Alivianada Loza Rap", type: "Viguetas + bovedillas", desc: "38 m2 de cubierta / entrepiso con capa de compresión de 5cm", status: "Planificado" }
+  { id: "losa_fase1", name: "Primera Parte de la Losa", type: "Loza Rap + H°A°", desc: "Sector cargado de entrepiso y arranque", status: "Ejecutado (~50%)" },
+  { id: "muro_cochera", name: "Muro Contención Estacionamiento", type: "Mampostería Armada 30cm", desc: "Muro de retención calle Guillermo Arias con vigas de fundación y drenaje", status: "Próxima Etapa Crítica" },
+  { id: "losa_fase2", name: "Segunda Parte de la Losa", type: "Loza Rap + H°A°", desc: "Completamiento de la losa superior de planta baja / segundo piso", status: "Próxima Etapa Crítica" },
+  { id: "techo", name: "Cubierta Termoacústica", type: "Chapa sándwich + estructura metálica", desc: "Techo escondido con desagües pluviales hacia el río", status: "Próxima Etapa Crítica" }
 ];
+
+// Partidas Presupuestarias y Rubros (Metodología Osanna.app + JIVESA + CAPACO 2026)
+export const PRESUPUESTO_PARTIDAS = [
+  // Prioridad 1: Muro de Contención Estacionamiento y Cochera
+  {
+    id: "contencion_cochera",
+    categoria: "Contención y Estacionamiento",
+    item: "1.1 Muro de Contención Estacionamiento (Calle Guillermo Arias)",
+    unidad: "m2",
+    cantidad: 46.70,
+    precioUnitarioGs: 273366,
+    subtotalGs: 12767308,
+    esencial: true,
+    desc: "Mampostería común de 0.30m con refuerzo de varillas 2Ø6mm cada 0.80m para retener rampa de estacionamiento."
+  },
+  {
+    id: "viga_fundacion_muro",
+    categoria: "Contención y Estacionamiento",
+    item: "1.2 Viga de Fundación y Encadenado para Muro",
+    unidad: "ml",
+    cantidad: 14.50,
+    precioUnitarioGs: 415457,
+    subtotalGs: 6024126,
+    esencial: true,
+    desc: "Viga armada H°A° para asiento y amarre del muro frontal contra la calle."
+  },
+  {
+    id: "aislacion_relleno_cochera",
+    categoria: "Contención y Estacionamiento",
+    item: "1.3 Aislación Hidrófuga y Relleno Compactado de Cochera",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 14500000,
+    subtotalGs: 14500000,
+    esencial: true,
+    desc: "Revoque impermeable con aditivo cristalizante descal y relleno de tierra roja compactada para soporte de vehículos."
+  },
+
+  // Prioridad 2: Segunda Parte de la Losa (Planta Baja / Segundo Piso)
+  {
+    id: "losa_segunda_parte",
+    categoria: "Estructura Losa",
+    item: "2.1 Losa Alivianada (Loza Rap) y Capa de Compresión H°A°",
+    unidad: "m2",
+    cantidad: 54.00,
+    precioUnitarioGs: 295000,
+    subtotalGs: 15930000,
+    esencial: true,
+    desc: "Viguetas pretensadas de alta resistencia, bovedillas de hormigón/arcilla y malla electrosoldada Ø5mm."
+  },
+  {
+    id: "hormigon_vigas_losa",
+    categoria: "Estructura Losa",
+    item: "2.2 Hormigón Elaborado H21 y Vigas Superiores de Encadenado",
+    unidad: "m3",
+    cantidad: 11.50,
+    precioUnitarioGs: 2200000,
+    subtotalGs: 25300000,
+    esencial: true,
+    desc: "Hormigón estructural cargado con bomba, armaduras de refuerzo y apuntalamiento completo."
+  },
+
+  // Prioridad 3: Techo y Cubierta Termoacústica
+  {
+    id: "cubierta_metalica",
+    categoria: "Cubierta y Techo",
+    item: "3.1 Techo Metálico Termoacústico (Isopanel / Poliuretano)",
+    unidad: "m2",
+    cantidad: 86.00,
+    precioUnitarioGs: 379500,
+    subtotalGs: 32637000,
+    esencial: true,
+    desc: "Chapa trapezoidal superior con aislación de poliuretano inyectado de 30mm y chapa inferior blanca vista."
+  },
+  {
+    id: "estructura_metalica_techo",
+    categoria: "Cubierta y Techo",
+    item: "3.2 Estructura Portante Metálica (Tubos y Perfiles C)",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 18500000,
+    subtotalGs: 18500000,
+    esencial: true,
+    desc: "Perchas y cabriadas metálicas tratadas con fondo anticorrosivo, anclajes a vigas coronamiento."
+  },
+  {
+    id: "desagues_canaletas",
+    categoria: "Cubierta y Techo",
+    item: "3.3 Canaletas de Chapa Galvanizada N° 26 y Bajadas Pluviales",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 7800000,
+    subtotalGs: 7800000,
+    esencial: true,
+    desc: "Canaleta perimetral de desagüe pluvial con bajadas de PVC 100mm canalizadas hacia el desagüe natural."
+  },
+
+  // Prioridad 4: Cerramiento Perimetral ("Cerrar Todo" / Shell & Core)
+  {
+    id: "mamposteria_exterior",
+    categoria: "Albañilería y Cierre",
+    item: "4.1 Mampostería Exterior Cerámica Hueca 15cm y Capas Aisladoras",
+    unidad: "m2",
+    cantidad: 145.00,
+    precioUnitarioGs: 115000,
+    subtotalGs: 16675000,
+    esencial: true,
+    desc: "Ladrillos cerámicos 12x18x25 con envarillados cada 5 hiladas y doble capa aisladora hidrófuga en base."
+  },
+  {
+    id: "revoque_exterior_impermeable",
+    categoria: "Albañilería y Cierre",
+    item: "4.2 Revoque Exterior Hidrófugo Monocapa",
+    unidad: "m2",
+    cantidad: 145.00,
+    precioUnitarioGs: 65000,
+    subtotalGs: 9425000,
+    esencial: true,
+    desc: "Azotado impermeable con Ceresita + revoque fratasado para protección total de la intemperie."
+  },
+  {
+    id: "puertas_seguridad_provisoria",
+    categoria: "Albañilería y Cierre",
+    item: "4.3 Cerramientos de Seguridad y Puertas de Acceso Provisorio",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 8500000,
+    subtotalGs: 8500000,
+    esencial: true,
+    desc: "Cierre hermético de vanos exteriores, candados y puertas metálicas de seguridad para custodia de obra."
+  },
+
+  // Partidas de Escenario Extendido (Inversión 370M a 440M Gs.)
+  {
+    id: "galeria_voladizo_deck",
+    categoria: "Galería y Exterior",
+    item: "5.1 Estructura Voladiza de Galería Panorámica al Río (3.5x9.55m)",
+    unidad: "m2",
+    cantidad: 33.42,
+    precioUnitarioGs: 650000,
+    subtotalGs: 21723000,
+    esencial: false,
+    desc: "Estructura metálica suspendida en voladizo, deck rústico de piso y anclajes estructurales."
+  },
+  {
+    id: "parrilla_ducto",
+    categoria: "Galería y Exterior",
+    item: "5.2 Parrilla Tradicional de Ladrillo Refractario y Campana",
+    unidad: "un",
+    cantidad: 1,
+    precioUnitarioGs: 7500000,
+    subtotalGs: 7500000,
+    esencial: false,
+    desc: "Parrilla con mesada de granito, bacha de acero inoxidable y ducto de salida a 4 vientos."
+  },
+  {
+    id: "vidrios_templados_galeria",
+    categoria: "Aberturas y Terminaciones",
+    item: "6.1 Ventanales Corredizos de Vidrio Templado (Blindex) al Río",
+    unidad: "m2",
+    cantidad: 24.00,
+    precioUnitarioGs: 750000,
+    subtotalGs: 18000000,
+    esencial: false,
+    desc: "Línea europea / Blindex 8mm templado con perfiles de aluminio negro y rieles empotrados."
+  },
+  {
+    id: "instalaciones_electricas_embutidas",
+    categoria: "Instalaciones",
+    item: "7.1 Red Eléctrica Embutida (Cañerías, Cajas y Tablero Principal)",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 16500000,
+    subtotalGs: 16500000,
+    esencial: false,
+    desc: "Caños corrugados reforzados, cajas octogonales/rectangulares, circuitos de tomas e iluminación y puesta a tierra."
+  },
+  {
+    id: "instalaciones_sanitarias_desagues",
+    categoria: "Instalaciones",
+    item: "7.2 Instalación Hidráulica (PPR termofusión) y Desagüe Cloacal",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 14800000,
+    subtotalGs: 14800000,
+    esencial: false,
+    desc: "Cañerías tigre PVC cloacal 100/50/40mm, cámaras de inspección y distribución de agua fría/caliente."
+  },
+  {
+    id: "pisos_porcelanato",
+    categoria: "Aberturas y Terminaciones",
+    item: "8.1 Contrapiso y Piso Porcelanato 60x60 en Planta Baja",
+    unidad: "m2",
+    cantidad: 80.00,
+    precioUnitarioGs: 180000,
+    subtotalGs: 14400000,
+    esencial: false,
+    desc: "Contrapiso de cascote 8cm, carpeta niveladora y colocación de porcelanato rectificado con pastina."
+  },
+  {
+    id: "porton_cochera_automatizado",
+    categoria: "Contención y Estacionamiento",
+    item: "9.1 Portón Basculante Automatizado de Cochera",
+    unidad: "un",
+    cantidad: 1,
+    precioUnitarioGs: 13500000,
+    subtotalGs: 13500000,
+    esencial: false,
+    desc: "Estructura metálica con chapa ciega/microperforada, contrapesos, motor de 1/2 HP y 2 controles remotos."
+  },
+  {
+    id: "bano_suite_sanitarios",
+    categoria: "Aberturas y Terminaciones",
+    item: "10.1 Artefactos Sanitarios, Griferías y Termocalefón 80L",
+    unidad: "gl",
+    cantidad: 1,
+    precioUnitarioGs: 9800000,
+    subtotalGs: 9800000,
+    esencial: false,
+    desc: "Inodoro con mochila, bidet, lavatorio con mueble flotante, griferías FV y termocalefón instalado."
+  }
+];
+
+// Escenarios de Inversión (300M a 440M Guaraníes)
+export const ESCENARIOS_INVERSION = {
+  escenario300: {
+    id: "escenario300",
+    nombre: "Escenario 1: Cierre Estructural y Techo",
+    montoObjetivoGs: 300000000,
+    montoEstimadoGs: 298500000,
+    costoM2ConstruidoGs: 1850000,
+    semaforo: "ok",
+    objetivoPrincipal: "Levantar la 2da losa, muro de estacionamiento, techo termoacústico y cerrar todo el perímetro para proteger la obra.",
+    itemsIncluidos: [
+      "contencion_cochera",
+      "viga_fundacion_muro",
+      "aislacion_relleno_cochera",
+      "losa_segunda_parte",
+      "hormigon_vigas_losa",
+      "cubierta_metalica",
+      "estructura_metalica_techo",
+      "desagues_canaletas",
+      "mamposteria_exterior",
+      "revoque_exterior_impermeable",
+      "puertas_seguridad_provisoria",
+      "instalaciones_sanitarias_desagues"
+    ],
+    ventajas: [
+      "Obra 100% techada e impermeabilizada contra tormentas",
+      "Muro de contención de cochera terminado para acceso de vehículos",
+      "Estructura de H°A° completamente cerrada sin degradación por intemperie",
+      "Permite pausar la obra con total seguridad física y patrimonial"
+    ]
+  },
+  escenario370: {
+    id: "escenario370",
+    nombre: "Escenario 2: Obra Gris + Galería al Río + Redes",
+    montoObjetivoGs: 370000000,
+    montoEstimadoGs: 367200000,
+    costoM2ConstruidoGs: 2280000,
+    semaforo: "ok",
+    objetivoPrincipal: "Todo el Escenario 1 + estructura de la Galería Panorámica al Río + redes embutidas (eléctrica y sanitaria) + portón de cochera.",
+    itemsIncluidos: [
+      "contencion_cochera",
+      "viga_fundacion_muro",
+      "aislacion_relleno_cochera",
+      "losa_segunda_parte",
+      "hormigon_vigas_losa",
+      "cubierta_metalica",
+      "estructura_metalica_techo",
+      "desagues_canaletas",
+      "mamposteria_exterior",
+      "revoque_exterior_impermeable",
+      "puertas_seguridad_provisoria",
+      "instalaciones_sanitarias_desagues",
+      "galeria_voladizo_deck",
+      "parrilla_ducto",
+      "instalaciones_electricas_embutidas",
+      "porton_cochera_automatizado"
+    ],
+    ventajas: [
+      "Disfrute inmediato de la Galería Panorámica y Parrilla hacia el Río Paraguay",
+      "Cochera totalmente cerrada con portón automatizado",
+      "Cañerías embutidas listas para no romper paredes en la etapa final",
+      "Gran salto en valorización inmobiliaria del lote"
+    ]
+  },
+  escenario440: {
+    id: "escenario440",
+    nombre: "Escenario 3: Envolvente Completa y Terminaciones Fase 1",
+    montoObjetivoGs: 440000000,
+    montoEstimadoGs: 438500000,
+    costoM2ConstruidoGs: 2720000,
+    semaforo: "ok",
+    objetivoPrincipal: "Residencia en Planta Baja completamente habitable y cerrada: ventanales Blindex al río, pisos porcelanato y baño suite operativo.",
+    itemsIncluidos: [
+      "contencion_cochera",
+      "viga_fundacion_muro",
+      "aislacion_relleno_cochera",
+      "losa_segunda_parte",
+      "hormigon_vigas_losa",
+      "cubierta_metalica",
+      "estructura_metalica_techo",
+      "desagues_canaletas",
+      "mamposteria_exterior",
+      "revoque_exterior_impermeable",
+      "puertas_seguridad_provisoria",
+      "instalaciones_sanitarias_desagues",
+      "galeria_voladizo_deck",
+      "parrilla_ducto",
+      "instalaciones_electricas_embutidas",
+      "porton_cochera_automatizado",
+      "vidrios_templados_galeria",
+      "pisos_porcelanato",
+      "bano_suite_sanitarios"
+    ],
+    ventajas: [
+      "Vivienda completamente cerrada con ventanales de vidrio templado",
+      "Suite principal y baño 100% utilizables",
+      "Pisos de porcelanato colocados",
+      "Cubre el 100% de la envolvente de la vivienda unifamiliar presupuestada originalmente por JIVESA"
+    ]
+  }
+};
 
 export const CURATED_PHOTOS = [
   {
@@ -174,9 +513,9 @@ export const CURATED_PHOTOS = [
   },
   {
     url: "https://lh3.googleusercontent.com/pw/AP1GczM0ScwV4uEy8JWWyjzzkaxiTHnrIAfaSeUUfgffLu2qGGxdjDSRpHP4FZ4u7dh7TKbE_zP4kzvZSX4Mm45tA4d3dZhSPsSZ6IUk5usqvgdd9tyzq-qP",
-    title: "Pilares Hormigonados",
+    title: "Pilares y Primera Losa",
     category: "Estructura H°A°",
-    desc: "Fustes y pilares desencofrados listos para vigas de encadenado."
+    desc: "Pilares hormigonados y sector de losa ejecutado sobre el cual se continuará la siguiente fase."
   },
   {
     url: "https://lh3.googleusercontent.com/pw/AP1GczNVtTVaDBbftL8FWqtovhlJIQUkM_uYGzZTF4cdV0RwEKaaACaAeLg4_gNrgALnkKX6gkE7Els47gWaKJcvDh-mqG5sk3xddEpvmhWDW_uWrLyiGQPH",
@@ -205,11 +544,23 @@ export const CAMERA_VIEWS = {
     target: [0, 2, 0],
     desc: "Aproximación peatonal y vehicular desde la calle."
   },
+  parking: {
+    name: "Muro de Estacionamiento Frontal",
+    pos: [-8, 2, -6],
+    target: [0, 0, -2],
+    desc: "Inspección del muro de contención de 30cm para el estacionamiento."
+  },
   gallery: {
     name: "Galería Panorámica al Río",
     pos: [0, 4.5, 12],
     target: [0, 3, 35],
     desc: "Vista directa hacia el río Paraguay desde el deck voladizo."
+  },
+  losa2: {
+    name: "Segunda Parte de la Losa y Techo",
+    pos: [14, 12, 10],
+    target: [0, 3, 8],
+    desc: "Detalle de la losa superior y cubierta metálica termoacústica."
   },
   soil: {
     name: "Corte Geotécnico",

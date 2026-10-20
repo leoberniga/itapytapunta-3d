@@ -1,8 +1,7 @@
 import { ProjectScene } from './scene.js';
-import { CURATED_PHOTOS, ARCHITECTURAL_ROOMS, GEOTECHNICAL_DATA, STRUCTURAL_ITEMS } from './data/projectData.js';
+import { CURATED_PHOTOS, ARCHITECTURAL_ROOMS, GEOTECHNICAL_DATA, STRUCTURAL_ITEMS, PRESUPUESTO_PARTIDAS, ESCENARIOS_INVERSION } from './data/projectData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Lucide icons
   if (window.lucide) {
     window.lucide.createIcons();
   }
@@ -19,6 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const inspectorMeta = document.getElementById('inspector-meta');
   const leftSidebar = document.getElementById('left-sidebar');
 
+  // KPI elements
+  const kpiScenarioName = document.getElementById('kpi-scenario-name');
+  const kpiTotalAmount = document.getElementById('kpi-total-amount');
+  const kpiCostoM2 = document.getElementById('kpi-costo-m2');
+  const kpiSemaforo = document.getElementById('kpi-semaforo');
+  const kpiObjectiveDesc = document.getElementById('kpi-objective-desc');
+
+  // Simulation Banner elements
+  const simTotalDisplay = document.getElementById('sim-total-display');
+  const simTargetDisplay = document.getElementById('sim-target-display');
+  const simSaldoDisplay = document.getElementById('sim-saldo-display');
+  const simM2Display = document.getElementById('sim-m2-display');
+  const budgetTbody = document.getElementById('budget-items-tbody');
+
+  let activeScenarioKey = 'escenario300';
+  let selectedItemIds = new Set(ESCENARIOS_INVERSION.escenario300.itemsIncluidos);
+
+  const formatGs = (num) => {
+    return Number(num).toLocaleString('es-PY');
+  };
+
   // Callback when user clicks an object in 3D
   const onSelectObject = (userData, hitPoint) => {
     if (!userData) {
@@ -31,20 +51,25 @@ document.addEventListener('DOMContentLoaded', () => {
     inspectorDesc.textContent = userData.desc || userData.highlights?.join(', ') || '';
 
     let metaHtml = '';
-    if (userData.type === 'room' || userData.area) {
+    if (userData.costo || userData.costoEstimado) {
+      metaHtml += `<span class="badge-pill" style="border-color:var(--accent-gold); color:var(--accent-gold); font-weight:700;">Costo: ${userData.costo || userData.costoEstimado}</span><br>`;
+    }
+    if (userData.dimensions) {
+      metaHtml += `<span class="badge-pill">Dim: ${userData.dimensions}</span> `;
+    }
+    if (userData.status) {
+      metaHtml += `<span class="badge-pill" style="border-color:#10b981; color:#34d399;">${userData.status}</span> `;
+    }
+    if (userData.area) {
       metaHtml += `<span class="badge-pill">Área: ${userData.area} m²</span> `;
-      metaHtml += `<span class="badge-pill">Dim: ${userData.dimensions || userData.level}</span>`;
     } else if (userData.type === 'borehole') {
       metaHtml += `<span class="badge-pill">Cota Boca: +${userData.cota} m</span> `;
       metaHtml += `<span class="badge-pill">Prof: ${userData.prof} m</span><br>`;
-      metaHtml += `<div style="margin-top:8px; font-size:11px;"><strong>Estratos:</strong><br>`;
+      metaHtml += `<div style="margin-top:8px; font-size:11px;"><strong>Estratos (GEO-STAN #2956):</strong><br>`;
       userData.estratos.forEach(e => {
         metaHtml += `• ${e.de}m - ${e.a}m: ${e.tipo} (Nspt: ${e.nspt})<br>`;
       });
       metaHtml += `</div>`;
-    } else if (userData.type === 'zapata' || userData.type === 'pilar') {
-      metaHtml += `<span class="badge-pill" style="border-color:#10b981; color:#34d399;">${userData.status}</span> `;
-      if (userData.cota) metaHtml += `<span class="badge-pill">Cota: ${userData.cota}</span>`;
     } else if (userData.type === 'photoHotspot') {
       const photo = userData.data;
       metaHtml += `
@@ -73,8 +98,133 @@ document.addEventListener('DOMContentLoaded', () => {
     measureCard.classList.add('visible');
   };
 
-  // Initialize Scene
+  // Initialize 3D Scene
   const scene = new ProjectScene(container, onSelectObject, onMeasurementUpdate);
+
+  // Function to recalculate budget totals & KPI
+  const recalculateBudget = () => {
+    let total = 0;
+    PRESUPUESTO_PARTIDAS.forEach(p => {
+      if (selectedItemIds.has(p.id)) {
+        total += p.subtotalGs;
+      }
+    });
+
+    const scenario = ESCENARIOS_INVERSION[activeScenarioKey];
+    const target = scenario.montoObjetivoGs;
+    const diff = target - total;
+    const m2Construido = 160; // Planta baja + Galeria
+    const costoM2 = Math.round(total / m2Construido);
+
+    // Update KPI Card
+    kpiTotalAmount.textContent = formatGs(total);
+    kpiCostoM2.textContent = `Gs. ${formatGs(costoM2)} / m²`;
+
+    // Update Modal Summary Banner
+    simTotalDisplay.textContent = `Gs. ${formatGs(total)}`;
+    simTargetDisplay.textContent = `${formatGs(target)} Gs.`;
+    simM2Display.textContent = `Gs. ${formatGs(costoM2)} / m²`;
+
+    if (diff >= 0) {
+      simSaldoDisplay.textContent = `+ ${formatGs(diff)} Gs.`;
+      simSaldoDisplay.style.color = '#10b981';
+      kpiSemaforo.className = 'kpi-status-badge ok';
+      kpiSemaforo.innerHTML = '<span class="status-dot"></span><span>En Rango</span>';
+    } else {
+      simSaldoDisplay.textContent = `- ${formatGs(Math.abs(diff))} Gs.`;
+      simSaldoDisplay.style.color = '#ef4444';
+      kpiSemaforo.className = 'kpi-status-badge';
+      kpiSemaforo.style.background = 'rgba(239, 68, 68, 0.2)';
+      kpiSemaforo.style.color = '#f87171';
+      kpiSemaforo.innerHTML = '<span class="status-dot" style="background:#ef4444;box-shadow:0 0 8px #ef4444;"></span><span>Excedido</span>';
+    }
+
+    // Refresh row classes
+    document.querySelectorAll('.budget-row').forEach(row => {
+      const id = row.getAttribute('data-item-id');
+      const checkbox = row.querySelector('.budget-chk');
+      if (selectedItemIds.has(id)) {
+        row.classList.add('selected');
+        if (checkbox) checkbox.checked = true;
+      } else {
+        row.classList.remove('selected');
+        if (checkbox) checkbox.checked = false;
+      }
+    });
+  };
+
+  // Populate Interactive Budget Table
+  const renderBudgetTable = () => {
+    if (!budgetTbody) return;
+    budgetTbody.innerHTML = '';
+
+    PRESUPUESTO_PARTIDAS.forEach(p => {
+      const isChecked = selectedItemIds.has(p.id);
+      const tr = document.createElement('tr');
+      tr.className = `budget-row ${isChecked ? 'selected' : ''}`;
+      tr.setAttribute('data-item-id', p.id);
+
+      tr.innerHTML = `
+        <td style="text-align:center;">
+          <input type="checkbox" class="budget-chk" ${isChecked ? 'checked' : ''}>
+        </td>
+        <td>
+          <strong style="color:#fff; font-size:12px;">${p.item}</strong>
+          <p style="font-size:10px; color:var(--text-muted); margin-top:2px;">${p.desc}</p>
+        </td>
+        <td><span class="badge-pill" style="font-size:10px;">${p.categoria}</span></td>
+        <td>${p.cantidad} ${p.unidad}</td>
+        <td>Gs. ${formatGs(p.precioUnitarioGs)}</td>
+        <td style="text-align:right; font-weight:700; color:var(--accent-gold);">Gs. ${formatGs(p.subtotalGs)}</td>
+      `;
+
+      const chk = tr.querySelector('.budget-chk');
+      chk.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          selectedItemIds.add(p.id);
+        } else {
+          selectedItemIds.delete(p.id);
+        }
+        recalculateBudget();
+      });
+
+      budgetTbody.appendChild(tr);
+    });
+
+    recalculateBudget();
+  };
+
+  renderBudgetTable();
+
+  // Function to apply a preset scenario
+  const applyScenario = (scenarioKey) => {
+    activeScenarioKey = scenarioKey;
+    const scenario = ESCENARIOS_INVERSION[scenarioKey];
+    if (!scenario) return;
+
+    selectedItemIds = new Set(scenario.itemsIncluidos);
+    scene.setScenario(scenarioKey);
+
+    // Update active state in pills
+    document.querySelectorAll('.scenario-pill').forEach(pill => {
+      pill.classList.toggle('active', pill.getAttribute('data-scenario') === scenarioKey);
+    });
+
+    // Update left KPI
+    kpiScenarioName.textContent = scenario.nombre.split(':')[0];
+    kpiObjectiveDesc.textContent = scenario.objetivoPrincipal;
+
+    recalculateBudget();
+  };
+
+  // Scenario Buttons
+  document.getElementById('btn-scen-300').addEventListener('click', () => applyScenario('escenario300'));
+  document.getElementById('btn-scen-370').addEventListener('click', () => applyScenario('escenario370'));
+  document.getElementById('btn-scen-440').addEventListener('click', () => applyScenario('escenario440'));
+
+  document.getElementById('btn-preset-300').addEventListener('click', () => applyScenario('escenario300'));
+  document.getElementById('btn-preset-370').addEventListener('click', () => applyScenario('escenario370'));
+  document.getElementById('btn-preset-440').addEventListener('click', () => applyScenario('escenario440'));
 
   // Toggle UI visibility
   const btnToggleUi = document.getElementById('btn-toggle-ui');
@@ -83,17 +233,20 @@ document.addEventListener('DOMContentLoaded', () => {
     uiVisible = !uiVisible;
     leftSidebar.style.display = uiVisible ? 'flex' : 'none';
     document.querySelector('.bottom-dock').style.display = uiVisible ? 'flex' : 'none';
+    document.querySelector('.scenario-selector-bar').style.display = uiVisible ? 'flex' : 'none';
     inspectorPopup.classList.remove('open');
   });
 
   // Layer Checkboxes
   const layerBindings = [
+    { id: 'layer-muro-parking', name: 'muroEstacionamiento' },
+    { id: 'layer-losa2', name: 'losaFase2' },
+    { id: 'layer-techo', name: 'techo' },
     { id: 'layer-arch', name: 'architecture' },
     { id: 'layer-subsuelo', name: 'subsuelo' },
     { id: 'layer-struct', name: 'structure' },
     { id: 'layer-geotech', name: 'geotech' },
-    { id: 'layer-topo', name: 'topography' },
-    { id: 'layer-photos', name: 'photos' }
+    { id: 'layer-topo', name: 'topography' }
   ];
 
   layerBindings.forEach(b => {
@@ -103,36 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
         scene.setLayerVisibility(b.name, e.target.checked);
       });
     }
-  });
-
-  // Design Options Buttons
-  const opt1 = document.getElementById('opt-btn-1');
-  const opt2 = document.getElementById('opt-btn-2');
-  const optSub = document.getElementById('opt-btn-sub');
-
-  const setOptionActive = (btn) => {
-    [opt1, opt2, optSub].forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  };
-
-  opt1.addEventListener('click', () => {
-    setOptionActive(opt1);
-    scene.setLayerVisibility('architecture', true);
-    scene.setLayerVisibility('subsuelo', true);
-    scene.setCameraView('aerial');
-  });
-
-  opt2.addEventListener('click', () => {
-    setOptionActive(opt2);
-    scene.setLayerVisibility('architecture', true);
-    scene.setCameraView('gallery');
-  });
-
-  optSub.addEventListener('click', () => {
-    setOptionActive(optSub);
-    scene.setLayerVisibility('architecture', false);
-    scene.setLayerVisibility('subsuelo', true);
-    scene.setCameraView('soil');
   });
 
   // Camera Presets Buttons
@@ -205,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.dock-item').forEach(item => {
     item.addEventListener('click', () => {
+      document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+      item.classList.add('active');
       const modalId = item.getAttribute('data-modal');
       openModal(modalId);
     });

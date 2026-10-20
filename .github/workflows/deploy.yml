@@ -32,7 +32,7 @@ jobs:
       - name: Instalar Dependencias
         run: |
           cd app
-          npm ci
+          npm install
 
       - name: Compilar Proyecto Vite 3D
         run: |

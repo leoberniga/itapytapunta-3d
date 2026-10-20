@@ -1,5 +1,5 @@
 import { ProjectScene } from './scene.js';
-import { CURATED_PHOTOS, ARCHITECTURAL_ROOMS, GEOTECHNICAL_DATA, STRUCTURAL_ITEMS, PRESUPUESTO_PARTIDAS, ESCENARIOS_INVERSION } from './data/projectData.js';
+import { CURATED_PHOTOS, ARCHITECTURAL_ROOMS, GEOTECHNICAL_DATA, STRUCTURAL_ITEMS, PRESUPUESTO_PARTIDAS, ESCENARIOS_INVERSION, REALISTIC_RENDERS, PARAMETROS_INSUMOS } from './data/projectData.js';
 import { AuthManager } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -438,5 +438,190 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       photoContainer.appendChild(card);
     });
+  }
+
+  // Realistic Renders Showcase Logic
+  const renderHeroImg = document.getElementById('render-hero-img');
+  const renderHeroTitle = document.getElementById('render-hero-title');
+  const renderHeroDesc = document.getElementById('render-hero-desc');
+  const renderHeroLink = document.getElementById('render-hero-link');
+  const renderSpec1 = document.getElementById('render-spec-1');
+  const renderSpec2 = document.getElementById('render-spec-2');
+  const renderSpec3 = document.getElementById('render-spec-3');
+  const renderThumbBtns = document.querySelectorAll('.render-thumb-btn');
+
+  if (renderThumbBtns.length > 0) {
+    renderThumbBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        renderThumbBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const renderId = btn.getAttribute('data-render');
+        const data = REALISTIC_RENDERS.find(r => r.id === renderId) || REALISTIC_RENDERS[0];
+        if (data) {
+          if (renderHeroImg) renderHeroImg.src = data.imgUrl;
+          if (renderHeroTitle) renderHeroTitle.textContent = data.title;
+          if (renderHeroDesc) renderHeroDesc.textContent = data.desc;
+          if (renderHeroLink) renderHeroLink.href = data.imgUrl;
+          if (data.specs) {
+            if (renderSpec1) renderSpec1.textContent = data.specs.orientacion || data.specs.cotaAcceso || data.specs.suelo || 'Paraguay';
+            if (renderSpec2) renderSpec2.textContent = data.specs.materialidad || data.specs.contencion || data.specs.hormigon || 'H°A°';
+            if (renderSpec3) renderSpec3.textContent = data.stage || 'En Desarrollo';
+          }
+        }
+      });
+    });
+  }
+
+  // Friendly Supplies & Metrics Calculator for Non-Architects
+  const sliderLosa = document.getElementById('calc-slider-losa');
+  const sliderMuro = document.getElementById('calc-slider-muro');
+  const valLosaDisplay = document.getElementById('calc-val-losa');
+  const valMuroDisplay = document.getElementById('calc-val-muro');
+  const radioTechos = document.querySelectorAll('input[name="calc-techo"]');
+  const radioCierres = document.querySelectorAll('input[name="calc-cierre"]');
+
+  const supplyCemento = document.getElementById('supply-cemento');
+  const supplyCementoTn = document.getElementById('supply-cemento-tn');
+  const supplyHierro = document.getElementById('supply-hierro');
+  const supplyArena = document.getElementById('supply-arena');
+  const supplyArenaTruck = document.getElementById('supply-arena-truck');
+  const supplyPiedra = document.getElementById('supply-piedra');
+  const supplyPiedraTruck = document.getElementById('supply-piedra-truck');
+  const supplyPiedraBruta = document.getElementById('supply-piedra-bruta');
+  const supplyTechoM2 = document.getElementById('supply-techo-m2');
+  const supplyTechoTipo = document.getElementById('supply-techo-tipo');
+  const calcTotalGs = document.getElementById('calc-total-gs');
+  const calcDiffDisplay = document.getElementById('calc-diff-display');
+  const btnAplicarKpi = document.getElementById('btn-aplicar-kpi');
+  const btnResetCalc = document.getElementById('btn-reset-calc');
+
+  if (sliderLosa && sliderMuro) {
+    const calculateSupplies = () => {
+      const areaLosa = parseFloat(sliderLosa.value);
+      const mlMuro = parseFloat(sliderMuro.value);
+      const hMuro = 2.8; // altura promedio muro contencion
+      const areaMuro = mlMuro * hMuro;
+
+      if (valLosaDisplay) valLosaDisplay.textContent = `${areaLosa} m²`;
+      if (valMuroDisplay) valMuroDisplay.textContent = `${mlMuro} ml (${areaMuro.toFixed(1)} m²)`;
+
+      let selectedTechoKey = 'isopanel';
+      radioTechos.forEach(r => { if (r.checked) selectedTechoKey = r.value; });
+      const techoData = PARAMETROS_INSUMOS.techo[selectedTechoKey] || PARAMETROS_INSUMOS.techo.isopanel;
+
+      let selectedCierreKey = 'basico';
+      radioCierres.forEach(r => { if (r.checked) selectedCierreKey = r.value; });
+      const cierreData = PARAMETROS_INSUMOS.cerramiento[selectedCierreKey] || PARAMETROS_INSUMOS.cerramiento.basico;
+
+      // Insumos físicos
+      const cementoLosa = areaLosa * PARAMETROS_INSUMOS.losa.cementoBolsasPorM2;
+      const cementoMuro = areaMuro * PARAMETROS_INSUMOS.muroContencion.cementoBolsasPorM2;
+      const cementoRevoques = areaLosa * 1.8;
+      const totalCementoBolsas = Math.round(cementoLosa + cementoMuro + cementoRevoques);
+      const cementoTn = (totalCementoBolsas * 50 / 1000).toFixed(1);
+
+      const hierroLosa = areaLosa * PARAMETROS_INSUMOS.losa.hierroKgPorM2;
+      const hierroMuro = mlMuro * PARAMETROS_INSUMOS.muroContencion.hierroKgPorMl;
+      const hierroVigasAmarre = areaLosa * 12.5;
+      const totalHierroKg = Math.round(hierroLosa + hierroMuro + hierroVigasAmarre);
+
+      const arenaLosa = areaLosa * PARAMETROS_INSUMOS.losa.arenaM3PorM2;
+      const arenaMuro = areaMuro * PARAMETROS_INSUMOS.muroContencion.arenaM3PorM2;
+      const arenaRevoques = areaLosa * 0.12;
+      const totalArenaM3 = (arenaLosa + arenaMuro + arenaRevoques).toFixed(1);
+      const arenaCamiones = Math.ceil(totalArenaM3 / 6);
+
+      const piedraLosa = areaLosa * PARAMETROS_INSUMOS.losa.piedraM3PorM2;
+      const piedraVigas = areaLosa * 0.14;
+      const totalPiedraM3 = (piedraLosa + piedraVigas).toFixed(1);
+      const piedraCamiones = Math.ceil(totalPiedraM3 / 6);
+
+      const totalPiedraBrutaM3 = (areaMuro * PARAMETROS_INSUMOS.muroContencion.piedraM3PorM2).toFixed(1);
+      const areaTecho = Math.round(areaLosa * 1.25);
+
+      // Costos estimados
+      const costoMuro = (areaMuro * PARAMETROS_INSUMOS.muroContencion.costoM2MuroGs) + (mlMuro * PARAMETROS_INSUMOS.muroContencion.rellenoM3PorMl * PARAMETROS_INSUMOS.muroContencion.costoM3RellenoGs);
+      const costoLosa = areaLosa * PARAMETROS_INSUMOS.losa.costoM2BaseGs;
+      const costoTecho = areaTecho * techoData.costoM2Gs;
+      const costoCierre = areaLosa * cierreData.costoM2Gs;
+      const costoManoObraAdmin = (costoMuro + costoLosa + costoTecho + costoCierre) * 0.22;
+
+      const costoTotalObra = Math.round(costoMuro + costoLosa + costoTecho + costoCierre + costoManoObraAdmin);
+
+      if (supplyCemento) supplyCemento.textContent = formatGs(totalCementoBolsas);
+      if (supplyCementoTn) supplyCementoTn.textContent = `~${cementoTn} toneladas`;
+      if (supplyHierro) supplyHierro.textContent = formatGs(totalHierroKg);
+      if (supplyArena) supplyArena.textContent = totalArenaM3;
+      if (supplyArenaTruck) supplyArenaTruck.textContent = `~${arenaCamiones} camionadas (6m³)`;
+      if (supplyPiedra) supplyPiedra.textContent = totalPiedraM3;
+      if (supplyPiedraTruck) supplyPiedraTruck.textContent = `~${piedraCamiones} camionadas (6m³)`;
+      if (supplyPiedraBruta) supplyPiedraBruta.textContent = totalPiedraBrutaM3;
+      if (supplyTechoM2) supplyTechoM2.textContent = areaTecho;
+      if (supplyTechoTipo) supplyTechoTipo.textContent = techoData.nombre.split(' ')[0] + ' ' + (techoData.nombre.split(' ')[1] || '');
+      if (calcTotalGs) calcTotalGs.textContent = formatGs(costoTotalObra);
+
+      const targetScenario = ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300;
+      const diff = targetScenario.montoObjetivo - costoTotalObra;
+
+      if (calcDiffDisplay) {
+        if (diff >= 0) {
+          calcDiffDisplay.innerHTML = `<span class="badge-pill" style="border-color:#10b981; color:#34d399; font-weight:700;">● En rango para tu meta (${targetScenario.titulo}): Saldo disponible Gs. ${formatGs(diff)}</span>`;
+        } else {
+          calcDiffDisplay.innerHTML = `<span class="badge-pill" style="border-color:#ef4444; color:#fca5a5; font-weight:700;">▲ Excede tu meta (${targetScenario.titulo}) en Gs. ${formatGs(Math.abs(diff))}. Puedes reducir área o cambiar terminación.</span>`;
+        }
+      }
+
+      return { costoTotalObra, areaLosa };
+    };
+
+    sliderLosa.addEventListener('input', calculateSupplies);
+    sliderMuro.addEventListener('input', calculateSupplies);
+
+    radioTechos.forEach(r => {
+      r.addEventListener('change', () => {
+        document.querySelectorAll('input[name="calc-techo"]').forEach(i => {
+          const pill = i.closest('.calc-radio-pill');
+          if (pill) pill.classList.toggle('selected', i.checked);
+        });
+        calculateSupplies();
+      });
+    });
+
+    radioCierres.forEach(r => {
+      r.addEventListener('change', () => {
+        document.querySelectorAll('input[name="calc-cierre"]').forEach(i => {
+          const pill = i.closest('.calc-radio-pill');
+          if (pill) pill.classList.toggle('selected', i.checked);
+        });
+        calculateSupplies();
+      });
+    });
+
+    if (btnResetCalc) {
+      btnResetCalc.addEventListener('click', () => {
+        sliderLosa.value = 65;
+        sliderMuro.value = 14.5;
+        const defaultTecho = document.getElementById('opt-techo-isopanel');
+        const defaultCierre = document.getElementById('opt-cierre-basico');
+        if (defaultTecho) defaultTecho.querySelector('input').checked = true;
+        if (defaultCierre) defaultCierre.querySelector('input').checked = true;
+        document.querySelectorAll('.calc-radio-pill').forEach(p => p.classList.remove('selected'));
+        if (defaultTecho) defaultTecho.classList.add('selected');
+        if (defaultCierre) defaultCierre.classList.add('selected');
+        calculateSupplies();
+      });
+    }
+
+    if (btnAplicarKpi) {
+      btnAplicarKpi.addEventListener('click', () => {
+        const res = calculateSupplies();
+        if (kpiTotalAmount) kpiTotalAmount.textContent = formatGs(res.costoTotalObra);
+        if (kpiCostoM2) kpiCostoM2.textContent = `Gs. ${formatGs(Math.round(res.costoTotalObra / res.areaLosa))} / m²`;
+        if (kpiObjectiveDesc) kpiObjectiveDesc.textContent = `Ajuste personalizado: ${res.areaLosa}m² de losa + muro cochera + cubierta y cerramiento exterior.`;
+        closeModal(document.getElementById('modal-insumos'));
+      });
+    }
+
+    calculateSupplies();
   }
 });

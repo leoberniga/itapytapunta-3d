@@ -375,8 +375,152 @@ export const PRESUPUESTO_PARTIDAS = [
     subtotalGs: 9800000,
     esencial: false,
     desc: "Inodoro con mochila, bidet, lavatorio con mueble flotante, griferías FV y termocalefón instalado."
+  },
+
+  // Plan Hidrófugo y Aislaciones (Crucial para Terreno en Barranco y Río)
+  {
+    id: "hidro_muro_vertical",
+    categoria: "Plan Hidrófugo",
+    item: "11.1 Aislación Vertical Muro Contención (Ceresita + Pintura Asfáltica)",
+    unidad: "m2",
+    cantidad: 46.70,
+    precioUnitarioGs: 48000,
+    subtotalGs: 2241600,
+    esencial: true,
+    desc: "Revoque hidrófugo con hidrófugo inorgánico 1:3 y doble mano de emulsión asfáltica al solvente en trasdós de muro."
+  },
+  {
+    id: "hidro_drenaje_frances",
+    categoria: "Plan Hidrófugo",
+    item: "11.2 Drenaje Francés Perimetral (Tubo Ø100 Ranurado + Geotextil Bidim)",
+    unidad: "ml",
+    cantidad: 18.00,
+    precioUnitarioGs: 165000,
+    subtotalGs: 2970000,
+    esencial: true,
+    desc: "Tubo corrugado ranurado Ø100mm envuelto en grava 1ra/2da y manta geotextil no tejida para aliviar empuje hidrostático hacia el barranco."
+  },
+  {
+    id: "hidro_capa_horizontal",
+    categoria: "Plan Hidrófugo",
+    item: "11.3 Capa Aisladora Horizontal Doble bajo Mampostería",
+    unidad: "ml",
+    cantidad: 28.50,
+    precioUnitarioGs: 55000,
+    subtotalGs: 1567500,
+    esencial: true,
+    desc: "Doble cajón hidrófugo continuo con pintura asfáltica para evitar humedad de cimientos por capilaridad."
+  },
+  {
+    id: "hidro_membrana_terraza",
+    categoria: "Plan Hidrófugo",
+    item: "11.4 Impermeabilización Losa Terraza al Río (Membrana 4mm + Babetas)",
+    unidad: "m2",
+    cantidad: 42.00,
+    precioUnitarioGs: 110000,
+    subtotalGs: 4620000,
+    esencial: true,
+    desc: "Membrana asfáltica de 4mm con alma de poliéster adherida con soplete, babetas embutidas y sellador poliuretánico."
+  },
+  {
+    id: "hidro_barrera_vapor",
+    categoria: "Plan Hidrófugo",
+    item: "11.5 Barrera de Vapor con Polietileno 200 Micrones bajo Contrapisos",
+    unidad: "m2",
+    cantidad: 85.00,
+    precioUnitarioGs: 12500,
+    subtotalGs: 1062500,
+    esencial: true,
+    desc: "Film continuo con solapes de 20cm termosellados para impedir ascensión de humedad del suelo arenoso."
+  },
+
+  // Señales Débiles, Telecomunicaciones y Domótica
+  {
+    id: "debil_cableado_cat6",
+    categoria: "Señales Débiles y Redes",
+    item: "12.1 Cableado Estructurado UTP Cat6 y Puntos de Red / Smart TV",
+    unidad: "bocas",
+    cantidad: 8,
+    precioUnitarioGs: 185000,
+    subtotalGs: 1480000,
+    esencial: true,
+    desc: "Ductos conduit ignífugos independientes de tensión, cable UTP 100% cobre Cat6 y tomas RJ45 blindadas."
+  },
+  {
+    id: "debil_cctv_ip",
+    categoria: "Señales Débiles y Redes",
+    item: "12.2 Sistema CCTV 6 Cámaras IP PoE 4MP + NVR 2TB",
+    unidad: "kit",
+    cantidad: 1,
+    precioUnitarioGs: 5800000,
+    subtotalGs: 5800000,
+    esencial: false,
+    desc: "Cámaras con infrarrojo nocturno y detección de intrusión cubriendo calle Guillermo Arias, cochera y barranco al río."
+  },
+  {
+    id: "debil_portero_visor",
+    categoria: "Señales Débiles y Redes",
+    item: "12.3 Portero Visor IP Gran Angular y Apertura Remota Smartphone",
+    unidad: "kit",
+    cantidad: 1,
+    precioUnitarioGs: 2450000,
+    subtotalGs: 2450000,
+    esencial: true,
+    desc: "Frente de calle antivandálico con cámara HD, audio bidireccional y módulo de relé para portón peatonal y vehicular."
+  },
+  {
+    id: "debil_wifi_mesh",
+    categoria: "Señales Débiles y Redes",
+    item: "12.4 Red Wi-Fi Mesh de Cobertura Total (Interior y Galería al Río)",
+    unidad: "kit",
+    cantidad: 1,
+    precioUnitarioGs: 1850000,
+    subtotalGs: 1850000,
+    esencial: false,
+    desc: "3 puntos de acceso Gigabit Wi-Fi 6 para streaming 4K y videollamadas fluidas en cualquier sector de la casa."
+  },
+  {
+    id: "debil_alarma_barreras",
+    categoria: "Señales Débiles y Redes",
+    item: "12.5 Alarma Perimetral con 4 Barreras Infrarrojas Exteriores",
+    unidad: "kit",
+    cantidad: 1,
+    precioUnitarioGs: 3200000,
+    subtotalGs: 3200000,
+    esencial: false,
+    desc: "Sensores fotoeléctricos perimetrales en frente y sobre el barranco hacia el río con notificación push celular."
+  },
+  {
+    id: "debil_domotica_luces",
+    categoria: "Señales Débiles y Redes",
+    item: "12.6 Domótica de Iluminación Exterior y Escenas Atardecer",
+    unidad: "un",
+    cantidad: 6,
+    precioUnitarioGs: 320000,
+    subtotalGs: 1920000,
+    esencial: false,
+    desc: "Microcontroladores inteligentes para encendido automático al atardecer en terraza, escalera y fachada."
   }
 ];
+
+// Metadatos Urbanos y Satelitales (Google Maps / OSM / Street View)
+export const CONTEXTO_URBANO_SATELITAL = {
+  direccion: "Calle Guillermo Arias e/ Avda. Carlos Antonio López y Calle Piravevé",
+  barrio: "Itá Pytã Punta",
+  ciudad: "Asunción, Paraguay",
+  coordenadasDecimales: { lat: -25.279612, lng: -57.663548 },
+  dimensionesLote: "9.89 metros de frente x 31.00 metros de fondo (306.59 m²)",
+  streetViewUrl: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-25.279612,-57.663548&heading=310&pitch=5",
+  mapsUrl: "https://www.google.com/maps/place/25%C2%B016'46.6%22S+57%C2%B039'48.8%22W/@-25.279612,-57.663548,19z/data=!3m1!1e3",
+  osmUrl: "https://www.openstreetmap.org/#map=19/-25.27961/-57.66355",
+  caracteristicasEntorno: [
+    "Frente sobre Calle Guillermo Arias a cota de referencia +100.00m con portón vehicular y peatonal.",
+    "Desnivel topográfico pronunciado de -3.64m desde el frente (+100.00m) hasta el borde posterior (+96.20m).",
+    "Visual directa sin obstrucciones hacia el Río Paraguay con orientación Noroeste (atardeceres dorados).",
+    "Suelo de excelente capacidad portante: arenisca firme a partir de los 4.5m - 5.0m (GEO-STAN Nº 2956)."
+  ]
+};
+
 
 // Escenarios de Inversión (300M a 440M Guaraníes)
 export const ESCENARIOS_INVERSION = {
@@ -400,23 +544,30 @@ export const ESCENARIOS_INVERSION = {
       "mamposteria_exterior",
       "revoque_exterior_impermeable",
       "puertas_seguridad_provisoria",
-      "instalaciones_sanitarias_desagues"
+      "instalaciones_sanitarias_desagues",
+      "hidro_muro_vertical",
+      "hidro_drenaje_frances",
+      "hidro_capa_horizontal",
+      "hidro_barrera_vapor",
+      "debil_cableado_cat6",
+      "debil_portero_visor"
     ],
     ventajas: [
       "Obra 100% techada e impermeabilizada contra tormentas",
       "Muro de contención de cochera terminado para acceso de vehículos",
-      "Estructura de H°A° completamente cerrada sin degradación por intemperie",
+      "Plan hidrófugo completo: drenaje francés y doble capa aisladora",
+      "Señales débiles esenciales: cableado Cat6 y portero visor IP instalados",
       "Permite pausar la obra con total seguridad física y patrimonial"
     ]
   },
   escenario370: {
     id: "escenario370",
-    nombre: "Escenario 2: Obra Gris + Galería al Río + Redes",
+    nombre: "Escenario 2: Obra Gris + Galería al Río + Redes y CCTV",
     montoObjetivoGs: 370000000,
     montoEstimadoGs: 367200000,
     costoM2ConstruidoGs: 2280000,
     semaforo: "ok",
-    objetivoPrincipal: "Todo el Escenario 1 + estructura de la Galería Panorámica al Río + redes embutidas (eléctrica y sanitaria) + portón de cochera.",
+    objetivoPrincipal: "Todo el Escenario 1 + estructura de la Galería Panorámica al Río + redes embutidas + impermeabilización de terraza + CCTV 6 cámaras + Wi-Fi Mesh + portón cochera.",
     itemsIncluidos: [
       "contencion_cochera",
       "viga_fundacion_muro",
@@ -430,6 +581,15 @@ export const ESCENARIOS_INVERSION = {
       "revoque_exterior_impermeable",
       "puertas_seguridad_provisoria",
       "instalaciones_sanitarias_desagues",
+      "hidro_muro_vertical",
+      "hidro_drenaje_frances",
+      "hidro_capa_horizontal",
+      "hidro_barrera_vapor",
+      "hidro_membrana_terraza",
+      "debil_cableado_cat6",
+      "debil_cctv_ip",
+      "debil_portero_visor",
+      "debil_wifi_mesh",
       "galeria_voladizo_deck",
       "parrilla_ducto",
       "instalaciones_electricas_embutidas",
@@ -437,19 +597,19 @@ export const ESCENARIOS_INVERSION = {
     ],
     ventajas: [
       "Disfrute inmediato de la Galería Panorámica y Parrilla hacia el Río Paraguay",
-      "Cochera totalmente cerrada con portón automatizado",
-      "Cañerías embutidas listas para no romper paredes en la etapa final",
-      "Gran salto en valorización inmobiliaria del lote"
+      "Terraza impermeabilizada con membrana poliéster 4mm",
+      "Seguridad total con CCTV 6 cámaras IP PoE y red Wi-Fi Mesh",
+      "Cochera totalmente cerrada con portón automatizado"
     ]
   },
   escenario440: {
     id: "escenario440",
-    nombre: "Escenario 3: Envolvente Completa y Terminaciones Fase 1",
+    nombre: "Escenario 3: Envolvente Completa, Domótica y Terminaciones Fase 1",
     montoObjetivoGs: 440000000,
     montoEstimadoGs: 438500000,
     costoM2ConstruidoGs: 2720000,
     semaforo: "ok",
-    objetivoPrincipal: "Residencia en Planta Baja completamente habitable y cerrada: ventanales Blindex al río, pisos porcelanato y baño suite operativo.",
+    objetivoPrincipal: "Residencia en Planta Baja completamente habitable y cerrada: ventanales Blindex al río, pisos porcelanato, baño suite operativo, alarma perimetral y domótica de luces.",
     itemsIncluidos: [
       "contencion_cochera",
       "viga_fundacion_muro",
@@ -463,6 +623,17 @@ export const ESCENARIOS_INVERSION = {
       "revoque_exterior_impermeable",
       "puertas_seguridad_provisoria",
       "instalaciones_sanitarias_desagues",
+      "hidro_muro_vertical",
+      "hidro_drenaje_frances",
+      "hidro_capa_horizontal",
+      "hidro_barrera_vapor",
+      "hidro_membrana_terraza",
+      "debil_cableado_cat6",
+      "debil_cctv_ip",
+      "debil_portero_visor",
+      "debil_wifi_mesh",
+      "debil_alarma_barreras",
+      "debil_domotica_luces",
       "galeria_voladizo_deck",
       "parrilla_ducto",
       "instalaciones_electricas_embutidas",
@@ -473,9 +644,9 @@ export const ESCENARIOS_INVERSION = {
     ],
     ventajas: [
       "Vivienda completamente cerrada con ventanales de vidrio templado",
-      "Suite principal y baño 100% utilizables",
-      "Pisos de porcelanato colocados",
-      "Cubre el 100% de la envolvente de la vivienda unifamiliar presupuestada originalmente por JIVESA"
+      "Plan hidrófugo integral y estanqueidad garantizada contra el río y lluvias",
+      "Domótica con encendido automático de luces al atardecer y alarma perimetral",
+      "Suite principal y baño 100% utilizables con pisos de porcelanato"
     ]
   }
 };
@@ -581,3 +752,104 @@ export const CAMERA_VIEWS = {
     desc: "Paseo a escala humana por el interior de la residencia."
   }
 };
+
+// Renders 3D Ilustrados Fotorrealistas de Alta Definición
+export const REALISTIC_RENDERS = [
+  {
+    id: "rio_atardecer",
+    title: "Vista Panorámica al Río Paraguay (Atardecer)",
+    subtitle: "Galería Voladiza y Living Social",
+    category: "Vista al Río",
+    imgUrl: "/assets/render_rio_atardecer.jpg",
+    desc: "Ilustración fotorrealista del remate de la obra hacia el Río Paraguay: ventanales corredizos piso-techo, terraza voladiza con deck de madera, barandas de cristal y cubierta metálica termoacústica.",
+    stage: "Proyecto Terminado / Horizonte de Inversión",
+    specs: {
+      orientacion: "Noroeste (Atardecer)",
+      materialidad: "Hormigón Visto Encofrado de Tabla, Vidrio Templado y Madera Nativa",
+      espacio: "Galería de 33.4 m² + Living de 24 m²"
+    }
+  },
+  {
+    id: "fachada_calle",
+    title: "Acceso Calle Guillermo Arias y Cochera",
+    subtitle: "Muro de Contención Frontal y Portón Vehicular",
+    category: "Fachada Urbana",
+    imgUrl: "/assets/render_fachada_calle.jpg",
+    desc: "Ilustración de la etapa prioritaria: Muro de contención para nivelar el estacionamiento sobre la calle Guillermo Arias, portón vehicular automatizado grafito, escalera peatonal y volumen superior protegido.",
+    stage: "Etapa Inmediata a Ejecutar",
+    specs: {
+      cotaAcceso: "+100.00 m (Nivel Calle)",
+      contencion: "Muro ciclópeo de piedra y H°A° (46.7 m²)",
+      acceso: "2 Vehículos + Acceso Peatonal Independiente"
+    }
+  },
+  {
+    id: "corte_obra",
+    title: "Corte 3D Estructural y Etapas de Construcción",
+    subtitle: "Fundaciones Existentes + Nueva Losa + Techo Termoacústico",
+    category: "Corte Pedagógico",
+    imgUrl: "/assets/render_corte_obra.jpg",
+    desc: "Visualización técnica amigable para no arquitectos: muestra cómo las fundaciones descansan firmemente sobre el estrato de arenisca (GEO-STAN #2956), los pilares existentes, la nueva losa a hormigonar y el techo termoacústico que cierra la estructura.",
+    stage: "Esquema Constructivo de Inversión",
+    specs: {
+      suelo: "Arenisca Cementada (Nspt > 50 a -5.0m)",
+      hormigon: "H°A° Fck 200 kg/cm² (Pilares P1..P20 y Zapatas)",
+      cubierta: "Isopanel Termoacústico de 50mm con Aislación PIR"
+    }
+  }
+];
+
+// Fórmulas paramétricas de insumos para no arquitectos (CAPACO / JIVESA S.A.)
+export const PARAMETROS_INSUMOS = {
+  losa: {
+    cementoBolsasPorM2: 0.85,    // bolsas de 50 kg por m² de losa Rap + capa compresión
+    hierroKgPorM2: 11.2,         // kg de varilla conformada por m²
+    arenaM3PorM2: 0.07,          // m³ arena lavada
+    piedraM3PorM2: 0.085,        // m³ piedra triturada 4ta
+    costoM2BaseGs: 395000        // Costo por m² de losa (hormigón + armadura + apuntalamiento)
+  },
+  muroContencion: {
+    piedraM3PorM2: 0.35,         // m³ piedra bruta por m² de muro
+    cementoBolsasPorM2: 0.48,    // bolsas cemento
+    arenaM3PorM2: 0.14,          // m³ arena
+    hierroKgPorMl: 9.5,          // hierro en viga y pilaretes por metro lineal
+    rellenoM3PorMl: 2.2,         // m³ relleno compactado por metro lineal
+    costoM2MuroGs: 420000,       // Costo por m² de muro
+    costoM3RellenoGs: 85000      // Costo por m³ relleno
+  },
+  techo: {
+    isopanel: {
+      nombre: "Isopanel Termoacústico 50mm (PIR)",
+      costoM2Gs: 380000,
+      desc: "Excelente aislación térmica y acústica contra el calor de Asunción. Rápido montaje y cero goteras."
+    },
+    chapaCincalum: {
+      nombre: "Chapa Trapezoidal Cincalum N°25",
+      costoM2Gs: 245000,
+      desc: "Económico y duradero, requiere cielorraso con lana de vidrio para aislación térmica."
+    },
+    tejaColonial: {
+      nombre: "Tejas y Tejuelones Cerámicos con Maderamen",
+      costoM2Gs: 340000,
+      desc: "Estética tradicional paraguaya, mayor peso estructural y tiempo de montaje."
+    }
+  },
+  cerramiento: {
+    basico: {
+      nombre: "Cierre Básico (Mampostería revocada + aberturas estándar)",
+      factorCosto: 1.0,
+      costoM2Gs: 750000
+    },
+    confort: {
+      nombre: "Cierre Confort (Ventanales Blindex templado + aislación)",
+      factorCosto: 1.35,
+      costoM2Gs: 1012500
+    },
+    premium: {
+      nombre: "Cierre Premium (Vidrios DVH doble vidriado + pisos porcelanato)",
+      factorCosto: 1.80,
+      costoM2Gs: 1350000
+    }
+  }
+};
+

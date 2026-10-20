@@ -294,9 +294,17 @@
 
   <!-- Bottom Floating Dock Navigation -->
   <nav class="bottom-dock glass-panel">
-    <button class="dock-item active" data-modal="modal-simulador">
+    <button class="dock-item" data-modal="modal-renders" style="background:rgba(245,158,11,0.18); border:1px solid rgba(245,158,11,0.5);">
+      <i data-lucide="sparkles" style="color:var(--accent-gold);"></i>
+      <span style="color:#fde68a; font-weight:700;">Vistas 3D Realistas</span>
+    </button>
+    <button class="dock-item active" data-modal="modal-insumos" style="background:rgba(6,182,212,0.18); border:1px solid rgba(6,182,212,0.5);">
+      <i data-lucide="wrench" style="color:var(--accent-cyan);"></i>
+      <span style="color:#67e8f9; font-weight:700;">Insumos y Métricas</span>
+    </button>
+    <button class="dock-item" data-modal="modal-simulador">
       <i data-lucide="calculator"></i>
-      <span>Simulador Rubros</span>
+      <span>Presupuesto JIVESA</span>
     </button>
     <button class="dock-item" data-modal="modal-planos">
       <i data-lucide="file-text"></i>
@@ -317,6 +325,297 @@
   </nav>
 
   <!-- Modals -->
+
+  <!-- Modal 0A: VISTAS ILUSTRADAS 3D FOTORREALISTAS (CALIDAD CASI REALISTA) -->
+  <div id="modal-renders" class="modal-overlay">
+    <div class="modal-content glass-panel" style="max-width:1040px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:22px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="sparkles" style="color:var(--accent-gold);"></i>
+            Vistas Ilustradas 3D Fotorrealistas de Alta Definición
+          </h2>
+          <p style="font-size:12px; color:var(--text-muted);">
+            Visualización arquitectónica inmersiva del proyecto terminado y de la etapa inmediata de obra en Itá Pytã Punta.
+          </p>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <!-- Selector de vistas -->
+      <div class="renders-nav-pills">
+        <button class="render-thumb-btn active" data-render="rio_atardecer">
+          <img src="/assets/render_rio_atardecer.jpg" alt="Vista al Río">
+          <div class="render-thumb-info">
+            <h5>Vista al Río Paraguay</h5>
+            <span>Atardecer en Galería</span>
+          </div>
+        </button>
+        <button class="render-thumb-btn" data-render="fachada_calle">
+          <img src="/assets/render_fachada_calle.jpg" alt="Fachada Calle">
+          <div class="render-thumb-info">
+            <h5>Fachada Guillermo Arias</h5>
+            <span>Muro Cochera y Acceso</span>
+          </div>
+        </button>
+        <button class="render-thumb-btn" data-render="corte_obra">
+          <img src="/assets/render_corte_obra.jpg" alt="Corte Estructural">
+          <div class="render-thumb-info">
+            <h5>Corte 3D de Obra</h5>
+            <span>Fundación + Losa + Techo</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Hero Preview -->
+      <div class="renders-gallery-hero">
+        <img id="render-hero-img" src="/assets/render_rio_atardecer.jpg" alt="Vista 3D Principal">
+        <div class="renders-hero-overlay">
+          <div class="renders-hero-title">
+            <h3 id="render-hero-title">Vista Panorámica al Río Paraguay (Atardecer)</h3>
+            <p id="render-hero-desc">Ilustración fotorrealista del remate de la obra hacia el Río Paraguay: ventanales corredizos piso-techo, terraza voladiza con deck de madera, barandas de cristal y cubierta metálica termoacústica.</p>
+          </div>
+          <a id="render-hero-link" href="/assets/render_rio_atardecer.jpg" target="_blank" class="btn-primary" style="padding:8px 14px; font-size:11px; text-decoration:none; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="maximize-2" style="width:14px;height:14px;"></i>
+            <span>Ver en Alta Resolución</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Specs Grid -->
+      <div class="render-specs-grid" id="render-specs-container">
+        <div class="render-spec-item">
+          <span>Orientación e Iluminación</span>
+          <strong id="render-spec-1">Noroeste (Atardecer sobre el Río)</strong>
+        </div>
+        <div class="render-spec-item">
+          <span>Materiales Principales</span>
+          <strong id="render-spec-2">Hormigón Visto de Tabla, Vidrio Templado y Techo Isopanel</strong>
+        </div>
+        <div class="render-spec-item">
+          <span>Estado del Sector</span>
+          <strong id="render-spec-3" style="color:#34d399;">Horizonte de Inversión (Etapa Final)</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 0B: GESTOR DE INSUMOS TÉCNICOS Y AJUSTES MÉTRICOS (PARA NO ARQUITECTOS) -->
+  <div id="modal-insumos" class="modal-overlay">
+    <div class="modal-content glass-panel" style="max-width:1040px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:22px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="wrench" style="color:var(--accent-cyan);"></i>
+            Gestor de Insumos Técnicos y Ajustes Métricos (Para Propietarios)
+          </h2>
+          <p style="font-size:12px; color:var(--text-muted);">
+            Herramienta intuitiva para ajustar dimensiones de obra y calcular bolsas de cemento, kilos de hierro, arena y costo en Guaraníes en tiempo real.
+          </p>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="calc-container">
+        <!-- Columna Izquierda: Parámetros Ajustables -->
+        <div class="calc-left">
+          <div class="calc-section-title">
+            <i data-lucide="sliders" style="width:16px;height:16px;"></i>
+            <span>1. Ajustar Parámetros de la Obra</span>
+          </div>
+
+          <!-- Control 1: Superficie de Losa a hormigonar -->
+          <div class="calc-control-group">
+            <div class="calc-control-header">
+              <label><i data-lucide="layers" style="width:14px;height:14px;vertical-align:middle;color:var(--accent-cyan);"></i> Superficie de Segunda Losa:</label>
+              <span id="calc-val-losa" class="calc-val-badge">65 m²</span>
+            </div>
+            <input type="range" id="calc-slider-losa" class="calc-range-slider" min="40" max="110" step="5" value="65">
+            <p class="calc-hint">Área a cargar con viguetas prefabricadas Losa Rap + capa de compresión H°A° 5cm.</p>
+          </div>
+
+          <!-- Control 2: Muro de Contención Estacionamiento -->
+          <div class="calc-control-group">
+            <div class="calc-control-header">
+              <label><i data-lucide="shield" style="width:14px;height:14px;vertical-align:middle;color:#a855f7;"></i> Muro de Contención Cochera:</label>
+              <span id="calc-val-muro" class="calc-val-badge">14.5 ml (43.5 m²)</span>
+            </div>
+            <input type="range" id="calc-slider-muro" class="calc-range-slider" min="10" max="25" step="0.5" value="14.5">
+            <p class="calc-hint">Metros lineales de muro sobre Guillermo Arias para nivelar el estacionamiento y soportar el empuje de tierra.</p>
+          </div>
+
+          <!-- Control 3: Tipo de Cubierta de Techo -->
+          <div class="calc-control-group">
+            <div class="calc-control-header">
+              <label><i data-lucide="home" style="width:14px;height:14px;vertical-align:middle;color:var(--accent-gold);"></i> Tipo de Techo y Aislación:</label>
+            </div>
+            <div class="calc-radio-pills">
+              <label class="calc-radio-pill selected" id="opt-techo-isopanel">
+                <input type="radio" name="calc-techo" value="isopanel" checked>
+                <div class="calc-radio-text">
+                  <strong>Isopanel Termoacústico 50mm PIR</strong>
+                  <small>Recomendado: Máxima aislación térmica contra el calor, rápida colocación y estanqueidad 100%.</small>
+                </div>
+                <span class="calc-radio-price">Gs. 380.000 / m²</span>
+              </label>
+              <label class="calc-radio-pill" id="opt-techo-chapa">
+                <input type="radio" name="calc-techo" value="chapaCincalum">
+                <div class="calc-radio-text">
+                  <strong>Chapa Trapezoidal Cincalum N°25</strong>
+                  <small>Opción más económica. Requiere cielorraso con aislante térmico de lana de vidrio.</small>
+                </div>
+                <span class="calc-radio-price">Gs. 245.000 / m²</span>
+              </label>
+              <label class="calc-radio-pill" id="opt-techo-teja">
+                <input type="radio" name="calc-techo" value="tejaColonial">
+                <div class="calc-radio-text">
+                  <strong>Tejas y Tejuelones Cerámicos</strong>
+                  <small>Estética tradicional paraguaya sobre tijerales de madera tratada.</small>
+                </div>
+                <span class="calc-radio-price">Gs. 340.000 / m²</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Control 4: Nivel de Cerramiento Exterior -->
+          <div class="calc-control-group">
+            <div class="calc-control-header">
+              <label><i data-lucide="grid" style="width:14px;height:14px;vertical-align:middle;color:#10b981;"></i> Nivel de Cierre Perimetral:</label>
+            </div>
+            <div class="calc-radio-pills">
+              <label class="calc-radio-pill selected" id="opt-cierre-basico">
+                <input type="radio" name="calc-cierre" value="basico" checked>
+                <div class="calc-radio-text">
+                  <strong>Cierre Básico (Mampostería revocada + aberturas estándar)</strong>
+                  <small>Cierre hermético esencial para habilitar y resguardar la obra.</small>
+                </div>
+              </label>
+              <label class="calc-radio-pill" id="opt-cierre-confort">
+                <input type="radio" name="calc-cierre" value="confort">
+                <div class="calc-radio-text">
+                  <strong>Cierre Confort (+ Ventanales Blindex corredizos al Río)</strong>
+                  <small>Abre la sala y galería hacia la vista del río Paraguay con vidrio templado.</small>
+                </div>
+              </label>
+              <label class="calc-radio-pill" id="opt-cierre-premium">
+                <input type="radio" name="calc-cierre" value="premium">
+                <div class="calc-radio-text">
+                  <strong>Cierre Premium (Vidrios Dobles DVH + Terminaciones Finas)</strong>
+                  <small>Aislación acústica y térmica superior con porcelanatos y revestimientos.</small>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Insumos Calculados y Costo en Vivo -->
+        <div class="calc-right">
+          <div class="calc-section-title">
+            <i data-lucide="package-check" style="width:16px;height:16px;"></i>
+            <span>2. Insumos Técnicos Necesarios</span>
+          </div>
+
+          <div class="supplies-grid">
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(245,158,11,0.15); border-color:rgba(245,158,11,0.4); color:var(--accent-gold);">
+                <i data-lucide="box"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Cemento Portland</h4>
+                <div><span id="supply-cemento" class="qty">380</span> <span class="unit">bolsas 50kg</span></div>
+                <small id="supply-cemento-tn" style="font-size:10px; color:#94a3b8;">~19.0 toneladas</small>
+              </div>
+            </div>
+
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(6,182,212,0.15); border-color:rgba(6,182,212,0.4); color:var(--accent-cyan);">
+                <i data-lucide="hash"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Varillas de Hierro</h4>
+                <div><span id="supply-hierro" class="qty">3.250</span> <span class="unit">kg</span></div>
+                <small style="font-size:10px; color:#94a3b8;">Ø8, Ø10, Ø12 conformadas</small>
+              </div>
+            </div>
+
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(234,179,8,0.15); border-color:rgba(234,179,8,0.4); color:#facc15;">
+                <i data-lucide="truck"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Arena Lavada</h4>
+                <div><span id="supply-arena" class="qty">26.5</span> <span class="unit">m³</span></div>
+                <small id="supply-arena-truck" style="font-size:10px; color:#94a3b8;">~5 camionadas (6m³)</small>
+              </div>
+            </div>
+
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(148,163,184,0.15); border-color:rgba(148,163,184,0.4); color:#cbd5e1;">
+                <i data-lucide="mountain"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Piedra Triturada 4ta</h4>
+                <div><span id="supply-piedra" class="qty">28.0</span> <span class="unit">m³</span></div>
+                <small id="supply-piedra-truck" style="font-size:10px; color:#94a3b8;">~5 camionadas (6m³)</small>
+              </div>
+            </div>
+
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(168,85,247,0.15); border-color:rgba(168,85,247,0.4); color:#c084fc;">
+                <i data-lucide="shield"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Piedra Bruta Muro</h4>
+                <div><span id="supply-piedra-bruta" class="qty">15.2</span> <span class="unit">m³</span></div>
+                <small style="font-size:10px; color:#94a3b8;">Para contención cochera</small>
+              </div>
+            </div>
+
+            <div class="supply-card">
+              <div class="supply-icon" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.4); color:#34d399;">
+                <i data-lucide="home"></i>
+              </div>
+              <div class="supply-data">
+                <h4>Cubierta de Techo</h4>
+                <div><span id="supply-techo-m2" class="qty">82</span> <span class="unit">m²</span></div>
+                <small id="supply-techo-tipo" style="font-size:10px; color:#94a3b8;">Isopanel Termoacústico</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Impacto en el Presupuesto y Semáforo -->
+          <div class="calc-impact-box">
+            <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#94a3b8;">Costo Total Estimado de esta Etapa</span>
+            <div class="calc-impact-total">
+              <span style="font-size:18px; color:var(--accent-gold); margin-right:4px;">Gs.</span>
+              <span id="calc-total-gs">294.850.000</span>
+            </div>
+
+            <div class="calc-impact-diff" id="calc-diff-display">
+              <span class="badge-pill" style="border-color:#10b981; color:#34d399; font-weight:700;">
+                ● En rango para el Escenario 300 Millones (Saldo disponible: Gs. 5.150.000)
+              </span>
+            </div>
+
+            <div style="font-size:11px; color:#94a3b8; line-height:1.5;">
+              Cálculo fundamentado en el contrato de <strong>JIVESA S.A.</strong> y cómputos de <strong>Losa Rap</strong> adaptado a tus ajustes.
+            </div>
+
+            <div class="calc-actions">
+              <button id="btn-aplicar-kpi" class="btn-primary" style="padding:10px 18px; font-size:12px;">
+                <i data-lucide="check" style="width:14px;height:14px;"></i>
+                <span>Aplicar a mi Modelo 3D</span>
+              </button>
+              <button id="btn-reset-calc" class="btn-header glass-panel" style="padding:10px 14px; font-size:12px;">
+                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+                <span>Valores Base</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal 1: SIMULADOR DE ESCENARIOS Y RUBROS (Inspirado en Osanna.app) -->
   <div id="modal-simulador" class="modal-overlay">

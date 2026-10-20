@@ -19,7 +19,7 @@
 
 import { DUCTOS_PASES_ENCHUFES_DATOS } from './data/projectData.js';
 
-const STORAGE_KEY = 'itapytapunta_bim_floorplan_v6';
+const STORAGE_KEY = 'itapytapunta_bim_floorplan_v7';
 
 /**
  * Grilla Estructural Exacta según planos de encofrado y fundación (`CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`
@@ -67,11 +67,11 @@ export const FIXED_STRUCTURAL_GRID = {
   },
   existingStaircase1: {
     id: 'ESCALERA_1_SUBSUELO',
-    name: 'Escalera 1 H°A° (Baja a Subsuelo 3.30×0.90m • Costado Izquierdo Eje 8–9 🔒)',
-    x1: -4.87,
+    name: 'Escalera 1 H°A° Existente (Baja a Subsuelo 3.30×0.90m • Costado de Servicio Eje 1–2 c/ Doble Puerta 🔒)',
+    x1: 3.84,
     z1: 5.26,
-    x2: -3.90,
-    z2: 8.56,
+    x2: 4.87,
+    z2: 8.80,
     w: 0.90,
     d: 3.30,
     cotaStart: '+97.66m',
@@ -80,11 +80,11 @@ export const FIXED_STRUCTURAL_GRID = {
   },
   existingStaircase2: {
     id: 'ESCALERA_2_PLANTA_ALTA',
-    name: 'Escalera 2 H°A° (Sube a Planta Alta 3.90×0.80m • Costado Derecho Eje 1–2 🔒)',
-    x1: 3.84,
+    name: 'Escalera 2 H°A° (Sube a Planta Alta / Desk 3.90×0.80m • Costado Opuesto Eje 8–9 🔒)',
+    x1: -4.87,
     z1: 5.26,
-    x2: 4.87,
-    z2: 9.16,
+    x2: -3.84,
+    z2: 8.85,
     w: 0.80,
     d: 3.90,
     cotaStart: '+100.00m',
@@ -876,73 +876,73 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
         codeType: 'exterior',
         x: -4.87,
         z: 1.50,
-        w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-        d: 1.50, // Muro Contención (1.50) a Eje G (3.00) = 14.61 m²
+        w: 9.74,
+        d: 1.50,
         floorCostPerM2Gs: 120000,
         equipCostGs: 2970000,
         activeStage: subsueloActive,
         color: 'rgba(16, 185, 129, 0.22)'
       },
       {
-        id: 'sub_bano',
-        name: 'Lavadero Operativo Día 1 (Lavarropas + Pileta • Ejes 4-1 / E-B)',
+        id: 'sub_encofrado_existente',
+        name: 'Encofrado H°A° Existente al Costado de Escalera 1 (Previsto originalmente p/ Lavadero — Queda integrado al Gran Salón • x=+1.84..+3.84m)',
+        codeType: 'exterior',
+        x: 1.84,
+        z: 5.26,
+        w: 2.00,
+        d: 2.54,
+        floorCostPerM2Gs: 0,
+        equipCostGs: 0,
+        activeStage: true,
+        color: 'rgba(148, 163, 184, 0.28)'
+      },
+      {
+        id: 'sub_lavadero_pared_opuesta',
+        name: 'Lavadero contra Pared Opuesta (Eje 9 x=-4.87..-3.50m, z=5.20..7.80m • Pileta + Lavarropas)',
         codeType: 'bano',
-        x: 1.69,
-        z: 4.77,
-        w: 3.18, // Eje 4 (+1.69) a Eje 1 (+4.87)
-        d: 5.17, // Eje E (4.77) a Eje B (9.94)
-        floorCostPerM2Gs: 165000,
+        x: -4.87,
+        z: 5.20,
+        w: 1.37,
+        d: 2.60,
+        floorCostPerM2Gs: 85000,
         equipCostGs: 2837500,
         activeStage: subsueloActive,
-        color: 'rgba(6, 182, 212, 0.22)'
+        color: 'rgba(6, 182, 212, 0.24)'
       },
       {
-        id: 'sub_estar_kitch',
-        name: 'Depósito Cerrado Día 1 + Arranque Escalera 1 en Eje 8–9 (Ejes 9-4 / G-C)',
-        codeType: 'cocina',
-        x: -4.87,
-        z: 3.00,
-        w: 6.56, // Eje 9 (-4.87) a Eje 4 (+1.69)
-        d: 4.37, // Eje G (3.00) a Eje C (7.37)
-        floorCostPerM2Gs: 145000,
-        equipCostGs: 3200000,
-        activeStage: subsueloActive,
-        color: 'rgba(56, 189, 248, 0.16)'
-      },
-      {
-        id: 'sub_dormitorio',
-        name: 'Estar / Planta Libre Subsuelo bajo Losa 1 (Ejes 9-4 / C-B)',
+        id: 'sub_gran_salon_abierto',
+        name: 'Gran Salón Abierto de Subsuelo ("Todo un Salón" 100.71 m² • Suelo Tierra Natural / Lecherada de Cemento)',
         codeType: 'habitable',
         x: -4.87,
-        z: 7.37,
-        w: 6.56, // de Eje 9 (-4.87) a Eje 4 (+1.69)
-        d: 4.13, // de Eje C (7.37) a z=11.50m
-        floorCostPerM2Gs: 165000,
-        equipCostGs: 3800000,
-        activeStage: subsueloFullFinish,
-        color: 'rgba(168, 85, 247, 0.16)'
+        z: 3.00,
+        w: 9.74,
+        d: 10.34,
+        floorCostPerM2Gs: 65000,
+        equipCostGs: 3200000,
+        activeStage: subsueloActive,
+        color: 'rgba(56, 189, 248, 0.14)'
       },
       {
         id: 'sub_parrilla_quincho',
-        name: 'Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m • Ejes 9-6)',
+        name: 'Parrillita / Quincho Inferior en Subsuelo hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m)',
         codeType: 'exterior',
         x: -4.87,
         z: 11.50,
-        w: 3.23, // x = -4.87m a -1.64m (Eje 9 a Eje 6)
-        d: 1.84, // z = 11.50m a 13.34m (Eje A)
-        floorCostPerM2Gs: 185000,
+        w: 3.23,
+        d: 1.84,
+        floorCostPerM2Gs: 125000,
         equipCostGs: 4620000,
         activeStage: subsueloActive,
         color: 'rgba(245, 158, 11, 0.24)'
       },
       {
         id: 'sub_patio_inferior',
-        name: 'Jardín Posterior con Césped (Patio Norte z=13.34..20.14m)',
+        name: 'Patio Trasero 100% Nivelado a Suelo de Subsuelo (Y = -2.34m • Sin Desnivel • z=13.34..26.80m)',
         codeType: 'exterior',
         x: -4.87,
         z: 13.34,
-        w: 9.74, // de Eje 9 (-4.87) a Eje 1 (+4.87)
-        d: 6.80, // de Eje A (13.34) hacia jardín
+        w: 9.74,
+        d: 13.46,
         floorCostPerM2Gs: 58000,
         equipCostGs: 6670000,
         activeStage: subsueloActive,
@@ -950,12 +950,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_pozo_septica_bombeo',
-        name: 'Cámara Séptica + Pozo Ciego Absorbente Ø1.80m (Ejes 8–9 • Libre de Piscina • Desagote Cisterna)',
+        name: 'Cámara Séptica + Pozo Ciego Absorbente Autónomo (Patio Trasero Ejes 8–9 • Evita red vecinal precaria)',
         codeType: 'bano',
         x: -4.55,
-        z: 14.10,
+        z: 14.20,
         w: 2.15,
-        d: 4.50,
+        d: 6.50,
         floorCostPerM2Gs: 0,
         equipCostGs: 6800000,
         activeStage: subsueloActive,
@@ -963,10 +963,10 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_piscina_futura',
-        name: 'Futura Piscina Oficial 4.65×2.45m (Ejes 5-1 • Sin Chocar con Pozo)',
+        name: 'Piscina 4.65×2.45m en Patio Nivelado (Muralla al fondo en z=26.80m detrás de la piscina)',
         codeType: 'exterior',
-        x: -0.55,
-        z: 14.80,
+        x: -0.45,
+        z: 15.80,
         w: 4.65,
         d: 2.45,
         floorCostPerM2Gs: 0,
@@ -977,51 +977,56 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     ],
     walls: [
       { id: 'w_sub_muro_cont_150', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: 4.87, z2: 1.50, activeStage: subsueloActive, label: 'Muro Contención Estacionamiento z=+1.50m (Cámara Oxigenación 1.50m)' },
-      { id: 'w_sub_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: subsueloActive, label: 'Muro Frontal Subsuelo Eje G Libre de Humedad (z=3.00m)' },
-      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (P20-P19-P18-P17 • Escalera 1 y Parrilla)' },
-      { id: 'w_sub_lav_div', type: 'ladrillo_15', x1: 1.69, z1: 3.00, x2: 1.69, z2: 9.94, activeStage: subsueloActive, label: 'Cerramiento Lavadero y Depósito Subsuelo (Eje 4)' },
-      { id: 'w_sub_div_c',  type: 'ladrillo_15', x1: -3.90, z1: 7.37, x2: 1.69, z2: 7.37, activeStage: subsueloActive, label: 'Divisorio Depósito Subsuelo Eje C (P15-P12)' },
-      { id: 'w_sub_parrilla', type: 'ladrillo_15', x1: -4.87, z1: 11.50, x2: -1.64, z2: 11.50, activeStage: subsueloActive, label: 'Mesada y Parrillita Subsuelo hacia el Patio (Ejes 9-6)' },
-      { id: 'w_sub_blindex_b', type: 'blindex_corredizo', x1: -1.64, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: subsueloFullFinish, label: 'Cerramiento Eje B hacia Galería Inferior y Jardín' }
+      { id: 'w_sub_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: subsueloActive, label: 'Muro Frontal Subsuelo Eje G (z=3.00m)' },
+      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (Contra esta pared va el Lavadero y la Parrillita)' },
+      { id: 'w_sub_cont_1', type: 'ciclopeo_30', x1: 4.87, z1: 1.50, x2: 4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Este Eje 1 (Junto a Escalera 1 existente y su Encofrado)' },
+      { id: 'w_sub_muralla_fondo', type: 'ladrillo_20', x1: -4.87, z1: 26.80, x2: 4.87, z2: 26.80, activeStage: true, label: 'Muralla de Fondo del Lote en z=26.80m (Detrás de la Piscina)' }
     ],
     mepNodes: isZeroWallsState ? [] : [
-      { id: 'm_sub_dren1', type: 'drenaje_frances', x: -4.50, z: 1.75, label: 'Drenaje Francés en Cámara de Oxigenación (z=1.75m)' },
-      { id: 'm_sub_dren2', type: 'drenaje_frances', x: 4.50,  z: 1.75, label: 'Rejilla y Drenaje Cámara Oxigenación Este (z=1.75m)' },
-      { id: 'm_sub_pvc1',  type: 'bajada_pvc100',   x: -4.75, z: 9.85, label: 'Bajada Pluvial P18 (Eje 9-B)' },
-      { id: 'm_sub_bomba_cloaca', type: 'bajada_pvc100', x: -3.50, z: 14.60, label: 'Cámara Séptica + Pozo Ciego Absorbente Ø1.80m en Eje 8–9 (Recibe colector desde Núcleo Eje F–G)' },
-      { id: 'm_sub_cctv1', type: 'cctv_poe',        x: -4.75, z: 13.25, label: 'Cámara Barranco / Parrilla Subsuelo P17 (Eje 9-A)' },
-      { id: 'm_sub_wifi1', type: 'wifi_mesh',       x: 2.50,  z: 6.50, label: 'AP Mesh Subsuelo / Lavadero' }
+      { id: 'm_sub_dren1', type: 'drenaje_frances', x: -4.50, z: 2.75, label: 'Drenaje Francés Frontal hacia Calle Guillermo Arias' },
+      { id: 'm_sub_dren2', type: 'drenaje_frances', x: 4.50,  z: 2.75, label: 'Colector Pluvial Este hacia Calle Guillermo Arias' },
+      { id: 'm_sub_bomba_cloaca', type: 'bajada_pvc100', x: -3.25, z: 16.55, label: 'Cámara Séptica + Pozo Ciego Autónomo en Patio Trasero' },
+      { id: 'm_sub_cctv1', type: 'cctv_poe',        x: 0.00,  z: 13.30, label: 'Cámara Contrafrente Subsuelo y Patio (Viga Eje A z=13.30m)' },
+      { id: 'm_sub_wifi1', type: 'wifi_mesh',       x: 0.00,  z: 8.50,  label: 'AP Mesh Gran Salón Subsuelo' }
     ]
   };
 
   // =========================================================================
   // PLANTA BAJA OFICIAL (+100.00m):
-  // - Cochera Frontal (z = -4.00m..3.00m): Muro Frontal 100% Ciego en z=-4.00m
-  //   (Portón Balancín 2.30m x=+1.20..+3.50m + Portoncito Peatonal 0.95m x=-2.20..-1.25m),
-  //   Pérgola de Madera con Enredadera y Techo Translúcido Antigranizo (x=-0.50..+4.50m, z=-3.80..+2.80m),
-  //   Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre cámara de oxigenación (z=1.50..3.00m).
-  // - Núcleo Húmedo Frontal en Eje F–G (z=3.00..5.00m):
-  //   Baño Social / SSHH (1.10m × 2.00m) en x=-1.64..-0.40m, z=3.00..5.00m
-  //   Cocina / Comedor (6.20m × 2.75m) en sector izquierdo Eje 5 a Eje 9 (x=-4.87..-0.74m, z=3.00..9.94m) con bacha sobre Eje F–G.
-  // - Estar Social (4.95m × 4.80m) en sector derecho Eje 1 a Eje 5 (x=-0.74..+3.84m, z=5.00..9.94m).
-  // - Escaleras en Costados Opuestos:
-  //   Escalera 1 (Baja a Subsuelo, 3.30×0.90m) en costado izquierdo Eje 8–9 (x=-4.87..-3.90m, z=5.26..8.56m)
-  //   Escalera 2 (Sube a Planta Alta, 3.90×0.80m) en costado derecho Eje 1–2 (x=+3.84..+4.87m, z=5.26..9.16m)
-  // - Galería al Río (3.50m × 9.55m) en Eje A–B (z=9.94..13.34m), sin parrilla (parrilla va en subsuelo).
+  // - Frente sobre Calle Tte. Guillermo Arias (z = -4.00m):
+  //   * Portoncito Peatonal (0.95m) a la IZQUIERDA mirando desde la calle (x = +1.725m)
+  //   * Portón Vehicular Balancín (2.30m) a la DERECHA mirando desde la calle (x = -2.35m)
+  // - Doble Puerta de Acceso de Servicio a Escalera 1 (+X, Ejes 1–2):
+  //   * Puerta Exterior de Servicio en Eje G (x = +4.35m, z = 3.00m)
+  //   * Puerta Interior hacia Escalera 1 (x = +3.84m, z = 4.20m)
+  // - Escalera 2 (Sube a 2do Piso) en el costado opuesto (-X, Ejes 8–9, x = -4.87..-3.84m).
   // =========================================================================
   const buildPlantaBajaRooms = (prefix) => [
     {
       id: `${prefix}_cochera`,
-      name: 'Cochera Frontal (Muro 100% Ciego + Portón Balancín 2.30m + Portoncito 0.95m + Pérgola Madera/Antigranizo + Piso Rejilla Electroforjada z=1.50..3.00m)',
+      name: 'Cochera Frontal (Portoncito Peatonal en +X • Portón Balancín 2.30m en -X • Pérgola Antigranizo • Rejilla Oxigenación z=1.50..3.00m)',
       codeType: 'exterior',
       x: -4.87,
       z: -4.00,
-      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-      d: 7.00, // Frente lote (-4.00) a Eje G (3.00)
+      w: 9.74,
+      d: 7.00,
       floorCostPerM2Gs: 140000,
       equipCostGs: 14500000,
       activeStage: activeFlag,
       color: 'rgba(16, 185, 129, 0.20)'
+    },
+    {
+      id: `${prefix}_acceso_servicio_esc1`,
+      name: 'Acceso de Servicio y Escalera 1 a Subsuelo (Eje 1–2 • Puerta Exterior z=3.00m + Puerta Interior x=3.84m)',
+      codeType: 'exterior',
+      x: 3.84,
+      z: 3.00,
+      w: 1.03,
+      d: 5.80,
+      floorCostPerM2Gs: 150000,
+      equipCostGs: 2400000,
+      activeStage: activeFlag,
+      color: 'rgba(14, 165, 233, 0.24)'
     },
     {
       id: `${prefix}_bano_social`,
@@ -1029,8 +1034,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       codeType: 'bano',
       x: -1.64,
       z: 3.00,
-      w: 1.24, // x = -1.64m a -0.40m (1.10m útiles internos)
-      d: 2.00, // z = 3.00m a 5.00m (Eje G a Eje E/D)
+      w: 1.24,
+      d: 2.00,
       floorCostPerM2Gs: 195000,
       equipCostGs: 4200000,
       activeStage: activeFlag,
@@ -1038,12 +1043,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_cocina_comedor`,
-      name: 'Cocina / Comedor (6.20m × 2.75m • Sector Izquierdo Eje 5 a Eje 9 c/ Bacha sobre Eje F–G • Losa L4)',
+      name: 'Cocina / Comedor (6.20m × 2.75m • Sector Eje 5 a Eje 9 c/ Bacha sobre Eje F–G + Escalera 2 a PA en Eje 8–9)',
       codeType: 'cocina',
       x: -4.87,
       z: 3.00,
-      w: 4.13, // x = -4.87m a -0.74m (Eje 9 a Eje 5)
-      d: 6.94, // z = 3.00m a 9.94m (Eje G a Eje B)
+      w: 4.13,
+      d: 6.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 8500000,
       activeStage: activeFlag,
@@ -1053,12 +1058,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       id: `${prefix}_estar_social`,
       name: isZeroWallsState
         ? 'VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap • Cuadrante Eje 1 a Eje 5 / Eje B a Eje G)'
-        : 'Estar Social (4.95m × 4.80m • Sector Derecho Eje 1 a Eje 5 sobre Loza Rap 38.00 m²)',
+        : 'Estar Social (4.95m × 4.80m • Sector Eje 2 a Eje 5 sobre Loza Rap 38.00 m²)',
       codeType: 'habitable',
       x: -0.74,
-      z: 5.00,
-      w: 4.58, // x = -0.74m a +3.84m (Eje 5 a Eje 2, libre de Escalera 2)
-      d: 4.94, // z = 5.00m a 9.94m (Eje D a Eje B)
+      z: 3.00,
+      w: 4.58,
+      d: 6.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 7800000,
       activeStage: activeFlag,
@@ -1070,8 +1075,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       codeType: 'exterior',
       x: -4.87,
       z: 9.94,
-      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-      d: 3.40, // Eje B (9.94) a Eje A (13.34) -> 33.12 m²
+      w: 9.74,
+      d: 3.40,
       floorCostPerM2Gs: 180000,
       equipCostGs: 4620000,
       activeStage: activeFlag,
@@ -1080,117 +1085,132 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
   ];
 
   const buildPlantaBajaWalls = (wPrefix) => [
-    { id: `${wPrefix}_muro_ciego_calle`, type: 'ladrillo_20', x1: -4.87, z1: -4.00, x2: 4.87, z2: -4.00, activeStage: activeFlag, label: 'Muro Frontal 100% Ciego Línea Municipal (z=-4.00m • Portón Balancín 2.30m + Portoncito 0.95m)' },
-    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (z=3.00m • Núcleo Húmedo Eje F–G + Acceso Principal)' },
-    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Oeste Eje 9 (P20-P19-P18 • Costado Escalera 1 a Subsuelo)' },
-    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Este Eje 1 (P4-P3-P2 • Costado Escalera 2 a Planta Alta)' },
-    { id: `${wPrefix}_bano_soc_s`, type: 'ladrillo_15', x1: -1.64, z1: 5.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Sur Baño Social SSHH (z=5.00m • Eje F–G)' },
+    { id: `${wPrefix}_muro_ciego_calle`, type: 'ladrillo_20', x1: -4.87, z1: -4.00, x2: 4.87, z2: -4.00, activeStage: activeFlag, label: 'Muro Frontal Ciego (z=-4.00m • Portón Balancín en -X y Portoncito en +X)' },
+    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (z=3.00m • Puerta Principal + Puerta Exterior de Servicio a Subsuelo en x=+4.35m)' },
+    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Oeste Eje 9 (Costado Escalera 2 que sube a Planta Alta)' },
+    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Este Eje 1 (Costado Escalera 1 existente que baja a Subsuelo)' },
+    { id: `${wPrefix}_bano_soc_s`, type: 'ladrillo_15', x1: -1.64, z1: 5.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Baño Social SSHH (z=5.00m • Eje F–G)' },
     { id: `${wPrefix}_bano_soc_e`, type: 'ladrillo_15', x1: -0.40, z1: 3.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Este Baño Social SSHH (x=-0.40m)' },
     { id: `${wPrefix}_bano_soc_o`, type: 'ladrillo_15', x1: -1.64, z1: 3.00, x2: -1.64, z2: 5.00, activeStage: activeFlag, label: 'Divisorio Baño Social / Bacha Cocina en Eje 6 (x=-1.64m)' },
-    { id: `${wPrefix}_esc1_caja`,  type: 'ladrillo_15', x1: -3.90, z1: 5.26, x2: -3.90, z2: 8.56, activeStage: activeFlag, label: 'Baranda / Cierre Escalera 1 a Subsuelo (Eje 8–9 • 3.30×0.90m)' },
-    { id: `${wPrefix}_esc2_caja`,  type: 'ladrillo_15', x1: 3.84,  z1: 5.26, x2: 3.84,  z2: 9.16, activeStage: activeFlag, label: 'Cierre Caja Escalera 2 a Planta Alta (Eje 1–2 • 3.90×0.80m)' },
-    { id: `${wPrefix}_blindex_b`,  type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: activeFlag, label: 'Ventanal Corredizo Eje B hacia Galería al Río (P18-P16-P9-P5)' },
-    { id: `${wPrefix}_baranda_a`,  type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Borde Galería al Río Eje A (P17-P11-P8-P1)' }
+    { id: `${wPrefix}_esc1_caja`,  type: 'ladrillo_15', x1: 3.84,  z1: 3.00, x2: 3.84,  z2: 8.80, activeStage: activeFlag, label: 'Tabique y Puerta Interior de Acceso a Escalera 1 de Servicio (Eje 2 x=+3.84m)' },
+    { id: `${wPrefix}_esc2_caja`,  type: 'ladrillo_15', x1: -3.84, z1: 5.26, x2: -3.84, z2: 8.85, activeStage: activeFlag, label: 'Baranda Escalera 2 que sube a Planta Alta (Eje 8 x=-3.84m)' },
+    { id: `${wPrefix}_blindex_b`,  type: 'blindex_corredizo', x1: -3.84, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: activeFlag, label: 'Ventanal Corredizo Eje B hacia Galería al Río' },
+    { id: `${wPrefix}_baranda_a`,  type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Borde Galería al Río Eje A' }
   ];
 
   // =========================================================================
-  // PLANTA ALTA OFICIAL (+102.88m — 2 Dormitorios + Desk al subir escalera + 2 Baños + Vestidor,
-  // SIN balcón ni Blindex frontal, apoyada sobre Eje G z=3.00m):
-  // - Escritorio / Desk (3.50m × 2.30m) en el desembarco de Escalera 2 (Eje 1–2, x=+1.80..+4.87m, z=7.37..9.94m)
-  // - Dormitorio 2 (3.85m × 3.00m) al centro (x=-0.74..+1.80m, z=5.26..9.94m)
-  // - Baño 2 Planta Alta (2.30m × 2.00m) sobre el núcleo húmedo frontal Eje F–G (x=+1.69..+3.84m, z=3.00..5.26m)
-  // - Dormitorio Principal en Suite (5.00m × 3.95m) en Eje 5–9 (x=-4.87..-0.74m, z=5.00..9.94m)
-  // - Vestidor (1.55m × 1.80m) en x=-4.87..-2.80m, z=3.00..5.00m
-  // - Baño en Suite (2.30m × 2.00m) en x=-2.80..+0.50m, z=3.00..5.00m (exactamente arriba del Baño Social y Cocina PB)
-  // - Deck 2 / Terraza al Río (4.15m × 7.00m) en Eje A–B (z=9.94..13.34m)
+  // PLANTA ALTA OFICIAL (+102.88m):
+  // - Escalera 2 desembarca en Ejes 8–9 (-X: x=-4.87..-3.84m, z=5.26..8.85m)
+  // - Escritorio / Desk inmediatamente al subir la Escalera 2 (x=-4.87..-1.80m, z=6.00..9.94m)
+  // - Pasillo Distribuidor Franco de 1.15m de ancho (x=-3.84..+0.60m, z=4.85..6.00m)
+  // - Franja Frontal Húmeda Eje F–G (z=3.00..4.85m):
+  //   * SSHH 2 / Baño Planta Alta (x=-3.84..-1.65m, z=3.00..4.85m)
+  //   * Baño en Suite (x=-1.65..+0.60m, z=3.00..4.85m)
+  //   * Vestidor en Suite (x=+2.77..+4.87m, z=3.00..4.85m)
+  // - Dormitorio 2 en el centro (x=-1.80..+0.60m, z=6.00..9.94m)
+  // - Dormitorio Principal en Suite en +X (x=+0.60..+4.87m, z=4.85..9.94m)
+  // - Deck 2 / Terraza al Río en Eje A–B (z=9.94..13.34m)
   // =========================================================================
   const buildPlantaAltaRooms = (prefix) => [
     {
-      id: `${prefix}_vestidor_suite`,
-      name: 'Vestidor Suite (1.55m × 1.80m • Eje 7–9 / Eje F–G • x=-4.87..-2.80m, z=3.00..5.00m)',
-      codeType: 'bano',
-      x: -4.87,
-      z: 3.00,
-      w: 2.07, // x = -4.87m a -2.80m
-      d: 2.00, // z = 3.00m a 5.00m (Frente Eje G sin voladizo)
-      floorCostPerM2Gs: 185000,
-      equipCostGs: 3600000,
-      activeStage: activeFlag,
-      color: 'rgba(56, 189, 248, 0.20)'
-    },
-    {
-      id: `${prefix}_bano_suite`,
-      name: 'Baño en Suite (2.30m × 2.00m • Núcleo Húmedo Eje F–G arriba de Baño Social/Cocina PB • x=-2.80..+0.50m, z=3.00..5.00m)',
-      codeType: 'bano',
-      x: -2.80,
-      z: 3.00,
-      w: 3.30, // x = -2.80m a +0.50m
-      d: 2.00, // z = 3.00m a 5.00m
-      floorCostPerM2Gs: 195000,
-      equipCostGs: 6800000,
-      activeStage: activeFlag,
-      color: 'rgba(16, 185, 129, 0.22)'
-    },
-    {
       id: `${prefix}_bano_2`,
-      name: 'Baño 2 Planta Alta (2.30m × 2.00m • Núcleo Húmedo Frontal Eje F–G • x=+1.69..+3.84m, z=3.00..5.26m)',
+      name: 'SSHH 2 / Baño Planta Alta (2.19m × 1.85m • Núcleo Húmedo Eje F–G • x=-3.84..-1.65m, z=3.00..4.85m)',
       codeType: 'bano',
-      x: 1.69,
+      x: -3.84,
       z: 3.00,
-      w: 2.15, // x = +1.69m a +3.84m (Eje 4 a Eje 2)
-      d: 2.26, // z = 3.00m a 5.26m (Eje G a Eje D)
+      w: 2.19,
+      d: 1.85,
       floorCostPerM2Gs: 195000,
       equipCostGs: 5400000,
       activeStage: activeFlag,
       color: 'rgba(6, 182, 212, 0.22)'
     },
     {
-      id: `${prefix}_master_suite`,
-      name: 'Dormitorio Principal en Suite (5.00m × 3.95m • Eje 5–9 / z=5.00..9.94m)',
-      codeType: 'habitable',
-      x: -4.87,
-      z: 5.00,
-      w: 4.13, // x = -4.87m a -0.74m (Eje 9 a Eje 5)
-      d: 4.94, // z = 5.00m a 9.94m (Eje D a Eje B)
-      floorCostPerM2Gs: 190000,
-      equipCostGs: 9800000,
+      id: `${prefix}_bano_suite`,
+      name: 'Baño en Suite (2.25m × 1.85m • Núcleo Húmedo Eje F–G arriba de Baño Social PB • x=-1.65..+0.60m, z=3.00..4.85m)',
+      codeType: 'bano',
+      x: -1.65,
+      z: 3.00,
+      w: 2.25,
+      d: 1.85,
+      floorCostPerM2Gs: 195000,
+      equipCostGs: 6800000,
       activeStage: activeFlag,
-      color: 'rgba(168, 85, 247, 0.22)'
+      color: 'rgba(16, 185, 129, 0.22)'
     },
     {
-      id: `${prefix}_dorm_2`,
-      name: 'Dormitorio 2 (3.85m × 3.00m • Centro x=-0.74..+1.80m, z=5.26..9.94m)',
-      codeType: 'habitable',
-      x: -0.74,
-      z: 5.26,
-      w: 2.54, // x = -0.74m a +1.80m
-      d: 4.68, // z = 5.26m a 9.94m (Eje D a Eje B)
+      id: `${prefix}_vestidor_suite`,
+      name: 'Vestidor en Suite (2.10m × 1.85m • Eje F–G • x=+2.77..+4.87m, z=3.00..4.85m)',
+      codeType: 'bano',
+      x: 2.77,
+      z: 3.00,
+      w: 2.10,
+      d: 1.85,
       floorCostPerM2Gs: 185000,
-      equipCostGs: 6400000,
+      equipCostGs: 3600000,
       activeStage: activeFlag,
-      color: 'rgba(245, 158, 11, 0.20)'
+      color: 'rgba(56, 189, 248, 0.20)'
+    },
+    {
+      id: `${prefix}_pasillo_distribuidor`,
+      name: 'Pasillo Distribuidor de Planta Alta (Ancho libre 1.15m • Conecta Escalera 2, Desk, SSHH 2, Dormitorio 2 y Suite)',
+      codeType: 'habitable',
+      x: -3.84,
+      z: 4.85,
+      w: 4.44,
+      d: 1.15,
+      floorCostPerM2Gs: 180000,
+      equipCostGs: 0,
+      activeStage: activeFlag,
+      color: 'rgba(148, 163, 184, 0.20)'
     },
     {
       id: `${prefix}_escritorio_desk`,
-      name: 'Escritorio / Desk al Subir Escalera 2 (3.50m × 2.30m • Eje 1–4 / x=+1.80..+4.87m, z=7.37..9.94m)',
+      name: 'Escritorio / Desk al Subir Escalera 2 (3.07m × 3.94m • x=-4.87..-1.80m, z=6.00..9.94m)',
       codeType: 'habitable',
-      x: 1.80,
-      z: 7.37,
-      w: 3.07, // x = +1.80m a +4.87m (Desembarco Escalera 2)
-      d: 2.57, // z = 7.37m a 9.94m (Eje C a Eje B)
+      x: -4.87,
+      z: 6.00,
+      w: 3.07,
+      d: 3.94,
       floorCostPerM2Gs: 180000,
       equipCostGs: 4800000,
       activeStage: activeFlag,
       color: 'rgba(56, 189, 248, 0.20)'
     },
     {
+      id: `${prefix}_dorm_2`,
+      name: 'Dormitorio 2 (2.40m × 3.94m • Centro x=-1.80..+0.60m, z=6.00..9.94m)',
+      codeType: 'habitable',
+      x: -1.80,
+      z: 6.00,
+      w: 2.40,
+      d: 3.94,
+      floorCostPerM2Gs: 185000,
+      equipCostGs: 6400000,
+      activeStage: activeFlag,
+      color: 'rgba(245, 158, 11, 0.20)'
+    },
+    {
+      id: `${prefix}_master_suite`,
+      name: 'Dormitorio Principal en Suite (4.27m × 5.09m • x=+0.60..+4.87m, z=4.85..9.94m)',
+      codeType: 'habitable',
+      x: 0.60,
+      z: 4.85,
+      w: 4.27,
+      d: 5.09,
+      floorCostPerM2Gs: 190000,
+      equipCostGs: 9800000,
+      activeStage: activeFlag,
+      color: 'rgba(168, 85, 247, 0.22)'
+    },
+    {
       id: `${prefix}_terraza_rio`,
-      name: 'Deck 2 / Terraza al Río (4.15m × 7.00m • Eje A–B z=9.94..13.34m)',
+      name: 'Deck 2 / Terraza al Río (Eje A–B z=9.94..13.34m)',
       codeType: 'exterior',
       x: -4.87,
       z: 9.94,
-      w: 9.74, // Eje 9 (-4.87) a Eje 1 (+4.87)
-      d: 3.40, // Eje B (9.94) a Eje A (13.34)
+      w: 9.74,
+      d: 3.40,
       floorCostPerM2Gs: 175000,
       equipCostGs: 4620000,
       activeStage: activeFlag,
@@ -1200,16 +1220,18 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
 
   const buildPlantaAltaWalls = (wPrefix) => [
     { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: activeFlag, label: 'Muro Frontal Mampostería PA en Eje G (z=3.00m • SIN Balcón ni Blindex Frontal)' },
-    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 (P20-P19-P18)' },
-    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (P4-P3-P2 • Escalera 2 y Desk)' },
-    { id: `${wPrefix}_nucleo_fg`, type: 'ladrillo_15', x1: -4.87, z1: 5.00, x2: 3.84, z2: 5.00, activeStage: activeFlag, label: 'Tabique Divisor Núcleo Húmedo Eje F–G (Vestidor + Baño Suite + Baño 2 PA)' },
-    { id: `${wPrefix}_vest_bano`, type: 'ladrillo_15', x1: -2.80, z1: 3.00, x2: -2.80, z2: 5.00, activeStage: activeFlag, label: 'Tabique Vestidor / Baño en Suite (x=-2.80m)' },
-    { id: `${wPrefix}_bano_suite_e`, type: 'ladrillo_15', x1: 0.50, z1: 3.00, x2: 0.50, z2: 5.00, activeStage: activeFlag, label: 'Cierre Este Baño en Suite (x=+0.50m)' },
-    { id: `${wPrefix}_bano2_o`,   type: 'ladrillo_15', x1: 1.69,  z1: 3.00, x2: 1.69,  z2: 5.26, activeStage: activeFlag, label: 'Cierre Oeste Baño 2 PA en Eje 4 (x=+1.69m)' },
-    { id: `${wPrefix}_eje5_suite`, type: 'ladrillo_15', x1: -0.74, z1: 5.00, x2: -0.74, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio Suite / Dormitorio 2 en Eje 5 (x=-0.74m)' },
-    { id: `${wPrefix}_dorm2_desk`, type: 'ladrillo_15', x1: 1.80,  z1: 5.26, x2: 1.80,  z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 / Escritorio Desk al subir Escalera 2 (x=+1.80m)' },
-    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B hacia Deck 2 / Terraza al Río (P18-P16-P9-P5-P2)' },
-    { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Eje A (P17-P11-P8-P1)' }
+    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 (Escalera 2 y Escritorio/Desk)' },
+    { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (Vestidor y Dormitorio Principal en Suite)' },
+    { id: `${wPrefix}_pasillo_sur`, type: 'ladrillo_15', x1: -3.84, z1: 4.85, x2: 0.60, z2: 4.85, activeStage: activeFlag, label: 'Muro Sur Pasillo Distribuidor (z=4.85m • Cierre SSHH 2 y Baño en Suite)' },
+    { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.60, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 2)' },
+    { id: `${wPrefix}_sshh2_o`, type: 'ladrillo_15', x1: -3.84, z1: 3.00, x2: -3.84, z2: 4.85, activeStage: activeFlag, label: 'Cierre Oeste SSHH 2 junto a Escalera 2 (x=-3.84m)' },
+    { id: `${wPrefix}_sshh2_suite`, type: 'ladrillo_15', x1: -1.65, z1: 3.00, x2: -1.65, z2: 4.85, activeStage: activeFlag, label: 'Divisorio SSHH 2 / Baño en Suite (x=-1.65m)' },
+    { id: `${wPrefix}_vestidor_o`, type: 'ladrillo_15', x1: 2.77, z1: 3.00, x2: 2.77, z2: 4.85, activeStage: activeFlag, label: 'Tabique Vestidor en Suite (x=+2.77m)' },
+    { id: `${wPrefix}_vestidor_n`, type: 'ladrillo_15', x1: 2.77, z1: 4.85, x2: 4.87, z2: 4.85, activeStage: activeFlag, label: 'Cerramiento Vestidor hacia Suite (z=4.85m)' },
+    { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Escritorio-Desk / Dormitorio 2 (x=-1.80m)' },
+    { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.60, z1: 3.00, x2: 0.60, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 y Pasillo / Dormitorio Principal en Suite (x=+0.60m)' },
+    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B hacia Deck 2 / Terraza al Río' },
+    { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Eje A' }
   ];
 
   // =========================================================================

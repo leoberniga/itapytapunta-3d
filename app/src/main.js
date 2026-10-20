@@ -222,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const scene = new ProjectScene(container, onSelectObject, onMeasurementUpdate);
+  window.projectScene = scene;
 
   // =========================================================================
   // 4. INTERACTIVE 2D/3D FLOORPLAN EDITOR INTEGRATION (#modal-editor-2d)

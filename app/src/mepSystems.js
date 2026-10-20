@@ -22,53 +22,53 @@ export const PLUVIAL_HYDRO_DATA = {
     nuevoTechoGeneral: "Cota +105.85m (Y = +5.85m, Arriba del 2do Piso) — A Colocar en esta Etapa"
   },
   especificaciones: {
-    canaletas: "Canaleta oculta en cenefa de chapa galvanizada N°24/26 plegada (sección 18x15cm) en el borde del Techo General (Y = +5.80m / Cota +105.80m), con pendiente longitudinal 3.0% hacia embudos colectores con rejilla atrapahojas.",
-    bajadas: "4 Bajadas pluviales verticales continuas de PVC reforzado Junta Elástica Ø100mm (Tigre / Titan línea pesada), que descienden desde el Techo General (Y = +5.80m), atraviesan los pases de la Losa del 2do Piso (Y = +3.00m) y Losa de Planta Baja (Y = 0.00m), hasta las cámaras desarenadoras y drenaje del barranco.",
-    drenajeFrancesCochera: "Drenaje Francés Superior (Trasdós Muro Cochera Cota +98.50m): Tubo PVC cribado/ranurado Ø100mm con pendiente 2%, envuelto en lecho de piedra triturada 4ta (40x40cm) y manta geotextil no tejida Bidim RT-16 (200 g/m²).",
-    drenajeFrancesSubsuelo: "Drenaje Francés Inferior (Trasdós Muro Contención Subsuelo Cota +96.80m): Tubo cribado Ø100mm + grava graduada + geotextil Bidim + lámina drenante nodular para interceptar agua subsuperficial de la arena limosa SM.",
-    barbacanas: "Barbacanas de alivio hidrostático en PVC Ø50mm cada 1.50m (pendiente 5% hacia afuera, con tapón de geotextil y grava en el trasdós para evitar lavado de finos del estrato SM).",
-    camaras: "5 Cámaras de inspección y desarenadoras de mampostería revocada con hidrófugo (40x40x50cm) con contratapa hermética y decantador de arena de 10cm de fondo.",
-    disipadorBarranco: "Disipador de energía escalonado en gaviones / piedra bruta cementada en el talud posterior (Cota +95.80m) para entregar el caudal pluvial sin velocidades erosivas (< 1.5 m/s) y prevenir erosión regresiva en el estrato de arena limosa SM (Nspt 7-9 en S3)."
+    canaletas: "Sistema de canaletas ocultas de chapa galvanizada N°24/26 plegada (sección 18x15cm) en el frente del Techo General (Eje G z = 2.95m, Y = +5.55m), recibiendo la pendiente del techo hacia adelante para desaguar directamente hacia la Calle Tte. Guillermo Arias.",
+    bajadas: "4 Bajadas pluviales verticales de PVC reforzado Junta Elástica Ø100mm adosadas a los pilares reales del edificio (2 frontales principales en Eje G z = 2.95m y 2 auxiliares de terraza en Eje B z = 9.94m), conduciendo el 100% del agua pluvial hacia el frente municipal.",
+    drenajeFrancesCochera: "Drenaje Francés Superior (Trasdós Muro Cochera): Tubo PVC cribado/ranurado Ø100mm con pendiente hacia los colectores frontales, envuelto en piedra triturada 4ta y manta geotextil Bidim RT-16.",
+    drenajeFrancesSubsuelo: "Drenaje Francés y Bombeo Pluvial de Subsuelo hacia el Frente: Intercepta el agua subsuperficial en Eje E/G y la conduce hacia las cámaras pluviales frontales de salida a Calle Tte. Guillermo Arias.",
+    barbacanas: "Barbacanas de alivio hidrostático en PVC Ø50mm cada 1.50m con filtro geotextil en el muro frontal.",
+    camaras: "Cámaras de inspección y desarenadoras pluviales (40x40x50cm) ubicadas en los retiros laterales conduciendo el caudal hacia el cordón cuneta de la Calle Tte. Guillermo Arias (z = -5.65m).",
+    disipadorBarranco: "Separación Total Pluvial vs. Cloacal: El 100% del agua de lluvia desagua por delante hacia la calle, mientras que en el patio trasero (nivelado a Y = -2.34m) trabajan exclusivamente la Cámara Séptica Bicameral y el Pozo Ciego Absorbente autónomos, evitando usar la precaria red vecinal."
   },
   elementos3D: [
     {
-      id: "canaleta_norte",
+      id: "canaleta_frontal",
       type: "pluvial_canaleta",
-      name: "Canaleta Oculta Chapa Galvanizada N°24 (Techo 2do Piso Y=+5.80m)",
-      dimensions: "8.80m x 0.18m x 0.15m (Pendiente 3%)",
-      cota: "+105.80 m (Y = +5.80m)",
+      name: "Canaleta Colectora Principal Frontal Chapa Galvanizada N°24 (Eje G z = 2.95m, Y = +5.55m)",
+      dimensions: "9.74m x 0.18m x 0.15m (Pendiente hacia bajadas frontales)",
+      cota: "+105.55 m (Y = +5.55m)",
       costo: "Incluido en Partida 3.3 (7.800.000 Gs.)",
-      status: "Crítico para Cierre de Techo en 2do Piso",
-      desc: "Ubicada arriba del Segundo Piso. Recoge el 100% de las aguas del techo Isopanel (86 m²) con pendiente del 3% hacia los 4 embudos laterales para evitar desborde en tormentas de >150 mm/h."
+      status: "Desagüe Pluvial Frontal hacia la Calle",
+      desc: "El techo termoacústico Isopanel inclina hacia adelante (Eje G z = 2.95m), descargando toda el agua de lluvia hacia los colectores frontales que salen a la Calle Tte. Guillermo Arias."
     },
     {
       id: "drenaje_frances_cochera",
       type: "hidrofugo_drenaje",
-      name: "Drenaje Francés Trasdós Muro Cochera (Cota +98.50m)",
+      name: "Drenaje Francés Trasdós Muro Cochera (z = -3.80m)",
       dimensions: "Long. 9.50m • Tubo Cribado Ø100mm + Piedra 4ta + Geotextil Bidim",
-      cota: "+98.50 m (Y = -1.50m)",
+      cota: "+98.75 m (Y = -1.25m)",
       costo: "2.970.000 Gs. (Partida 11.2)",
       status: "Obligatorio antes de rellenar cochera",
-      desc: "Elimina el empuje hidrostático sobre el muro de contención de calle Guillermo Arias. Envuelto en manta geotextil Bidim para impedir colmatación por tierra roja compactada."
+      desc: "Elimina el empuje hidrostático sobre el muro frontal de contención y desagua directamente hacia el cordón cuneta de la calle."
     },
     {
       id: "drenaje_frances_subsuelo",
       type: "hidrofugo_drenaje",
-      name: "Drenaje Francés Trasdós Muro Subsuelo (Cota +96.80m)",
-      dimensions: "Long. 8.00m • Tubo Cribado Ø100mm + Grava + Geotextil Bidim",
-      cota: "+96.80 m (Y = -3.20m)",
+      name: "Drenaje Francés Trasdós Muro Subsuelo (Eje G z = 2.85m)",
+      dimensions: "Long. 8.50m • Tubo Cribado Ø100mm + Grava + Geotextil Bidim",
+      cota: "+97.66 m (Y = -2.34m)",
       costo: "2.241.600 Gs. (Aislación Vertical Partida 11.1)",
-      status: "Protección Departamento Subsuelo Construido",
-      desc: "Combinado con azotado hidrófugo Ceresita 1:3 y doble mano de emulsión asfáltica en el muro de contención central. Garantiza humedad 0% en el nivel inferior."
+      status: "Protección Hidrófuga Subsuelo",
+      desc: "Intercepta la humedad del terreno frontal bajo la cámara de oxigenación enrejada y la deriva hacia el colector frontal."
     },
     {
-      id: "disipador_energia_barranco",
+      id: "salida_pluvial_calle",
       type: "pluvial_disipador",
-      name: "Disipador de Energía Hidráulica en Barranco (Cota +95.80m)",
-      dimensions: "1.80m x 1.50m • Piedra Bruta Basáltica y Deflectores",
-      cota: "+95.80 m (Y = -4.20m)",
-      status: "Protección Geotécnica Sondeo S-3",
-      desc: "Amortigua la velocidad del agua pluvial que cae desde los +5.85m de altura del techo general antes de verter al barranco natural, protegiendo el estrato SM contra socavación."
+      name: "Bocas de Desagüe Pluvial a Cordón Cuneta (Calle Tte. Guillermo Arias • z = -5.65m)",
+      dimensions: "Doble Salida PVC Pesado Ø100mm en Vereda Municipal",
+      cota: "+99.82 m (Nivel Calzada Calle Tte. Guillermo Arias)",
+      status: "Evacuación Pluvial 100% por Delante",
+      desc: "Entrega el caudal pluvial del techo y cochera directamente a la calzada de la Calle Tte. Guillermo Arias, dejando el patio trasero exclusivamente para el sistema autónomo de Cámara Séptica y Pozo Ciego."
     }
   ]
 };
@@ -80,7 +80,7 @@ export const WEAK_SIGNALS_DATA = {
     type: "telecom_rack",
     name: "Gabinete Principal de Telecomunicaciones (Rack 6U Pared)",
     ubicacion: "Área Técnica en Planta Baja Construida (Cota +100.00m / Y = +1.50m)",
-    pos3D: [-1.8, 1.5, 5.2],
+    pos3D: [-1.55, 1.50, 4.85],
     equipamiento: [
       "ONU Fibra Óptica Gigabit (acometida subterránea desde poste calle Guillermo Arias)",
       "Switch Gigabit PoE+ de 8 puertos (802.3af/at, 120W) para alimentar las 6 cámaras IP y los 3 nodos Wi-Fi (Subsuelo, PB y 2do Piso)",
@@ -95,191 +95,191 @@ export const WEAK_SIGNALS_DATA = {
     {
       id: "cam_1_oriente",
       numero: 1,
-      name: "Cámara IP PoE #1 — Calle Guillermo Arias (Vista Oriente)",
-      ubicacion: "Pilar Frontal Izquierdo Cochera (Nivel Calle)",
+      name: "Cámara IP PoE #1 — Calle Guillermo Arias (Vista Acceso Peatonal +X)",
+      ubicacion: "Pilar Frontal Este (Nivel Calle z = -4.00m)",
       especificacion: "Bullet IP PoE 4MP (2560x1440), Lente 2.8mm (FOV 104°), IR ColorVu 30m, IP67",
-      pos: [-4.4, 2.5, -1.8],
-      lookAt: [4.5, 0.2, -7.5],
+      pos: [4.40, 2.35, -4.05],
+      lookAt: [-2.50, 0.20, -7.50],
       fovDeg: 62,
-      range: 9.5,
+      range: 9.0,
       color: 0x38bdf8,
-      desc: "Vigila la vereda, acceso peatonal y aproximación vehicular desde el Este por Calle Guillermo Arias."
+      desc: "Vigila la vereda municipal, el portoncito peatonal (+X) y la aproximación vehicular por Calle Tte. Guillermo Arias."
     },
     {
       id: "cam_2_poniente",
       numero: 2,
-      name: "Cámara IP PoE #2 — Calle Guillermo Arias (Vista Poniente)",
-      ubicacion: "Pilar Frontal Derecho Cochera (Nivel Calle)",
+      name: "Cámara IP PoE #2 — Calle Guillermo Arias (Vista Portón Balancín -X)",
+      ubicacion: "Pilar Frontal Oeste Cochera (Nivel Calle z = -4.00m)",
       especificacion: "Bullet IP PoE 4MP, Lente 2.8mm, Detección Humana/Vehicular IA, IP67",
-      pos: [4.4, 2.5, -1.8],
-      lookAt: [-4.5, 0.2, -7.5],
+      pos: [-4.40, 2.35, -4.05],
+      lookAt: [2.50, 0.20, -7.50],
       fovDeg: 62,
-      range: 9.5,
+      range: 9.0,
       color: 0x38bdf8,
-      desc: "Cubre el frente urbano hacia el Oeste y cruce de acceso vehicular sobre la cota +100.00m."
+      desc: "Cubre el portón vehicular balancín (-X) y el tramo sin salida de Calle Tte. Guillermo Arias."
     },
     {
       id: "cam_3_cochera",
       numero: 3,
-      name: "Cámara IP PoE #3 — Interior Estacionamiento y Portón",
-      ubicacion: "Bajo Viga de Losa 2do Piso (Fachada Frontal Y = +2.85m)",
+      name: "Cámara IP PoE #3 — Interior Estacionamiento y Puerta de Servicio",
+      ubicacion: "Bajo Viga Frontal Fachada Eje G (Y = +2.65m, z = 2.95m)",
       especificacion: "Domo Antivandálico IK10 PoE 4MP, WDR 120dB contra contraluz, Audio Integrado",
-      pos: [0.0, 2.85, 2.85],
-      lookAt: [0.0, 0.1, -4.5],
+      pos: [0.00, 2.65, 2.95],
+      lookAt: [-1.50, 0.10, -3.50],
       fovDeg: 70,
-      range: 8.0,
+      range: 7.5,
       color: 0x22d3ee,
-      desc: "Monitorea los 2 vehículos estacionados sobre la platea, la puerta principal de seguridad y el portón basculante."
+      desc: "Monitorea el vehículo bajo la pérgola antigranizo, la puerta principal y la puerta exterior de servicio hacia el subsuelo."
     },
     {
       id: "cam_4_pasillo",
       numero: 4,
-      name: "Cámara IP PoE #4 — Pasillo y Escalera Lateral al Subsuelo",
-      ubicacion: "Muro Lateral Derecho (Bajo Losa 2do Piso Y = +2.75m)",
+      name: "Cámara IP PoE #4 — Escalera 1 de Servicio hacia el Subsuelo (Ejes 1–2)",
+      ubicacion: "Muro Lateral Este sobre Escalera 1 (x = +4.65m, z = 5.30m)",
       especificacion: "Bullet IP PoE 4MP, Visión Nocturna Smart IR 25m, IP67",
-      pos: [4.15, 2.75, 13.5],
-      lookAt: [4.5, -1.8, 19.5],
+      pos: [4.65, 2.45, 5.30],
+      lookAt: [4.35, -1.80, 9.20],
       fovDeg: 55,
-      range: 8.0,
+      range: 6.5,
       color: 0x06b6d4,
-      desc: "Controla la circulación peatonal independiente por la escalera lateral que baja desde Planta Baja (+100.00m) hacia el Subsuelo (+97.00m)."
+      desc: "Controla el doble acceso de servicio (puerta exterior y puerta interior) que baja por la Escalera 1 existente hacia el Subsuelo."
     },
     {
       id: "cam_5_galeria",
       numero: 5,
-      name: "Cámara IP PoE #5 — Galería Panorámica al Río y Terraza Superior",
-      ubicacion: "Alero Superior de Galería / Segundo Piso (Y = +5.45m)",
+      name: "Cámara IP PoE #5 — Galería Panorámica y Deck 2 (Eje A z = 13.30m)",
+      ubicacion: "Pilar Esquinero Eje A de Planta Alta (Y = +5.25m, z = 13.30m)",
       especificacion: "Domo IP PoE 4MP Gran Angular 110°, Sirena y Estrobo disuasivo activo",
-      pos: [-3.9, 5.45, 16.2],
-      lookAt: [2.2, 0.8, 19.8],
+      pos: [-4.55, 5.25, 13.25],
+      lookAt: [2.20, 2.88, 10.50],
       fovDeg: 68,
-      range: 8.5,
+      range: 7.5,
       color: 0x38bdf8,
-      desc: "Ubicada bajo la estructura superior para cubrir en picado tanto la galería/terraza panorámica como los cerramientos hacia el Río Paraguay."
+      desc: "Adosada al pilar real del Eje A (z = 13.30m) para cubrir la terraza mirador del 2do piso y los ventanales hacia el río."
     },
     {
       id: "cam_6_barranco",
       numero: 6,
-      name: "Cámara IP PoE #6 — Contrafrente Subsuelo y Barranco al Río",
-      ubicacion: "Bajo Losa de Planta Baja hacia Patio Inferior (Y = -0.35m)",
-      especificacion: "Bullet IP PoE 4MP Térmica/Perimetral con cruce de línea virtual, IR 40m",
-      pos: [0.0, -0.35, 22.1],
-      lookAt: [0.0, -3.8, 28.5],
+      name: "Cámara IP PoE #6 — Contrafrente Subsuelo, Quincho y Patio Trasero (Eje A z = 13.30m)",
+      ubicacion: "Bajo Viga de Losa 1 en Eje A (Y = -0.50m, z = 13.30m)",
+      especificacion: "Bullet IP PoE 4MP Perimetral con cruce de línea virtual, IR 40m",
+      pos: [0.00, -0.50, 13.30],
+      lookAt: [0.00, -2.34, 21.50],
       fovDeg: 65,
       range: 8.5,
       color: 0x0ea5e9,
-      desc: "Vigilancia perimetral del nivel inferior construido (+97.00m) y talud posterior hacia el Río Paraguay en conjunto con las barreras infrarrojas."
+      desc: "Fijada bajo la viga real del Eje A (z = 13.30m), vigilando el salón del subsuelo, la parrillita y el patio nivelado con la piscina."
     }
   ],
   nodosWifiMesh: [
     {
       id: "wifi_node_1_pb",
       name: "Nodo Wi-Fi 6 Mesh #1 — Planta Baja Construida (Y = +1.80m)",
-      ubicacion: "Estar / Cocina Integrada Planta Baja (Cota +101.80m)",
-      pos: [-1.2, 1.8, 8.5],
-      radius: 6.5,
+      ubicacion: "Estar / Cocina Integrada Planta Baja (x = -0.80m, z = 6.50m)",
+      pos: [-0.80, 1.80, 6.50],
+      radius: 6.0,
       banda: "Dual Band AX3000 (2.4 GHz + 5 GHz 160MHz) • Master Router Gigabit",
-      desc: "Vinculado directo al Rack Principal en Planta Baja. Cubre el Estar/Comedor, Cocina, Galería y Cochera."
+      desc: "Vinculado directo al Rack Principal en Planta Baja. Cubre el Estar, Cocina/Comedor, Galería y Cochera."
     },
     {
       id: "wifi_node_2_pa",
-      name: "Nodo Wi-Fi 6 Mesh #2 — Segundo Piso / Planta Alta (Y = +4.60m)",
-      ubicacion: "Sobre Nueva Losa del Segundo Piso y Bajo Techo Isopanel (Cota +104.60m)",
-      pos: [0.5, 4.6, 13.5],
-      radius: 6.5,
-      banda: "Wi-Fi 6 Gigabit PoE • Backhaul Cableado Cat6 por Boquete de Losa 2do Piso",
-      desc: "Garantiza cobertura total en toda la nueva planta alta a levantar (Y = +3.00m a +5.85m) y terraza/mirador superior al Río Paraguay."
+      name: "Nodo Wi-Fi 6 Mesh #2 — Segundo Piso / Planta Alta (Y = +4.40m)",
+      ubicacion: "Pasillo Distribuidor y Escritorio de Planta Alta (x = -0.60m, z = 5.60m)",
+      pos: [-0.60, 4.40, 5.60],
+      radius: 6.0,
+      banda: "Wi-Fi 6 Gigabit PoE • Backhaul Cableado Cat6 por Pase de Losa",
+      desc: "Instalado en el centro de Planta Alta para cubrir el Escritorio/Desk, el Dormitorio 2 y la Suite Principal."
     },
     {
       id: "wifi_node_3_sub",
-      name: "Nodo Wi-Fi 6 Mesh #3 — Departamento Subsuelo (Y = -1.50m)",
-      ubicacion: "Estar / Kitchenette Nivel Inferior Construido (Cota +98.50m)",
-      pos: [0.0, -1.5, 18.0],
+      name: "Nodo Wi-Fi 6 Mesh #3 — Salón Subsuelo y Quincho (Y = -0.55m)",
+      ubicacion: "Salón Abierto del Subsuelo bajo Losa 1 (x = 0.00m, z = 8.50m)",
+      pos: [0.00, -0.55, 8.50],
       radius: 5.5,
-      banda: "Wi-Fi 6 Gigabit conectado por pase de Losa PB con UTP Cat6",
-      desc: "Supera el blindaje de la primera losa de hormigón armado ya construida bajando por el boquete técnico hacia el subsuelo."
+      banda: "Wi-Fi 6 Gigabit conectado por pase de Losa 1 con UTP Cat6",
+      desc: "Ubicado bajo la Losa 1 en el centro del Salón del Subsuelo (z = 8.50m), dando cobertura total al subsuelo, lavadero y patio."
     }
   ],
   pasesLosaBoquetes: [
     {
       id: "pase_losa_sub_pb",
-      name: "Boquete / Pase en 1ra Losa Existente Ø2\" (Planta Baja Y=0.00m ↔ Subsuelo)",
-      pos: [-1.8, 0.0, 14.3],
+      name: "Pase Diamantado #2 en 1ra Losa Existente Ø2\" (Planta Baja Y=0.00m ↔ Subsuelo)",
+      pos: [-1.55, 0.00, 4.85],
       dimensions: "Camisa PVC Ø50mm + Sellado Cortafuego/Hidrófugo Sikaflex",
-      desc: "Atraviesa la losa ya construida de Planta Baja (Y = 0.00m) para bajar UTP Cat6 al Nodo Wi-Fi #3 (Y = -1.50m) y Cámara #6."
+      desc: "Atraviesa la losa de Planta Baja en el núcleo técnico (x = -1.55m, z = 4.85m) para bajar UTP Cat6 al Nodo Wi-Fi #3 del Subsuelo."
     },
     {
       id: "pase_losa_pb_pa",
-      name: "Boquete / Pase en Nueva Losa 2do Piso Ø2\" (Planta Baja ↔ 2do Piso Y=+3.00m)",
-      pos: [-1.8, 3.0, 11.5],
+      name: "Pase en Nueva Losa 2do Piso Ø2\" (Planta Baja ↔ 2do Piso Y=+2.88m)",
+      pos: [-1.55, 2.88, 4.85],
       dimensions: "Camisa PVC Ø50mm dejada prevista antes de hormigonar Losa Fase 2",
-      desc: "Paso vertical clave en la nueva Losa de Segundo Piso (Y = +3.00m) para subir UTP Cat6 al Nodo Wi-Fi #2 (Y = +4.60m), Cámara #5 y futuras divisiones."
+      desc: "Paso vertical alineado con el Rack Principal (x = -1.55m, z = 4.85m) para subir UTP Cat6 al Nodo Wi-Fi #2 de Planta Alta."
     }
   ],
   porteroYPorton: {
     portero: {
       id: "portero_visor_ip",
       type: "domotica_acceso",
-      name: "Portero Visor IP Antivandálico con Apertura desde Celular",
-      pos: [-4.55, 1.45, -1.95],
+      name: "Portero Visor IP Antivandálico en Portoncito Peatonal (+X)",
+      pos: [1.05, 1.45, -4.12],
       costo: "2.450.000 Gs. (Partida 12.3)",
-      desc: "Frente de calle IP PoE con cámara Gran Angular 160° WDR, lector RFID y notificación en vivo en app móvil (Hik-Connect / Ezviz) para abrir portón peatonal y vehicular a distancia."
+      desc: "Frente de calle IP PoE instalado en el pilar central junto al Portoncito Peatonal (+X, x = +1.725m) con apertura remota desde el celular."
     },
     motorPorton: {
       id: "motor_porton_cochera",
       type: "domotica_acceso",
-      name: "Automatización Portón Basculante Rápido + Módulo Domótico Wi-Fi",
-      pos: [4.3, 1.1, -1.9],
+      name: "Automatización Portón Balancín Vehicular (-X) + Módulo Wi-Fi/Zigbee",
+      pos: [-3.65, 1.15, -3.85],
       costo: "13.500.000 Gs. (Partida 9.1 Portón Completo)",
-      desc: "Motor torsional de 1/2 HP con destrabe rápido de apertura en 6 segundos (seguridad en vía pública en Asunción) y relé inteligente vinculado a las cámaras #1 y #2."
+      desc: "Motor torsional de apertura rápida en el Portón Balancín de 2.30m (ubicado en el lado derecho mirando de frente, x = -2.35m)."
     }
   },
   lucesDomoticasNocturnas: [
     {
       id: "luz_dom_1",
-      name: "Luminaria Domótica Cálida 3000K — Fachada Cochera Oeste (Bajo Losa 2do Piso)",
-      pos: [-3.2, 2.85, 2.7],
-      target: [-3.2, 0.0, -1.5],
+      name: "Luminaria Domótica Cálida 3000K — Fachada Cochera Oeste (Eje G z = 2.95m)",
+      pos: [-2.35, 2.65, 2.90],
+      target: [-2.35, 0.00, -1.50],
       intensity: 3.5,
       distance: 11
     },
     {
       id: "luz_dom_2",
-      name: "Luminaria Domótica Cálida 3000K — Fachada Cochera Este (Bajo Losa 2do Piso)",
-      pos: [3.2, 2.85, 2.7],
-      target: [3.2, 0.0, -1.5],
+      name: "Luminaria Domótica Cálida 3000K — Acceso Peatonal y Servicio Este (Eje G z = 2.95m)",
+      pos: [2.50, 2.65, 2.90],
+      target: [2.50, 0.00, -1.50],
       intensity: 3.5,
       distance: 11
     },
     {
       id: "luz_dom_3",
-      name: "Bañador LED 3000K — Muro de Contención Calle Guillermo Arias",
-      pos: [0.0, 0.4, -2.0],
-      target: [0.0, -1.0, -3.5],
+      name: "Bañador LED 3000K — Muro Frontal Calle Tte. Guillermo Arias (z = -4.05m)",
+      pos: [0.00, 1.85, -4.08],
+      target: [0.00, 0.00, -5.20],
       intensity: 2.8,
       distance: 8
     },
     {
       id: "luz_dom_4",
-      name: "Iluminación Escénica 3000K — Galería Planta Baja al Río (Y = +2.85m)",
-      pos: [-2.8, 2.85, 16.5],
-      target: [-2.8, 0.1, 16.5],
+      name: "Iluminación Escénica 3000K — Galería Planta Baja al Río (Eje A z = 12.80m)",
+      pos: [-2.20, 2.75, 12.80],
+      target: [-2.20, -0.45, 12.80],
       intensity: 4.0,
       distance: 11
     },
     {
       id: "luz_dom_5",
-      name: "Iluminación Escénica 3000K — Segundo Piso y Alero Techo General (Y = +5.60m)",
-      pos: [2.2, 5.6, 16.5],
-      target: [2.2, 3.0, 16.5],
+      name: "Iluminación Escénica 3000K — Deck 2do Piso bajo Alero Techo (Eje A z = 12.80m)",
+      pos: [2.20, 5.45, 12.80],
+      target: [2.20, 2.88, 12.80],
       intensity: 4.5,
       distance: 12
     },
     {
       id: "luz_dom_6",
-      name: "Baliza LED Automatizada 3000K — Escalera Exterior y Subsuelo (Y = -0.30m)",
-      pos: [4.4, -0.3, 17.5],
-      target: [4.4, -2.8, 19.5],
+      name: "Baliza LED Automatizada 3000K — Escalera 1 y Salón Subsuelo (x = +4.35m, z = 7.50m)",
+      pos: [4.35, -0.35, 7.50],
+      target: [4.35, -2.34, 7.50],
       intensity: 3.2,
       distance: 9
     }
@@ -428,45 +428,45 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     metalness: 0.6
   });
 
-  // 1. CANALETA OCULTA DE CHAPA GALVANIZADA N°24/26 EN BORDE DEL TECHO DEL SEGUNDO PISO (Y = +5.80m, Pendiente 3%)
-  const gutterRearGeom = new THREE.BoxGeometry(8.8, 0.22, 0.24);
-  const gutterRear = new THREE.Mesh(gutterRearGeom, galvMat);
-  gutterRear.position.set(0, 5.55, 20.25);
-  gutterRear.rotation.z = -0.015; // Pendiente longitudinal 3% hacia extremos colectores
-  gutterRear.userData = PLUVIAL_HYDRO_DATA.elementos3D[0];
-  group.add(gutterRear);
-
-  const gutterFrontGeom = new THREE.BoxGeometry(8.8, 0.18, 0.20);
+  // 1. SISTEMA DE CANALETAS APUNTANDO HACIA ADELANTE (FRENTE EJE G z = 2.95m, Y = +5.55m)
+  const gutterFrontGeom = new THREE.BoxGeometry(9.60, 0.22, 0.24);
   const gutterFront = new THREE.Mesh(gutterFrontGeom, galvMat);
-  gutterFront.position.set(0, 6.15, 3.05);
-  gutterFront.userData = {
-    type: "pluvial_canaleta",
-    name: "Babeta y Canaleta Superior Frontal Chapa Galvanizada N°24 (Arriba 2do Piso)",
-    dimensions: "8.80m x 0.18m (Pendiente 3%)",
-    cota: "+106.15 m (Y = +6.15m)",
-    desc: "Cierre superior estanco del techo Isopanel sobre el Segundo Piso con caída hacia las 4 bajadas pluviales."
-  };
+  gutterFront.position.set(0, 5.55, 2.95);
+  gutterFront.userData = PLUVIAL_HYDRO_DATA.elementos3D[0];
   group.add(gutterFront);
 
-  // Canaleta auxiliar en borde de Losa de 2do Piso / Galería (Y = +3.00m)
-  const gutterMidGeom = new THREE.BoxGeometry(9.55, 0.14, 0.16);
+  // Babeta superior en el borde posterior real del techo (Eje A z = 13.34m, Y = +5.88m — NUNCA flotando en z = 20m)
+  const gutterRearGeom = new THREE.BoxGeometry(9.60, 0.16, 0.18);
+  const gutterRear = new THREE.Mesh(gutterRearGeom, galvMat);
+  gutterRear.position.set(0, 5.88, 13.34);
+  gutterRear.userData = {
+    type: "pluvial_canaleta",
+    name: "Babeta y Cumbrera Superior Chapa Galvanizada N°24 (Eje A z = 13.34m • Caída hacia Adelante)",
+    dimensions: "9.60m x 0.18m (Cierre superior del techo con pendiente hacia el frente)",
+    cota: "+105.88 m (Y = +5.88m)",
+    desc: "Coronamiento superior en Eje A desde donde el techo Isopanel baja hacia la canaleta frontal en Eje G (z = 2.95m) para desaguar hacia la calle."
+  };
+  group.add(gutterRear);
+
+  // Canaleta colectora frontal en el borde de la Pérgola de Cochera (x = -2.35m, Y = +2.65m, z = -3.85m)
+  const gutterMidGeom = new THREE.BoxGeometry(3.80, 0.12, 0.14);
   const gutterMid = new THREE.Mesh(gutterMidGeom, galvMat);
-  gutterMid.position.set(0, 3.0, 20.05);
+  gutterMid.position.set(-2.35, 2.65, -3.85);
   gutterMid.userData = {
     type: "pluvial_canaleta",
-    name: "Canaleta Colectora de Losa 2do Piso / Galería (Y = +3.00m)",
-    dimensions: "9.55m x 0.14m • Conectada a Bajadas Ø100mm",
-    cota: "+103.00 m",
-    desc: "Evacúa el agua de lluvia de la nueva losa de planta alta / terraza hacia los caños verticales Ø100mm."
+    name: "Canaleta Colectora Frontal de Pérgola Antigranizo en Cochera (z = -3.85m)",
+    dimensions: "3.80m x 0.14m • Conectada a Bajada Frontal hacia la Calle",
+    cota: "+102.65 m",
+    desc: "Recoge el agua de lluvia de la cubierta translúcida del estacionamiento y la descarga directo al colector frontal hacia Calle Tte. Guillermo Arias."
   };
   group.add(gutterMid);
 
-  // 2. 4 BAJADAS PLUVIALES VERTICALES DE PVC REFORZADO Ø100mm (Desde Techo Y=+5.80m pasando por Losa 2do Piso Y=+3.00m y PB Y=0.00m)
+  // 2. 4 BAJADAS PLUVIALES VERTICALES DE PVC REFORZADO Ø100mm ADOSADAS A LOS PILARES REALES DE LA CASA
   const downspoutsConfig = [
-    { id: "BP-1", name: "Bajada Pluvial #1 (PVC Ø100mm - Pilar Frontal Oeste)", x: -4.12, z: 3.1, topY: 6.15, botY: -0.25 },
-    { id: "BP-2", name: "Bajada Pluvial #2 (PVC Ø100mm - Pilar Frontal Este)", x: 4.12, z: 3.1, topY: 6.15, botY: -0.25 },
-    { id: "BP-3", name: "Bajada Pluvial #3 (PVC Ø100mm - Pilar Posterior Oeste)", x: -4.12, z: 20.1, topY: 5.55, botY: -2.75 },
-    { id: "BP-4", name: "Bajada Pluvial #4 (PVC Ø100mm - Pilar Posterior Este)", x: 4.12, z: 20.1, topY: 5.55, botY: -2.75 }
+    { id: "BP-1", name: "Bajada Pluvial Frontal Principal #1 (PVC Ø100mm - Pilar P20 Eje G Oeste)", x: -4.75, z: 2.92, topY: 5.55, botY: -0.35 },
+    { id: "BP-2", name: "Bajada Pluvial Frontal Principal #2 (PVC Ø100mm - Pilar P4 Eje G Este)", x: 4.75, z: 2.92, topY: 5.55, botY: -0.35 },
+    { id: "BP-3", name: "Bajada Pluvial Terraza Deck 2 #3 (PVC Ø100mm - Pilar P18 Eje B Oeste)", x: -4.75, z: 9.94, topY: 2.88, botY: -2.34 },
+    { id: "BP-4", name: "Bajada Pluvial Terraza Deck 2 #4 (PVC Ø100mm - Pilar P2 Eje B Este)", x: 4.75, z: 9.94, topY: 2.88, botY: -2.34 }
   ];
 
   downspoutsConfig.forEach((ds) => {
@@ -477,42 +477,40 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     pipeMesh.userData = {
       type: "pluvial_bajada",
       name: `${ds.id}: ${ds.name}`,
-      dimensions: `PVC Reforzado Ø100mm • Altura Total ${h.toFixed(2)}m (Techo 2do Piso → Barranco)`,
+      dimensions: `PVC Reforzado Ø100mm • Altura ${h.toFixed(2)}m (Hacia Colector Frontal a Calle)`,
       costo: "Incluido en Partida 3.3",
-      status: "Crítico Evacuación Tormentas >150mm/h",
-      desc: "Tubería vertical continua desde el Techo General (Y=+5.80m), pasando por la Losa del 2do Piso (Y=+3.00m) y Planta Baja (Y=0.00m) hasta cámara desarenadora."
+      status: "Evacuación Pluvial hacia Adelante (Calle Tte. Guillermo Arias)",
+      desc: "Tubería vertical adosada a pilar estructural real que baja el agua pluvial hacia los colectores laterales que desaguan por delante hacia la calle."
     };
     group.add(pipeMesh);
 
-    // Embudo colector superior en el techo del 2do piso
-    const hopperGeom = new THREE.ConeGeometry(0.16, 0.25, 16);
+    const hopperGeom = new THREE.ConeGeometry(0.15, 0.22, 16);
     hopperGeom.rotateX(Math.PI);
     const hopperMesh = new THREE.Mesh(hopperGeom, galvMat);
-    hopperMesh.position.set(ds.x, ds.topY + 0.05, ds.z);
+    hopperMesh.position.set(ds.x, ds.topY + 0.04, ds.z);
     group.add(hopperMesh);
 
-    // Abrazadera / Pase en Losa de 2do Piso (Y = +3.00m) y Losa Planta Baja (Y = 0.00m)
-    [3.0, 0.0].forEach((slabY) => {
-      const collarGeom = new THREE.TorusGeometry(0.085, 0.02, 10, 20);
-      collarGeom.rotateX(Math.PI / 2);
-      const collarMesh = new THREE.Mesh(collarGeom, galvMat);
-      collarMesh.position.set(ds.x, slabY, ds.z);
-      group.add(collarMesh);
+    [2.88, 0.0].forEach((slabY) => {
+      if (slabY <= ds.topY && slabY >= ds.botY) {
+        const collarGeom = new THREE.TorusGeometry(0.085, 0.02, 10, 20);
+        collarGeom.rotateX(Math.PI / 2);
+        const collarMesh = new THREE.Mesh(collarGeom, galvMat);
+        collarMesh.position.set(ds.x, slabY, ds.z);
+        group.add(collarMesh);
+      }
     });
   });
 
-  // 3. DRENAJE FRANCÉS PERIMETRAL (MURO COCHERA +98.50m Y MURO SUBSUELO +96.80m) CON BARBACANAS Ø50mm CADA 1.50m
+  // 3. DRENAJE FRANCÉS FRONTAL (MURO COCHERA Y CÁMARA DE OXIGENACIÓN SUBSUELO) CON BARBACANAS Ø50mm CADA 1.50m
   const buildFrenchDrain = (centerX, centerY, centerZ, lengthX, metaData, weepYOffset) => {
     const drainGroup = new THREE.Group();
 
-    // Envolvente de piedra triturada 4ta + Manta Geotextil Bidim RT-16 (Sección 45x45cm)
     const gravelBedGeom = new THREE.BoxGeometry(lengthX, 0.42, 0.45);
     const gravelBed = new THREE.Mesh(gravelBedGeom, geotextilMat);
     gravelBed.position.set(centerX, centerY, centerZ);
     gravelBed.userData = metaData;
     drainGroup.add(gravelBed);
 
-    // Tubo interior cribado/ranurado Ø100mm
     const cribadoGeom = new THREE.CylinderGeometry(0.075, 0.075, lengthX - 0.2, 20);
     cribadoGeom.rotateZ(Math.PI / 2);
     const cribadoMesh = new THREE.Mesh(cribadoGeom, perforatedPipeMat);
@@ -520,7 +518,6 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     cribadoMesh.userData = metaData;
     drainGroup.add(cribadoMesh);
 
-    // Anillos visuales de ranurado del tubo
     for (let x = -lengthX / 2 + 0.6; x <= lengthX / 2 - 0.6; x += 0.8) {
       const ringGeom = new THREE.TorusGeometry(0.08, 0.015, 8, 16);
       ringGeom.rotateY(Math.PI / 2);
@@ -529,10 +526,9 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
       drainGroup.add(ring);
     }
 
-    // Barbacanas de alivio Ø50mm cada 1.50m atravesando el muro de contención
     for (let x = -3.75; x <= 3.75; x += 1.5) {
       const weepGeom = new THREE.CylinderGeometry(0.035, 0.035, 0.55, 12);
-      weepGeom.rotateX(Math.PI / 2 + 0.05); // Pendiente 5% hacia el exterior
+      weepGeom.rotateX(Math.PI / 2 + 0.05);
       const weepMesh = new THREE.Mesh(weepGeom, weepHoleMat);
       weepMesh.position.set(centerX + x, centerY + weepYOffset, centerZ - 0.25);
       weepMesh.userData = {
@@ -540,7 +536,7 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
         name: "Barbacana de Alivio Hidrostático PVC Ø50mm (c/ 1.50m)",
         dimensions: "Ø50mm • Separación 1.50m • Pendiente 5%",
         status: "Alivio de Presión Hidrostática",
-        desc: "Pasa-muro de PVC Ø50mm con filtro geotextil interior. Evita que el agua de lluvia acumulada detrás del muro genere empuje hidrostático o fisuras."
+        desc: "Pasa-muro de PVC Ø50mm con filtro geotextil interior hacia el frente."
       };
       drainGroup.add(weepMesh);
     }
@@ -548,98 +544,89 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     group.add(drainGroup);
   };
 
-  // Drenaje Francés Muro Cochera (Cota +98.50m -> Y = -1.25 en escena, Z = -1.52 detrás del muro en Z = -1.8)
-  buildFrenchDrain(0, -1.25, -1.52, 9.5, PLUVIAL_HYDRO_DATA.elementos3D[1], 0.25);
+  // Drenaje Francés Muro Frontal Cochera (z = -3.75m)
+  buildFrenchDrain(0, -0.55, -3.75, 9.4, PLUVIAL_HYDRO_DATA.elementos3D[1], 0.20);
 
-  // Drenaje Francés Muro Contención Subsuelo (Cota +96.80m -> Y = -2.55 en escena, Z = 13.75 detrás del muro en Z = 14.0)
-  buildFrenchDrain(0, -2.55, 13.75, 8.0, PLUVIAL_HYDRO_DATA.elementos3D[2], 0.35);
+  // Drenaje Francés Cámara de Oxigenación Frontal del Subsuelo (z = 2.75m, Y = -2.34m)
+  buildFrenchDrain(0, -2.25, 2.75, 8.8, PLUVIAL_HYDRO_DATA.elementos3D[2], 0.25);
 
-  // 4. CÁMARAS DESARENADORAS / REGISTROS DE INSPECCIÓN PLUVIAL (40x40cm) Y COLECTORES LATERALES
+  // 4. CÁMARAS PLUVIALES (40x40cm) Y COLECTORES QUE DESAGUAN HACIA ADELANTE (CALLE TTE. GUILLERMO ARIAS z = -5.65m)
   const chambersConfig = [
-    { id: "CI-1", name: "Cámara de Inspección y Desarenadora #1 (Noroeste Frente)", x: -4.25, z: 3.1 },
-    { id: "CI-2", name: "Cámara de Inspección y Desarenadora #2 (Noreste Frente)", x: 4.25, z: 3.1 },
-    { id: "CI-3", name: "Cámara de Inspección y Desarenadora #3 (Oeste Barranco)", x: -4.25, z: 20.1 },
-    { id: "CI-4", name: "Cámara de Inspección y Desarenadora #4 (Este Barranco)", x: 4.25, z: 20.1 },
-    { id: "CI-5", name: "Cámara Colectora Final pre-Disipador (Fondo Barranco)", x: 0.0, z: 25.0 }
+    { id: "CI-1", name: "Cámara Pluvial #1 (Recibe Bajada Eje B Oeste)", x: -4.65, z: 9.94, y: -2.34 },
+    { id: "CI-2", name: "Cámara Pluvial #2 (Recibe Bajada Eje B Este)", x: 4.65, z: 9.94, y: -2.34 },
+    { id: "CI-3", name: "Cámara Pluvial Frontal #3 (Recibe Bajada Principal Eje G Oeste)", x: -4.65, z: 2.85, y: -0.35 },
+    { id: "CI-4", name: "Cámara Pluvial Frontal #4 (Recibe Bajada Principal Eje G Este)", x: 4.65, z: 2.85, y: -0.35 },
+    { id: "CI-5", name: "Boca de Salida Pluvial a Cordón Cuneta Oeste (Calle Guillermo Arias)", x: -4.65, z: -5.55, y: -0.25 },
+    { id: "CI-6", name: "Boca de Salida Pluvial a Cordón Cuneta Este (Calle Guillermo Arias)", x: 4.65, z: -5.55, y: -0.25 }
   ];
 
   chambersConfig.forEach((ch) => {
-    const groundY = getTerrainHeight ? getTerrainHeight(ch.x, ch.z) : -2.0;
-    const boxGeom = new THREE.BoxGeometry(0.5, 0.55, 0.5);
+    const boxGeom = new THREE.BoxGeometry(0.45, 0.45, 0.45);
     const boxMesh = new THREE.Mesh(boxGeom, chamberMat);
-    boxMesh.position.set(ch.x, groundY - 0.15, ch.z);
+    boxMesh.position.set(ch.x, ch.y, ch.z);
 
-    const lidGeom = new THREE.BoxGeometry(0.54, 0.06, 0.54);
+    const lidGeom = new THREE.BoxGeometry(0.49, 0.05, 0.49);
     const lidMesh = new THREE.Mesh(lidGeom, chamberLidMat);
-    lidMesh.position.y = 0.28;
+    lidMesh.position.y = 0.24;
     boxMesh.add(lidMesh);
 
     boxMesh.userData = {
       type: "pluvial_camara",
       name: `${ch.id}: ${ch.name}`,
-      dimensions: "0.40m x 0.40m x 0.50m (Mampostería Hidrófuga)",
-      cota: `${(100 + groundY).toFixed(2)} m`,
-      status: "Inspección y Decantación de Arena SM",
-      desc: "Registro pluvial con fondo decantador de 10cm para retener sedimentos y arena limosa antes de conducir el agua hacia el barranco."
+      dimensions: "0.40m x 0.40m x 0.45m (Mampostería Hidrófuga)",
+      cota: `${(100 + ch.y).toFixed(2)} m`,
+      status: "Conducción Pluvial hacia la Calle (Frente Sur)",
+      desc: "Registro pluvial que conduce las aguas de lluvia hacia adelante hasta el cordón cuneta de la Calle Tte. Guillermo Arias."
     };
     group.add(boxMesh);
   });
 
-  // Colectores enterrados Ø100mm laterales (de Z = -1.52 hasta Z = 25.0 y al Disipador en Z = 27.2)
+  // Colectores pluviales laterales Ø100mm con flujo HACIA ADELANTE (desde Eje B z = 9.94m → Eje G z = 2.85m → Calle z = -5.65m)
   const createCollectorTube = (points, label) => {
     const curve = new THREE.CatmullRomCurve3(points);
-    const tubeGeom = new THREE.TubeGeometry(curve, 32, 0.06, 12, false);
+    const tubeGeom = new THREE.TubeGeometry(curve, 32, 0.055, 12, false);
     const tubeMesh = new THREE.Mesh(tubeGeom, pvcPluvialMat);
     tubeMesh.userData = {
       type: "pluvial_colector",
       name: label,
-      dimensions: "PVC Cloacal/Pluvial Pesado Ø100mm • Pendiente > 2%",
-      desc: "Conducto troncal subterráneo que recoge el drenaje francés y las bajadas pluviales conduciéndolas de forma hermética fuera de la zona de zapatas."
+      dimensions: "PVC Pluvial Pesado Ø100mm • Desagüe hacia Calle Tte. Guillermo Arias",
+      desc: "Conducto troncal que evacúa toda el agua de lluvia hacia adelante (Calle Tte. Guillermo Arias), dejando el fondo exclusivamente para la Cámara Séptica y Pozo Ciego."
     };
     group.add(tubeMesh);
     return curve;
   };
 
   const westCurve = createCollectorTube([
-    new THREE.Vector3(-4.25, -1.25, -1.52),
-    new THREE.Vector3(-4.25, -0.45, 3.1),
-    new THREE.Vector3(-4.25, -2.55, 13.75),
-    new THREE.Vector3(-4.25, -2.85, 20.1),
-    new THREE.Vector3(0.0, -3.65, 25.0),
-    new THREE.Vector3(0.0, -4.15, 27.2)
-  ], "Colector Pluvial Troncal Oeste (PVC Ø100mm)");
+    new THREE.Vector3(-4.65, -2.30, 9.94),
+    new THREE.Vector3(-4.65, -0.35, 2.85),
+    new THREE.Vector3(-4.65, -0.38, -1.50),
+    new THREE.Vector3(-4.65, -0.42, -5.65)
+  ], "Colector Pluvial Troncal Oeste hacia Calle Tte. Guillermo Arias (PVC Ø100mm)");
 
   const eastCurve = createCollectorTube([
-    new THREE.Vector3(4.25, -1.25, -1.52),
-    new THREE.Vector3(4.25, -0.45, 3.1),
-    new THREE.Vector3(4.25, -2.55, 13.75),
-    new THREE.Vector3(4.25, -2.85, 20.1),
-    new THREE.Vector3(0.0, -3.65, 25.0),
-    new THREE.Vector3(0.0, -4.15, 27.2)
-  ], "Colector Pluvial Troncal Este (PVC Ø100mm)");
+    new THREE.Vector3(4.65, -2.30, 9.94),
+    new THREE.Vector3(4.65, -0.35, 2.85),
+    new THREE.Vector3(4.65, -0.38, -1.50),
+    new THREE.Vector3(4.65, -0.42, -5.65)
+  ], "Colector Pluvial Troncal Este hacia Calle Tte. Guillermo Arias (PVC Ø100mm)");
 
-  // 5. DISIPADOR DE ENERGÍA HIDRÁULICA EN EL BARRANCO (Z = 27.2, Cota +95.80m)
-  const dissipatorGroup = new THREE.Group();
-  const disY = getTerrainHeight ? getTerrainHeight(0, 27.2) : -3.85;
-  dissipatorGroup.position.set(0, disY, 27.2);
-
-  const stoneBasinMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.9, metalness: 0.1 });
-  const basinBase = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.25, 1.5), stoneBasinMat);
-  dissipatorGroup.add(basinBase);
-
-  [-0.5, 0, 0.5].forEach((bx) => {
-    const baffle = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.35, 0.25), galvMat);
-    baffle.position.set(bx, 0.25, 0.2);
-    dissipatorGroup.add(baffle);
+  // 5. BOCAS DE DESAGÜE PLUVIAL EN CORDÓN CUNETA DE CALLE TTE. GUILLERMO ARIAS (z = -5.65m)
+  const streetOutfallGroup = new THREE.Group();
+  [-4.65, 4.65].forEach((ox) => {
+    const outfallBox = new THREE.Mesh(
+      new THREE.BoxGeometry(0.55, 0.24, 0.35),
+      new THREE.MeshStandardMaterial({ color: 0x0ea5e9, roughness: 0.4, metalness: 0.5 })
+    );
+    outfallBox.position.set(ox, -0.35, -5.65);
+    streetOutfallGroup.add(outfallBox);
   });
-
-  dissipatorGroup.userData = PLUVIAL_HYDRO_DATA.elementos3D[3];
-  group.add(dissipatorGroup);
+  streetOutfallGroup.userData = PLUVIAL_HYDRO_DATA.elementos3D[3];
+  group.add(streetOutfallGroup);
 
   // 6. SIMULADOR INTERACTIVO PLUVIAL / HIDROSANITARIO POR CAPAS:
-  //    (a) 'rainstorm': Lluvia torrencial 165 mm/h con cortina de gotas 3D sobre techo Isopanel y pérgola antigranizo de cochera + escurrimiento por canaletas y 4 bajadas Ø100mm hacia drenaje francés y barranco.
-  //    (b) 'water_supply': Flujo presurizado azul (fría) y rojo (caliente) desde Cisterna 1.000L + Bomba Rowa subiendo por el núcleo húmedo Eje F–G (z=3.00..5.26m) hacia Cocina, Baño Social, Baño en Suite, Baño 2 y Parrillita Subsuelo.
-  //    (c) 'sewage_flow': Descarga cloacal ámbar vertical por la columna Ø100mm desde los baños superpuestos en Eje F–G hacia Cámara Séptica y Pozo Ciego.
+  //    (a) 'rainstorm': Lluvia torrencial 165 mm/h cayendo sobre el techo Isopanel y la pérgola de cochera, escurriendo HACIA ADELANTE por la canaleta frontal (z=2.95m) y bajadas hacia la Calle Tte. Guillermo Arias (z=-5.65m).
+  //    (b) 'water_supply': Flujo presurizado azul (fría) y rojo (caliente) por el núcleo húmedo Eje F–G (z=3.00..4.85m).
+  //    (c) 'sewage_flow': Descarga cloacal ámbar vertical por columna Ø100mm hacia la Cámara Séptica y Pozo Ciego en el patio trasero.
   const simSubGroups = {
     rainstorm: new THREE.Group(),
     water_supply: new THREE.Group(),
@@ -653,7 +640,6 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
   group.add(simSubGroups.water_supply);
   group.add(simSubGroups.sewage_flow);
 
-  // Cortina de gotas de lluvia 3D (Tormenta Asuncena 165 mm/h sobre Techo General y Pérgola Antigranizo de Cochera)
   const rainStreakGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.55, 6);
   const rainStreakMat = new THREE.MeshBasicMaterial({
     color: 0x7dd3fc,
@@ -665,11 +651,11 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     const streak = new THREE.Mesh(rainStreakGeo, rainStreakMat);
     const isOverPergola = i < 45;
     const rx = isOverPergola
-      ? -0.4 + ((i * 37) % 100) * 0.048 // Cochera x = -0.40..+4.40m
+      ? -4.4 + ((i * 37) % 100) * 0.042 // Pérgola Cochera x = -4.40..-0.20m
       : -4.8 + ((i * 53) % 100) * 0.096; // Techo casa x = -4.80..+4.80m
     const rz = isOverPergola
       ? -3.7 + ((i * 29) % 100) * 0.064 // Pérgola z = -3.70..+2.70m
-      : 2.2 + ((i * 71) % 100) * 0.115; // Casa z = 2.20..13.70m
+      : 2.8 + ((i * 71) % 100) * 0.106; // Casa z = 2.80..13.40m
     const minY = isOverPergola ? 2.75 : 5.75;
     const maxY = 12.5;
     const ry = minY + ((i * 19) % 100) * ((maxY - minY) / 100);
@@ -683,29 +669,29 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     });
   }
 
-  // Esferas de flujo pluvial por canaletas, pérgola de cochera, 4 bajadas Ø100mm y colectores hacia el barranco
+  // Esferas de flujo pluvial corriendo HACIA ADELANTE (del techo z=13.0m → canaleta frontal z=2.95m → bajadas frontales → Calle Tte. Guillermo Arias z=-5.65m)
   const dropGeom = new THREE.SphereGeometry(0.09, 10, 10);
   const dropRainMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
   const roofWestPath = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-2.5, 6.05, 4.0),
-    new THREE.Vector3(-4.12, 5.65, 3.1),
-    new THREE.Vector3(-4.12, 2.88, 3.1),
-    new THREE.Vector3(-4.12, 0.0, 3.1),
-    new THREE.Vector3(-4.25, -0.45, 3.1)
+    new THREE.Vector3(-2.5, 5.92, 12.5),
+    new THREE.Vector3(-3.5, 5.65, 6.5),
+    new THREE.Vector3(-4.75, 5.55, 2.92),
+    new THREE.Vector3(-4.75, 2.88, 2.92),
+    new THREE.Vector3(-4.75, -0.35, 2.92)
   ]);
   const roofEastPath = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(2.5, 6.05, 4.0),
-    new THREE.Vector3(4.12, 5.65, 3.1),
-    new THREE.Vector3(4.12, 2.88, 3.1),
-    new THREE.Vector3(4.12, 0.0, 3.1),
-    new THREE.Vector3(4.25, -0.45, 3.1)
+    new THREE.Vector3(2.5, 5.92, 12.5),
+    new THREE.Vector3(3.5, 5.65, 6.5),
+    new THREE.Vector3(4.75, 5.55, 2.92),
+    new THREE.Vector3(4.75, 2.88, 2.92),
+    new THREE.Vector3(4.75, -0.35, 2.92)
   ]);
   const pergolaDrainPath = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(2.0, 2.72, -3.5),
-    new THREE.Vector3(3.8, 2.62, -1.0),
-    new THREE.Vector3(4.12, 2.55, 2.6),
-    new THREE.Vector3(4.12, 0.0, 3.1),
-    new THREE.Vector3(4.25, -0.45, 3.1)
+    new THREE.Vector3(-2.35, 2.75, 2.2),
+    new THREE.Vector3(-2.35, 2.68, -1.0),
+    new THREE.Vector3(-3.80, 2.65, -3.85),
+    new THREE.Vector3(-4.65, 0.0, -3.85),
+    new THREE.Vector3(-4.65, -0.42, -5.65)
   ]);
 
   [westCurve, eastCurve, roofWestPath, roofEastPath, pergolaDrainPath].forEach((curve, pathIdx) => {
@@ -719,7 +705,7 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
         mesh: drop,
         curve,
         t: tOffset,
-        speed: pathIdx >= 2 ? 0.0065 : 0.0042,
+        speed: pathIdx >= 2 ? 0.0065 : 0.0048,
         mode: 'rainstorm'
       });
     }
@@ -1052,14 +1038,14 @@ export function buildWeakSignalsLayer(THREE, sceneGroups, getTerrainHeight) {
     group.add(sleeveMesh);
   });
 
-  // Columna Montante UTP Cat6 uniendo Subsuelo (Y=-1.5m) ↔ Rack PB (Y=+1.5m) ↔ Losa 2do Piso (Y=+3.0m) ↔ Nodo 2do Piso (Y=+4.6m)
+  // Columna Montante UTP Cat6 uniendo Subsuelo (Y=-0.55m) ↔ Rack PB (Y=+1.5m) ↔ Losa 2do Piso (Y=+2.88m) ↔ Nodo 2do Piso (Y=+4.4m)
   const cat6Points = [
-    new THREE.Vector3(0.0, -1.5, 18.0),
-    new THREE.Vector3(-1.8, 0.0, 14.3),
+    new THREE.Vector3(0.00, -0.55, 8.50),
+    new THREE.Vector3(-1.55, 0.00, 4.85),
     new THREE.Vector3(...rackInfo.pos3D),
-    new THREE.Vector3(-1.2, 1.8, 8.5),
-    new THREE.Vector3(-1.8, 3.0, 11.5),
-    new THREE.Vector3(0.5, 4.6, 13.5)
+    new THREE.Vector3(-0.80, 1.80, 6.50),
+    new THREE.Vector3(-1.55, 2.88, 4.85),
+    new THREE.Vector3(-0.60, 4.40, 5.60)
   ];
   const cat6Geom = new THREE.BufferGeometry().setFromPoints(cat6Points);
   const cat6Mat = new THREE.LineDashedMaterial({ color: 0x10b981, dashSize: 0.4, gapSize: 0.2 });

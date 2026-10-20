@@ -135,7 +135,8 @@ export class ProjectScene {
 
     // Estado de Modo Juego 1ra/3ra Persona (GTA VI / Sims Walk-Through) y Simuladores MEP
     this.gameMode = false;
-    this.thirdPersonView = true;
+    this.thirdPersonView = false;
+    this.isPointerDraggingLook = false;
     this.keysPressed = {};
     this.playerPos = new THREE.Vector3(0.85, 0.0, -1.2);
     this.playerYaw = 0;
@@ -348,16 +349,16 @@ export class ProjectScene {
 
   // Perfil topográfico real basado en GEO-STAN #2956 y la excavación real ejecutada en obra:
   // - Calle Tte. Guillermo Arias y explanada de cochera rellenada (z <= 1.50m) en Cota +100.00m (Y = 0.00m)
-  // - Desde z = 1.50m (Muro de Contención) hasta z = 13.50m (Eje A) dentro de la huella del lote (|x| <= 4.95m):
-  //   el terreno está 100% excavado y nivelado plano en Y = -2.38m (dejando libres el pasillo antihumedad z=1.50..3.00m
-  //   y los 100,71 m² completos bajo toda la Primera Losa z=3.00..13.34m).
+  // - Desde z = 1.50m (Muro de Contención) hasta el fondo del lote en z = 26.80m dentro de la huella del lote (|x| <= 4.95m):
+  //   tanto el Subsuelo como TODO el Patio Trasero están 100% nivelados al mismo nivel de suelo del Subsuelo (Y = -2.34m),
+  //   sin desnivel entre el subsuelo y el patio.
   getTerrainHeight(x, z) {
     if (Math.abs(x) <= 4.95) {
       if (z <= 1.48) {
         return 0.0;
       }
-      if (z >= 1.50 && z <= 13.50) {
-        return -2.38;
+      if (z >= 1.50 && z <= 26.85) {
+        return -2.34;
       }
     }
     if (z <= -1.8) {
@@ -366,11 +367,11 @@ export class ProjectScene {
     const zn = Math.min(45, Math.max(0, z + 1.8));
     let drop = 0;
     if (zn < 5.0) {
-      drop = (zn / 5.0) * 1.35;
-    } else if (zn < 16.0) {
-      drop = 1.35 + ((zn - 5.0) / 11.0) * 2.10;
+      drop = (zn / 5.0) * 1.15;
+    } else if (zn < 28.0) {
+      drop = 2.34;
     } else {
-      drop = 3.45 + ((zn - 16.0) / 29.0) * 5.80;
+      drop = 2.34 + ((zn - 28.0) / 17.0) * 3.80;
     }
     return -drop;
   }
@@ -378,7 +379,7 @@ export class ProjectScene {
   buildTopography() {
     this.groups.topography.clear();
 
-    // Terreno enfocado en el lote de Leo (9.89m × 31.00m) y sus bordes naturales inmediatos
+    // Terreno enfocado en el lote de Leo (9.89m × 31.00m) y sus bordes colindantes
     const width = 34;
     const depth = 48;
     const segX = 72;
@@ -397,17 +398,23 @@ export class ProjectScene {
 
       let vy = this.getTerrainHeight(vx, vz);
 
-      if (Math.abs(vx) <= 4.95 && vz >= 1.50 && vz <= 13.50) {
-        vy = -2.38;
+      if (Math.abs(vx) <= 4.95 && vz >= 1.50 && vz <= 26.85) {
+        vy = -2.34;
       }
       pos.setY(i, vy);
 
       const c = new THREE.Color();
-      if (Math.abs(vx) <= FIXED_STRUCTURAL_GRID.lot.width / 2 && vz >= -4 && vz <= 27) {
-        if (vz > 13.34) c.setHex(0x15803d);
-        else c.setHex(0x3f6212);
+      if (Math.abs(vx) <= FIXED_STRUCTURAL_GRID.lot.width / 2 && vz >= -4 && vz <= 26.85) {
+        if (vz >= 3.00 && vz <= 13.34) {
+          // Tierra colorada compactada bajo el subsuelo
+          c.setHex(0x7c3f23);
+        } else if (vz > 13.34) {
+          c.setHex(0x2e6f40);
+        } else {
+          c.setHex(0x4b5563);
+        }
       } else {
-        c.setHex(0x14532d);
+        c.setHex(0x57534e);
       }
       colors.push(c.r, c.g, c.b);
     }
@@ -417,8 +424,8 @@ export class ProjectScene {
 
     const mat = new THREE.MeshStandardMaterial({
       vertexColors: true,
-      roughness: 0.88,
-      metalness: 0.04,
+      roughness: 0.90,
+      metalness: 0.02,
       side: THREE.DoubleSide
     });
 
@@ -426,10 +433,10 @@ export class ProjectScene {
     terrainMesh.receiveShadow = true;
     this.groups.topography.add(terrainMesh);
 
-    // Línea sutil demarcatoria del Lote (9.89m × 31.00m)
+    // Línea sutil demarcatoria del Lote (9.89m × 30.80m, de z=-4.00m a z=+26.80m)
     const halfW = FIXED_STRUCTURAL_GRID.lot.width / 2;
     const zStart = -4.0;
-    const zEnd = 27.0;
+    const zEnd = 26.80;
     const borderPts = [];
     const corners = [
       [-halfW, zStart],
@@ -462,14 +469,19 @@ export class ProjectScene {
   }
 
   /**
-   * Entorno Natural Limpio y Realista con Texturas Procedurales GTA VI (`gtaAsphaltPBR` y `lushFoliagePBR`):
-   * - Calle Tte. Guillermo Arias asfaltada con textura PBR de alta definición y cordón vereda.
-   * - Árboles subtropicales orgánicos (Lapachos / Mangos) con follaje PBR enmarcando el barranco hacia el río.
+   * Contexto Urbano Real relevado por Fotos de Obra (`media_1792502169633.jpg`, `media_1792502324664.jpg`),
+   * Google Street View y Satélite:
+   * - SIN árboles alrededor del terreno.
+   * - A un costado (`-X`, derecha mirando desde la calle / `Eje 9`): Construcción vecina de 2 plantas de altura
+   *   con una tremenda pared medianera alta hacia nuestro terreno (revoque hidrófugo oscuro y mampostería de 2 pisos).
+   * - Del otro lado (`+X`, izquierda mirando desde la calle / `Eje 1`): La "Casa Topo", construida en el subsuelo
+   *   de la barranca, cuyo techo de losa de hormigón parece desde fuera un piso de cemento a nivel de calle.
+   * - Al frente (Sur): Calle Tte. Guillermo Arias y muralla/galpón de Molinos Harineros.
    */
   buildUrbanContext() {
     this.groups.urbanContext.clear();
 
-    // 1. Calle Tte. Guillermo Arias al frente (z = -11.5m a -5.65m) con textura PBR Empedrado Basáltico + Arena Rojiza (Street View 1950 Tte. Guillermo Arias)
+    // 1. Calle Tte. Guillermo Arias al frente (z = -11.85m a -5.65m)
     const streetGroup = new THREE.Group();
     const streetLength = 38;
     const streetWidth = 6.2;
@@ -486,12 +498,11 @@ export class ProjectScene {
       type: 'urban_street',
       name: 'Calle Tte. Guillermo Arias #1950 (Empedrado Basáltico + Arena Rojiza • Street View Verificado)',
       dimensions: 'Calzada 6,20m frente al lote de 9.89m',
-      status: 'Tramo Sin Salida (Cul-de-sac Residencial hacia el Barranco)',
-      desc: 'Calzada de piedra basáltica paraguaya con bordes de arena rojiza lavada, postes ANDE en acera Norte y muralla blanca/galpón de Molinos Harineros en acera Sur (relevado en Google Street View).'
+      status: 'Tramo Sin Salida (Cul-de-sac Residencial)',
+      desc: 'Calzada de piedra basáltica paraguaya con postes ANDE en acera Norte y muralla blanca/galpón de Molinos Harineros en acera Sur.'
     };
     streetGroup.add(streetMesh);
 
-    // Cordones de vereda Norte y Sur en piedra/hormigón rojizo-grisáceo
     const curbMat = new THREE.MeshStandardMaterial({ color: 0xb89f8d, roughness: 0.78 });
     const curbNorth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.20), curbMat);
     curbNorth.position.set(0, 0.01, -5.65);
@@ -501,7 +512,7 @@ export class ProjectScene {
     curbSouth.position.set(0, 0.01, -11.85);
     streetGroup.add(curbSouth);
 
-    // Acera Sur (frente a la obra): Muralla blanca envejecida + Galpón metálico de Molinos Harineros del Paraguay (según Street View)
+    // Acera Sur (frente a la obra): Muralla blanca + Galpón metálico de Molinos Harineros del Paraguay
     const molinosWallMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.88 });
     const molinosWall = new THREE.Mesh(new THREE.BoxGeometry(36, 3.1, 0.28), molinosWallMat);
     molinosWall.position.set(0, 1.5, -13.3);
@@ -521,7 +532,7 @@ export class ProjectScene {
     molinosUpper.position.set(0, 3.8, -15.5);
     streetGroup.add(molinosUpper);
 
-    // Postes de Hormigón ANDE en la Acera Norte con Brazo de Alumbrado Público y Tendido Aéreo (vistos en Street View)
+    // Postes de Hormigón ANDE en la Acera Norte
     const poleMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, roughness: 0.7 });
     const wireMat = new THREE.LineBasicMaterial({ color: 0x1e293b });
     [-6.2, 6.4].forEach((px) => {
@@ -530,13 +541,11 @@ export class ProjectScene {
       pole.castShadow = true;
       streetGroup.add(pole);
 
-      // Brazo de luminaria callejera ANDE
       const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.4, 6), poleMat);
       arm.rotation.x = Math.PI / 3;
       arm.position.set(px, 6.5, -5.9);
       streetGroup.add(arm);
     });
-    // Cables eléctricos aéreos ANDE cruzando entre postes en acera Norte
     [6.8, 6.4, 5.9].forEach((wy) => {
       const pts = [
         new THREE.Vector3(-18, wy, -5.35),
@@ -550,48 +559,94 @@ export class ProjectScene {
 
     this.groups.urbanContext.add(streetGroup);
 
-    // 2. Vegetación Subtropical Orgánica con textura PBR `lushFoliagePBR`
-    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.9 });
-    const foliageDarkMat = this.archVizMats.lushFoliagePBR || new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.82 });
-    const foliageLightMat = this.archVizMats.lushFoliagePBR || new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.78 });
+    // 2. VECINO DE 2 PLANTAS CON TREMENDA PARED MEDIANERA (Costado Derecho mirando desde la calle: x = -5.00m a -12.00m, z = -3.80m a +14.80m)
+    // Tal como se ve en las fotos reales `media_1792502169633.jpg` y `media_1792502324664.jpg`:
+    const tallNeighborGroup = new THREE.Group();
+    const tallNeighborMeta = {
+      type: 'urban_context',
+      name: 'Construcción Vecina de 2 Plantas con Gran Pared Medianera (Colindancia en Eje 9 / x = -5.00m)',
+      dimensions: 'Altura 2 Plantas (+6.20m sobre nivel calle / 8.54m desde subsuelo) × Profundidad 18.60m',
+      status: 'Edificación Colindante Existente (Verificada en Fotos de Obra y Street View)',
+      desc: 'Construcción vecina de dos plantas de altura pegada a nuestra medianera derecha (mirando desde la calle), con una gran pared ciega revocada/impermeabilizada en negro y ladrillo hacia nuestro lote y techo de tejas coloniales.'
+    };
 
-    const treePositions = [
-      [-9.5, 16.5, 1.1],
-      [-11.2, 23.0, 1.3],
-      [9.8, 17.5, 1.0],
-      [11.5, 24.5, 1.25],
-      [-3.2, 25.2, 0.85],
-      [3.5, 25.5, 0.9]
-    ];
+    const neighborBodyMat = new THREE.MeshStandardMaterial({ color: 0xe5e7eb, roughness: 0.85 });
+    const neighborDarkPartyMat = new THREE.MeshStandardMaterial({ color: 0x27272a, roughness: 0.90 });
+    const neighborBrickUpperMat = this.archVizMats.brickWallPBR || new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.88 });
+    const neighborRoofTileMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.75 });
 
-    treePositions.forEach(([tx, tz, scale]) => {
-      const ty = this.getTerrainHeight(tx, tz);
-      const tree = new THREE.Group();
-      tree.position.set(tx, ty, tz);
+    // Volumen principal de 2 plantas del vecino (-X)
+    const neighborMainBox = new THREE.Mesh(new THREE.BoxGeometry(6.80, 6.20, 18.60), neighborBodyMat);
+    neighborMainBox.position.set(-8.45, 3.10, 5.50);
+    neighborMainBox.castShadow = true;
+    neighborMainBox.receiveShadow = true;
+    neighborMainBox.userData = tallNeighborMeta;
+    tallNeighborGroup.add(neighborMainBox);
 
-      const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.14 * scale, 0.22 * scale, 2.4 * scale, 10),
-        trunkMat
-      );
-      trunk.position.y = 1.2 * scale;
-      trunk.castShadow = true;
-      tree.add(trunk);
+    // Tremenda pared medianera directa hacia nuestro lote (x = -5.02m):
+    // Tramo con pintura asfáltica negra/revoque y ladrillo visto de 2 pisos visto en la foto de obra
+    const partyWallLower = new THREE.Mesh(new THREE.BoxGeometry(0.16, 4.20, 18.60), neighborDarkPartyMat);
+    partyWallLower.position.set(-5.03, 2.10, 5.50);
+    partyWallLower.castShadow = true;
+    partyWallLower.receiveShadow = true;
+    partyWallLower.userData = tallNeighborMeta;
+    tallNeighborGroup.add(partyWallLower);
 
-      const canopy1 = new THREE.Mesh(new THREE.SphereGeometry(1.35 * scale, 14, 12), foliageDarkMat);
-      canopy1.position.set(0, 2.7 * scale, 0);
-      canopy1.castShadow = true;
-      tree.add(canopy1);
+    const partyWallUpper = new THREE.Mesh(new THREE.BoxGeometry(0.16, 2.10, 14.50), neighborBrickUpperMat);
+    partyWallUpper.position.set(-5.03, 5.25, 4.20);
+    partyWallUpper.castShadow = true;
+    partyWallUpper.userData = tallNeighborMeta;
+    tallNeighborGroup.add(partyWallUpper);
 
-      const canopy2 = new THREE.Mesh(new THREE.SphereGeometry(1.05 * scale, 12, 10), foliageLightMat);
-      canopy2.position.set(0.6 * scale, 2.4 * scale, 0.4 * scale);
-      tree.add(canopy2);
+    // Techo de tejas a dos aguas sobre la construcción de 2 plantas
+    const neighborRoof = new THREE.Mesh(new THREE.BoxGeometry(7.10, 0.25, 19.00), neighborRoofTileMat);
+    neighborRoof.position.set(-8.45, 6.32, 5.50);
+    neighborRoof.rotation.z = 0.08;
+    neighborRoof.userData = tallNeighborMeta;
+    tallNeighborGroup.add(neighborRoof);
 
-      const canopy3 = new THREE.Mesh(new THREE.SphereGeometry(0.95 * scale, 12, 10), foliageLightMat);
-      canopy3.position.set(-0.55 * scale, 2.5 * scale, -0.35 * scale);
-      tree.add(canopy3);
+    this.groups.urbanContext.add(tallNeighborGroup);
 
-      this.groups.urbanContext.add(tree);
-    });
+    // 3. VECINO "CASA TOPO" EN SUBSUELO (Costado Izquierdo mirando desde la calle: x = +5.00m a +12.50m, z = -3.50m a +14.00m)
+    // Desde fuera a nivel de calle parece un piso/terraza de cemento, pero es la losa de techo de la vivienda construida abajo en el subsuelo:
+    const casaTopoGroup = new THREE.Group();
+    const casaTopoMeta = {
+      type: 'urban_context',
+      name: 'Vecino "Casa Topo" en Subsuelo (Losa de Techo a Nivel de Calle parece Piso de Cemento)',
+      dimensions: 'Cuerpo en Subsuelo (Y = -2.40m a 0.00m) + Techo de Losa de Cemento en Cota +100.05m (Y = +0.05m)',
+      status: 'Edificación Subterránea Colindante (Despeja 100% las Vistas al Río)',
+      desc: 'Vivienda vecina construida debajo del nivel de calle (en el desnivel del barranco). Desde la calle y desde nuestra Planta Baja se observa su techo de losa de hormigón como un piso de cemento con baranda baja, dejando totalmente despejada la visual hacia el Río Paraguay.'
+    };
+
+    const topoSlabMat = this.archVizMats.concreteFoundationPBR || new THREE.MeshStandardMaterial({ color: 0x9ca3af, roughness: 0.86 });
+    const topoSubWallMat = new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.85 });
+
+    // Cuerpo inferior de la "Casa Topo" alojado en el subsuelo (Y = -2.34m a Y = 0.00m)
+    const topoSubBody = new THREE.Mesh(new THREE.BoxGeometry(7.20, 2.34, 16.50), topoSubWallMat);
+    topoSubBody.position.set(8.65, -1.17, 4.75);
+    topoSubBody.receiveShadow = true;
+    topoSubBody.userData = casaTopoMeta;
+    casaTopoGroup.add(topoSubBody);
+
+    // Losa de techo a nivel de calle (parece un piso de cemento visto desde afuera, en Y = +0.04m)
+    const topoRoofSlab = new THREE.Mesh(new THREE.BoxGeometry(7.40, 0.18, 16.80), topoSlabMat);
+    topoRoofSlab.position.set(8.65, 0.02, 4.75);
+    topoRoofSlab.receiveShadow = true;
+    topoRoofSlab.userData = casaTopoMeta;
+    casaTopoGroup.add(topoRoofSlab);
+
+    // Murete / parapeto perimetral bajo (35cm) sobre el borde de la losa de la Casa Topo
+    const topoParapetFront = new THREE.Mesh(new THREE.BoxGeometry(7.40, 0.40, 0.15), topoSlabMat);
+    topoParapetFront.position.set(8.65, 0.30, -3.55);
+    topoParapetFront.userData = casaTopoMeta;
+    casaTopoGroup.add(topoParapetFront);
+
+    const topoParapetRear = new THREE.Mesh(new THREE.BoxGeometry(7.40, 0.40, 0.15), topoSlabMat);
+    topoParapetRear.position.set(8.65, 0.30, 13.05);
+    topoParapetRear.userData = casaTopoMeta;
+    casaTopoGroup.add(topoParapetRear);
+
+    this.groups.urbanContext.add(casaTopoGroup);
   }
 
   buildGeotechnicalLayer() {
@@ -749,33 +804,80 @@ export class ProjectScene {
     addTieBeam(4.87, 3.00, 4.87, 13.34, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje 1 • x=+4.87m)', 'Viga de arriostramiento sobre medianera Este Eje 1.');
 
     const subsueloY = -2.34;
-    addTieBeam(-4.87, 3.00, 4.87, 3.00, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje G (z=3.00m • Frente ventilado hacia Pasillo Antihumedad)', 'Viga frontal del subsuelo de 100 m² libres sobre el Eje G.');
-    addTieBeam(-4.87, 4.77, 4.87, 4.77, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje E (z=4.77m • Cota +97.66m)', 'Viga de pórtico de subsuelo en Y=-2.34m.');
-    addTieBeam(-4.87, 7.37, 3.84, 7.37, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje C (z=7.37m • Cota +97.66m)', 'Viga central de arriostramiento de subsuelo en Y=-2.34m.');
-    addTieBeam(-4.87, 9.94, 4.87, 9.94, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje B (z=9.94m • Cota +97.66m)', 'Viga intermedia de subsuelo en Eje B (Y=-2.34m).');
-    addTieBeam(-4.87, 13.34, 4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje A (z=13.34m • Salida a Jardín)', 'Viga posterior de cierre de los 100,71 m² de subsuelo en Eje A.');
-    addTieBeam(-4.87, 3.00, -4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 9 (x=-4.87m)', 'Viga lateral Oeste de subsuelo entre Eje G y Eje A.');
-    addTieBeam(-1.64, 3.00, -1.64, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 6 (x=-1.64m)', 'Viga longitudinal interna de pórtico de subsuelo.');
-    addTieBeam(4.87, 3.00, 4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 1 (x=+4.87m)', 'Viga lateral Este de subsuelo junto a Escalera 1.');
+    // NOTA DE OBRA REAL (verificada por Leo):
+    // En el suelo del Subsuelo NO existen tirantes/vigas transversales sobresaliendo en el piso; hoy está todo de tierra
+    // natural compactada y se prevé una lecherada de cemento alisado para todo el salón abierto.
+    // Al costado de la Escalera 1 (x = +1.85m..+3.84m, z = 5.26m..7.80m) existe un encofrado de hormigón ya hecho
+    // donde originalmente iba a estar el lavadero (según plano estructural E5), el cual queda integrado al gran salón
+    // mientras el lavadero pasa contra la pared opuesta (x = -4.45m).
 
-    // Plataforma estructural completa de los 100.71 m² LIBRES bajo toda la Primera Losa (Eje G z=3.00m a Eje A z=13.34m, Y = -2.34m)
+    const earthFloorMat = new THREE.MeshStandardMaterial({
+      color: 0x854427,
+      roughness: 0.96,
+      metalness: 0.01
+    });
+    const lecheradaFloorMat = new THREE.MeshStandardMaterial({
+      color: 0x9ca3af,
+      roughness: 0.65,
+      metalness: 0.05
+    });
+
     const subSlabW = 9.74;
     const subSlabD = 13.34 - 3.00; // 10.34m -> 9.74m * 10.34m = 100.71 m²
     const subSlabMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(subSlabW, 0.16, subSlabD),
-      concreteFootMat
+      new THREE.BoxGeometry(subSlabW, 0.14, subSlabD),
+      isHoyEnObra ? earthFloorMat : lecheradaFloorMat
     );
-    subSlabMesh.position.set(0, subsueloY - 0.08, (3.00 + 13.34) / 2);
+    subSlabMesh.position.set(0, subsueloY - 0.07, (3.00 + 13.34) / 2);
     subSlabMesh.receiveShadow = true;
     subSlabMesh.userData = {
       type: 'structure',
-      name: 'Platea de Subsuelo 100% Libre bajo Toda la 1ra Losa (Eje G z=3.00m a Eje A z=13.34m)',
+      bankCategory: isHoyEnObra ? 'existente_negro' : 'nuevo_rojo',
+      name: isHoyEnObra
+        ? 'Suelo de Tierra Natural en Subsuelo (100,71 m² Despejados sin Tirantes en el Piso)'
+        : 'Piso de Subsuelo con Lecherada de Cemento Alisado (Salón Abierto 100,71 m²)',
       dimensions: '9.74m × 10.34m (100.71 m² Libres) • Cota +97.66m (Y = -2.34m)',
       area: 100.71,
-      status: '100,71 m² Despejados en Obra (No rellenado) 🔒',
-      desc: 'A diferencia del anteproyecto que preveía rellenar parte del nivel inferior, en obra quedaron 100% libres y aprovechables los 100,71 m² completos debajo de toda la primera losa (de Eje G a Eje A), protegidos de la humedad por el pasillo frontal en z=1.50..3.00m.'
+      status: isHoyEnObra
+        ? 'Suelo de Tierra Natural hoy en Obra (Sin tirantes en el piso) 🔒'
+        : 'Lecherada de Cemento sobre 100,71 m² de Salón de Subsuelo ✨',
+      desc: 'El suelo del subsuelo no posee tirantes atravesando el piso; hoy se encuentra en tierra natural nivelada a Y = -2.34m (al mismo nivel del patio trasero) y se ejecuta una lecherada de cemento para conformar todo un gran salón continuo.'
     };
     this.groups.structure.add(subSlabMesh);
+
+    // ENCOFRADO DE HORMIGÓN YA EJECUTADO AL COSTADO DE LA ESCALERA 1 EN SUBSUELO (donde iba a ir el lavadero según planos de obra E5)
+    const encofradoGroup = new THREE.Group();
+    const encofradoMeta = {
+      type: 'structure',
+      bankCategory: 'existente_negro',
+      name: 'Encofrado de H°A° Existente al Costado de Escalera 1 (Previsto originalmente para Lavadero en Plano E5)',
+      dimensions: '2.00m × 2.54m (x = +1.84m..+3.84m, z = 5.26m..7.80m • En Subsuelo Y = -2.34m)',
+      status: 'Ejecutado en Obra (No se cierra: queda integrado al Salón; el Lavadero va en la pared opuesta) 🔒',
+      costo: 'Patrimonio Ejecutado en Obra',
+      desc: 'Estructura/encofrado de hormigón ya hormigonado al costado de la escalera de subsuelo donde el plano original ubicaba el lavadero. Se mantiene abierto sin tabiques para que todo el subsuelo sea un gran salón continuo, reubicando el lavadero contra la pared del otro lado (x = -4.45m).'
+    };
+    // Cordón/base y pórtico de encofrado existente al lado de la escalera 1
+    const encCurbFront = new THREE.Mesh(new THREE.BoxGeometry(2.00, 0.22, 0.18), concreteColMat);
+    encCurbFront.position.set(2.84, subsueloY + 0.11, 5.26);
+    encCurbFront.userData = encofradoMeta;
+    encofradoGroup.add(encCurbFront);
+
+    const encCurbRear = new THREE.Mesh(new THREE.BoxGeometry(2.00, 0.22, 0.18), concreteColMat);
+    encCurbRear.position.set(2.84, subsueloY + 0.11, 7.80);
+    encCurbRear.userData = encofradoMeta;
+    encofradoGroup.add(encCurbRear);
+
+    const encCurbSide = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.22, 2.54), concreteColMat);
+    encCurbSide.position.set(1.84, subsueloY + 0.11, 6.53);
+    encCurbSide.userData = encofradoMeta;
+    encofradoGroup.add(encCurbSide);
+
+    const encUpperBeam = new THREE.Mesh(new THREE.BoxGeometry(2.00, 0.25, 0.18), concreteColMat);
+    encUpperBeam.position.set(2.84, -0.22, 7.80);
+    encUpperBeam.userData = encofradoMeta;
+    encofradoGroup.add(encUpperBeam);
+
+    this.groups.structure.add(encofradoGroup);
 
     // 3. 20 Pilares Reales (`P1..P20`) con coordenadas exactas
     const rebarOffsets = [
@@ -821,8 +923,6 @@ export class ProjectScene {
         };
         this.groups.structure.add(capMesh);
       } else {
-        // 17 Pilares que continúan por Planta Baja hasta el nivel de Losa 2do Piso (Y = +2.88m):
-        // YA ESTÁN HORMIGONADOS EN OBRA -> van en `this.groups.structure` para verse al 100% en "Hoy en Obra"
         const targetPA_Y = 2.88;
         const hPBtoPA = targetPA_Y - topFase1Y;
 
@@ -842,7 +942,6 @@ export class ProjectScene {
         };
         this.groups.structure.add(colPBMesh);
 
-        // Pelos de espera expuestos en la cima de los 17 pilares (Y = +2.88m a +3.45m) cuando se visualiza "Hoy en Obra"
         if (isHoyEnObra) {
           rebarOffsets.forEach(([ox, oz]) => {
             const barGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.58, 8);
@@ -899,79 +998,70 @@ export class ProjectScene {
     addTieBeam(-4.87, 3.00, 4.87, 3.00, 2.72, 0.20, 0.34, 'Viga Superior Pórtico Eje G (z=3.00m • Y=+2.72m)', 'Viga superior de arriostramiento de los pilares frontales sobre Eje G.');
     addTieBeam(-4.87, 9.94, 4.87, 9.94, 2.72, 0.22, 0.36, 'Viga Superior Pórtico Eje B (z=9.94m • Y=+2.72m)', 'Viga superior central sobre Eje B.');
     addTieBeam(-4.87, 13.34, 4.87, 13.34, 2.72, 0.20, 0.34, 'Viga Superior Pórtico Eje A (z=13.34m • Y=+2.72m)', 'Viga superior posterior hacia el Río Paraguay sobre Eje A.');
-    addTieBeam(-4.87, 3.00, -4.87, 13.34, 2.72, 0.20, 0.34, 'Viga Superior Medianera Oeste Eje 9 (x=-4.87m • Y=+2.72m)', 'Viga longitudinal superior sobre Eje 9.');
-    addTieBeam(4.87, 3.00, 4.87, 13.34, 2.72, 0.20, 0.34, 'Viga Superior Medianera Este Eje 1 (x=+4.87m • Y=+2.72m)', 'Viga longitudinal superior sobre Eje 1.');
+    addTieBeam(-4.87, 3.00, -4.87, 13.34, 2.72, 0.20, 0.34, 'Viga Superior Medianera Eje 9 (x=-4.87m • Y=+2.72m)', 'Viga longitudinal superior sobre Eje 9.');
+    addTieBeam(4.87, 3.00, 4.87, 13.34, 2.72, 0.20, 0.34, 'Viga Superior Medianera Eje 1 (x=+4.87m • Y=+2.72m)', 'Viga longitudinal superior sobre Eje 1.');
 
     // 3B. MURALLAS PERIMETRALES YA EXISTENTES ALREDEDOR DEL TERRENO (`this.groups.structure` — Color Negro en Carpeta Banco)
+    // Ubicadas exactamente en los bordes del lote de 30.80m (de z = -4.00m hasta el fondo z = +26.80m, DETRÁS de la piscina)
     const perimWallMat = mats.brickWallPBR || mats.plasterRoughPBR;
     const perimExistingMeta = {
       type: 'structure',
       bankCategory: 'existente_negro',
-      name: 'Murallas Perimetrales YA EXISTENTES alrededor del Terreno (Oeste, Este y Fondo Norte)',
-      dimensions: 'Perímetro Lateral 26.00m × 2 lados + Fondo 9.89m • Altura media 1.85m',
+      name: 'Murallas Perimetrales YA EXISTENTES alrededor del Terreno (Laterales y Fondo z = +26.80m)',
+      dimensions: 'Perímetro Lateral 30.80m × 2 lados + Fondo 9.89m en z = +26.80m • Altura 2.00m',
       costo: 'Gs. 0 (Murallas Perimetrales Ya Construidas en el Terreno)',
       status: 'Ejecutado 100% en Sitio (Color Negro en Carpeta Banco) 🔒',
-      desc: 'El terreno de Ruth y Leo ya cuenta con sus murallas perimetrales construidas alrededor. Solo se requiere levantar un tramo adicional de 3,00m × 2,00m (6,00 m²) en el costado próximo a la calle donde el piso del vecino está abierto.'
+      desc: 'Murallas perimetrales del terreno de 9.89m × 31.00m cerrando ambos laterales y el fondo en z = +26.80m (detrás de la reserva de piscina y del sistema séptico).'
     };
 
-    const westPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.85, 25.80), perimWallMat);
-    westPerimExisting.position.set(-4.95, 0.925 - 0.85, 8.90);
+    const westPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 2.10, 30.80), perimWallMat);
+    westPerimExisting.position.set(-4.95, -2.34 + 1.05, 11.40);
     westPerimExisting.userData = perimExistingMeta;
     this.groups.structure.add(westPerimExisting);
 
-    const eastPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.85, 25.80), perimWallMat);
-    eastPerimExisting.position.set(4.95, 0.925 - 0.85, 8.90);
+    const eastPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 2.10, 30.80), perimWallMat);
+    eastPerimExisting.position.set(4.95, -2.34 + 1.05, 11.40);
     eastPerimExisting.userData = perimExistingMeta;
     this.groups.structure.add(eastPerimExisting);
 
-    const northPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(9.90, 1.90, 0.18), perimWallMat);
-    northPerimExisting.position.set(0, -2.34 + 0.95, 21.80);
+    const northPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(9.90, 2.10, 0.18), perimWallMat);
+    northPerimExisting.position.set(0, -2.34 + 1.05, 26.80);
     northPerimExisting.userData = perimExistingMeta;
     this.groups.structure.add(northPerimExisting);
 
-    // 4. Escaleras Opuestas según Plano Original:
-    //    - Escalera 1 (PB -> Subsuelo) en el Oeste (x = -4.87m..-3.90m, z = 5.26m..9.94m) en `this.groups.structure`
-    //    - Escalera 2 (PB -> Planta Alta) en el Este (x = +3.84m..+4.87m, z = 5.26m..9.94m) en `this.groups.losaFase2`
+    // 4. Escaleras en su Lado Correcto según Fotos de Obra (`media_1792502324664.jpg`) y Planos:
+    //    - Escalera 1 YA CONSTRUIDA (PB -> Subsuelo) en el lado Izquierdo mirando desde el frente (`+X`, Eje 1-2: `x = +3.84m..+4.87m, z = 5.26m..9.94m`),
+    //      conectada directo con la Puerta de Servicio Exterior (`x = +4.35m, z = 3.00m`) y con la Puerta Interior desde la casa (`x = +3.84m, z = 4.20m`).
+    //    - Escalera 2 A CONSTRUIR (PB -> 2do Piso) del otro lado (`-X`, Eje 8-9: `x = -4.87m..-3.84m, z = 5.26m..9.94m`),
+    //      subiendo directamente al Escritorio / Desk y al Pasillo Distribuidor del 2do Piso.
     buildExistingStaircase3D(THREE, this.groups.structure, this.groups.losaFase2, mats, this.currentScenario);
 
     // 5. PRIMERA LOSA EN NIVEL CALLE (`this.groups.losaFase1`):
-    //    - Losa L4 Maciza Ejecutada en Sector Oeste (x = -4.87m..-0.74m, z = 3.00m..9.94m, con abertura para Escalera 1 en x=-4.87..-3.90m, z=5.26..9.94m)
-    //    - Losa L1–L3 Maciza Ejecutada en Sector Galería al Río (x = -4.87m..+4.87m, z = 9.94m..13.34m, Y = -0.45m)
-    //    - HUECO REAL DE 38,00 m² EN SECTOR ESTE/CENTRAL (x = -0.74m..+4.87m, z = 3.00m..9.94m):
-    //      En "Hoy en Obra" solo están hormigonadas las vigas de H°A° (con el vacío abierto entre ellas);
-    //      en los escenarios habitables (>= 300M) se cierra con `this.losaRap38m2Fill` (Loza Rap Pretensada).
+    //    Tal como muestra la foto de obra `media_1792502324664.jpg` mirando desde el estacionamiento hacia el río:
+    //    - A la derecha (`-X`, `x = -4.87m..-0.74m, z = 3.00m..9.94m`): Losa L4 MACIZA 100% HORMIGONADA (28.66 m²).
+    //    - Al fondo (`z = 9.94m..13.34m, x = -4.87m..+4.87m`): Losa Galería L1–L3 MACIZA 100% HORMIGONADA en Y = -0.45m (33.12 m²).
+    //    - A la izquierda (`+X`, `x = -0.74m..+4.87m, z = 3.00m..9.94m`): HUECO ABIERTO DE 38,00 m² entre las vigas de H°A°
+    //      y la Escalera 1 ya construida (`x = +3.84m..+4.87m, z = 5.26m..9.94m`), que se tapa con Loza Rap (`this.losaRap38m2Fill`).
     const l4Meta = {
       type: 'losa_existente',
       bankCategory: 'hormigon_verde',
-      name: '1ra Losa H°A° Maciza Ejecutada — Sector Oeste L4 (Cocina, Comedor, Lavadero y Baño Social)',
-      dimensions: '4.13m × 6.94m (28.66 m² menos vano Escalera 1) • Espesor 18cm • Cota +100.00m (Y = 0.00m)',
+      name: '1ra Losa H°A° Maciza Ejecutada — Sector L4 (x = -4.87m a -0.74m, z = 3.00m a 9.94m)',
+      dimensions: '4.13m × 6.94m (28.66 m²) • Espesor 18cm • Cota +100.00m (Y = 0.00m)',
       area: 28.66,
-      status: 'Ejecutado 100% en Obra (Losa Maciza Sector Oeste) 🔒',
+      status: 'Ejecutado 100% en Obra (Paño Macizo junto a Medianera de 2 Plantas) 🔒',
       costo: 'Patrimonio ejecutado Fase 1',
-      desc: 'Paño de losa maciza L4 ya hormigonado entre Eje 9 (x=-4.87m) y Eje 5 (x=-0.74m), desde Eje G (z=3.00m) hasta Eje B (z=9.94m), con el vano de bajada de la Escalera 1 hacia el Subsuelo en x=-4.87..-3.90m.'
+      desc: 'Paño de losa maciza L4 ya hormigonado entre Eje 9 (x=-4.87m) y Eje 5 (x=-0.74m), desde Eje G (z=3.00m) hasta Eje B (z=9.94m), verificado en la foto real de obra.'
     };
 
-    // L4 Franja Central-Oeste continua (x = -3.90m a -0.74m, z = 3.00m a 9.94m)
     const l4MainMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(3.90 - 0.74, 0.18, 9.94 - 3.00),
+      new THREE.BoxGeometry(4.87 - 0.74, 0.18, 9.94 - 3.00),
       slabFase1Mat
     );
-    l4MainMesh.position.set((-3.90 + -0.74) / 2, -0.09, (3.00 + 9.94) / 2);
+    l4MainMesh.position.set((-4.87 + -0.74) / 2, -0.09, (3.00 + 9.94) / 2);
     l4MainMesh.castShadow = true;
     l4MainMesh.receiveShadow = true;
     l4MainMesh.userData = l4Meta;
     this.groups.losaFase1.add(l4MainMesh);
-
-    // L4 Desembarco Frontal Oeste delante de Escalera 1 (x = -4.87m a -3.90m, z = 3.00m a 5.26m)
-    const l4StairLanding = new THREE.Mesh(
-      new THREE.BoxGeometry(0.97, 0.18, 5.26 - 3.00),
-      slabFase1Mat
-    );
-    l4StairLanding.position.set((-4.87 + -3.90) / 2, -0.09, (3.00 + 5.26) / 2);
-    l4StairLanding.castShadow = true;
-    l4StairLanding.receiveShadow = true;
-    l4StairLanding.userData = l4Meta;
-    this.groups.losaFase1.add(l4StairLanding);
 
     // VIGAS DE H°A° YA HORMIGONADAS SOBRE LA CUADRÍCULA DEL HUECO DE 38,00 m² (x = -0.74m..+4.87m, z = 3.00m..9.94m)
     const addLosa1Beam = (x1, z1, x2, z2, w, h, name, desc) => {
@@ -994,36 +1084,48 @@ export class ProjectScene {
 
     addLosa1Beam(-4.87, 3.00, 4.87, 3.00, 0.22, 0.40, 'Viga Principal Eje G Nivel Calle (z=3.00m)', 'Viga frontal de H°A° ejecutada sobre Eje G.');
     addLosa1Beam(-0.74, 5.00, 3.84, 5.00, 0.20, 0.35, 'Viga Intermedia Eje F sobre Hueco 38 m² (z=5.00m)', 'Viga transversal de H°A° ejecutada sobre Eje F.');
-    addLosa1Beam(-0.74, 5.26, 4.87, 5.26, 0.20, 0.35, 'Viga Intermedia Eje D sobre Hueco 38 m² (z=5.26m)', 'Viga transversal de H°A° ejecutada en z=5.26m.');
-    addLosa1Beam(-0.74, 3.00, -0.74, 9.94, 0.22, 0.38, 'Viga Longitudinal Eje 5 — Borde Oeste del Hueco de 38 m² (x=-0.74m)', 'Viga portante sobre Eje 5 que divide la losa maciza L4 del paño de 38 m².');
+    addLosa1Beam(-0.74, 5.26, 4.87, 5.26, 0.20, 0.35, 'Viga Intermedia Eje D sobre Hueco 38 m² y Arranque Escalera 1 (z=5.26m)', 'Viga transversal de H°A° ejecutada en z=5.26m.');
+    addLosa1Beam(-0.74, 3.00, -0.74, 9.94, 0.22, 0.38, 'Viga Longitudinal Eje 5 — Borde del Hueco de 38 m² (x=-0.74m)', 'Viga portante sobre Eje 5 que divide la losa maciza L4 del paño abierto de 38 m².');
     addLosa1Beam(1.69, 3.00, 1.69, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 4 sobre Hueco de 38 m² (x=+1.69m)', 'Viga central expuesta en el hueco de 38 m², lista para recibir viguetas Loza Rap.');
-    addLosa1Beam(3.84, 3.00, 3.84, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 2 junto a Escalera 2 (x=+3.84m)', 'Viga portante sobre Eje 2 entre P6 y P5.');
-    addLosa1Beam(4.87, 3.00, 4.87, 9.94, 0.22, 0.38, 'Viga Longitudinal Medianera Este Eje 1 (x=+4.87m)', 'Viga perimetral Este sobre Eje 1.');
+    addLosa1Beam(3.84, 3.00, 3.84, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 2 junto a Escalera 1 de Subsuelo (x=+3.84m)', 'Viga portante sobre Eje 2 que bordea la Escalera 1 hacia el Subsuelo.');
+    addLosa1Beam(4.87, 3.00, 4.87, 9.94, 0.22, 0.38, 'Viga Longitudinal Medianera Eje 1 (x=+4.87m)', 'Viga perimetral sobre Eje 1 junto a Escalera 1.');
 
     // PAÑO DE CIERRE LOZA RAP DE 38,00 m² (`this.losaRap38m2Fill`):
-    // - En `hoy_en_obra`: `visible = false` (se ve el HUECO ABIERTO de 38,00 m² hacia el Subsuelo entre las vigas de H°A°)
-    // - En `escenario300` en adelante: `visible = true` (cerrado con Loza Rap pretensada + capa de compresión)
+    // - En `hoy_en_obra`: `visible = false` (se ve el HUECO ABIERTO de 38,00 m² hacia el Subsuelo y la Escalera 1 ya construida)
+    // - En `escenario300` en adelante: `visible = true` (cierra x=-0.74..+3.84m, z=3.00..9.94m + desembarco de Puerta de Servicio x=+3.84..+4.87m, z=3.00..5.26m, dejando libre el hueco de Escalera 1 en x=+3.84..+4.87m, z=5.26..9.94m)
     this.losaRap38m2Fill = new THREE.Group();
     const losaRapMeta = {
       type: 'losa_rap_38m2',
       bankCategory: 'hormigon_verde',
-      name: 'Cierre de Hueco de 38,00 m² en 1ra Losa con Sistema Pretensado Loza Rap (Sector Estar / Living / Estudio PB)',
-      dimensions: '5.61m × 6.94m = 38.00 m² netos (x = -0.74m..+4.87m, z = 3.00m..9.94m • Cota +100.00m)',
+      name: 'Cierre de Hueco de 38,00 m² en 1ra Losa con Sistema Pretensado Loza Rap',
+      dimensions: '38.00 m² netos (x = -0.74m..+3.84m, z = 3.00m..9.94m + Desembarco Servicio x = +3.84..+4.87m, z = 3.00..5.26m)',
       area: 38.0,
       costo: 'Gs. 13.300.000 (38,00 m² × Gs. 350.000/m² — Viguetas Pretensadas + Bovedillas + Capa Compresión HA-25)',
       status: 'Cierre Estructural Prioritario de Planta Baja 🎯',
-      desc: 'Cierre definitivo del hueco abierto de 38,00 m² en el sector Este/Central de Planta Baja (entre Eje 5 x=-0.74m y Eje 1 x=+4.87m, de Eje G z=3.00m a Eje B z=9.94m) apoyando viguetas pretensadas Loza Rap sobre las vigas de H°A° ya existentes.'
+      desc: 'Cierre definitivo del hueco abierto de 38,00 m² en Planta Baja con viguetas pretensadas Loza Rap, dejando libre el vano de la Escalera 1 hacia el Subsuelo (x=+3.84..+4.87m, z=5.26..9.94m) y formando el hall de doble acceso (puerta exterior de servicio + puerta interior a la casa).'
     };
 
     const rapMainMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(4.87 - (-0.74), 0.18, 9.94 - 3.00),
+      new THREE.BoxGeometry(3.84 - (-0.74), 0.18, 9.94 - 3.00),
       slabFase1Mat
     );
-    rapMainMesh.position.set((-0.74 + 4.87) / 2, -0.09, (3.00 + 9.94) / 2);
+    rapMainMesh.position.set((-0.74 + 3.84) / 2, -0.09, (3.00 + 9.94) / 2);
     rapMainMesh.castShadow = true;
     rapMainMesh.receiveShadow = true;
     rapMainMesh.userData = losaRapMeta;
     this.losaRap38m2Fill.add(rapMainMesh);
+
+    // Desembarco de la Puerta de Servicio delante de la Escalera 1 (x = +3.84m a +4.87m, z = 3.00m a 5.26m)
+    const rapServiceLanding = new THREE.Mesh(
+      new THREE.BoxGeometry(4.87 - 3.84, 0.18, 5.26 - 3.00),
+      slabFase1Mat
+    );
+    rapServiceLanding.position.set((3.84 + 4.87) / 2, -0.09, (3.00 + 5.26) / 2);
+    rapServiceLanding.castShadow = true;
+    rapServiceLanding.receiveShadow = true;
+    rapServiceLanding.userData = losaRapMeta;
+    this.losaRap38m2Fill.add(rapServiceLanding);
+
     this.losaRap38m2Fill.visible = !isHoyEnObra;
     this.groups.losaFase1.add(this.losaRap38m2Fill);
 
@@ -1032,7 +1134,9 @@ export class ProjectScene {
     const voidBorderPts = [
       new THREE.Vector3(-0.74, 0.04, 3.00),
       new THREE.Vector3(4.87, 0.04, 3.00),
-      new THREE.Vector3(4.87, 0.04, 9.94),
+      new THREE.Vector3(4.87, 0.04, 5.26),
+      new THREE.Vector3(3.84, 0.04, 5.26),
+      new THREE.Vector3(3.84, 0.04, 9.94),
       new THREE.Vector3(-0.74, 0.04, 9.94),
       new THREE.Vector3(-0.74, 0.04, 3.00)
     ];
@@ -1064,7 +1168,7 @@ export class ProjectScene {
     const badgeSprite = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: badgeTex, transparent: true, depthTest: false })
     );
-    badgeSprite.position.set(2.05, 0.55, 6.47);
+    badgeSprite.position.set(1.60, 0.55, 6.47);
     badgeSprite.scale.set(4.2, 1.05, 1);
     badgeSprite.userData = losaRapMeta;
     this.hueco38m2Badge.add(badgeSprite);
@@ -1133,7 +1237,7 @@ export class ProjectScene {
     // 6. LOSA DEL SEGUNDO PISO (`this.groups.losaFase2` en Y = +2.88m / Cota +102.88m)
     this.buildLosaFase2(fase2SlabMat, fase2ColMat);
 
-    // 7. CUBIERTA GENERAL CON CONMUTADOR 3D (`this.groups.roof` en Y = +5.64m / Cota +105.64m):
+    // 7. CUBIERTA GENERAL CON PENDIENTE HACIA EL FRENTE (DESAGÜE PLUVIAL HACIA LA CALLE TTE. GUILLERMO ARIAS):
     this.currentRoofStyle = this.currentRoofStyle || 'isopanel';
     const roofMinZ = 2.80;
     const roofMaxZ = 13.60;
@@ -1142,22 +1246,23 @@ export class ProjectScene {
     const roofCenterZ = (roofMinZ + roofMaxZ) / 2;
     const roofBaseY = 5.64;
 
-    // --- 7A. SUBGRUPO OPCIÓN A: TECHO ISOPANEL PIR 50mm + CIELORRASO ACÚSTICO DURLOCK ---
+    // --- 7A. SUBGRUPO OPCIÓN A: TECHO ISOPANEL PIR 50mm CON CAÍDA PLUVIAL HACIA DELANTE (EJE G / CALLE) ---
     this.roofIsopanelGroup = new THREE.Group();
     this.roofIsopanelGroup.name = 'roof_style_isopanel';
 
     const purlinMat = mats.stainlessMat;
     for (let z = roofMinZ + 0.35; z <= roofMaxZ - 0.25; z += 1.15) {
-      const slopeOffset = ((roofMaxZ - z) / roofD) * 0.32;
+      // Pendiente hacia delante (z=2.80m más bajo que z=13.60m para que toda el agua de lluvia escurra hacia la calle frontal)
+      const slopeOffset = ((z - roofMinZ) / roofD) * 0.32;
       const pMesh = new THREE.Mesh(new THREE.BoxGeometry(roofW - 0.2, 0.10, 0.06), purlinMat);
       pMesh.position.set(0, roofBaseY + slopeOffset, z);
       pMesh.userData = {
         type: 'techo',
         bankCategory: 'nuevo_rojo',
-        name: 'Correas Estructurales Perfil C Galvanizado 100×50×2mm (Opción Isopanel)',
+        name: 'Correas Estructurales Perfil C Galvanizado 100×50×2mm (Pendiente Pluvial hacia Calle Frontal)',
         dimensions: 'Largo 10.10m • Separación c/ 1.15m',
         status: 'Estructura Metálica Liviana 🎯',
-        desc: 'Perfiles C galvanizados anclados a las vigas de coronamiento en Cota +105.64m.'
+        desc: 'Perfiles C galvanizados con pendiente del 3% hacia la fachada frontal (Eje G) para que todo el desagüe pluvial salga hacia la calle Tte. Guillermo Arias.'
       };
       this.roofIsopanelGroup.add(pMesh);
     }
@@ -1185,18 +1290,19 @@ export class ProjectScene {
     });
     const roofPanelMesh = new THREE.Mesh(new THREE.BoxGeometry(roofW, 0.12, roofD), roofPanelMat);
     roofPanelMesh.position.set(0, roofBaseY + 0.22, roofCenterZ);
-    roofPanelMesh.rotation.x = 0.028;
+    // Inclinación negativa en X: más alto atrás (z=13.6m) y más bajo adelante (z=2.8m) para desaguar hacia la calle
+    roofPanelMesh.rotation.x = -0.028;
     roofPanelMesh.castShadow = true;
     roofPanelMesh.receiveShadow = true;
     roofPanelMesh.userData = {
       type: 'techo',
       bankCategory: 'nuevo_rojo',
-      name: 'Cubierta Termoacústica Sandwich Isopanel PIR 50mm (Cota +105.64m)',
-      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (142 m² • Pendiente 6%)`,
+      name: 'Cubierta Termoacústica Sandwich Isopanel PIR 50mm (Pendiente hacia Calle Frontal)',
+      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (142 m² • Desagüe Pluvial Delantero)`,
       area: 142,
-      status: 'Opción A: Montaje Rápido y Liviano 🎯',
+      status: 'Opción A: Montaje Rápido y Desagüe Pluvial Frontal 🎯',
       costo: 'Gs. 63.390.000 (Chapa Sandwich PIR 50mm + Estructura C)',
-      desc: 'Cubierta metálica con núcleo de poliisocianurato (PIR) de 50mm. Excelente aislación térmica y montaje rápido.'
+      desc: 'Cubierta metálica con núcleo PIR de 50mm e inclinación hacia la canaleta frontal (Eje G), conduciendo el 100% del agua de lluvia hacia la calle Tte. Guillermo Arias.'
     };
     this.roofIsopanelGroup.add(roofPanelMesh);
 
@@ -1224,11 +1330,11 @@ export class ProjectScene {
       type: 'techo',
       bankCategory: 'nuevo_rojo',
       name: 'Techo Tradicional de Tejas Cerámicas de Tobatí + Tejuelones y Tirantes de Lapacho/Yvyra Pytã',
-      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (150 m² en 2 Aguas • Pendiente 28%)`,
+      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (150 m² • Pendiente hacia Canaletas Laterales/Frontales)`,
       area: 150,
       status: 'Opción B: Máximo Confort Acústico ante Lluvias Torrenciales ✨',
       costo: 'Gs. 71.850.000 (Tijerales y Tirantes Madera Dura + Tejuelones + Aislación + Tejas Prensadas)',
-      desc: 'Cubierta tradicional paraguaya en dos aguas con maderamen de Lapacho/Yvyra Pytã, tejuelones cerámicos vistos, membrana hidrófuga/térmica y tejas cerámicas coloniales de Tobatí.'
+      desc: 'Cubierta tradicional paraguaya con maderamen de Lapacho/Yvyra Pytã, tejuelones cerámicos vistos, membrana hidrófuga/térmica y tejas cerámicas coloniales de Tobatí.'
     };
 
     const halfD = roofD / 2;
@@ -1300,8 +1406,8 @@ export class ProjectScene {
 
   /**
    * Construye la Losa de Planta Alta (`Y = +2.88m` / Cota `+102.88m`) desde Eje G (`z = 3.00m`, SIN voladizo frontal)
-   * hasta Eje A (`z = 13.34m`), dejando el vano de la Escalera 2 en el extremo Este (`x = +3.84m..+4.87m, z = 5.26m..9.94m`),
-   * mientras que la Escalera 1 baja al Subsuelo en el extremo Oeste (`x = -4.87m..-3.90m`) con losa llena encima en Y=+2.88m.
+   * hasta Eje A (`z = 13.34m`), dejando el vano de la Escalera 2 en el costado `-X` (`x = -4.87m..-3.84m, z = 5.26m..8.85m`),
+   * mientras que la Escalera 1 baja al Subsuelo en el otro costado (`+X`, `x = +3.84m..+4.87m`) con losa llena encima en Y=+2.88m.
    */
   buildLosaFase2(
     fase2SlabMat = this.archVizMats.concretePBR,
@@ -1313,48 +1419,48 @@ export class ProjectScene {
     const losa2Meta = {
       type: 'losa_fase2',
       bankCategory: 'hormigon_verde',
-      name: 'Losa de Planta Alta (Cota +102.88m • Eje G z=3.00m a Eje A z=13.34m • Vano Escalera 2 en x=+3.84..+4.87m)',
+      name: 'Losa de Planta Alta (Cota +102.88m • Eje G z=3.00m a Eje A z=13.34m • Vano Escalera 2 en x=-4.87..-3.84m)',
       dimensions: '9.74m × 10.34m (100.71 m² brutos) • Espesor 20cm • Sin voladizo frontal sobre Eje G',
       area: 96.0,
       status: 'Estructura Planta Alta según Plano Original 🎯',
       costo: 'Gs. 54.022.500 (Losa + Vigas Encadenado)',
-      desc: 'Losa de entrepiso de Planta Alta en Cota +102.88m entre Eje G (z=3.00m) y Eje A (z=13.34m), con el vano de llegada de la Escalera 2 en el sector Este (x=+3.84..+4.87m, z=5.26..9.94m) hacia el Escritorio/Desk.'
+      desc: 'Losa de entrepiso de Planta Alta en Cota +102.88m entre Eje G (z=3.00m) y Eje A (z=13.34m), con el vano de llegada de la Escalera 2 en el costado opuesto a la escalera de subsuelo (x=-4.87..-3.84m, z=5.26..8.85m) llegando directamente al Escritorio / Desk y al Pasillo Distribuidor.'
     };
 
-    // 1. Paño Principal Oeste y Centro (desde Eje 9 x=-4.87m hasta el borde Oeste de la Escalera 2 en x=3.84m, z=3.00..13.34m)
-    const losa2WestW = 3.84 - (-4.87); // 8.71m
+    // 1. Paño Principal Central e Izquierdo (+X): desde x = -3.84m hasta Eje 1 x = +4.87m, z = 3.00m..13.34m (cubre encima de Escalera 1)
+    const losa2MainW = 4.87 - (-3.84); // 8.71m
     const losa2FullD = 13.34 - 3.00;   // 10.34m
     const losa2Mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(losa2WestW, 0.20, losa2FullD),
+      new THREE.BoxGeometry(losa2MainW, 0.20, losa2FullD),
       fase2SlabMat
     );
-    losa2Mesh.position.set((-4.87 + 3.84) / 2, losa2Y + 0.10, (3.00 + 13.34) / 2);
+    losa2Mesh.position.set((-3.84 + 4.87) / 2, losa2Y + 0.10, (3.00 + 13.34) / 2);
     losa2Mesh.castShadow = true;
     losa2Mesh.receiveShadow = true;
     losa2Mesh.userData = losa2Meta;
     this.groups.losaFase2.add(losa2Mesh);
 
-    // 2. Franja Este de Escalera 2 (x = 3.84m..4.87m): Tramo Sur bajo SSHH 2 (z = 3.00m..5.26m) y Tramo Norte de Desembarco a Escritorio/Deck 2 (z = 9.94m..13.34m)
-    const stair2W = 4.87 - 3.84; // 1.03m
-    const losa2EastFront = new THREE.Mesh(
+    // 2. Franja de Escalera 2 (x = -4.87m..-3.84m): Tramo Frontal bajo SSHH 2 (z = 3.00m..5.26m) y Desembarco a Escritorio/Deck 2 (z = 8.85m..13.34m)
+    const stair2W = -3.84 - (-4.87); // 1.03m
+    const losa2WestFront = new THREE.Mesh(
       new THREE.BoxGeometry(stair2W, 0.20, 5.26 - 3.00),
       fase2SlabMat
     );
-    losa2EastFront.position.set((3.84 + 4.87) / 2, losa2Y + 0.10, (3.00 + 5.26) / 2);
-    losa2EastFront.castShadow = true;
-    losa2EastFront.receiveShadow = true;
-    losa2EastFront.userData = losa2Meta;
-    this.groups.losaFase2.add(losa2EastFront);
+    losa2WestFront.position.set((-4.87 + -3.84) / 2, losa2Y + 0.10, (3.00 + 5.26) / 2);
+    losa2WestFront.castShadow = true;
+    losa2WestFront.receiveShadow = true;
+    losa2WestFront.userData = losa2Meta;
+    this.groups.losaFase2.add(losa2WestFront);
 
-    const losa2EastRear = new THREE.Mesh(
-      new THREE.BoxGeometry(stair2W, 0.20, 13.34 - 9.94),
+    const losa2WestRear = new THREE.Mesh(
+      new THREE.BoxGeometry(stair2W, 0.20, 13.34 - 8.85),
       fase2SlabMat
     );
-    losa2EastRear.position.set((3.84 + 4.87) / 2, losa2Y + 0.10, (9.94 + 13.34) / 2);
-    losa2EastRear.castShadow = true;
-    losa2EastRear.receiveShadow = true;
-    losa2EastRear.userData = losa2Meta;
-    this.groups.losaFase2.add(losa2EastRear);
+    losa2WestRear.position.set((-4.87 + -3.84) / 2, losa2Y + 0.10, (8.85 + 13.34) / 2);
+    losa2WestRear.castShadow = true;
+    losa2WestRear.receiveShadow = true;
+    losa2WestRear.userData = losa2Meta;
+    this.groups.losaFase2.add(losa2WestRear);
 
     // Vigas de encadenado de Planta Alta
     const addFase2Beam = (x, y, z, w, h, d, name, desc) => {
@@ -1372,7 +1478,7 @@ export class ProjectScene {
       this.groups.losaFase2.add(bm);
     };
 
-    addFase2Beam(3.84, 2.72, (5.26 + 9.94) / 2, 0.18, 0.34, 9.94 - 5.26, 'Viga Eje 2 Borde Hueco Escalera 2 (x=+3.84m, z=5.26..9.94m)', 'Viga sobre Eje 2 que bordea el vano de subida de la Escalera 2 hacia el Escritorio de Planta Alta.');
+    addFase2Beam(-3.84, 2.72, (5.26 + 8.85) / 2, 0.18, 0.34, 8.85 - 5.26, 'Viga Borde Hueco Escalera 2 (x=-3.84m, z=5.26..8.85m)', 'Viga que bordea el vano de subida de la Escalera 2 hacia el Escritorio y Pasillo de Planta Alta.');
   }
 
   /**
@@ -1617,6 +1723,8 @@ export class ProjectScene {
 
   /**
    * Sincroniza en tiempo real los muros, aberturas y ambientes editados en el Editor 2D (`floorplanEditor.js`)
+   * IMPORTANTE: Solo agrega muros adicionales creados manualmente por el usuario (`w.isCustomUserWall === true`)
+   * para no duplicar ni superponer paredes sobre el modelo 3D arquitectónico (`buildHyperRealisticInterior3D`).
    */
   updateFromFloorplan(planState) {
     if (!planState || !planState.levels) return;
@@ -1648,6 +1756,7 @@ export class ProjectScene {
       const defaultBaseY = levelElevationMap[levelKey] ?? 0.00;
 
       (lvlData.walls || []).forEach((w) => {
+        if (!w.isCustomUserWall) return;
         const dx = w.x2 - w.x1;
         const dz = w.z2 - w.z1;
         const len = Math.hypot(dx, dz);
@@ -1694,7 +1803,7 @@ export class ProjectScene {
           dimensions: `Largo ${len.toFixed(2)}m × Alto ${wallH.toFixed(2)}m (${areaM2} m²) • Esp. ${(wallThick * 100).toFixed(0)}cm`,
           area: areaM2,
           costo: `Gs. ${wallCostGs}`,
-          status: 'Sincronizado desde Plano 2D ✨',
+          status: 'Muro Personalizado desde Plano 2D ✨',
           desc: cat.desc
         };
 
@@ -2001,9 +2110,9 @@ export class ProjectScene {
   }
 
   /**
-   * Activa/Desactiva el Modo Juego (Recorrido Peatonal 1ra / 3ra Persona estilo GTA VI / Los Sims)
-   * Controles: WASD / Flechas para caminar, Shift correr, Espacio saltar, C alternar 1ra/3ra persona,
-   * 1/2/3 teletransportar a Planta Baja (0.00m), Planta Alta (+2.88m) o Subsuelo (-2.34m), E interactuar.
+   * Activa/Desactiva el Modo Juego (Recorrido Peatonal 1ra / 3ra Persona con Colisión de Paredes Real)
+   * Controles: WASD / Flechas para caminar, Arrastrar ratón para girar la vista, Shift correr, Espacio saltar,
+   * C alternar 1ra/3ra persona, 1/2/3 teletransportar a Planta Baja (0.00m), Planta Alta (+2.88m) o Subsuelo (-2.34m), E interactuar.
    */
   toggleGameMode(enabled) {
     this.gameMode = Boolean(enabled);
@@ -2011,16 +2120,19 @@ export class ProjectScene {
 
     if (this.gameMode) {
       this.controls.enabled = false;
-      this.playerPos.set(0.85, 0.0, -1.20);
+      this.thirdPersonView = false; // Inicia en 1ra persona ("Ojos") para que ninguna pared tape la cámara
+      this.playerPos.set(0.85, 0.0, 0.50);
       this.playerYaw = 0;
+      this.playerPitch = 0;
       this.playerVelY = 0;
       avatar.position.copy(this.playerPos);
       avatar.visible = this.thirdPersonView;
-      this._notifyGameHud('Cochera / Ingreso Principal (Nivel Calle 0.00m)');
+      this._notifyGameHud('Cochera / Ingreso Principal (1ra Persona • Usa WASD + Ratón; pulsa C para 3ra Persona)');
     } else {
       this.controls.enabled = true;
       avatar.visible = false;
       this.keysPressed = {};
+      this.isPointerDraggingLook = false;
       if (typeof this.onGameHudUpdate === 'function') {
         this.onGameHudUpdate({ active: false });
       }
@@ -2031,21 +2143,25 @@ export class ProjectScene {
   _getFloorZoneLabel(x, y, z) {
     if (y < -1.0) {
       if (z < 3.0) return 'Pasillo Cámara Antihumedad (Subsuelo -2.34m)';
-      if (z > 12.0) return 'Patio / Galería de Subsuelo y Parrilla (-2.34m)';
-      return 'Salón Multiuso de Subsuelo 100 m² (-2.34m)';
+      if (z > 13.34) return 'Patio Nivelado, Parrilla y Reserva Piscina (-2.34m)';
+      if (x < -3.2 && z >= 5.0 && z <= 8.2) return 'Lavadero sobre Pared Lateral (Subsuelo -2.34m)';
+      return 'Gran Salón Abierto de Subsuelo 100 m² (-2.34m)';
     }
     if (y > 1.8) {
       if (z > 9.94) return 'Deck 2 / Terraza Panorámica al Río (+2.88m)';
-      if (x < -0.74 && z >= 5.0) return 'Dormitorio Principal en Suite (+2.88m)';
-      if (x < 0.5 && z < 5.0) return 'Vestidor y Baño en Suite (+2.88m)';
-      if (x >= 1.8 && z >= 7.0) return 'Escritorio / Desk de Ruth y Leo (+2.88m)';
-      return 'Dormitorio 2 y SSHH 2 — Planta Alta (+2.88m)';
+      if (z >= 4.85 && z <= 6.00 && x >= -3.84 && x <= 0.60) return 'Pasillo Distribuidor de Planta Alta (+2.88m)';
+      if (x < -1.80 && z >= 6.00) return 'Escritorio / Desk junto a Escalera 2 (+2.88m)';
+      if (x >= -1.80 && x <= 0.60 && z >= 6.00) return 'Dormitorio 2 (+2.88m)';
+      if (x > 0.60 && z >= 4.85) return 'Dormitorio Principal en Suite (+2.88m)';
+      if (x >= -1.65 && z < 4.85) return 'Vestidor y Baño en Suite (+2.88m)';
+      return 'SSHH 2 — Baño de Planta Alta (+2.88m)';
     }
     if (z < 1.5) return 'Explanada de Estacionamiento y Pérgola (0.00m)';
     if (z < 3.0) return 'Rejilla Galvanizada sobre Foso de Oxigenación (0.00m)';
     if (z > 9.94) return 'Galería Panorámica al Río Paraguay (-0.45m)';
-    if (x < -0.74) return 'Cocina, Comedor, Lavadero y Baño Social (0.00m)';
-    return 'Estar Social / Living y Estudio PB (0.00m)';
+    if (x > 3.75 && z <= 5.26) return 'Hall Puerta de Servicio (Acceso Doble a Subsuelo y Casa 0.00m)';
+    if (x < -0.74) return 'Cocina, Comedor y Baño Social (0.00m)';
+    return 'Estar Social / Living Principal (0.00m)';
   }
 
   _notifyGameHud(customInteraction = null) {
@@ -2088,10 +2204,90 @@ export class ProjectScene {
     }
   }
 
+  /**
+   * Resuelve colisiones 2D por nivel para evitar que el jugador atraviese paredes perimetrales o tabiques internos,
+   * permitiendo el paso fluido por puertas y vanos reales.
+   */
+  _resolveWallCollisions(oldX, oldZ, newX, newZ, y) {
+    const r = 0.28; // Radio de cuerpo del jugador
+    let rx = Math.max(-4.58, Math.min(4.58, newX));
+    let rz = Math.max(-5.20, Math.min(26.20, newZ));
+
+    const collideSegmentZ = (wallZ, xMin, xMax) => {
+      if (rx + r > xMin && rx - r < xMax) {
+        if (oldZ <= wallZ - r && rz > wallZ - r) rz = wallZ - r;
+        else if (oldZ >= wallZ + r && rz < wallZ + r) rz = wallZ + r;
+      }
+    };
+
+    const collideSegmentX = (wallX, zMin, zMax) => {
+      if (rz + r > zMin && rz - r < zMax) {
+        if (oldX <= wallX - r && rx > wallX - r) rx = wallX - r;
+        else if (oldX >= wallX + r && rx < wallX + r) rx = wallX + r;
+      }
+    };
+
+    // 1. Muro Frontal de Línea Municipal (z = -4.00m): paso abierto por Portoncito Izquierdo (+X: x = +1.15..+2.25m) y Portón Balancín Derecho (-X: x = -3.50..-1.20m)
+    collideSegmentZ(-4.00, -4.87, -3.50);
+    collideSegmentZ(-4.00, -1.20, 1.15);
+    collideSegmentZ(-4.00, 2.25, 4.87);
+
+    if (this.currentScenario === 'hoy_en_obra') {
+      return { x: rx, z: rz };
+    }
+
+    if (y > 1.8) {
+      // --- COLISIONES PLANTA ALTA (+2.88m) ---
+      // Fachada Frontal Eje G (z = 3.00m, ciega en PA)
+      collideSegmentZ(3.00, -4.87, 4.87);
+      // Muro divisorio de fila húmeda frontal con el Pasillo (z = 4.85m):
+      // Puertas en x = -2.75m (SSHH 2), x = +0.10m (Baño Suite), x = +3.80m (Vestidor)
+      collideSegmentZ(4.85, -3.84, -3.15);
+      collideSegmentZ(4.85, -2.35, -0.30);
+      collideSegmentZ(4.85, 0.50, 3.40);
+      collideSegmentZ(4.85, 4.20, 4.87);
+      // Muro sur de Dormitorio 2 hacia el Pasillo (z = 6.00m, entre x = -1.80m y x = +0.60m, puerta en x = -0.60m)
+      collideSegmentZ(6.00, -1.80, -1.00);
+      collideSegmentZ(6.00, -0.20, 0.60);
+      // Muro de Dormitorio en Suite (x = +0.60m, entre z = 4.85m y z = 9.94m, puerta desde el pasillo en z = 5.42m)
+      collideSegmentX(0.60, 5.85, 9.94);
+      // Muro entre Escritorio y Dormitorio 2 (x = -1.80m, entre z = 6.00m y z = 9.94m)
+      collideSegmentX(-1.80, 6.00, 9.94);
+      // Baranda/Blindex hacia Deck 2 (z = 9.94m): aberturas en x = -3.30..-1.90m y x = +1.50..+3.90m
+      collideSegmentZ(9.94, -4.87, -3.30);
+      collideSegmentZ(9.94, -1.90, 1.50);
+      collideSegmentZ(9.94, 3.90, 4.87);
+      // Borde Balcón Deck 2 (z = 13.34m)
+      collideSegmentZ(13.34, -4.87, 4.87);
+    } else if (y >= -0.8) {
+      // --- COLISIONES PLANTA BAJA (0.00m / -0.45m) ---
+      // Fachada Eje G (z = 3.00m): Puerta Principal en x = +0.85m (0.30..1.40) y Puerta de Servicio Exterior en x = +4.35m (3.90..4.80)
+      collideSegmentZ(3.00, -4.87, 0.30);
+      collideSegmentZ(3.00, 1.40, 3.90);
+      // Tabique del Hall de Servicio / Escalera 1 (x = +3.84m, de z = 3.00m a z = 9.94m):
+      // Puerta Interior que comunica la casa con el Hall de Servicio y la Escalera 1 en z = 4.20m (3.75..4.65)
+      collideSegmentX(3.84, 3.00, 3.75);
+      collideSegmentX(3.84, 4.65, 9.94);
+      // Baño Social en PB (x = -4.87..-2.80m, z = 3.00..4.77m, puerta en z = 4.77m, x = -3.45m)
+      collideSegmentZ(4.77, -4.87, -3.85);
+      collideSegmentZ(4.77, -3.05, -2.80);
+      collideSegmentX(-2.80, 3.00, 4.77);
+    } else {
+      // --- COLISIONES SUBSUELO (-2.34m) ---
+      // Muro de Contención del Estacionamiento en z = 1.50m
+      collideSegmentZ(1.50, -4.87, 4.87);
+      // Pared Frontal de Subsuelo en Eje G (z = 3.00m): vanos ventilados/puerta en x = -1.20..+1.20m
+      collideSegmentZ(3.00, -4.87, -1.20);
+      collideSegmentZ(3.00, 1.20, 4.87);
+    }
+
+    return { x: rx, z: rz };
+  }
+
   _updateGameController(dt) {
     if (!this.gameMode) return;
-    const moveSpeed = (this.keysPressed.ShiftLeft || this.keysPressed.ShiftRight) ? 5.6 : 3.1;
-    const turnSpeed = 1.95;
+    const moveSpeed = (this.keysPressed.ShiftLeft || this.keysPressed.ShiftRight) ? 5.2 : 2.9;
+    const turnSpeed = 1.85;
 
     if (this.keysPressed.KeyA || this.keysPressed.ArrowLeft) {
       this.playerYaw += turnSpeed * dt;
@@ -2104,22 +2300,32 @@ export class ProjectScene {
     if (this.keysPressed.KeyW || this.keysPressed.ArrowUp) forward += 1;
     if (this.keysPressed.KeyS || this.keysPressed.ArrowDown) forward -= 1;
 
-    if (forward !== 0) {
-      this.playerPos.x += Math.sin(this.playerYaw) * forward * moveSpeed * dt;
-      this.playerPos.z += Math.cos(this.playerYaw) * forward * moveSpeed * dt;
+    let strafe = 0;
+    if (this.keysPressed.KeyQ) strafe += 1;
+
+    const oldX = this.playerPos.x;
+    const oldZ = this.playerPos.z;
+    let nextX = oldX;
+    let nextZ = oldZ;
+
+    if (forward !== 0 || strafe !== 0) {
+      nextX += (Math.sin(this.playerYaw) * forward + Math.cos(this.playerYaw) * strafe) * moveSpeed * dt;
+      nextZ += (Math.cos(this.playerYaw) * forward - Math.sin(this.playerYaw) * strafe) * moveSpeed * dt;
     }
 
-    // Límites del lote (x entre -4.65m y +4.65m, z entre -5.5m y +24.5m)
-    this.playerPos.x = Math.max(-4.65, Math.min(4.65, this.playerPos.x));
-    this.playerPos.z = Math.max(-5.50, Math.min(24.50, this.playerPos.z));
+    const resolved = this._resolveWallCollisions(oldX, oldZ, nextX, nextZ, this.playerPos.y);
+    this.playerPos.x = resolved.x;
+    this.playerPos.z = resolved.z;
 
-    // Alturas automáticas por escaleras (Escalera 1 en Oeste x<-3.8m baja a Subsuelo; Escalera 2 en Este x>3.7m sube a PA)
+    // Alturas automáticas por escaleras en su lado real:
+    // - Escalera 1 ya existente (PB <-> Subsuelo) en el lado +X (`x > 3.75m, z = 5.20..9.90m`)
+    // - Escalera 2 (PB <-> 2do Piso) en el lado opuesto -X (`x < -3.75m, z = 5.20..8.85m`)
     let targetGroundY = this.playerPos.y;
-    if (this.playerPos.x < -3.75 && this.playerPos.z >= 5.2 && this.playerPos.z <= 9.9 && this.playerPos.y <= 0.5) {
-      const tStair1 = (this.playerPos.z - 5.2) / (9.9 - 5.2);
+    if (this.playerPos.x > 3.75 && this.playerPos.z >= 5.20 && this.playerPos.z <= 9.90 && this.playerPos.y <= 0.5) {
+      const tStair1 = (this.playerPos.z - 5.20) / (9.90 - 5.20);
       targetGroundY = -2.34 * Math.max(0, Math.min(1, tStair1));
-    } else if (this.playerPos.x > 3.75 && this.playerPos.z >= 5.2 && this.playerPos.z <= 9.9 && this.playerPos.y >= -0.2) {
-      const tStair2 = (this.playerPos.z - 5.2) / (9.9 - 5.2);
+    } else if (this.playerPos.x < -3.75 && this.playerPos.z >= 5.20 && this.playerPos.z <= 8.85 && this.playerPos.y >= -0.2) {
+      const tStair2 = (this.playerPos.z - 5.20) / (8.85 - 5.20);
       targetGroundY = 2.88 * Math.max(0, Math.min(1, tStair2));
     } else if (Math.abs(this.playerPos.y - 2.88) < 0.85 && this.playerPos.z >= 3.0 && this.playerPos.z <= 13.34) {
       targetGroundY = 2.88;
@@ -2151,11 +2357,21 @@ export class ProjectScene {
       this.playerAvatar.visible = this.thirdPersonView;
     }
 
-    const lookDir = new THREE.Vector3(Math.sin(this.playerYaw), 0, Math.cos(this.playerYaw));
+    const lookDir = new THREE.Vector3(
+      Math.sin(this.playerYaw) * Math.cos(this.playerPitch),
+      Math.sin(this.playerPitch),
+      Math.cos(this.playerYaw) * Math.cos(this.playerPitch)
+    );
+    const flatLookDir = new THREE.Vector3(Math.sin(this.playerYaw), 0, Math.cos(this.playerYaw));
+
     if (this.thirdPersonView) {
-      const camOffset = lookDir.clone().multiplyScalar(-3.1).add(new THREE.Vector3(0, 1.85, 0));
-      this.camera.position.lerp(this.playerPos.clone().add(camOffset), 0.22);
-      this.camera.lookAt(this.playerPos.clone().add(new THREE.Vector3(0, 1.35, 0)).add(lookDir.clone().multiplyScalar(2.5)));
+      // Cámara de hombro cercana (1.35m) con límite interior para que jamás atraviese paredes ni se pierda fuera de la casa
+      const rawCamPos = this.playerPos.clone().add(flatLookDir.clone().multiplyScalar(-1.35)).add(new THREE.Vector3(0, 1.65, 0));
+      const safeCamXZ = this._resolveWallCollisions(this.playerPos.x, this.playerPos.z, rawCamPos.x, rawCamPos.z, this.playerPos.y);
+      rawCamPos.x = safeCamXZ.x;
+      rawCamPos.z = safeCamXZ.z;
+      this.camera.position.lerp(rawCamPos, 0.35);
+      this.camera.lookAt(this.playerPos.clone().add(new THREE.Vector3(0, 1.42, 0)).add(lookDir.clone().multiplyScalar(2.5)));
     } else {
       const eye = this.playerPos.clone().add(new THREE.Vector3(0, 1.62, 0));
       this.camera.position.copy(eye);
@@ -2317,13 +2533,16 @@ export class ProjectScene {
         this._notifyGameHud();
       } else if (e.code === 'Digit1') {
         this.playerPos.set(0.85, 0.0, 4.2);
+        this.playerYaw = 0;
         this._notifyGameHud('Teletransporte: Planta Baja (0.00m)');
       } else if (e.code === 'Digit2') {
-        this.playerPos.set(2.60, 2.88, 8.2);
-        this._notifyGameHud('Teletransporte: Planta Alta (+2.88m)');
+        this.playerPos.set(-1.50, 2.88, 5.42);
+        this.playerYaw = Math.PI / 2;
+        this._notifyGameHud('Teletransporte: Pasillo Distribuidor Planta Alta (+2.88m)');
       } else if (e.code === 'Digit3') {
         this.playerPos.set(0.0, -2.34, 7.5);
-        this._notifyGameHud('Teletransporte: Subsuelo (-2.34m)');
+        this.playerYaw = 0;
+        this._notifyGameHud('Teletransporte: Gran Salón de Subsuelo (-2.34m)');
       } else if (e.code === 'KeyE') {
         this._interactNearestObject();
       } else if (e.code === 'Escape') {
@@ -2338,8 +2557,26 @@ export class ProjectScene {
     });
 
     let pointerDownPos = { x: 0, y: 0 };
+    let lastLookPos = { x: 0, y: 0 };
     this.renderer.domElement.addEventListener('pointerdown', (e) => {
       pointerDownPos = { x: e.clientX, y: e.clientY };
+      lastLookPos = { x: e.clientX, y: e.clientY };
+      if (this.gameMode && e.button === 0) {
+        this.isPointerDraggingLook = true;
+      }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!this.gameMode || !this.isPointerDraggingLook) return;
+      const dx = e.clientX - lastLookPos.x;
+      const dy = e.clientY - lastLookPos.y;
+      lastLookPos = { x: e.clientX, y: e.clientY };
+      this.playerYaw -= dx * 0.0055;
+      this.playerPitch = Math.max(-0.65, Math.min(0.65, this.playerPitch - dy * 0.0045));
+    });
+
+    window.addEventListener('pointerup', () => {
+      this.isPointerDraggingLook = false;
     });
 
     this.renderer.domElement.addEventListener('pointerup', (e) => {

@@ -1784,27 +1784,27 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     type: 'fachada_exterior',
     bankCategory: 'existente_negro',
     name: 'Muralla Frontal Ciega de Mampostería Revocada (100% Privacidad Visual desde la Calle • z = -4.00m)',
-    dimensions: 'Frente 9.89m × Altura 2.25m + Pilar Central de Mampostería entre Portón Vehicular y Peatonal',
+    dimensions: 'Frente 9.89m × Altura 2.25m + Pilar Central de Mampostería entre Portoncito Peatonal (Izq.) y Portón Balancín (Der.)',
     costo: isFullExterior573 ? 'Gs. 10.677.500 (Ítem 20 Presupuesto Completo)' : 'Gs. 0 (Muralla Existente en Obra)',
     status: 'Privacidad 100% Opaca desde Calle Tte. Guillermo Arias 🔒🛡️',
-    desc: 'Muralla perimetral ciega sobre línea municipal (z = -4.00m) con paño izquierdo ciego (x = -4.95..-2.20m), pilar central de mampostería revocada (x = -1.25..+1.20m) con medidor ANDE y portero eléctrico, y machón derecho (x = +3.50..+4.95m).'
+    desc: 'Muralla perimetral ciega sobre línea municipal (z = -4.00m) respetando el lado real de cada portón según fotografía de obra: paño izquierdo ciego (x = +2.20..+4.95m), Portoncito Peatonal a la izquierda (x = +1.25..+2.20m), pilar central (x = -1.20..+1.25m), Portón Balancín a la derecha (x = -3.50..-1.20m) y machón derecho (x = -4.95..-3.50m).'
   };
 
-  // Tramo izquierdo ciego (x = -4.95m a -2.20m, ancho 2.75m)
+  // Tramo izquierdo ciego mirando desde la calle (+X: x = +2.20m a +4.95m, ancho 2.75m)
   const leftBlindWall = new THREE.Mesh(new THREE.BoxGeometry(2.75, 2.25, 0.25), wallMat);
-  leftBlindWall.position.set(-3.575, 1.125, -4.00);
+  leftBlindWall.position.set(3.575, 1.125, -4.00);
   leftBlindWall.userData = murallaData;
   facadeGroup.add(leftBlindWall);
 
-  // Pilar central / machón de mampostería entre puerta peatonal y portón vehicular (x = -1.25m a +1.20m, ancho 2.45m)
+  // Pilar central / machón de mampostería entre Portoncito Peatonal (+X) y Portón Balancín (-X) (x = -1.20m a +1.25m, ancho 2.45m)
   const centerMasonryWall = new THREE.Mesh(new THREE.BoxGeometry(2.45, 2.35, 0.28), wallMat);
-  centerMasonryWall.position.set(-0.025, 1.175, -4.00);
+  centerMasonryWall.position.set(0.025, 1.175, -4.00);
   centerMasonryWall.userData = murallaData;
   facadeGroup.add(centerMasonryWall);
 
-  // Pilar derecho de mampostería (x = +3.50m a +4.95m, ancho 1.45m)
+  // Pilar derecho de mampostería mirando desde la calle (-X: x = -4.95m a -3.50m, ancho 1.45m)
   const rightMasonryWall = new THREE.Mesh(new THREE.BoxGeometry(1.45, 2.35, 0.28), wallMat);
-  rightMasonryWall.position.set(4.225, 1.175, -4.00);
+  rightMasonryWall.position.set(-4.225, 1.175, -4.00);
   rightMasonryWall.userData = murallaData;
   facadeGroup.add(rightMasonryWall);
 
@@ -1816,20 +1816,20 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
 
   // Caja de Medidor ANDE + Portero Eléctrico sobre el pilar central de mampostería
   const meterBox = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.12), mats.blackMetalMat);
-  meterBox.position.set(-0.65, 1.55, -4.15);
+  meterBox.position.set(0.65, 1.55, -4.15);
   facadeGroup.add(meterBox);
 
   const intercom = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.16, 0.05), mats.stainlessMat);
-  intercom.position.set(-0.98, 1.42, -4.15);
+  intercom.position.set(0.98, 1.42, -4.15);
   facadeGroup.add(intercom);
 
   const gateMat = mats.graphiteSheetGatePBR || mats.blackMetalMat;
 
-  // 1C. PUERTA PEATONAL CIEGA EN CHAPA PLEGADA HORIZONTAL GRAFITO (x = -2.20m a -1.25m, ancho 0.95m × alto 2.10m)
+  // 1C. PORTONCITO PEATONAL CIEGO EN CHAPA PLEGADA HORIZONTAL GRAFITO — LADO IZQUIERDO MIRANDO DESDE LA CALLE (+X: x = +1.25m a +2.20m, ancho 0.95m × alto 2.15m)
   const pedGateGroup = new THREE.Group();
   const pedW = 0.95;
   const pedH = 2.15;
-  const pedX = -1.725;
+  const pedX = 1.725;
 
   const pedPanel = new THREE.Mesh(new THREE.BoxGeometry(pedW - 0.04, pedH - 0.32, 0.05), gateMat);
   pedPanel.position.set(pedX, (pedH - 0.32) / 2 + 0.02, -4.00);
@@ -1844,25 +1844,25 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
   }
 
   const pedHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.65, 12), mats.stainlessMat);
-  pedHandle.position.set(pedX + 0.34, 1.05, -4.05);
+  pedHandle.position.set(pedX - 0.34, 1.05, -4.05);
   pedGateGroup.add(pedHandle);
 
   tagGroupUserData(pedGateGroup, {
     type: 'fachada_exterior',
     bankCategory: 'existente_negro',
-    name: 'Puerta Peatonal Ciega en Chapa Plegada Horizontal Gris Grafito Oscuro (0.95m × 2.15m)',
-    dimensions: '0.95m × 2.15m (x = -2.20m a -1.25m • Línea Municipal z = -4.00m)',
+    name: 'Portoncito Peatonal Ciego en Chapa Plegada Horizontal Gris Grafito (Lado Izquierdo • 0.95m × 2.15m)',
+    dimensions: '0.95m × 2.15m (x = +1.25m a +2.20m • Línea Municipal z = -4.00m)',
     costo: 'Gs. 0 (Puerta Peatonal Existente en Obra)',
-    status: 'Chapa Plegada Horizontal Ciega + Celosía Superior de Ventilación 🔒',
-    desc: 'Puerta peatonal haciendo juego con el portón vehicular en chapa plegada horizontal color gris grafito oscuro (#1f242b), garantizando privacidad total hacia el interior.'
+    status: 'Ubicado en su Lado Real Izquierdo (+X) según Foto de Obra 🔒',
+    desc: 'Portoncito peatonal ubicado a la izquierda mirando desde la calle (x = +1.25..+2.20m), haciendo juego con el portón vehicular en chapa plegada horizontal color gris grafito oscuro (#1f242b) con celosía superior.'
   });
   facadeGroup.add(pedGateGroup);
 
-  // 1D. PORTÓN VEHICULAR BASCULANTE ANGOSTO DE 1 VEHÍCULO EN CHAPA PLEGADA HORIZONTAL CIEGA (x = +1.20m a +3.50m, ancho 2.30m × alto 2.15m)
+  // 1D. PORTÓN VEHICULAR BALANCÍN DE 2.30m EN CHAPA PLEGADA HORIZONTAL CIEGA — LADO DERECHO MIRANDO DESDE LA CALLE (-X: x = -3.50m a -1.20m)
   const gateGroup = new THREE.Group();
   const gateW = 2.30;
   const gateH = 2.15;
-  const gateX = 2.35;
+  const gateX = -2.35;
 
   const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.09, gateH, 0.10), mats.blackMetalMat);
   frameLeft.position.set(gateX - gateW / 2, gateH / 2, -4.00);
@@ -1895,58 +1895,58 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
   tagGroupUserData(gateGroup, {
     type: 'fachada_exterior',
     bankCategory: 'existente_negro',
-    name: 'Portón Vehicular Basculante Ciego en Chapa Plegada Horizontal Gris Grafito (2.30m × 2.15m • 1 Vehículo)',
-    dimensions: 'Ancho 2.30m × Alto 2.15m (x = +1.20m a +3.50m • Paso para 1 vehículo con privacidad 100% ciega)',
+    name: 'Portón Vehicular Balancín Ciego en Chapa Plegada Horizontal Gris Grafito (Lado Derecho • 2.30m × 2.15m)',
+    dimensions: 'Ancho 2.30m × Alto 2.15m (x = -3.50m a -1.20m • Lado Derecho mirando desde la calle)',
     costo: 'Gs. 0 (Portón Vehicular Existente en Obra — Color Negro en Carpeta Banco)',
     status: isUpgradedGate
-      ? 'Chapa Plegada Horizontal Grafito Oscuro (#1f242b) + Motor Automatizador ✨'
-      : 'Portón Basculante Ciego YA EXISTENTE en Obra 🔒',
-    desc: 'Portón vehicular basculante angosto de 2,30m de ancho en chapa plegada horizontal ciega color gris grafito oscuro con celosía superior de ventilación, brindando 100% de privacidad visual desde la calle.'
+      ? 'Ubicado en su Lado Real Derecho (-X) + Motor Automatizador ✨'
+      : 'Portón Balancín Ciego YA EXISTENTE en su Lado Real Derecho (-X) 🔒',
+    desc: 'Portón vehicular balancín de 2,30m ubicado a la derecha mirando desde la calle (x = -3.50..-1.20m, exactamente como en la foto real de fachada), en chapa plegada horizontal ciega gris grafito con celosía superior.'
   });
   facadeGroup.add(gateGroup);
 
-  // 1D-Bis. Motor Automatizador para el Portón Basculante (x = +3.45m)
+  // 1D-Bis. Motor Automatizador para el Portón Basculante (x = -3.45m)
   if (scenarioKey !== 'hoy_en_obra') {
     const motorKitGroup = new THREE.Group();
 
     const driveRail = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.55, 0.08), mats.stainlessMat);
-    driveRail.position.set(3.45, 1.25, -3.91);
+    driveRail.position.set(-3.45, 1.25, -3.91);
     motorKitGroup.add(driveRail);
 
     const motorHead = new THREE.Mesh(
       new THREE.BoxGeometry(0.22, 0.34, 0.20),
       new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.35, metalness: 0.6 })
     );
-    motorHead.position.set(3.36, 1.62, -3.86);
+    motorHead.position.set(-3.36, 1.62, -3.86);
     motorKitGroup.add(motorHead);
 
     const actuatorArm = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.58, 0.05), mats.chromeMat);
-    actuatorArm.position.set(3.43, 1.38, -3.95);
+    actuatorArm.position.set(-3.43, 1.38, -3.95);
     actuatorArm.rotation.x = 0.22;
     motorKitGroup.add(actuatorArm);
 
     tagGroupUserData(motorKitGroup, {
       type: 'automatizacion_porton',
       bankCategory: 'nuevo_rojo',
-      name: 'Motor Automatizador Rápido para Portón Basculante (2.30m) + Traba Eléctrica y Fotocélula',
+      name: 'Motor Automatizador Rápido para Portón Balancín (2.30m) + Traba Eléctrica y Fotocélula',
       dimensions: 'Riel 1.55m + Motor Electromecánico JetFlex + Central + 2 Controles',
       costo: 'Gs. 2.450.000 (Kit Motor Portón Basculante Instalado)',
       status: 'Equipamiento Nuevo a Instalar sobre Portón Existente ⚡🚪',
-      desc: 'Kit de motorización rápida acoplado al parante derecho del portón vehicular de 2,30m.'
+      desc: 'Kit de motorización rápida acoplado al parante del portón vehicular de 2,30m.'
     });
     facadeGroup.add(motorKitGroup);
   }
 
   // 1E. PÉRGOLA DE MADERA DURA CON ENREDADERA VERDE TUPIDA (SANTA RITA / JAZMÍN) + CHAPA TRANSLÚCIDA DE POLICARBONATO ANTIGRANIZO
-  //     Cubre la cochera y el acceso peatonal (x = -0.50m..+4.50m, z = -3.80m..+2.80m, Y = +2.55m..+2.75m)
+  //     Cubre la cochera y el acceso peatonal (x = -4.50m..+2.50m, z = -3.80m..+2.80m, Y = +2.55m..+2.75m)
   const pergolaGroup = new THREE.Group();
-  const pMinX = -0.50;
-  const pMaxX = 4.50;
+  const pMinX = -4.50;
+  const pMaxX = 2.50;
   const pMinZ = -3.80;
   const pMaxZ = 2.80;
-  const pW = pMaxX - pMinX; // 5.00m
+  const pW = pMaxX - pMinX; // 7.00m
   const pD = pMaxZ - pMinZ; // 6.60m
-  const pCenterX = (pMinX + pMaxX) / 2; // +2.00m
+  const pCenterX = (pMinX + pMaxX) / 2; // -1.00m
   const pCenterZ = (pMinZ + pMaxZ) / 2; // -0.50m
   const pY = 2.55;
 
@@ -1991,11 +1991,11 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
 
   // Enredadera Verde Tupida (Santa Rita / Jazmín del Paraguay) entrelazada sobre la pérgola
   const vineMat = mats.lushFoliagePBR || mats.grassPBR;
-  const flowerMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.55 }); // Flores fucsia Santa Rita
-  for (let vx = 0; vx < 6; vx++) {
+  const flowerMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.55 });
+  for (let vx = 0; vx < 7; vx++) {
     for (let vz = 0; vz < 8; vz++) {
       if ((vx + vz) % 2 === 0 || vx === 0 || vz < 2) {
-        const fx = pMinX + 0.45 + vx * 0.82;
+        const fx = pMinX + 0.55 + vx * 0.95;
         const fz = pMinZ + 0.45 + vz * 0.80;
         const foliageCluster = new THREE.Mesh(
           new THREE.SphereGeometry(0.46 + ((vx * 3 + vz) % 3) * 0.08, 10, 8),
@@ -2020,38 +2020,38 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     type: 'pergola_cochera',
     bankCategory: 'existente_negro',
     name: 'Pérgola de Madera Dura con Enredadera Tupida (Santa Rita / Jazmín) y Policarbonato Antigranizo',
-    dimensions: '5.00m × 6.60m (33.0 m² • x = -0.50..+4.50m, z = -3.80..+2.80m, Y = +2.55..+2.75m)',
+    dimensions: '7.00m × 6.60m (x = -4.50..+2.50m, z = -3.80..+2.80m, Y = +2.55..+2.75m)',
     costo: 'Incluida en Cubierta de Cochera y Acceso Frontal',
     status: 'Sombra Fresca Natural + Protección Pluvial de Policarbonato 🌿🚗',
-    desc: 'Pérgola de madera dura que cubre la cochera y el acceso peatonal, combinando enredadera natural tupida con chapa translúcida de policarbonato antigranizo para proteger la SUV y el ingreso en días de tormenta.'
+    desc: 'Pérgola de madera dura que cubre el estacionamiento vehicular y el acceso peatonal, combinando enredadera natural con chapa translúcida de policarbonato antigranizo.'
   });
   facadeGroup.add(pergolaGroup);
 
-  // 1F. Solado de Cochera y Caminero Peatonal (z = -4.00m a +1.50m) + SUV Chery Tiggo 2 Pro 2026 alineada con el portón de 2.30m (x = +2.35m)
+  // 1F. Solado de Cochera y Caminero Peatonal (z = -4.00m a +1.50m) + SUV Chery Tiggo 2 Pro 2026 alineada con el portón de 2.30m (x = -2.35m)
   if (scenarioKey !== 'hoy_en_obra') {
     const walkwayMat = isFullExterior573 ? mats.porcelainPBR : mats.concretePBR;
 
-    // Huella vehicular principal (alineada con portón en x = +2.35m)
+    // Huella vehicular principal (alineada con el Portón Balancín en el lado derecho mirando desde la calle: x = -2.35m)
     const carTrack = new THREE.Mesh(new THREE.BoxGeometry(2.60, 0.04, 5.30), walkwayMat);
-    carTrack.position.set(2.35, 0.015, -1.25);
+    carTrack.position.set(-2.35, 0.015, -1.25);
     carTrack.userData = {
       type: 'fachada_exterior',
       bankCategory: 'nuevo_rojo',
-      name: 'Explanada Vehicular de Cochera Cubierta por Pérgola (z = -4.00m a +1.50m)',
+      name: 'Explanada Vehicular de Cochera Cubierta por Pérgola (Alineada con Portón Balancín en x = -2.35m)',
       dimensions: '51.90 m² (Entre Línea Municipal y Rejilla Peatonal de Foso de Oxigenación en z = +1.50m)',
       costo: isFullExterior573 ? 'Gs. 7.320.000 (Terminación Completa)' : 'Contrapiso Armado de Cochera',
       status: 'Cochera Operativa bajo Pérgola de Madera y Enredadera 🎯',
-      desc: 'Superficie de estacionamiento vehicular a nivel de calle contenida por el muro en z = +1.50m.'
+      desc: 'Superficie de estacionamiento vehicular a nivel de calle alineada con el portón balancín derecho (x = -2.35m).'
     };
     facadeGroup.add(carTrack);
 
-    // Caminero peatonal desde la puerta peatonal (x = -1.72m) hacia el puente de rejilla y la Puerta Principal
-    const pedWalk = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.04, 5.30), walkwayMat);
-    pedWalk.position.set(-1.35, 0.015, -1.25);
+    // Caminero peatonal desde el Portoncito Peatonal izquierdo (x = +1.725m) hacia la Puerta Principal (x = +0.85m) y la Puerta de Servicio (x = +4.35m)
+    const pedWalk = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.04, 5.30), walkwayMat);
+    pedWalk.position.set(1.55, 0.015, -1.25);
     facadeGroup.add(pedWalk);
 
     // Topes de rueda (Wheel Stops) en z = +0.65m antes del Foso de Oxigenación con Rejilla (z = +1.50m)
-    [1.80, 2.90].forEach((wx) => {
+    [-2.90, -1.80].forEach((wx) => {
       const wheelStop = new THREE.Mesh(
         new THREE.BoxGeometry(0.55, 0.11, 0.16),
         new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.6, metalness: 0.1 })
@@ -2070,31 +2070,34 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     });
   }
 
-  // SUV Chery Tiggo 2 Pro 2026 estacionada bajo la pérgola (alineada con el portón vehicular x = +2.35m)
-  facadeGroup.add(createCheryTiggo2Pro2026_3D(THREE, mats, 2.35, 0.03, -1.25, 0));
+  // SUV Chery Tiggo 2 Pro 2026 estacionada bajo la pérgola (alineada con el Portón Balancín derecho x = -2.35m)
+  facadeGroup.add(createCheryTiggo2Pro2026_3D(THREE, mats, -2.35, 0.03, -1.25, 0));
 
   targetGroup.add(facadeGroup);
 }
 
 /**
- * 2. ESCALERAS EN LADOS OPUESTOS DE LA CASA SEGÚN PLANO ORIGINAL:
- *    - ESCALERA 1 (PB ↔ SUBSUELO): Lado Sur/Izquierdo (Ejes 8–9, x = -4.87m..-3.90m, z = 5.26m..8.60m, de Y = 0.00m a Y = -2.34m)
- *    - ESCALERA 2 (PB ↔ PLANTA ALTA): Lado Norte/Derecho (Ejes 1–2, x = +3.84m..+4.87m, z = 5.26m..9.16m, de Y = 0.00m a Y = +2.88m)
+ * 2. ESCALERAS EN SU LADO REAL SEGÚN FOTOS DE OBRA (`media_1792502324664.jpg`) Y PLANOS:
+ *    - ESCALERA 1 YA EXISTENTE EN OBRA (PB ↔ SUBSUELO): Lado Izquierdo mirando desde la calle (`+X`, Ejes 1–2: `x = +3.84m..+4.87m, z = 5.26m..8.80m`),
+ *      vinculada directamente con la Puerta de Servicio Exterior (`x = +4.35m, z = 3.00m`) y con la Puerta Interior desde la casa (`x = +3.84m, z = 4.20m`).
+ *    - ESCALERA 2 A CONSTRUIR (PB ↔ 2DO PISO): Del otro lado (`-X`, Ejes 8–9: `x = -4.87m..-3.84m, z = 5.26m..8.85m`),
+ *      subiendo desde el área social hasta el Escritorio / Desk y el Pasillo Distribuidor del 2do Piso (+2.88m).
  */
 export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats, scenarioKey = 'escenario300') {
   const isFinished = ['escenario350', 'escenario370', 'escenario440', 'edifica460', 'edifica573'].includes(scenarioKey);
 
   // ==========================================================================
-  // 2A. ESCALERA 1 DE H°A° (PB Y=0.00m ↔ SUBSUELO Y=-2.34m) EN LADO SUR/IZQUIERDO (Ejes 8–9: x = -4.87m..-3.90m, z = 5.26m..8.60m)
+  // 2A. ESCALERA 1 DE H°A° YA EXISTENTE (PB Y=0.00m ↔ SUBSUELO Y=-2.34m) EN LADO +X (Ejes 1–2: x = +3.84m..+4.87m, z = 5.26m..8.80m)
+  //     Acceso directo desde la Puerta de Servicio Exterior (z=3.00m) y desde la Puerta Interior de la casa (x=+3.84m, z=4.20m)
   // ==========================================================================
   const stairSubGroup = new THREE.Group();
-  stairSubGroup.name = 'escalera_1_pb_subsuelo_sur';
+  stairSubGroup.name = 'escalera_1_pb_subsuelo_existente';
 
-  const stX1 = (-4.87 + -3.90) / 2; // -4.385m (Lado Sur/Izquierdo, junto a Cocina/Comedor)
-  const stW1 = 0.97;
+  const stX1 = (3.84 + 4.87) / 2; // +4.355m (Lado Izquierdo mirando desde el frente, tal como en la foto de obra `media_1792502324664.jpg`)
+  const stW1 = 1.00;
   const zStart1 = 5.26;
-  const zEnd1 = 8.60;
-  const runZ1 = zEnd1 - zStart1; // 3.34m
+  const zEnd1 = 8.80;
+  const runZ1 = zEnd1 - zStart1; // 3.54m
   const dropY1 = 2.34;
   const numSteps1 = 14;
 
@@ -2106,7 +2109,7 @@ export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats
   waistMesh1.rotation.x = waistAngle1;
   stairSubGroup.add(waistMesh1);
 
-  const landingGeo1 = new THREE.BoxGeometry(stW1 + 0.12, 0.18, 1.05);
+  const landingGeo1 = new THREE.BoxGeometry(stW1 + 0.06, 0.18, 1.05);
   const landingMesh1 = new THREE.Mesh(landingGeo1, isFinished ? mats.porcelainPBR : mats.concretePBR);
   landingMesh1.position.set(stX1, -2.34 + 0.02, zEnd1 + 0.48);
   stairSubGroup.add(landingMesh1);
@@ -2144,14 +2147,14 @@ export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats
         new THREE.CylinderGeometry(0.02, 0.02, 0.95, 12),
         mats.stainlessMat
       );
-      post.position.set(-3.92, py, pz);
+      post.position.set(3.86, py, pz);
       railGroup1.add(post);
     });
 
     const handrailGeo1 = new THREE.CylinderGeometry(0.025, 0.025, waistLen1, 14);
     handrailGeo1.rotateX(Math.PI / 2 + waistAngle1);
     const handrail1 = new THREE.Mesh(handrailGeo1, mats.stainlessMat);
-    handrail1.position.set(-3.92, -dropY1 / 2 + 0.92, (zStart1 + zEnd1) / 2);
+    handrail1.position.set(3.86, -dropY1 / 2 + 0.92, (zStart1 + zEnd1) / 2);
     railGroup1.add(handrail1);
     stairSubGroup.add(railGroup1);
   }
@@ -2159,32 +2162,31 @@ export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats
   tagGroupUserData(stairSubGroup, {
     type: 'structure',
     bankCategory: 'existente_negro',
-    name: 'Escalera 1 de H°A° (PB ↔ Subsuelo) en Lado Sur/Izquierdo (Ejes 8–9 • x = -4.87m..-3.90m, z = 5.26m..8.60m)',
-    dimensions: 'Ancho 0.97m × Largo 3.34m • 14 Peldaños (De Y=0.00m a Y=-2.34m)',
+    name: 'Escalera 1 de H°A° YA EXISTENTE (PB ↔ Subsuelo) con Acceso de Servicio Exterior e Interior (Ejes 1–2 • x = +3.84..+4.87m)',
+    dimensions: 'Ancho 1.00m × Largo 3.54m • 14 Peldaños (De Y=0.00m a Y=-2.34m)',
     costo: isFinished ? 'Revestida en Lapacho + Baranda Inox' : 'Ejecutada en H°A° en Obra 🔒',
-    status: 'Ubicada en Lado Sur/Izquierdo (Opuesta a Escalera 2) 🔒',
-    desc: 'Escalera 1 en el extremo Sur/Izquierdo (Ejes 8–9) junto al sector de Cocina/Comedor que desciende al Subsuelo (-2.34m) y a la Parrillita / Quincho Inferior.'
+    status: 'Ubicada en su Lado Real (+X, Ejes 1–2) según Foto de Obra y Planos 🔒',
+    desc: 'Escalera de hormigón armado ya construida en el lateral izquierdo mirando desde el frente (x = +3.84..+4.87m). Cuenta con doble acceso en su rellano superior: una puerta exterior de servicio desde la cochera (z=3.00m) y una puerta interior que comunica con el interior de la casa (x=+3.84m, z=4.20m).'
   });
   structureGroup.add(stairSubGroup);
 
   // ==========================================================================
-  // 2B. ESCALERA 2 (PB Y=0.00m ↔ PLANTA ALTA Y=+2.88m) EN LADO NORTE/DERECHO (Ejes 1–2: x = +3.84m..+4.87m, z = 5.26m..9.16m)
-  //     Desembarca directamente en el ESCRITORIO / DESK (3.50m × 2.30m) de Planta Alta
+  // 2B. ESCALERA 2 (PB Y=0.00m ↔ 2DO PISO Y=+2.88m) DEL OTRO LADO (-X, Ejes 8–9: x = -4.87m..-3.84m, z = 5.26m..8.85m)
+  //     Desembarca directamente en el ESCRITORIO / DESK y en el PASILLO DISTRIBUIDOR del 2do Piso
   // ==========================================================================
   const stairPAGroup = new THREE.Group();
-  stairPAGroup.name = 'escalera_2_pb_pa_norte';
+  stairPAGroup.name = 'escalera_2_pb_pa_opuesta';
 
-  const stX2 = (3.84 + 4.87) / 2; // +4.355m (Lado Norte/Derecho, opuesta a Escalera 1)
+  const stX2 = (-4.87 + -3.84) / 2; // -4.355m (Del otro lado respecto a la Escalera 1 de Subsuelo)
   const stW2 = 1.00;
   const zStart2 = 5.26;
-  const zEnd2 = 9.16;
-  const runZ2 = zEnd2 - zStart2; // 3.90m
+  const zEnd2 = 8.85;
+  const runZ2 = zEnd2 - zStart2; // 3.59m
   const risePA = 2.88;
   const stepsPA = 16;
   const waistLenPA = Math.hypot(runZ2, risePA);
   const waistAnglePA = -Math.atan2(risePA, runZ2);
 
-  // Losa inclinada / limones de H°A° y acero en Ejes 1–2
   [-stW2 / 2 + 0.04, stW2 / 2 - 0.04].forEach((lx) => {
     const stringerMesh = new THREE.Mesh(
       new THREE.BoxGeometry(0.06, 0.20, waistLenPA),
@@ -2218,14 +2220,14 @@ export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats
         new THREE.CylinderGeometry(0.02, 0.02, 0.95, 12),
         mats.stainlessMat
       );
-      post.position.set(3.86, py, pz);
+      post.position.set(-3.86, py, pz);
       railPAGroup.add(post);
     });
 
     const handrailPAGeo = new THREE.CylinderGeometry(0.025, 0.025, waistLenPA, 14);
     handrailPAGeo.rotateX(Math.PI / 2 + waistAnglePA);
     const handrailPA = new THREE.Mesh(handrailPAGeo, mats.stainlessMat);
-    handrailPA.position.set(3.86, risePA / 2 + 0.92, (zStart2 + zEnd2) / 2);
+    handrailPA.position.set(-3.86, risePA / 2 + 0.92, (zStart2 + zEnd2) / 2);
     railPAGroup.add(handrailPA);
     stairPAGroup.add(railPAGroup);
   }
@@ -2233,11 +2235,11 @@ export function buildExistingStaircase3D(THREE, structureGroup, fase2Group, mats
   tagGroupUserData(stairPAGroup, {
     type: 'structure_fase2',
     bankCategory: 'nuevo_rojo',
-    name: 'Escalera 2 (PB ↔ Planta Alta) en Lado Norte/Derecho (Ejes 1–2 • x = +3.84m..+4.87m, z = 5.26m..9.16m)',
-    dimensions: 'Ancho 1.00m × Largo 3.90m • 16 Peldaños de Lapacho (De Y=0.00m a +2.88m)',
-    costo: 'Gs. 9.800.000 (Escalera 2 hacia Escritorio / Desk en Planta Alta)',
-    status: 'Desembarco Directo en ESCRITORIO / DESK (3.50m × 2.30m) de Planta Alta ✨',
-    desc: 'Escalera 2 ubicada en el lado Norte/Derecho (Ejes 1–2, opuesta a la Escalera 1 del Subsuelo), subiendo desde el Estar en PB hasta el Escritorio / Desk de Planta Alta (+2.88m).'
+    name: 'Escalera 2 (PB ↔ 2do Piso) en el Costado Opuesto (Ejes 8–9 • x = -4.87m..-3.84m, z = 5.26m..8.85m)',
+    dimensions: 'Ancho 1.00m × Largo 3.59m • 16 Peldaños de Lapacho (De Y=0.00m a +2.88m)',
+    costo: 'Gs. 9.800.000 (Escalera 2 hacia Escritorio / Desk y Pasillo de Planta Alta)',
+    status: 'Desembarco Directo en ESCRITORIO / DESK y PASILLO DISTRIBUIDOR de Planta Alta ✨',
+    desc: 'Escalera 2 ubicada del otro lado del inmueble (x = -4.87..-3.84m, opuesta a la Escalera 1 del Subsuelo), subiendo desde la Planta Baja hasta el Escritorio / Desk y el Pasillo Distribuidor del 2do Piso (+2.88m).'
   });
   fase2Group.add(stairPAGroup);
 }
@@ -2722,81 +2724,60 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
   const patioGroup = new THREE.Group();
   patioGroup.name = 'patio_jardin_piscina_quincho';
 
-  const patioY = -3.15; // Terraza nivelada de jardín posterior al pie de la salida del Subsuelo
+  const patioY = -2.34; // Patio posterior 100% nivelado a ras de suelo del Subsuelo (Y = -2.34m, sin desnivel)
 
   // 3A. Jardín con Césped Esmeralda Paraguayo (`grassPBR`, visible siempre desde `escenario300`)
   const lawnGroup = new THREE.Group();
 
-  // Muro de contención perimetral de nivelación del jardín posterior (z = 13.40m a 25.60m, x = -4.85m a +4.85m)
-  const terraceBase = new THREE.Mesh(
-    new THREE.BoxGeometry(9.68, 1.45, 12.20),
-    mats.stoneWallPBR
-  );
-  terraceBase.position.set(0, patioY - 0.725, 19.50);
-  lawnGroup.add(terraceBase);
-
-  // Alfombra de Césped Esmeralda natural (9.50m × 12.00m)
+  // Alfombra de Césped Esmeralda natural (9.50m × 13.00m) a ras del Subsuelo (Y = -2.34m)
   const grassLawn = new THREE.Mesh(
-    new THREE.BoxGeometry(9.50, 0.08, 12.00),
+    new THREE.BoxGeometry(9.50, 0.06, 13.00),
     mats.grassPBR
   );
-  grassLawn.position.set(0, patioY + 0.04, 19.50);
+  grassLawn.position.set(0, patioY + 0.01, 19.90);
   grassLawn.receiveShadow = true;
   lawnGroup.add(grassLawn);
 
-  // Escalera exterior de jardín vinculando el Subsuelo (Y=-2.34m, z=9.94m..13.34m) con el Jardín de la Piscina (Y=-3.15m)
-  for (let s = 0; s < 5; s++) {
-    const gStep = new THREE.Mesh(
-      new THREE.BoxGeometry(1.65, 0.16, 0.38),
-      mats.porcelainPBR
-    );
-    gStep.position.set(3.45, -2.38 - s * 0.16, 13.40 + s * 0.38);
-    lawnGroup.add(gStep);
-  }
-
-  // Caminero de losetas atérmicas sobre el césped
-  for (let p = 0; p < 7; p++) {
+  // Caminero de losetas atérmicas sobre el césped al mismo nivel del Subsuelo (sin escalones de desnivel)
+  for (let p = 0; p < 9; p++) {
     const paver = new THREE.Mesh(
-      new THREE.BoxGeometry(0.95, 0.04, 0.55),
+      new THREE.BoxGeometry(0.95, 0.03, 0.55),
       mats.porcelainPBR
     );
-    paver.position.set(0.45, patioY + 0.09, 14.30 + p * 0.95);
+    paver.position.set(0.45, patioY + 0.045, 13.80 + p * 0.95);
     lawnGroup.add(paver);
   }
 
-  // Canteros perimetrales con arbustos ornamentales
+  // Canteros perimetrales bajos con arbustos ornamentales (sin árboles altos)
   [-4.40, 4.40].forEach((px) => {
-    [15.5, 18.5, 21.5, 24.0].forEach((pz) => {
+    [15.5, 18.5, 21.5, 24.5].forEach((pz) => {
       const shrub = new THREE.Mesh(
-        new THREE.SphereGeometry(0.42, 12, 10),
+        new THREE.SphereGeometry(0.35, 12, 10),
         mats.grassPBR
       );
-      shrub.scale.set(1, 0.75, 1.2);
-      shrub.position.set(px, patioY + 0.32, pz);
+      shrub.scale.set(1, 0.65, 1.1);
+      shrub.position.set(px, patioY + 0.24, pz);
       lawnGroup.add(shrub);
     });
   });
 
   tagGroupUserData(lawnGroup, {
     type: 'jardin_cesped',
-    name: 'Jardín Posterior Nivelado con Césped Esmeralda y Camineros Atérmicos',
-    dimensions: '9.50m × 12.00m (114.0 m² de Parque y Solárium hacia el Río)',
-    costo: 'Gs. 4.850.000 (Nivelación de Tierra Negra + Empastado Grama Esmeralda)',
-    status: 'Jardín con Césped Esmeralda Activo ✨',
-    desc: 'Parque posterior empastado con grama esmeralda paraguaya, camineros de losetas atérmicas y canteros vegetales.'
+    name: 'Patio Posterior 100% Nivelado a Ras del Subsuelo (Y = -2.34m • Sin Desnivel)',
+    dimensions: '9.50m × 13.00m (123.5 m² nivelados a cota del Subsuelo Y = -2.34m)',
+    costo: 'Gs. 4.850.000 (Nivelación + Empastado Grama Esmeralda)',
+    status: 'Patio Nivelado a Ras de Subsuelo ✨',
+    desc: 'El patio posterior no tiene desnivel: está 100% nivelado a la misma cota del suelo del Subsuelo (Y = -2.34m / Cota +97.66m), permitiendo salir caminando al mismo nivel hacia el jardín y la piscina.'
   });
   patioGroup.add(lawnGroup);
 
-  // 3B. SISTEMA SANITARIO Y CLOACAL AUTÓNOMO EN MARGEN IZQUIERDO/OESTE DEL PATIO (Ejes 8–9: x = -3.25m, z = 14.55m..20.20m)
-  //     100% libre de la huella de la Piscina proyectada (4.65m × 2.45m ubicada en x = +0.50m, centro-derecho) y con retiro > 1,50m de la medianera Oeste.
-  //     Activo desde `escenario300` porque es indispensable para habitar la casa en una zona con desnivel hacia el río.
+  // 3B. SISTEMA SANITARIO Y CLOACAL AUTÓNOMO EN EL PATIO POSTERIOR (Ejes 8–9: x = -3.25m, z = 14.55m..20.20m)
   if (scenarioKey !== 'hoy_en_obra') {
     const sewageSystemGroup = new THREE.Group();
     sewageSystemGroup.name = 'sistema_cloacal_patio_trasero';
     const sewX = -3.25;
 
     const pvcSewerMat = new THREE.MeshStandardMaterial({ color: 0xc2410c, roughness: 0.35, metalness: 0.10 });
-    const pvcPressureMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.30, metalness: 0.15 });
     const cutConcreteMat = new THREE.MeshStandardMaterial({
       color: 0x64748b,
       roughness: 0.75,
@@ -2808,15 +2789,15 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
     // 1) Cámara Desgrasadora y Cámara de Inspección Principal (0.65m × 0.65m, z = 14.55m)
     const greaseTrapGroup = new THREE.Group();
     const gtBody = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.75, 0.68), cutConcreteMat);
-    gtBody.position.set(sewX, patioY - 0.26, 14.55);
+    gtBody.position.set(sewX, patioY - 0.35, 14.55);
     greaseTrapGroup.add(gtBody);
 
     const gtLid = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.06, 0.72), mats.concretePBR);
-    gtLid.position.set(sewX, patioY + 0.14, 14.55);
+    gtLid.position.set(sewX, patioY + 0.05, 14.55);
     greaseTrapGroup.add(gtLid);
 
     const gtHandle = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.03, 0.04), mats.blackMetalMat);
-    gtHandle.position.set(sewX, patioY + 0.18, 14.55);
+    gtHandle.position.set(sewX, patioY + 0.09, 14.55);
     greaseTrapGroup.add(gtHandle);
 
     tagGroupUserData(greaseTrapGroup, {
@@ -2833,17 +2814,16 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
     // 2) Cámara Séptica Impermeable Bicameral de H°A° (1.60m × 1.20m × 1.40m prof., z = 16.55m)
     const septicGroup = new THREE.Group();
     const septicShell = new THREE.Mesh(new THREE.BoxGeometry(1.20, 1.35, 1.60), cutConcreteMat);
-    septicShell.position.set(sewX, patioY - 0.56, 16.55);
+    septicShell.position.set(sewX, patioY - 0.65, 16.55);
     septicGroup.add(septicShell);
 
     const septicTopSlab = new THREE.Mesh(new THREE.BoxGeometry(1.26, 0.08, 1.66), mats.concretePBR);
-    septicTopSlab.position.set(sewX, patioY + 0.14, 16.55);
+    septicTopSlab.position.set(sewX, patioY + 0.05, 16.55);
     septicGroup.add(septicTopSlab);
 
-    // Dos tapas de inspección herméticas sobre la Cámara Séptica
     [-0.42, 0.42].forEach((sz) => {
       const manholeLid = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.05, 20), mats.blackMetalMat);
-      manholeLid.position.set(sewX, patioY + 0.19, 16.55 + sz);
+      manholeLid.position.set(sewX, patioY + 0.10, 16.55 + sz);
       septicGroup.add(manholeLid);
     });
 
@@ -2853,8 +2833,8 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
       name: 'Cámara Séptica Impermeable Bicameral de H°A° (1.60m × 1.20m • x = -3.25m, z = 16.55m)',
       dimensions: '1.60m × 1.20m × 1.40m prof. (Capacidad ~2.700 Litros • 2 Tapas Herméticas)',
       costo: 'Gs. 4.800.000 (Mampostería Armada Impermeabilizada con Sika-1 + Losa Tapa H°A°)',
-      status: 'Tratamiento Primario de Efluentes (Sin chocar con Piscina) ♻️',
-      desc: 'Cámara séptica bicameral de decantación y digestión anaeróbica ubicada en el margen izquierdo del patio (x=-3.25m, z=16.55m), dejando libre el sector central/derecho para la Piscina de 4.65×2.45m.'
+      status: 'Tratamiento Cloacal Autónomo en Patio Trasero ♻️',
+      desc: 'Cámara séptica bicameral en el patio trasero (x=-3.25m, z=16.55m) para evitar el uso de la precaria red vecinal.'
     });
     sewageSystemGroup.add(septicGroup);
 
@@ -2864,69 +2844,61 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
       new THREE.CylinderGeometry(0.90, 0.85, 2.20, 24),
       mats.brickPBR
     );
-    wellCylinder.position.set(sewX, patioY - 0.98, 20.20);
+    wellCylinder.position.set(sewX, patioY - 1.08, 20.20);
     wellGroup.add(wellCylinder);
 
     const wellCapSlab = new THREE.Mesh(
       new THREE.CylinderGeometry(0.96, 0.96, 0.10, 24),
       mats.concretePBR
     );
-    wellCapSlab.position.set(sewX, patioY + 0.15, 20.20);
+    wellCapSlab.position.set(sewX, patioY + 0.06, 20.20);
     wellGroup.add(wellCapSlab);
 
     const wellInspectionPlug = new THREE.Mesh(
       new THREE.CylinderGeometry(0.28, 0.28, 0.06, 20),
       mats.blackMetalMat
     );
-    wellInspectionPlug.position.set(sewX, patioY + 0.21, 20.20);
+    wellInspectionPlug.position.set(sewX, patioY + 0.12, 20.20);
     wellGroup.add(wellInspectionPlug);
-
-    // Caño de ventilación superior con sombrerete
-    const ventPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 2.10, 12), pvcSewerMat);
-    ventPipe.position.set(sewX - 0.78, patioY + 1.15, 20.20);
-    wellGroup.add(ventPipe);
 
     tagGroupUserData(wellGroup, {
       type: 'instalacion_cloacal',
       bankCategory: 'nuevo_rojo',
       name: 'Pozo Ciego Absorbente Calzado en Ladrillo Tobatí (Ø 1.80m × 3.50m prof. • x = -3.25m, z = 20.20m)',
       dimensions: 'Diámetro Ø 1.80m × 3.50m prof. • Retiro > 1.50m de Medianera y > 2.50m de Piscina',
-      costo: 'Gs. 5.600.000 (Excavación + Calzado en Ladrillo + Tapa de H°A° + Ventilación)',
-      status: 'Absorción Sanitaria Autónoma Auditada en Patio Trasero 🛠️',
-      desc: 'Pozo absorbente calzado en mampostería de ladrillo en aparejo cribado con tapa superior de hormigón armado en x=-3.25m, z=20.20m, cumpliendo distancia reglamentaria >1.50m a medianera y >2.50m al vaso de la piscina.'
+      costo: 'Gs. 5.600.000 (Excavación + Calzado en Ladrillo + Tapa de H°A°)',
+      status: 'Absorción Sanitaria Autónoma en Patio Trasero 🛠️',
+      desc: 'Pozo absorbente calzado en ladrillo Tobatí con tapa de H°A° a ras del césped nivelado en x=-3.25m, z=20.20m.'
     });
     sewageSystemGroup.add(wellGroup);
 
-    // 4) Boca de Acople Rápido p/ Manguera de Camión Cisterna Atmosférico (Desagote vía Puerta de Servicio Eje G -> Escalera Lateral 1 -> Subsuelo -> Patio, sin motor de bombeo propio)
+    // 4) Cañería gravitatoria enterrada y Boca de Acople Rápido p/ Camión Cisterna
     const suctionAccessGroup = new THREE.Group();
 
-    // Cañería gravitatoria PVC Ø110mm entre Cámara Desgrasadora -> Cámara Séptica -> Pozo Ciego Absorbente
     const gravityPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 6.20, 14), pvcSewerMat);
     gravityPipe.rotation.x = Math.PI / 2;
-    gravityPipe.position.set(sewX, patioY + 0.06, 17.35);
+    gravityPipe.position.set(sewX, patioY - 0.12, 17.35);
     sewageSystemGroup.add(gravityPipe);
 
-    // Toma rápida de bronce/acero Ø100mm (4") sobre tapa del Pozo Ciego y Cámara Séptica para manguera de succión del Camión Cisterna
-    const suctionCoupling = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.14, 16), mats.chromeMat);
-    suctionCoupling.position.set(sewX, patioY + 0.28, 20.20);
+    const suctionCoupling = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.10, 16), mats.chromeMat);
+    suctionCoupling.position.set(sewX, patioY + 0.16, 20.20);
     suctionAccessGroup.add(suctionCoupling);
 
     tagGroupUserData(suctionAccessGroup, {
       type: 'instalacion_cloacal',
       bankCategory: 'nuevo_rojo',
-      name: 'Boca de Desagote Rápido Ø100mm p/ Camión Cisterna Atmosférico (Vía Escalera Lateral 1 — Sin Motor Eléctrico)',
-      dimensions: 'Acople Rápido Ø 100mm (4") en Pozo Ciego + Ruta Directa ~27m por Escalera Lateral de Servicio',
+      name: 'Boca de Desagote Rápido Ø100mm p/ Camión Cisterna Atmosférico (Vía Puerta de Servicio y Escalera 1)',
+      dimensions: 'Acople Rápido Ø 100mm (4") en Pozo Ciego + Ruta Directa ~27m por Escalera Lateral 1',
       costo: 'Gs. 0 en Motor Eléctrico (Ahorra Gs. 2.600.000 — El Camión Cisterna trae su propia bomba)',
-      status: 'Desagote Limpio por Escalera Lateral de Servicio sin Pisar la Vivienda ✨🚛',
-      desc: 'Siguiendo el criterio práctico de Leo y la validación del Maestro Plomero, no se instala motor de bombeo cloacal eléctrico: cuando se requiera desagotar el pozo ciego o la cámara séptica, el camión cisterna utiliza su propia bomba de vacío bajando 27m de manguera por la Puerta de Servicio (Eje G) y la Escalera Lateral 1.'
+      status: 'Desagote Limpio por Acceso de Servicio Lateral ✨🚛',
+      desc: 'El camión cisterna ingresa la manguera directamente desde la calle por la Puerta de Servicio Exterior (x=+4.35m) y baja por la Escalera 1 al Subsuelo sin pisar el interior social de la casa.'
     });
     sewageSystemGroup.add(suctionAccessGroup);
 
     patioGroup.add(sewageSystemGroup);
   }
 
-  // 3C. PISCINA DE H°A° (4.65m × 2.45m según Plano Oficial IE-IS-IH-ISD-IAA Pág. 2) + SOLÁRIUM CON REPOSERAS
-  //     Ubicada en x = +0.50m (sector central-derecho), garantizando > 2.50m de separación libre al Pozo Ciego (x = -3.25m).
+  // 3C. PISCINA DE H°A° (4.65m × 2.45m según Plano Oficial Pág. 2) + SOLÁRIUM CON REPOSERAS
   const showPoolAndQuincho = forceShowPoolQuincho || ['escenario440', 'edifica460', 'edifica573'].includes(scenarioKey);
   const poolQuinchoSubGroup = new THREE.Group();
   poolQuinchoSubGroup.name = 'pool_and_quincho_sub';
@@ -2934,82 +2906,76 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
 
   const poolX = 0.50;
   const poolZ = 18.80;
-  const poolL = 4.65; // Largo exacto plano oficial Pág. 2
-  const poolW = 2.45; // Ancho exacto plano oficial Pág. 2
+  const poolL = 4.65;
+  const poolW = 2.45;
 
   const poolGroup = new THREE.Group();
 
-  // Solárium y Borde Perimetral Atérmico Blanco alrededor de la piscina (5.65m × 3.45m)
   const copingDeck = new THREE.Mesh(
-    new THREE.BoxGeometry(poolW + 0.90, 0.12, poolL + 0.90),
+    new THREE.BoxGeometry(poolW + 0.90, 0.08, poolL + 0.90),
     mats.ceramicSanitaryMat
   );
-  copingDeck.position.set(poolX, patioY + 0.10, poolZ);
+  copingDeck.position.set(poolX, patioY + 0.06, poolZ);
   poolGroup.add(copingDeck);
 
-  // Interior revestido en venecita turquesa (`poolTilePBR`)
   const poolBasin = new THREE.Mesh(
-    new THREE.BoxGeometry(poolW, 0.08, poolL),
+    new THREE.BoxGeometry(poolW, 0.06, poolL),
     mats.poolTilePBR
   );
-  poolBasin.position.set(poolX, patioY + 0.13, poolZ);
+  poolBasin.position.set(poolX, patioY + 0.08, poolZ);
   poolGroup.add(poolBasin);
 
-  // Escalones romanos sumergidos en el extremo Norte de la piscina
   for (let rs = 0; rs < 3; rs++) {
     const rStep = new THREE.Mesh(
-      new THREE.BoxGeometry(poolW - 0.16, 0.06, 0.34),
+      new THREE.BoxGeometry(poolW - 0.16, 0.05, 0.34),
       mats.poolTilePBR
     );
-    rStep.position.set(poolX, patioY + 0.15 - rs * 0.02, poolZ - poolL / 2 + 0.22 + rs * 0.32);
+    rStep.position.set(poolX, patioY + 0.10 - rs * 0.02, poolZ - poolL / 2 + 0.22 + rs * 0.32);
     poolGroup.add(rStep);
   }
 
-  // Espejo de agua turquesa cristalino reflectivo (`poolWaterMat`)
   const waterSurface = new THREE.Mesh(
     new THREE.BoxGeometry(poolW - 0.06, 0.04, poolL - 0.06),
     mats.poolWaterMat
   );
-  waterSurface.position.set(poolX, patioY + 0.165, poolZ);
+  waterSurface.position.set(poolX, patioY + 0.115, poolZ);
   poolGroup.add(waterSurface);
 
-  // 2 Luminarias LED subacuáticas cian
   [-0.95, 0.95].forEach((lz) => {
     const poolLight = new THREE.Mesh(
       new THREE.CylinderGeometry(0.08, 0.08, 0.03, 16),
       mats.ledPoolCyanMat
     );
     poolLight.rotation.z = Math.PI / 2;
-    poolLight.position.set(poolX + poolW / 2 - 0.05, patioY + 0.14, poolZ + lz);
+    poolLight.position.set(poolX + poolW / 2 - 0.05, patioY + 0.09, poolZ + lz);
     poolGroup.add(poolLight);
   });
 
-  // Deck Solárium de Madera Lapacho con 2 Reposeras al Sur de la Piscina mirando al Río (z = 22.35m)
   const solariumDeck = new THREE.Mesh(
-    new THREE.BoxGeometry(poolW + 0.90, 0.08, 1.85),
+    new THREE.BoxGeometry(poolW + 0.90, 0.06, 1.85),
     mats.woodDeckPBR
   );
-  solariumDeck.position.set(poolX, patioY + 0.09, poolZ + poolL / 2 + 1.40);
+  solariumDeck.position.set(poolX, patioY + 0.05, poolZ + poolL / 2 + 1.40);
   poolGroup.add(solariumDeck);
 
   [-0.65, 0.65].forEach((lx) => {
     const loungerBase = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.22, 1.65), mats.woodDeckPBR);
-    loungerBase.position.set(poolX + lx, patioY + 0.22, poolZ + poolL / 2 + 1.40);
+    loungerBase.position.set(poolX + lx, patioY + 0.18, poolZ + poolL / 2 + 1.40);
     poolGroup.add(loungerBase);
 
     const loungerPad = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.07, 1.58), mats.bedSheetMat);
-    loungerPad.position.set(poolX + lx, patioY + 0.36, poolZ + poolL / 2 + 1.40);
+    loungerPad.position.set(poolX + lx, patioY + 0.32, poolZ + poolL / 2 + 1.40);
     poolGroup.add(loungerPad);
   });
 
   tagGroupUserData(poolGroup, {
     type: 'piscina_planificada',
     bankCategory: 'nuevo_rojo',
-    name: 'Piscina de H°A° (4.65m × 2.45m según Plano Oficial Pág. 2) + Solárium Mirador al Río',
-    dimensions: '4.65m × 2.45m (11.40 m² Espejo de Agua + Borde Atérmico y Deck Solárium Sur)',
+    name: 'Piscina de H°A° (4.65m × 2.45m según Plano Oficial Pág. 2) Nivelada en el Patio (Y = -2.34m)',
+    dimensions: '4.65m × 2.45m (11.40 m² Espejo de Agua • z = 16.48m..21.12m, Libre de Muralla de Fondo z = 26.80m)',
     costo: 'Gs. 34.500.000 (Vaso H°A° + Venecita + Filtro + Borde Atérmico + Luces LED)',
-    status: 'Planificación de Patio y Recreación (Cero Colisión con Pozo Ciego y Cámara Séptica) ✨',
-    desc: 'Piscina proyectada en el plano oficial de instalaciones (Lámina Pág. 2) desplazada al eje central-derecho (x=-0.35m), dejando el margen izquierdo libre para la Cámara Séptica, el Pozo Ciego Absorbente y la Cámara de Bombeo.'
+    status: 'Piscina Nivelada y Libre de Colisión con Muralla y Pozo Ciego ✨',
+    desc: 'Piscina proyectada en z = 16.48m..21.12m a cota del patio nivelado (Y = -2.34m), con más de 5 metros libres hasta la muralla trasera del lote (z = 26.80m).'
   });
   poolQuinchoSubGroup.add(poolGroup);
 
@@ -3021,51 +2987,46 @@ export function buildPatioPoolAndQuincho3D(THREE, targetGroup, mats, scenarioKey
   const qD = 4.40;
   const qH = 2.65;
 
-  // Plataforma de piso de madera Lapacho / porcelanato del Quincho
-  const qFloor = new THREE.Mesh(new THREE.BoxGeometry(qW, 0.10, qD), mats.woodDeckPBR);
-  qFloor.position.set(qX, patioY + 0.09, qZ);
+  const qFloor = new THREE.Mesh(new THREE.BoxGeometry(qW, 0.08, qD), mats.woodDeckPBR);
+  qFloor.position.set(qX, patioY + 0.05, qZ);
   quinchoGroup.add(qFloor);
 
-  // 4 Columnas pergoladas de acero negro y madera + Viga perimetral + Pérgola de listones de Lapacho
   [[-qW / 2 + 0.15, -qD / 2 + 0.15], [qW / 2 - 0.15, -qD / 2 + 0.15], [-qW / 2 + 0.15, qD / 2 - 0.15], [qW / 2 - 0.15, qD / 2 - 0.15]].forEach(([cx, cz]) => {
     const col = new THREE.Mesh(new THREE.BoxGeometry(0.14, qH, 0.14), mats.blackMetalMat);
-    col.position.set(qX + cx, patioY + qH / 2 + 0.10, qZ + cz);
+    col.position.set(qX + cx, patioY + qH / 2 + 0.06, qZ + cz);
     quinchoGroup.add(col);
   });
 
-  // Vigas perimetrales y 9 cabios de madera Lapacho de la pérgola del Quincho
   const pergolaRing = new THREE.Mesh(new THREE.BoxGeometry(qW, 0.16, qD), mats.blackMetalMat);
-  pergolaRing.position.set(qX, patioY + qH + 0.12, qZ);
+  pergolaRing.position.set(qX, patioY + qH + 0.08, qZ);
   quinchoGroup.add(pergolaRing);
 
   for (let b = -4; b <= 4; b++) {
     const beam = new THREE.Mesh(new THREE.BoxGeometry(qW + 0.25, 0.12, 0.08), mats.woodDeckPBR);
-    beam.position.set(qX, patioY + qH + 0.24, qZ + b * 0.46);
+    beam.position.set(qX, patioY + qH + 0.20, qZ + b * 0.46);
     quinchoGroup.add(beam);
   }
 
-  // Barra desayunadora y mesada de granito con bacha en el Quincho
   const qBarBase = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.92, 2.60), mats.stoneWallPBR);
-  qBarBase.position.set(qX + qW / 2 - 0.40, patioY + 0.56, qZ);
+  qBarBase.position.set(qX + qW / 2 - 0.40, patioY + 0.52, qZ);
   quinchoGroup.add(qBarBase);
 
   const qBarTop = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.045, 2.70), mats.granitePBR);
-  qBarTop.position.set(qX + qW / 2 - 0.40, patioY + 1.04, qZ);
+  qBarTop.position.set(qX + qW / 2 - 0.40, patioY + 1.00, qZ);
   quinchoGroup.add(qBarTop);
 
-  // Mesa de Quincho para 6 personas frente a la Piscina
   const qTable = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.76, 2.10), mats.woodDeckPBR);
-  qTable.position.set(qX - 0.40, patioY + 0.48, qZ);
+  qTable.position.set(qX - 0.40, patioY + 0.44, qZ);
   quinchoGroup.add(qTable);
 
   tagGroupUserData(quinchoGroup, {
     type: 'quincho_jardin',
     bankCategory: 'nuevo_rojo',
-    name: 'Quincho Semicubierto Pergolado en Jardín junto a la Piscina',
+    name: 'Quincho Semicubierto Pergolado en Jardín junto a la Piscina (Nivelado Y = -2.34m)',
     dimensions: '3.20m × 4.40m (14.08 m²) • Pérgola en Lapacho + Barra de Granito y Mesa',
     costo: 'Gs. 16.800.000 (Estructura Pergolada + Deck + Mesada Granito con Bacha)',
     status: 'Planificación de Quincho y Piscina ✨',
-    desc: 'Quincho exterior semicubierto en el jardín posterior, integrado directamente con la Piscina de 4.65×2.45m y con la salida del Subsuelo.'
+    desc: 'Quincho exterior semicubierto en el jardín posterior nivelado a ras del Subsuelo (Y = -2.34m).'
   });
   poolQuinchoSubGroup.add(quinchoGroup);
 
@@ -3318,7 +3279,9 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // 2) PUERTA DE SERVICIO / CIRCULACIÓN VERTICAL en x = +4.35m, z = 3.00m (Ejes 1–2, alineada con Escalera 2 PB→PA)
+  // 2) SISTEMA DE DOBLE PUERTA EN ACCESO DE SERVICIO AL SUBSUELO (Ejes 1–2: x = +3.84m..+4.87m, z = 3.00m..5.26m):
+  //    - PUERTA EXTERIOR DE SERVICIO en x = +4.355m, z = 3.00m (acceso directo desde la cochera/calle hacia la Escalera 1 del Subsuelo)
+  //    - PUERTA INTERIOR DE COMUNICACIÓN en x = +3.84m, z = 4.20m (permite salir desde adentro de la casa hacia el pasillo de servicio y la Escalera 1)
   const serviceDoor = createWoodenDoor3D(
     THREE,
     mats,
@@ -3329,17 +3292,60 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     2.10,
     0,
     0.45,
-    'Puerta Lateral de Acceso a Caja de Escalera 2 (x = +4.35m, Eje G • Ejes 1–2)',
+    'Puerta Exterior de Servicio — Acceso Directo a Escalera 1 del Subsuelo (x = +4.35m, Eje G)',
     {
       type: 'puerta_servicio',
       isServiceDoor: true,
-      dimensionsExtra: '0.85×2.10m + Reja Exterior • Alineada con Escalera 2 (PB → Escritorio PA)',
-      costo: 'Gs. 2.350.000 (Puerta Reforzada + Reja Protectora)',
-      status: 'Acceso Directo a Escalera 2 Norte/Derecha ✨',
-      desc: 'Ubicada entre Ejes 1 y 2 sobre Eje G (z=3.00m), alineada con la Escalera 2 que sube al Escritorio / Desk de Planta Alta (+2.88m).'
+      dimensionsExtra: '0.85×2.10m + Reja Exterior • Acceso Directo a Escalera 1 (PB ↔ Subsuelo)',
+      costo: 'Gs. 2.350.000 (Puerta Exterior de Servicio Reforzada + Reja)',
+      status: 'Puerta Exterior de Servicio Directa al Subsuelo ✨',
+      desc: 'Puerta exterior en el costado izquierdo visto de frente (x=+4.35m, Eje G) que da acceso directo desde el exterior a la Escalera 1 hacia el Subsuelo.'
     }
   );
   groups.archMain.add(serviceDoor);
+
+  // Tabique divisorio del Pasillo de Servicio en Eje 2 (x = +3.84m, z = 3.00m..5.26m) con la PUERTA INTERIOR hacia la casa
+  addWallSegment(
+    groups.archMain,
+    3.84, 3.00, 3.84, 3.78,
+    0.00, hPB, 0.15, intWallMat,
+    'Mocheta Sur Pasillo de Servicio en Eje 2 (x = +3.84m, z = 3.00..3.78m)',
+    'Separa el pasillo de acceso directo al Subsuelo respecto del Estar interior.'
+  );
+  addWallSegment(
+    groups.archMain,
+    3.84, 4.62, 3.84, 5.26,
+    0.00, hPB, 0.15, intWallMat,
+    'Mocheta Norte Pasillo de Servicio en Eje 2 (x = +3.84m, z = 4.62..5.26m)',
+    'Cierra el pasillo de servicio junto al arranque de la Escalera 1 al Subsuelo.'
+  );
+  addWallSegment(
+    groups.archMain,
+    3.84, 3.78, 3.84, 4.62,
+    2.12, 0.70, 0.15, intWallMat,
+    'Dintel Puerta Interior de Servicio en Eje 2 (x = +3.84m)',
+    'Dintel sobre la puerta interior que comunica el Estar con el acceso al Subsuelo.'
+  );
+  const serviceDoorInterior = createWoodenDoor3D(
+    THREE,
+    mats,
+    3.84,
+    0.00,
+    4.20,
+    0.82,
+    2.10,
+    Math.PI / 2,
+    -0.55,
+    'Puerta Interior de Acceso a Escalera 1 del Subsuelo y Salida de Servicio (x = +3.84m, z = 4.20m)',
+    {
+      type: 'puerta_servicio_interior',
+      dimensionsExtra: '0.82×2.10m en Eje 2 • Conecta el Interior de la Casa con la Escalera al Subsuelo y la Puerta Exterior',
+      costo: 'Gs. 1.450.000 (Puerta Placa Reforzada con Cerradura)',
+      status: 'Doble Acceso (Exterior + Interior) al Subsuelo Activo ✨',
+      desc: 'Permite pasar desde adentro de la casa hacia el pasillo de servicio para bajar al Subsuelo por la Escalera 1 o salir por la puerta exterior lateral.'
+    }
+  );
+  groups.archMain.add(serviceDoorInterior);
 
   addWallSegment(
     groups.archMain,
@@ -3387,21 +3393,20 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(createToilet3D(THREE, mats, -1.02, 0.03, 3.48, 0, 'SSHH / Baño Social PB (1.10×2.00m)'));
   groups.archMain.add(createVanity3D(THREE, mats, -1.32, 0.03, 4.30, 0.65, Math.PI / 2, 'SSHH / Baño Social PB (1.10×2.00m)'));
 
-  // Baranda interior de protección en PB junto al hueco de la Escalera 1 (Sur/Izquierda: x = -3.90m, z = 5.26..8.60m)
+  // Baranda interior de protección en PB junto al hueco de la Escalera 1 (+X: x = +3.84m, z = 5.26..8.80m)
   groups.archMain.add(
     createBalconyGrille3D(
-      THREE, mats, -3.88, 5.26, -3.88, 8.60, 0.02, 0.96,
-      'Baranda Interior de Seguridad sobre Escalera 1 hacia Subsuelo (Lado Sur/Izquierdo • x = -3.88m)'
+      THREE, mats, 3.84, 5.26, 3.84, 8.80, 0.02, 0.96,
+      'Baranda Interior de Seguridad sobre Hueco de Escalera 1 hacia Subsuelo (Eje 2 • x = +3.84m)'
     )
   );
 
-  // Tabique de acompañamiento de Escalera 2 en Eje 2 (x = +3.84m, z = 3.85..5.26m)
-  addWallSegment(
-    groups.archMain,
-    3.84, 3.85, 3.84, 5.26,
-    0.00, hPB, 0.15, intWallMat,
-    'Tabique Lateral Caja de Escalera 2 en Eje 2 (x = +3.84m)',
-    'Acompaña el arranque de la Escalera 2 (Lado Norte/Derecho) que sube al Escritorio de Planta Alta (+2.88m).'
+  // Baranda de acompañamiento de la Escalera 2 (PB → 2do Piso en el otro lado -X: x = -3.84m, z = 5.26..8.85m)
+  groups.archMain.add(
+    createBalconyGrille3D(
+      THREE, mats, -3.84, 5.26, -3.84, 8.85, 0.02, 0.96,
+      'Baranda de Escalera 2 hacia 2do Piso (Lado -X • Ejes 8–9 • x = -3.84m)'
+    )
   );
 
   // Gran Ventanal Panorámico Blindex de Punta a Punta en Eje B (z = 9.94m): Estar y Cocina/Comedor hacia la Galería al Río
@@ -3902,9 +3907,10 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(galGroup);
 
   // ============================================================================
-  // F. SUBSUELO REAL DE 100,71 m² LIBRES BAJO TODA LA PRIMERA LOSA (Y = -2.34m):
+  // F. SUBSUELO REAL DE 100,71 m² LIBRES COMO TODO UN SALÓN ABIERTO (Y = -2.34m):
+  //    - Al costado de la Escalera 1 (+X: x=+1.84..+3.84m, z=5.26..7.80m) queda el encofrado existente de H°A° (donde iba a ir el lavadero y no se usará; queda integrado al salón)
+  //    - Del otro lado (-X), contra la pared (Eje 9: x = -4.35m, z = 6.50m), se ubica el LAVADERO ABIERTO
   //    - PARRILLITA / QUINCHO INFERIOR HACIA EL PATIO (x = -4.50m..-2.00m, z = 12.20m..13.34m)
-  //    - LAVADERO OPERATIVO + DEPÓSITO CERRADO (z = 3.00m..5.20m)
   // ============================================================================
   const ySub = -2.34;
   const hSub = 2.28;
@@ -3929,98 +3935,39 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     groups.archSubsuelo,
     -4.87, 3.00, -4.87, 13.34,
     ySub, hSub, 0.20, subWallMat,
-    'Muro Lateral Sur/Izquierdo Subsuelo (Eje 9 • x = -4.87m • Junto a Escalera 1)',
-    'Cerramiento lateral Sur/Izquierdo del Subsuelo donde desembarca la Escalera 1.'
+    'Muro Lateral Oeste Subsuelo (Eje 9 • x = -4.87m • Pared del Lavadero Reubicado)',
+    'Cerramiento lateral del Subsuelo (del otro lado de la Escalera 1) contra el cual se ubica ahora el Lavadero.'
   );
   addWallSegment(
     groups.archSubsuelo,
     4.87, 3.00, 4.87, 13.34,
     ySub, hSub, 0.20, subWallMat,
-    'Muro Lateral Norte/Derecho Subsuelo (Eje 1 • x = +4.87m)',
-    'Cerramiento lateral Norte/Derecho del Subsuelo.'
+    'Muro Lateral Este Subsuelo (Eje 1 • x = +4.87m • Junto a Escalera 1 y Encofrado Existente)',
+    'Cerramiento lateral Este del Subsuelo donde desembarca la Escalera 1 existente.'
   );
 
-  // Núcleo de Depósito y Lavadero en Subsuelo (x = -3.80m a -0.80m, z = 3.00m a 5.20m), dejando libre x = -4.87..-3.90m (z = 5.26..8.60m) para el desembarco de Escalera 1
-  addWallSegment(
-    groups.archSubsuelo,
-    -0.80, 3.00, -0.80, 5.20,
-    ySub, hSub, 0.15, subWallMat,
-    'Tabique Divisorio Subsuelo — Depósito y Lavadero (x = -0.80m, z = 3.00..5.20m)',
-    'Cierra el núcleo de Depósito y Lavadero bajo la columna húmeda Eje F–G.'
-  );
-  addWallSegment(
-    groups.archSubsuelo,
-    -4.87, 5.20, -0.80, 5.20,
-    ySub, hSub, 0.15, subWallMat,
-    'Tabique Frontal Depósito y Lavadero en Subsuelo (Eje F • z = 5.20m)',
-    'Separa el Depósito y Lavadero del salón principal del Subsuelo y del pie de la Escalera 1.'
-  );
-
+  // F1. LAVADERO REUBICADO DEL OTRO LADO CONTRA LA PARED OESTE (Eje 9: x = -4.35m, z = 6.50m), dejando los 100,71 m² como TODO UN SALÓN ABIERTO
   groups.archSubsuelo.add(
-    createWoodenDoor3D(
-      THREE, mats, -1.65, ySub, 5.20, 0.82, 2.05, 0, 0.45,
-      'Puerta de Madera — Depósito y Lavadero en Subsuelo (Núcleo Húmedo Eje F–G)'
+    createLaundryModule3D(
+      THREE,
+      mats,
+      -4.35,
+      ySub + 0.03,
+      6.50,
+      Math.PI / 2,
+      'Lavadero en Subsuelo Reubicado Contra la Pared Opuesta (Eje 9 • x = -4.35m, z = 6.50m — Todo el Subsuelo Queda como un Gran Salón)'
     )
   );
 
-  // F1. Lavadero Operativo en Subsuelo bajo el núcleo húmedo Eje F–G
-  groups.archSubsuelo.add(
-    createLaundryModule3D(THREE, mats, -1.85, ySub + 0.03, 3.65, 0, 'Lavadero en Subsuelo • Núcleo Húmedo Eje F–G (300M)')
-  );
-
-  // F2. Estanterías de Depósito en Subsuelo (x = -4.35..-3.15m, z = 3.40..4.60m)
-  const storageRoomGroup = new THREE.Group();
-  [-4.35, -3.25].forEach((sx, idx) => {
-    const rackFrame = new THREE.Group();
-    [0.25, 0.75, 1.25, 1.75].forEach((shY) => {
-      const shelfPlate = new THREE.Mesh(
-        new THREE.BoxGeometry(0.50, 0.03, 1.45),
-        mats.woodDeckPBR
-      );
-      shelfPlate.position.set(sx, ySub + shY, 4.00);
-      rackFrame.add(shelfPlate);
-    });
-    [[-0.22, -0.68], [0.22, -0.68], [-0.22, 0.68], [0.22, 0.68]].forEach(([px, pz]) => {
-      const post = new THREE.Mesh(
-        new THREE.BoxGeometry(0.035, 1.85, 0.035),
-        mats.blackMetalMat
-      );
-      post.position.set(sx + px, ySub + 0.95, 4.00 + pz);
-      rackFrame.add(post);
-    });
-    [0.38, 0.88, 1.38].forEach((by, bIdx) => {
-      const box = new THREE.Mesh(
-        new THREE.BoxGeometry(0.38, 0.24, 0.42),
-        new THREE.MeshStandardMaterial({
-          color: (idx + bIdx) % 2 === 0 ? 0xd97706 : 0x475569,
-          roughness: 0.65
-        })
-      );
-      box.position.set(sx, ySub + by, 3.75 + bIdx * 0.30);
-      rackFrame.add(box);
-    });
-    storageRoomGroup.add(rackFrame);
-  });
-
-  tagGroupUserData(storageRoomGroup, {
-    type: 'ambiente_equipado',
-    name: 'Depósito Cerrado y Organizado en Subsuelo con Estanterías de Guardado (Eje F–G)',
-    dimensions: '4.07m × 2.20m (8.95 m² cerrados • Cota +97.66m / Y=-2.34m)',
-    costo: 'Incluido en Subsuelo Habitable (300M)',
-    status: 'Depósito Seco y Ventilado desde el Día 1 🎯',
-    desc: 'Depósito cerrado y lavadero en el Subsuelo alineados bajo el núcleo húmedo Eje F–G.'
-  });
-  groups.archSubsuelo.add(storageRoomGroup);
-
-  // F3. PARRILLITA / QUINCHO INFERIOR EN SUBSUELO HACIA EL PATIO (x = -4.50m..-2.00m, z = 12.20m..13.34m, Y = -2.34m)
+  // F2. PARRILLITA / QUINCHO INFERIOR EN SUBSUELO HACIA EL PATIO (x = -4.50m..-2.00m, z = 12.20m..13.34m, Y = -2.34m)
   groups.archSubsuelo.add(buildSubsueloParilla3D(THREE, mats, ySub, scenarioKey));
 
-  // Ventanal Corredizo Blindex del Subsuelo mirando al Jardín y Piscina (Eje B z=9.94m)
+  // Ventanal Corredizo Blindex del Gran Salón del Subsuelo mirando al Jardín Nivelado y Piscina (Eje B z=9.94m)
   groups.archSubsuelo.add(
     createBlindexWindow3D(
       THREE, mats, 0.45, ySub + 1.12, 9.94, 6.40, 2.15, 0,
-      'Ventanal Corredizo Blindex 10mm — Subsuelo hacia Quincho Inferior, Jardín y Piscina (Eje B)',
-      'Cerramiento de vidrio templado Blindex con salida directa a la Parrillita del Subsuelo y al patio con piscina.'
+      'Ventanal Corredizo Blindex 10mm — Gran Salón del Subsuelo hacia Quincho Inferior y Patio Nivelado (Eje B)',
+      'Cerramiento de vidrio templado Blindex del Salón del Subsuelo con salida al mismo nivel (Y = -2.34m) hacia la Parrillita y el patio.'
     )
   );
 
@@ -4094,7 +4041,7 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     -4.87, 3.00, 4.87, 3.00,
     0.00, 1.90, 0.20, extWallMat,
     'Muro Frontal de Mampostería Revocada en Planta Alta (Eje G • z = 3.00m — Sin Balcón Frontal)',
-    'Muro frontal sólido sobre la Línea de Edificación (Eje G z = 3.00m) que resguarda la privacidad del Vestidor, Baño en Suite y SSHH 2 hacia la calle.'
+    'Muro frontal sólido sobre la Línea de Edificación (Eje G z = 3.00m) que resguarda la privacidad de SSHH 2, Baño en Suite y Vestidor hacia la calle.'
   );
   addWallSegment(
     plantaAltaArchGroup,
@@ -4104,193 +4051,207 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     'Viga dintel superior sobre la faja de ventiluces altos de los núcleos húmedos y vestidor en Eje G.'
   );
   // Mochetas entre ventiluces altos en Eje G (z = 3.00m)
-  addWallSegment(plantaAltaArchGroup, -4.87, 3.00, -4.35, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Oeste Eje G', 'Mocheta de mampostería en fachada frontal PA.');
-  addWallSegment(plantaAltaArchGroup, -3.25, 3.00, -2.05, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Oeste Eje G', 'Mocheta entre ventiluz de Vestidor y ventiluz de Baño en Suite.');
-  addWallSegment(plantaAltaArchGroup, -0.45, 3.00, 1.95, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Este Eje G', 'Muro ciego sobre hall de escalera y separación con SSHH 2.');
-  addWallSegment(plantaAltaArchGroup, 3.55, 3.00, 4.87, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Este Eje G', 'Mocheta sobre el cajón de Escalera 2 en Eje G.');
+  addWallSegment(plantaAltaArchGroup, -4.87, 3.00, -3.55, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Oeste Eje G', 'Mocheta sobre el cajón de Escalera 2 en Eje G.');
+  addWallSegment(plantaAltaArchGroup, -1.95, 3.00, -1.35, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Oeste Eje G', 'Mocheta entre SSHH 2 y Baño en Suite.');
+  addWallSegment(plantaAltaArchGroup, 0.25, 3.00, 3.25, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Central-Este Eje G', 'Muro ciego entre Baño en Suite y Vestidor.');
+  addWallSegment(plantaAltaArchGroup, 4.35, 3.00, 4.87, 3.00, 1.90, 2.38, 0.20, extWallMat, 'Mocheta Frontal Este Eje G', 'Mocheta lateral Este en fachada frontal PA.');
 
-  // 3 Ventiluces Altos Horizontales (Clerestory Windows) sobre Eje G (z = 3.00m) para Vestidor, Baño en Suite y SSHH 2
+  // 3 Ventiluces Altos Horizontales (Clerestory Windows) sobre Eje G (z = 3.00m) para SSHH 2, Baño en Suite y Vestidor
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, -3.80, 2.14, 3.00, 1.10, 0.46, 0,
-      'Ventiluz Alto Horizontal — Vestidor en Suite (Fachada Eje G z = 3.00m)',
-      'Ventiluz superior tipo balancín en aluminio negro y vidrio traslúcido sobre Eje G para iluminación cenital del Vestidor.'
+      THREE, mats, -2.75, 2.14, 3.00, 1.60, 0.46, 0,
+      'Ventiluz Alto Horizontal — SSHH 2 / Baño de Planta Alta (Fachada Eje G z = 3.00m)',
+      'Ventiluz superior horizontal en fachada frontal Eje G para el segundo baño de Planta Alta (SSHH 2).'
     )
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, -1.25, 2.14, 3.00, 1.60, 0.46, 0,
+      THREE, mats, -0.55, 2.14, 3.00, 1.60, 0.46, 0,
       'Ventiluz Alto Horizontal — Baño en Suite (Fachada Eje G z = 3.00m)',
       'Ventiluz superior horizontal de ventilación cruzada e iluminación natural del Baño en Suite sobre Eje G.'
     )
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, 2.75, 2.14, 3.00, 1.60, 0.46, 0,
-      'Ventiluz Alto Horizontal — SSHH 2 / Baño de Planta Alta (Fachada Eje G z = 3.00m)',
-      'Ventiluz superior horizontal en fachada frontal Eje G para el segundo baño de Planta Alta (SSHH 2).'
+      THREE, mats, 3.80, 2.14, 3.00, 1.10, 0.46, 0,
+      'Ventiluz Alto Horizontal — Vestidor en Suite (Fachada Eje G z = 3.00m)',
+      'Ventiluz superior tipo balancín en aluminio negro y vidrio traslúcido sobre Eje G para iluminación cenital del Vestidor.'
     )
   );
 
-  // G3. Tabiquería Interior de Planta Alta según Plano Original:
-  //     - Franja Sur Eje F–G (z = 3.00m..5.00m): VESTIDOR (x=-4.87..-2.80m), BAÑO EN SUITE (x=-2.80..+0.50m), Hall, SSHH 2 (x=+1.69..+3.84m)
+  // G3. Tabiquería Interior de Planta Alta con PASILLO DISTRIBUIDOR FRANCO (z = 4.85m..6.00m, ancho 1.15m):
+  //     - Al subir la Escalera 2 (en Ejes 8-9, x = -4.87m..-3.84m, z = 5.26m..8.85m), se llega directamente al ESCRITORIO / DESK (x = -4.87m..-1.80m, z = 6.00m..9.94m) y al PASILLO DISTRIBUIDOR (x = -3.84m..+0.60m, z = 4.85m..6.00m).
+  //     - Franja Frontal Húmeda Eje F–G (z = 3.00m..4.85m, superpuesta sobre cocina y baño social de PB):
+  //       * SSHH 2 / Baño Planta Alta: x = -3.84m..-1.65m, z = 3.00m..4.85m (acceso desde Pasillo Distribuidor)
+  //       * Baño en Suite: x = -1.65m..+0.60m, z = 3.00m..4.85m (acceso privado desde Suite)
+  //       * Vestidor en Suite: x = +2.77m..+4.87m, z = 3.00m..4.85m (abierto hacia Suite)
   addWallSegment(
     plantaAltaArchGroup,
-    -2.80, 3.00, -2.80, 5.00,
+    -3.84, 3.00, -3.84, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Vestidor / Baño en Suite (x = -2.80m, z = 3.00..5.00m)',
-    'Divide el Vestidor (1.55m × 1.80m) del Baño en Suite (2.30m × 2.00m) sobre el núcleo húmedo de Eje F–G.'
-  );
-  addWallSegment(
-    plantaAltaArchGroup,
-    0.50, 3.00, 0.50, 5.00,
-    0.00, hPA, 0.15, intWallMat,
-    'Muro Este del Baño en Suite (x = +0.50m, z = 3.00..5.00m)',
-    'Cierra el Baño en Suite respecto del pasillo distribuidor de Planta Alta.'
-  );
-  addWallSegment(
-    plantaAltaArchGroup,
-    1.69, 3.00, 1.69, 5.00,
-    0.00, hPA, 0.15, intWallMat,
-    'Muro Oeste de SSHH 2 / Baño de Planta Alta (x = +1.69m, z = 3.00..5.00m)',
-    'Cierra el segundo baño de Planta Alta (SSHH 2 • 2.30m × 2.00m) sobre Eje F–G.'
-  );
-  addWallSegment(
-    plantaAltaArchGroup,
-    3.84, 3.00, 3.84, 5.00,
-    0.00, hPA, 0.15, intWallMat,
-    'Muro Este de SSHH 2 junto a Escalera 2 (x = +3.84m, z = 3.00..5.00m)',
+    'Muro Oeste de SSHH 2 junto a Escalera 2 (x = -3.84m, z = 3.00..4.85m)',
     'Separa el baño SSHH 2 de la caja de la Escalera 2 (PB -> PA).'
   );
-
-  // Muro transversal en Eje F (z = 5.00m) que separa Vestidor + Baño Suite + SSHH 2 respecto de los Dormitorios y Circulación
   addWallSegment(
     plantaAltaArchGroup,
-    -4.87, 5.00, -3.95, 5.00,
+    -1.65, 3.00, -1.65, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Eje F — Cierre de Vestidor hacia Suite (z = 5.00m)',
-    'Tabique con vano de acceso directo entre el Dormitorio Principal en Suite y su Vestidor.'
+    'Tabique Divisorio SSHH 2 / Baño en Suite (x = -1.65m, z = 3.00..4.85m)',
+    'Divide el baño general de Planta Alta (SSHH 2) respecto del Baño Principal en Suite sobre el núcleo húmedo frontal.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -3.10, 5.00, -1.85, 5.00,
+    0.60, 3.00, 0.60, 3.50,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Eje F — Divisoria Vestidor y Baño en Suite / Dormitorio Principal (z = 5.00m)',
-    'Muro sanitario sobre Eje F (plomada directa con el núcleo húmedo de Planta Baja).'
+    'Mocheta Sur Puerta Baño en Suite (x = +0.60m, z = 3.00..3.50m)',
+    'Mocheta de acceso privado desde el Dormitorio Principal hacia su Baño en Suite.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -1.05, 5.00, 0.50, 5.00,
+    0.60, 4.30, 0.60, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Eje F — Cierre Norte Baño en Suite (z = 5.00m)',
-    'Cierre del Baño Principal en Suite hacia el Dormitorio Principal.'
+    'Mocheta Norte Puerta Baño en Suite (x = +0.60m, z = 4.30..4.85m)',
+    'Cierra el Baño en Suite y recibe la puerta de acceso a la Suite Principal.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    1.69, 5.00, 2.35, 5.00,
+    2.77, 3.00, 2.77, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Eje F — Cierre Oeste SSHH 2 (z = 5.00m)',
-    'Mocheta de acceso al segundo baño de Planta Alta (SSHH 2).'
-  );
-  addWallSegment(
-    plantaAltaArchGroup,
-    3.15, 5.00, 3.84, 5.00,
-    0.00, hPA, 0.15, intWallMat,
-    'Muro Eje F — Cierre Este SSHH 2 (z = 5.00m)',
-    'Cierre del baño SSHH 2 junto al desembarco de Escalera 2.'
+    'Tabique Lateral de Vestidor en Suite (x = +2.77m, z = 3.00..4.85m)',
+    'Delimita el Vestidor independiente (2.10m × 1.85m) dentro de la Suite Principal.'
   );
 
-  // Tabique Longitudinal en Eje 5 (x = -0.74m, z = 5.00m..9.94m) que separa DORMITORIO PRINCIPAL EN SUITE (Oeste) de DORMITORIO 2 (Centro)
+  // Muro Norte de la Franja Húmeda (z = 4.85m) que conforma el lado Sur del PASILLO DISTRIBUIDOR (z = 4.85m..6.00m)
   addWallSegment(
     plantaAltaArchGroup,
-    -0.74, 5.00, -0.74, 5.40,
+    -3.84, 4.85, -3.15, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Mocheta Sur Eje 5 — Acceso a Dormitorio Principal en Suite (x = -0.74m)',
-    'Mocheta de arranque del muro divisorio de la Suite Principal.'
+    'Muro Sur Pasillo Distribuidor — Cierre Oeste SSHH 2 (z = 4.85m)',
+    'Mocheta de puerta del baño SSHH 2 sobre el Pasillo Distribuidor.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -0.74, 6.26, -0.74, 9.94,
+    -2.35, 4.85, 0.60, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Eje 5 — Dormitorio Principal en Suite / Dormitorio 2 (x = -0.74m, z = 6.26..9.94m)',
-    'Divide el Dormitorio Principal en Suite (5.00m × 3.95m al Oeste) respecto del Dormitorio 2 (3.85m × 3.00m al Centro).'
-  );
-
-  // Cerramiento de DORMITORIO 2 (x = -0.74m..+1.80m, z = 5.26m..9.94m) respecto del Pasillo y del ESCRITORIO / DESK (x = +1.80m..+4.87m)
-  addWallSegment(
-    plantaAltaArchGroup,
-    -0.74, 5.26, 0.35, 5.26,
-    0.00, hPA, 0.15, intWallMat,
-    'Muro Sur Dormitorio 2 hacia Pasillo Distribuidor (z = 5.26m)',
-    'Cerramiento del Dormitorio 2 hacia el hall distribuidor de Planta Alta.'
+    'Muro Sur Pasillo Distribuidor — Cierre SSHH 2 y Baño en Suite (z = 4.85m)',
+    'Pared continua que delimita el Pasillo Distribuidor de 1.15m de ancho libre en Planta Alta.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    1.17, 5.26, 1.80, 5.26,
+    2.77, 4.85, 3.40, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Mocheta Este Puerta Dormitorio 2 (z = 5.26m)',
-    'Mocheta de puerta de acceso al Dormitorio 2.'
+    'Mocheta Oeste Puerta Vestidor en Suite (z = 4.85m)',
+    'Cierre frontal del Vestidor hacia el Dormitorio Principal en Suite.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    1.80, 5.26, 1.80, 9.94,
+    4.20, 4.85, 4.87, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Dormitorio 2 / Escritorio-Desk (x = +1.80m, z = 5.26..9.94m)',
-    'Separa el Dormitorio 2 (3.85m × 3.00m) del sector abierto de Escritorio / Desk (3.50m × 2.30m) en el desembarco de la Escalera 2.'
+    'Mocheta Este Puerta Vestidor en Suite (z = 4.85m)',
+    'Mocheta derecha de acceso al Vestidor en Suite.'
   );
 
-  // Puertas Interiores de Madera en Planta Alta (Vestidor, Baño en Suite, SSHH 2, Dormitorio Principal y Dormitorio 2)
+  // Muro Norte del PASILLO DISTRIBUIDOR (z = 6.00m) y acceso limpio a DORMITORIO 2 (x = -1.80m..+0.60m, z = 6.00m..9.94m)
+  addWallSegment(
+    plantaAltaArchGroup,
+    -1.80, 6.00, -1.02, 6.00,
+    0.00, hPA, 0.15, intWallMat,
+    'Muro Norte Pasillo Distribuidor — Cierre Oeste Dormitorio 2 (z = 6.00m)',
+    'Separa el Dormitorio 2 del Pasillo Distribuidor de Planta Alta.'
+  );
+  addWallSegment(
+    plantaAltaArchGroup,
+    -0.18, 6.00, 0.60, 6.00,
+    0.00, hPA, 0.15, intWallMat,
+    'Muro Norte Pasillo Distribuidor — Cierre Este Dormitorio 2 (z = 6.00m)',
+    'Mocheta de puerta del Dormitorio 2 en esquina con el acceso a la Suite Principal.'
+  );
+
+  // Tabique Divisorio entre ESCRITORIO / DESK (x = -4.87m..-1.80m) y DORMITORIO 2 (x = -1.80m..+0.60m)
+  addWallSegment(
+    plantaAltaArchGroup,
+    -1.80, 6.00, -1.80, 9.94,
+    0.00, hPA, 0.15, intWallMat,
+    'Tabique Divisorio Escritorio-Desk / Dormitorio 2 (x = -1.80m, z = 6.00..9.94m)',
+    'Separa el Escritorio / Desk abierto al desembarco de la Escalera 2 respecto del Dormitorio 2.'
+  );
+
+  // Tabique Divisorio entre DORMITORIO 2 + PASILLO (Oeste) y DORMITORIO PRINCIPAL EN SUITE (x = +0.60m..+4.87m, Este)
+  addWallSegment(
+    plantaAltaArchGroup,
+    0.60, 4.85, 0.60, 5.00,
+    0.00, hPA, 0.15, intWallMat,
+    'Mocheta Sur Puerta Suite Principal (x = +0.60m)',
+    'Arranque del tabique de entrada al Dormitorio Principal en Suite al final del Pasillo Distribuidor.'
+  );
+  addWallSegment(
+    plantaAltaArchGroup,
+    0.60, 5.86, 0.60, 9.94,
+    0.00, hPA, 0.15, intWallMat,
+    'Tabique Divisorio Dormitorio 2 / Dormitorio Principal en Suite (x = +0.60m, z = 5.86..9.94m)',
+    'Divide el Dormitorio 2 central respecto de la gran Suite Principal (+X).'
+  );
+
+  // Baranda de Protección Interna de la Escalera 2 en Planta Alta (x = -3.84m, z = 5.26m..8.85m)
+  plantaAltaArchGroup.add(
+    createBalconyGrille3D(
+      THREE, mats, -3.84, 5.26, -3.84, 8.85, 0.05, 0.98,
+      'Baranda de Seguridad del Hueco de Escalera 2 en Escritorio / Planta Alta (x = -3.84m)'
+    )
+  );
+
+  // 5 Puertas Interiores de Madera en Planta Alta (100% libres de colisión y alineadas al Pasillo Distribuidor)
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, -3.52, localFloorY, 5.00, 0.80, 2.10, 0, 0.50,
-      'Puerta Placa de Madera — Acceso a Vestidor (1.55m × 1.80m) desde Dormitorio en Suite'
+      THREE, mats, -2.75, localFloorY, 4.85, 0.80, 2.10, 0, -0.55,
+      'Puerta de Madera Hidrófuga — SSHH 2 / Baño de Planta Alta (desde Pasillo Distribuidor z = 4.85m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, -1.45, localFloorY, 5.00, 0.80, 2.10, 0, 0.55,
-      'Puerta de Madera Hidrófuga — Baño Principal en Suite (2.30m × 2.00m en Eje F–G)'
+      THREE, mats, -0.60, localFloorY, 6.00, 0.84, 2.10, 0, 0.60,
+      'Puerta Placa de Madera — Acceso a Dormitorio 2 (desde Pasillo Distribuidor z = 6.00m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, 2.75, localFloorY, 5.00, 0.80, 2.10, 0, -0.55,
-      'Puerta de Madera Hidrófuga — SSHH 2 / Baño de Planta Alta (2.30m × 2.00m en Eje F–G)'
+      THREE, mats, 0.60, localFloorY, 5.43, 0.86, 2.10, -Math.PI / 2, 0.65,
+      'Puerta Principal de Madera — Acceso a Dormitorio Principal en Suite (al final del Pasillo Distribuidor x = +0.60m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, -0.74, localFloorY, 5.83, 0.86, 2.10, Math.PI / 2, 0.65,
-      'Puerta Principal de Madera — Acceso a Dormitorio Principal en Suite (5.00m × 3.95m)'
+      THREE, mats, 0.60, localFloorY, 3.90, 0.80, 2.10, Math.PI / 2, 0.55,
+      'Puerta de Madera Hidrófuga — Acceso Privado a Baño en Suite (x = +0.60m, z = 3.90m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, 0.76, localFloorY, 5.26, 0.82, 2.10, 0, 0.60,
-      'Puerta Placa de Madera — Acceso a Dormitorio 2 (3.85m × 3.00m)'
+      THREE, mats, 3.80, localFloorY, 4.85, 0.80, 2.10, 0, -0.50,
+      'Puerta Placa de Madera — Acceso a Vestidor en Suite (z = 4.85m)'
     )
   );
 
   // Cerramiento Vidriado sobre Eje B (z = 9.94m) con Salida a DECK 2 / TERRAZA AL RÍO (z = 9.94m..13.34m)
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, -2.80, 1.25, 9.94, 3.80, 2.30, 0,
-      'Gran Ventanal Corredizo Blindex — Dormitorio Principal en Suite hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
-      'Puerta-ventana corrediza Blindex 10mm del Dormitorio Principal en Suite con salida directa a la Terraza Panorámica al Río Paraguay.'
+      THREE, mats, -3.33, 1.25, 9.94, 2.85, 2.30, 0,
+      'Ventanal Panorámico Blindex — Escritorio / Desk hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
+      'Cerramiento vidriado del Escritorio / Home-Office al subir la Escalera 2 con luz natural Norte y salida al Deck 2.'
     )
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, 0.53, 1.25, 9.94, 2.30, 2.30, 0,
+      THREE, mats, -0.60, 1.25, 9.94, 2.20, 2.30, 0,
       'Puerta-Ventana Corrediza Blindex — Dormitorio 2 hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
       'Ventanal corredizo de piso a dintel en el Dormitorio 2 con vista y salida a la terraza mirador Norte.'
     )
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, 3.33, 1.25, 9.94, 2.85, 2.30, 0,
-      'Ventanal Panorámico Blindex — Escritorio / Desk hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
-      'Cerramiento vidriado del Escritorio / Home-Office de Ruth y Leo con luz natural Norte y salida al Deck 2.'
+      THREE, mats, 2.75, 1.25, 9.94, 3.80, 2.30, 0,
+      'Gran Ventanal Corredizo Blindex — Dormitorio Principal en Suite hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
+      'Puerta-ventana corrediza Blindex 10mm del Dormitorio Principal en Suite con salida directa a la Terraza Panorámica.'
     )
   );
 
@@ -4314,62 +4275,62 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // G4. Equipamiento de VESTIDOR (x = -4.87..-2.80m, z = 3.00..5.00m), BAÑO EN SUITE (x = -2.80..+0.50m, z = 3.00..5.00m) y SSHH 2 (x = +1.69..+3.84m, z = 3.00..5.00m)
-  // Baño Principal en Suite (2.30m × 2.00m sobre Eje F–G, apilado sobre el núcleo húmedo de PB)
-  plantaAltaArchGroup.add(createToilet3D(THREE, mats, -2.15, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
-  plantaAltaArchGroup.add(createBidet3D(THREE, mats, -1.45, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
-  plantaAltaArchGroup.add(createVanity3D(THREE, mats, -0.35, localFloorY + 0.02, 3.48, 0.90, 0, 'Baño Principal en Suite (Eje F–G)'));
-  plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, -2.22, localFloorY + 0.02, 4.35, 1.05, 1.15, 0, 'Baño Principal en Suite (Eje F–G)'));
+  // G4. Equipamiento de SSHH 2 (x = -3.84..-1.65m, z = 3.00..4.85m), BAÑO EN SUITE (x = -1.65..+0.60m, z = 3.00..4.85m) y VESTIDOR (x = +2.77..+4.87m, z = 3.00..4.85m)
+  // SSHH 2 / Segundo Baño Completo de Planta Alta (sobre Eje F–G, acceso desde Pasillo Distribuidor)
+  plantaAltaArchGroup.add(createToilet3D(THREE, mats, -3.30, localFloorY + 0.02, 3.42, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
+  plantaAltaArchGroup.add(createVanity3D(THREE, mats, -2.55, localFloorY + 0.02, 3.48, 0.85, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
+  plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, -2.10, localFloorY + 0.02, 4.25, 0.85, 1.05, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
 
-  // SSHH 2 / Segundo Baño Completo de Planta Alta (2.30m × 2.00m en x = +1.69..+3.84m, z = 3.00..5.00m)
-  plantaAltaArchGroup.add(createToilet3D(THREE, mats, 2.15, localFloorY + 0.02, 3.42, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
-  plantaAltaArchGroup.add(createVanity3D(THREE, mats, 2.95, localFloorY + 0.02, 3.48, 0.85, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
-  plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, 3.32, localFloorY + 0.02, 4.35, 0.95, 1.15, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
+  // Baño Principal en Suite (sobre Eje F–G, apilado sobre el núcleo húmedo de PB)
+  plantaAltaArchGroup.add(createToilet3D(THREE, mats, -1.15, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
+  plantaAltaArchGroup.add(createBidet3D(THREE, mats, -0.50, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
+  plantaAltaArchGroup.add(createVanity3D(THREE, mats, 0.12, localFloorY + 0.02, 3.48, 0.78, 0, 'Baño Principal en Suite (Eje F–G)'));
+  plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, -1.10, localFloorY + 0.02, 4.25, 0.95, 1.05, 0, 'Baño Principal en Suite (Eje F–G)'));
 
-  // G5. DORMITORIO PRINCIPAL EN SUITE (5.00m × 3.95m en x = -4.87..-0.74m, z = 5.00..9.94m):
+  // G5. DORMITORIO PRINCIPAL EN SUITE (x = +0.60..+4.87m, z = 4.85..9.94m):
   //     1 Sommier de 1,40m + 2 Mesas de Luz + Tocador #1 con Espejo (Propios — Gs. 0)
   const suiteOwnFurnitureGroup = new THREE.Group();
 
   const headboard = new THREE.Mesh(new THREE.BoxGeometry(0.10, 1.10, 1.44), mats.woodDeckPBR);
-  headboard.position.set(-4.72, localFloorY + 0.56, 7.55);
+  headboard.position.set(4.72, localFloorY + 0.56, 7.55);
   suiteOwnFurnitureGroup.add(headboard);
 
   const sommierBase = new THREE.Mesh(new THREE.BoxGeometry(1.90, 0.28, 1.40), mats.linenSofaMat);
-  sommierBase.position.set(-3.75, localFloorY + 0.15, 7.55);
+  sommierBase.position.set(3.75, localFloorY + 0.15, 7.55);
   suiteOwnFurnitureGroup.add(sommierBase);
 
   const sommierMattress = new THREE.Mesh(new THREE.BoxGeometry(1.90, 0.24, 1.40), mats.bedSheetMat);
-  sommierMattress.position.set(-3.75, localFloorY + 0.40, 7.55);
+  sommierMattress.position.set(3.75, localFloorY + 0.40, 7.55);
   suiteOwnFurnitureGroup.add(sommierMattress);
 
   const duvet = new THREE.Mesh(new THREE.BoxGeometry(1.30, 0.25, 1.42), mats.bedDuvetMat);
-  duvet.position.set(-3.44, localFloorY + 0.41, 7.55);
+  duvet.position.set(3.44, localFloorY + 0.41, 7.55);
   suiteOwnFurnitureGroup.add(duvet);
 
   [-0.34, 0.34].forEach((pz) => {
     const pillow = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.12, 0.52), mats.bedSheetMat);
-    pillow.position.set(-4.42, localFloorY + 0.56, 7.55 + pz);
+    pillow.position.set(4.42, localFloorY + 0.56, 7.55 + pz);
     suiteOwnFurnitureGroup.add(pillow);
   });
 
   // 2 Mesas de Luz (0.45m × 0.40m × 0.52m c/u, Propias — Gs. 0)
   [-0.96, 0.96].forEach((nz) => {
     const nightStand = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.52, 0.45), mats.woodDoorPBR);
-    nightStand.position.set(-4.52, localFloorY + 0.26, 7.55 + nz);
+    nightStand.position.set(4.52, localFloorY + 0.26, 7.55 + nz);
     suiteOwnFurnitureGroup.add(nightStand);
 
     const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.11, 0.22, 14), mats.ledWarmMat);
-    lamp.position.set(-4.52, localFloorY + 0.63, 7.55 + nz);
+    lamp.position.set(4.52, localFloorY + 0.63, 7.55 + nz);
     suiteOwnFurnitureGroup.add(lamp);
   });
 
   // Tocador de Dormitorio #1 con Espejo y Cajones en la Suite (0.85m × 0.42m × 1.45m, Propio — Gs. 0)
   const dresser1Base = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.76, 0.85), mats.woodDoorPBR);
-  dresser1Base.position.set(-1.05, localFloorY + 0.38, 7.85);
+  dresser1Base.position.set(1.05, localFloorY + 0.38, 7.85);
   suiteOwnFurnitureGroup.add(dresser1Base);
 
   const dresser1Mirror = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.68, 0.65), mats.mirrorMat);
-  dresser1Mirror.position.set(-0.85, localFloorY + 1.10, 7.85);
+  dresser1Mirror.position.set(0.85, localFloorY + 1.10, 7.85);
   suiteOwnFurnitureGroup.add(dresser1Mirror);
 
   tagGroupUserData(suiteOwnFurnitureGroup, {
@@ -4378,33 +4339,33 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     dimensions: 'Sommier 1.40m × 1.90m + 2 Mesas de Luz (0.45×0.40m) + Tocador #1 (0.85×0.42m) en Suite PA',
     costo: 'Gs. 0 (Propio de Ruth y Leo — A trasladar)',
     status: 'Propio del Propietario en Suite PA (Gs. 0 — A trasladar) 📦',
-    desc: 'Equipamiento propio de Ruth y Leo instalado en el Dormitorio Principal en Suite (5.00m × 3.95m, z=5.00..9.94m) con Vestidor independiente, Baño en Suite y salida a Deck 2 / Terraza al Río.'
+    desc: 'Equipamiento propio de Ruth y Leo instalado en el Dormitorio Principal en Suite (x=+0.60..+4.87m, z=4.85..9.94m) con Vestidor independiente, Baño en Suite y salida a Deck 2 / Terraza al Río.'
   });
   plantaAltaArchGroup.add(suiteOwnFurnitureGroup);
 
-  // G6. ESCRITORIO / DESK (3.50m × 2.30m en x = +1.80m..+4.87m, z = 7.37m..9.94m, al desembarco de Escalera 2):
+  // G6. ESCRITORIO / DESK (en x = -4.87m..-1.80m, z = 6.00m..9.94m, inmediatamente al subir la Escalera 2):
   //     2 Escritorios pequeños de Ruth y Leo + 2 Sillas de oficina + Máquina de coser antigua
   const homeOfficePAGroup = new THREE.Group();
 
-  [2.45, 3.60].forEach((dxOffset) => {
-    const deskTop = new THREE.Mesh(new THREE.BoxGeometry(1.00, 0.035, 0.52), mats.woodDeckPBR);
-    deskTop.position.set(dxOffset, localFloorY + 0.75, 8.85);
+  [-3.40, -2.35].forEach((dxOffset) => {
+    const deskTop = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.035, 0.52), mats.woodDeckPBR);
+    deskTop.position.set(dxOffset, localFloorY + 0.75, 9.15);
     homeOfficePAGroup.add(deskTop);
 
-    [[-0.45, -0.22], [0.45, -0.22], [-0.45, 0.22], [0.45, 0.22]].forEach(([lx, lz]) => {
+    [[-0.42, -0.22], [0.42, -0.22], [-0.42, 0.22], [0.42, 0.22]].forEach(([lx, lz]) => {
       const dLeg = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.73, 0.04), mats.blackMetalMat);
-      dLeg.position.set(dxOffset + lx, localFloorY + 0.37, 8.85 + lz);
+      dLeg.position.set(dxOffset + lx, localFloorY + 0.37, 9.15 + lz);
       homeOfficePAGroup.add(dLeg);
     });
 
     const laptop = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.22, 0.02), mats.blackMetalMat);
-    laptop.position.set(dxOffset, localFloorY + 0.88, 8.95);
+    laptop.position.set(dxOffset, localFloorY + 0.88, 9.25);
     homeOfficePAGroup.add(laptop);
   });
 
-  // 2 Sillas Ergonómicas de Oficina en Escritorio / Desk (x = 2.45m y 3.60m)
-  [2.45, 3.60].forEach((chairX) => {
-    const chairZ = 8.32;
+  // 2 Sillas Ergonómicas de Oficina en Escritorio / Desk (x = -3.40m y -2.35m)
+  [-3.40, -2.35].forEach((chairX) => {
+    const chairZ = 8.62;
     const chairStarBase = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.04, 5), mats.blackMetalMat);
     chairStarBase.position.set(chairX, localFloorY + 0.04, chairZ);
     homeOfficePAGroup.add(chairStarBase);
@@ -4425,17 +4386,17 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   tagGroupUserData(homeOfficePAGroup, {
     type: 'mobiliario_propio',
     name: 'Escritorio / Desk en Planta Alta (3.50m × 2.30m • Desembarco Escalera 2): 2 Escritorios de Ruth y Leo + 2 Sillas Ergonómicas',
-    dimensions: 'Ambiente Escritorio 3.50m × 2.30m (x=+1.80..+4.87m, z=7.37..9.94m) • 2 Escritorios 1.00×0.52m',
+    dimensions: 'Ambiente Escritorio 3.50m × 2.30m (x=-4.87..-1.80m, z=6.00..9.94m) • 2 Escritorios 0.95×0.52m',
     costo: '2 Escritorios + 1 Silla Gs. 0 (Propios) • 2da Silla Ergonómica: Gs. 850.000',
     status: 'Escritorio / Home-Office Doble de Ruth y Leo 📦✨',
-    desc: 'Sector de Escritorio / Desk (3.50m × 2.30m) ubicado al desembarco de la Escalera 2 en Planta Alta según el plano original, con vista directa al Río Paraguay y salida al Deck 2.'
+    desc: 'Sector de Escritorio / Desk ubicado inmediatamente al subir la Escalera 2 en Planta Alta según el plano original, con vista directa al Río Paraguay y salida al Deck 2.'
   });
   plantaAltaArchGroup.add(homeOfficePAGroup);
 
-  // Máquina de Coser Antigua en el sector Escritorio / Desk (x = 2.15m, z = 7.75m, contra tabique x = +1.80m)
+  // Máquina de Coser Antigua en el sector Escritorio / Desk (x = -2.15m, z = 7.25m, contra tabique x = -1.80m)
   const antiqueSewingGroup = new THREE.Group();
-  const asmX = 2.15;
-  const asmZ = 7.75;
+  const asmX = -2.15;
+  const asmZ = 7.25;
 
   [-0.32, 0.32].forEach((lz) => {
     const sLeg = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.72, 0.035), mats.blackMetalMat);
@@ -4470,19 +4431,19 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
 
   tagGroupUserData(antiqueSewingGroup, {
     type: 'mobiliario_propio',
-    name: 'Máquina de Coser Antigua Completa en Escritorio / Desk de Planta Alta (x = 2.15m, z = 7.75m)',
+    name: 'Máquina de Coser Antigua Completa en Escritorio / Desk de Planta Alta (x = -2.15m, z = 7.25m)',
     dimensions: '0.78m × 0.46m × 1.05m • Pedestal de Hierro Fundido + Gabinete y Cabezal Antiguo',
     costo: 'Gs. 0 (Propio de Ruth y Leo — A trasladar)',
     status: 'Propio del Propietario en Escritorio PA (Gs. 0 — A trasladar) 📦',
-    desc: 'Máquina de coser antigua clásica con pedestal de hierro forjado, pedal, gabinete de madera y cabezal original ubicada en el ambiente Escritorio / Desk (3.50m × 2.30m) de Planta Alta.'
+    desc: 'Máquina de coser antigua clásica con pedestal de hierro forjado, pedal, gabinete de madera y cabezal original ubicada en el ambiente Escritorio / Desk de Planta Alta.'
   });
   plantaAltaArchGroup.add(antiqueSewingGroup);
 
-  // G7. DORMITORIO 2 (3.85m × 3.00m en x = -0.74m..+1.80m, z = 5.26m..9.94m):
+  // G7. DORMITORIO 2 (en x = -1.80m..+0.60m, z = 6.00m..9.94m):
   //     1 Cama de 1 Plaza (0.90m × 1.90m, Propia — Gs. 0) + Tocador de Dormitorio #2 con Espejo (Propio — Gs. 0)
   const secondRoomOwnFurniture = new THREE.Group();
-  const sbX = 1.15;
-  const sbZ = 7.65;
+  const sbX = -1.15;
+  const sbZ = 7.85;
 
   const singleBedFrame = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.26, 1.92), mats.woodDeckPBR);
   singleBedFrame.position.set(sbX, localFloorY + 0.14, sbZ);
@@ -4497,48 +4458,48 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   secondRoomOwnFurniture.add(singlePillow);
 
   const dresser2Base = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.76, 0.85), mats.woodDoorPBR);
-  dresser2Base.position.set(-0.42, localFloorY + 0.38, 7.45);
+  dresser2Base.position.set(0.25, localFloorY + 0.38, 7.65);
   secondRoomOwnFurniture.add(dresser2Base);
 
   const dresser2Mirror = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.68, 0.65), mats.mirrorMat);
-  dresser2Mirror.position.set(-0.60, localFloorY + 1.10, 7.45);
+  dresser2Mirror.position.set(0.44, localFloorY + 1.10, 7.65);
   secondRoomOwnFurniture.add(dresser2Mirror);
 
   tagGroupUserData(secondRoomOwnFurniture, {
     type: 'mobiliario_propio',
-    name: 'Dormitorio 2 en Planta Alta (3.85m × 3.00m): 1 Cama de 1 Plaza (0.90×1.90m) + Tocador de Dormitorio #2 con Espejo',
-    dimensions: 'Dormitorio 2 (x=-0.74..+1.80m, z=5.26..9.94m) • Cama 1 Plaza 0.90×1.90m + Tocador #2 0.85×0.42m',
+    name: 'Dormitorio 2 en Planta Alta (3.85m × 2.40m): 1 Cama de 1 Plaza (0.90×1.90m) + Tocador de Dormitorio #2 con Espejo',
+    dimensions: 'Dormitorio 2 (x=-1.80..+0.60m, z=6.00..9.94m) • Cama 1 Plaza 0.90×1.90m + Tocador #2 0.85×0.42m',
     costo: 'Gs. 0 (Propio de Ruth y Leo — A trasladar)',
     status: 'Propio del Propietario en Dormitorio 2 PA (Gs. 0 — A trasladar) 📦',
-    desc: 'Segundo dormitorio independiente de Planta Alta (3.85m × 3.00m) con salida al Deck 2 / Terraza al Río y acceso directo al baño SSHH 2, equipado con la cama de 1 plaza y el tocador #2 con espejo.'
+    desc: 'Segundo dormitorio independiente de Planta Alta con acceso desde el Pasillo Distribuidor, salida al Deck 2 / Terraza al Río y baño SSHH 2 contiguo.'
   });
   plantaAltaArchGroup.add(secondRoomOwnFurniture);
 
-  // G8. ADICIONAL CLAVE A PRESUPUESTAR EN PLANTA ALTA: Placares de Vestidor (1.55m × 1.80m) y Placares de Dormitorio 2
+  // G8. ADICIONAL CLAVE A PRESUPUESTAR EN PLANTA ALTA: Placares de Vestidor (x = +2.77..+4.87m, z = 3.00..4.85m) y Placares de Dormitorio 2
   if (isAtLeast350) {
     const budgetedClosetsGroup = new THREE.Group();
 
-    const closetVestidorWest = new THREE.Mesh(new THREE.BoxGeometry(0.55, 2.40, 1.75), mats.woodDoorPBR);
-    closetVestidorWest.position.set(-4.48, localFloorY + 1.22, 3.95);
-    budgetedClosetsGroup.add(closetVestidorWest);
+    const closetVestidorEast = new THREE.Mesh(new THREE.BoxGeometry(0.55, 2.40, 1.75), mats.woodDoorPBR);
+    closetVestidorEast.position.set(4.48, localFloorY + 1.22, 3.92);
+    budgetedClosetsGroup.add(closetVestidorEast);
 
-    const closetSecond = new THREE.Mesh(new THREE.BoxGeometry(1.45, 2.40, 0.56), mats.woodDoorPBR);
-    closetSecond.position.set(0.55, localFloorY + 1.22, 5.62);
+    const closetSecond = new THREE.Mesh(new THREE.BoxGeometry(1.15, 2.40, 0.52), mats.woodDoorPBR);
+    closetSecond.position.set(-1.18, localFloorY + 1.22, 6.32);
     budgetedClosetsGroup.add(closetSecond);
 
     if (isAtLeast440) {
       const acSplit = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.92), mats.ceramicSanitaryMat);
-      acSplit.position.set(-4.65, localFloorY + 2.18, 7.55);
+      acSplit.position.set(4.65, localFloorY + 2.18, 7.55);
       budgetedClosetsGroup.add(acSplit);
     }
 
     tagGroupUserData(budgetedClosetsGroup, {
       type: 'adicional_a_presupuestar',
-      name: 'Módulos de Vestidor en Suite (1.55m × 1.80m) + Placar Empotrado en Dormitorio 2 (Adicional a Presupuestar)',
-      dimensions: 'Vestidor Piso-Techo en Eje F–G (1.75×2.40m) + Placar Dormitorio 2 (1.45×2.40m)',
+      name: 'Módulos de Vestidor en Suite (2.10m × 1.85m) + Placar Empotrado en Dormitorio 2 (Adicional a Presupuestar)',
+      dimensions: 'Vestidor Piso-Techo en Eje F–G (1.75×2.40m) + Placar Dormitorio 2 (1.15×2.40m)',
       costo: 'Gs. 9.600.000 (Vestidor + Placar Dormitorio 2 — A Presupuestar)',
       status: 'Adicional Clave a Presupuestar 🛠️',
-      desc: 'Equipamiento de carpintería a medida para el Vestidor independiente (1.55m × 1.80m en Eje F–G) del Dormitorio en Suite y placar piso-techo para el Dormitorio 2.'
+      desc: 'Equipamiento de carpintería a medida para el Vestidor independiente (en Eje F–G) del Dormitorio en Suite y placar piso-techo para el Dormitorio 2.'
     });
     plantaAltaArchGroup.add(budgetedClosetsGroup);
   }
@@ -4554,9 +4515,9 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(
     createLibrary4Shelves2m3D(THREE, mats, -0.95, 0.03, 8.45, -Math.PI / 2, 'Estar / Living Social Nivel Calle (Muro Eje 5 x=-0.74m)')
   );
-  // 2) Biblioteca #2 de 4 estantes de 2,00m cada uno en el Escritorio / Desk de Planta Alta (sobre tabique x = +1.98m, z = 8.55m)
+  // 2) Biblioteca #2 de 4 estantes de 2,00m cada uno en el Escritorio / Desk de Planta Alta (sobre tabique x = -1.98m, z = 8.55m)
   plantaAltaArchGroup.add(
-    createLibrary4Shelves2m3D(THREE, mats, 1.98, localFloorY, 8.55, Math.PI / 2, 'Escritorio / Desk Planta Alta (Tabique x=+1.80m)')
+    createLibrary4Shelves2m3D(THREE, mats, -1.98, localFloorY, 8.55, -Math.PI / 2, 'Escritorio / Desk Planta Alta (Tabique x=-1.80m)')
   );
 
   // 2) Las Mascotas de Ruth y Leo: Emma (Caniche) y Serafina (Gata Calicó) en el Estar / Living Social
@@ -4568,8 +4529,8 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(createSansevieriaPot3D(THREE, mats, 1.75, 0.44, 5.45, 0.68, 'Mesa Ratona de Sala'));
   groups.archMain.add(createSansevieriaPot3D(THREE, mats, 1.65, 0.03, 3.35, 1.05, 'Recibidor Puerta Principal'));
   groups.archMain.add(createSansevieriaPot3D(THREE, mats, -1.85, -0.42, 10.45, 1.15, 'Galería Panorámica al Río'));
-  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, -1.05, localFloorY + 0.76, 7.85, 0.70, 'Tocador Dormitorio Suite PA'));
-  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, 2.55, localFloorY + 0.76, 8.85, 0.68, 'Escritorio / Desk PA'));
+  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, 1.05, localFloorY + 0.76, 7.85, 0.70, 'Tocador Dormitorio Suite PA'));
+  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, -2.55, localFloorY + 0.76, 9.15, 0.68, 'Escritorio / Desk PA'));
 
   // 4) Sistema Completo de Alarma Pet-Immune (Central + Teclado, Sirenas Estroboscópicas y Sensores PIR Pet-Immune)
   groups.archMain.add(createPetImmuneAlarmSystem3D(THREE, mats));

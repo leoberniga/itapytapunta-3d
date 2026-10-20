@@ -1,838 +1,1682 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { PROJECT_METADATA, GEOTECHNICAL_DATA, ARCHITECTURAL_ROOMS, STRUCTURAL_ITEMS, CURATED_PHOTOS, CAMERA_VIEWS, ESCENARIOS_INVERSION } from './data/projectData.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import {
+  GEOTECHNICAL_DATA,
+  ARCHITECTURAL_ROOMS,
+  CURATED_PHOTOS,
+  STRUCTURAL_ITEMS,
+  ESCENARIOS_INVERSION
+} from './data/projectData.js';
+import entornoGeoData from './data/entornoGeoData.json';
+import {
+  buildPluvialAndHydroLayer,
+  buildWeakSignalsLayer,
+  buildConduitsOutletsAndPlumbingLayer,
+  PLUVIAL_HYDRO_DATA,
+  WEAK_SIGNALS_DATA
+} from './mepSystems.js';
+import {
+  FIXED_STRUCTURAL_GRID,
+  FIXED_COLUMNS_AND_FOOTINGS,
+  WALL_CATALOG,
+  OPENING_CATALOG
+} from './floorplanEditor.js';
+import {
+  createArchVizMaterials,
+  buildFacadeAndGate3D,
+  buildExistingStaircase3D,
+  buildHyperRealisticInterior3D,
+  ROOM_CAMERA_PRESETS
+} from './archVizInterior.js';
 
 export class ProjectScene {
-  constructor(canvasContainer, onSelectObject, onMeasurementUpdate) {
-    this.container = canvasContainer;
+  constructor(container, onSelectObject, onMeasurementUpdate) {
+    this.container = container;
     this.onSelectObject = onSelectObject;
     this.onMeasurementUpdate = onMeasurementUpdate;
 
-    this.layers = {
-      architecture: true,
-      subsuelo: true,
-      structure: true,
-      geotech: true,
-      topography: true,
-      photos: true,
-      muroEstacionamiento: true,
-      losaFase2: true,
-      techo: true
-    };
-
-    this.currentScenario = 'escenario300'; // 'escenario300', 'escenario370', 'escenario440'
-    this.xRayMode = false;
-    this.measureMode = false;
-    this.measurePoints = [];
-    this.measureMeshes = [];
-
-    this.init();
-    this.buildTerrain();
-    this.buildRiver();
-    this.buildGeotech();
-    this.buildStructure();
-    this.buildParkingRetainingWall();
-    this.buildArchitecture();
-    this.buildPhotoHotspots();
-    this.setupInteractions();
-    this.setScenario('escenario300');
-    this.animate();
-  }
-
-  init() {
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientHeight;
-
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0e131f);
-    this.scene.fog = new THREE.FogExp2(0x0e131f, 0.008);
+    this.scene.background = new THREE.Color(0x0b1526);
+    this.scene.fog = new THREE.FogExp2(0x0b1526, 0.0028);
 
-    this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
-    this.camera.position.set(18, 24, 28);
+    this.camera = new THREE.PerspectiveCamera(
+      42,
+      window.innerWidth / window.innerHeight,
+      0.08,
+      900
+    );
+    this.camera.position.set(16.5, 11.5, 22.0);
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      powerPreference: "high-performance",
-      logarithmicDepthBuffer: true
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: true
     });
-    this.renderer.setSize(this.width, this.height);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.1;
+    this.renderer.toneMappingExposure = 1.12;
+    this.renderer.localClippingEnabled = true;
     this.container.appendChild(this.renderer.domElement);
+
+    // Iluminación IBL Físicamente Basada (estilo Unity / Unreal ArchViz)
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    pmremGenerator.compileEquirectangularShader();
+    this.scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+    this.scene.environmentIntensity = 0.65;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
-    this.controls.maxPolarAngle = Math.PI / 2 + 0.05;
-    this.controls.minDistance = 3;
-    this.controls.maxDistance = 150;
-    this.controls.target.set(0, 2, 8);
+    this.controls.maxPolarAngle = Math.PI / 2 + 0.16;
+    this.controls.minDistance = 0.8;
+    this.controls.maxDistance = 160;
+    this.controls.target.set(0, 1.1, 6.8);
 
+    // Materiales PBR 1024x1024 de alta definición
+    this.archVizMats = createArchVizMaterials(THREE);
+
+    // Grupos de capas CAD / BIM / ArchViz
     this.groups = {
-      terrain: new THREE.Group(),
-      river: new THREE.Group(),
+      topography: new THREE.Group(),
+      urbanContext: new THREE.Group(),
       geotech: new THREE.Group(),
       structure: new THREE.Group(),
-      parkingWall: new THREE.Group(),
       losaFase1: new THREE.Group(),
       losaFase2: new THREE.Group(),
-      roof: new THREE.Group(),
-      archMain: new THREE.Group(),
+      muroEstacionamiento: new THREE.Group(),
       archSubsuelo: new THREE.Group(),
-      galleryFinish: new THREE.Group(),
-      windowsFinish: new THREE.Group(),
+      archMain: new THREE.Group(),
+      roof: new THREE.Group(),
+      pluvialHydro: new THREE.Group(),
+      weakSignals: new THREE.Group(),
+      ductosYEnchufes: new THREE.Group(),
       photos: new THREE.Group(),
-      measure: new THREE.Group()
+      measurements: new THREE.Group()
     };
 
-    Object.values(this.groups).forEach(g => this.scene.add(g));
+    Object.values(this.groups).forEach((g) => this.scene.add(g));
 
-    this.ambientLight = new THREE.AmbientLight(0xd9e5ff, 0.6);
+    // Por defecto la vista inicia limpia como un render ArchViz real:
+    // Las capas técnicas de conos/esferas (pluvial, senalesDebiles, geotech) inician apagadas y solo se encienden a pedido del usuario
+    this.layers = {
+      muroEstacionamiento: true,
+      losaFase2: true,
+      techo: true,
+      architecture: true,
+      subsuelo: true,
+      structure: true,
+      geotech: false,
+      topography: true,
+      entornoUrbano: true,
+      pluvial: false,
+      senalesDebiles: false,
+      ductos: false,
+      ductosYEnchufes: false,
+      photos: false
+    };
+
+    this.groups.geotech.visible = false;
+    this.groups.pluvialHydro.visible = false;
+    this.groups.weakSignals.visible = false;
+    this.groups.ductosYEnchufes.visible = false;
+    this.groups.photos.visible = false;
+
+    this.xrayMode = false;
+    this.measureMode = false;
+    this.measurePoints = [];
+    this.interactableMeshes = [];
+    this.currentScenario = 'edifica573';
+    this.currentCutawayMode = 'full';
+    this.currentHour = 16.2;
+
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+
+    this.init();
+  }
+
+  init() {
+    this.setupLights();
+    this.buildEnvironment();
+    this.buildTopography();
+    this.buildUrbanContext();
+    this.buildGeotechnicalLayer();
+    this.buildStructure();
+    this.buildMuroEstacionamiento();
+    this.buildArchitecture();
+
+    // Sistemas MEP 3D (ocultos al inicio para no ensuciar el render ArchViz; activables desde el panel de capas)
+    this.pluvialSystem = buildPluvialAndHydroLayer(
+      THREE,
+      this.groups,
+      this.getTerrainHeight.bind(this)
+    );
+    if (this.pluvialSystem && !this.pluvialSystem.updateRainFlow) {
+      this.pluvialSystem.updateRainFlow = this.pluvialSystem.updateAnimation;
+    }
+    this.groups.pluvialHydro.visible = this.layers.pluvial;
+
+    this.weakSignalsSystem = buildWeakSignalsLayer(
+      THREE,
+      this.groups,
+      this.getTerrainHeight.bind(this)
+    );
+    if (this.weakSignalsSystem && !this.weakSignalsSystem.updateNightLighting) {
+      this.weakSignalsSystem.updateNightLighting = this.weakSignalsSystem.updateDomoticLighting;
+    }
+    this.groups.weakSignals.visible = this.layers.senalesDebiles;
+
+    this.conduitsOutletsSystem = buildConduitsOutletsAndPlumbingLayer(
+      THREE,
+      this.groups
+    );
+    this.groups.ductosYEnchufes.visible = Boolean(this.layers.ductos || this.layers.ductosYEnchufes);
+
+    this.buildPhotoHotspots();
+    this.groups.photos.visible = this.layers.photos;
+
+    this.rebuildInteractables();
+    this.setupEvents();
+    this.animate();
+  }
+
+  /**
+   * Reconstruye la lista de mallas interactivas para inspección en 3D
+   */
+  rebuildInteractables() {
+    this.interactableMeshes = [];
+    const targetGroups = [
+      this.groups.structure,
+      this.groups.losaFase1,
+      this.groups.losaFase2,
+      this.groups.muroEstacionamiento,
+      this.groups.archSubsuelo,
+      this.groups.archMain,
+      this.groups.roof,
+      this.groups.geotech,
+      this.groups.urbanContext,
+      this.groups.pluvialHydro,
+      this.groups.weakSignals,
+      this.groups.ductosYEnchufes,
+      this.groups.photos
+    ];
+
+    targetGroups.forEach((grp) => {
+      if (!grp) return;
+      grp.traverse((child) => {
+        if ((child.isMesh || child.isSprite) && child.userData && (child.userData.type || child.userData.name)) {
+          this.interactableMeshes.push(child);
+        }
+      });
+    });
+  }
+
+  setupLights() {
+    this.ambientLight = new THREE.AmbientLight(0xfff7ed, 0.52);
     this.scene.add(this.ambientLight);
 
-    this.hemiLight = new THREE.HemisphereLight(0xfff4e6, 0x3d352e, 0.5);
+    this.hemiLight = new THREE.HemisphereLight(0xe0f2fe, 0x334155, 0.65);
+    this.hemiLight.position.set(0, 60, 0);
     this.scene.add(this.hemiLight);
 
-    this.sunLight = new THREE.DirectionalLight(0xfff0dd, 2.2);
-    this.sunLight.position.set(25, 35, -20);
+    this.sunLight = new THREE.DirectionalLight(0xfffbeb, 2.1);
     this.sunLight.castShadow = true;
     this.sunLight.shadow.mapSize.width = 2048;
     this.sunLight.shadow.mapSize.height = 2048;
     this.sunLight.shadow.camera.near = 0.5;
     this.sunLight.shadow.camera.far = 120;
-    const d = 30;
+    const d = 22;
     this.sunLight.shadow.camera.left = -d;
     this.sunLight.shadow.camera.right = d;
     this.sunLight.shadow.camera.top = d;
     this.sunLight.shadow.camera.bottom = -d;
-    this.sunLight.shadow.bias = -0.0005;
+    this.sunLight.shadow.bias = -0.0004;
     this.scene.add(this.sunLight);
 
-    const sunGeom = new THREE.SphereGeometry(1.5, 16, 16);
-    const sunMat = new THREE.MeshBasicMaterial({ color: 0xffdd88 });
-    this.sunMesh = new THREE.Mesh(sunGeom, sunMat);
-    this.sunMesh.position.copy(this.sunLight.position);
-    this.scene.add(this.sunMesh);
+    // Luz cálida interior suave para realzar baños, cocina y estar en modo corte seccional
+    this.interiorFillLight = new THREE.PointLight(0xffedd5, 0.85, 18, 1.2);
+    this.interiorFillLight.position.set(0, 2.35, 6.8);
+    this.scene.add(this.interiorFillLight);
 
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
+    this.subsueloFillLight = new THREE.PointLight(0xffedd5, 0.65, 14, 1.2);
+    this.subsueloFillLight.position.set(-1.2, -0.6, 7.2);
+    this.scene.add(this.subsueloFillLight);
 
-    window.addEventListener('resize', this.onResize.bind(this));
+    this.setTimeOfDay(16.2);
   }
 
-  buildTerrain() {
-    this.groups.terrain.clear();
+  setTimeOfDay(hour) {
+    this.currentHour = hour;
+    const normalized = (hour - 6) / 14;
+    const angle = normalized * Math.PI;
 
-    const nx = 40;
-    const nz = 60;
-    const width = 28;
-    const depth = 65;
+    const radius = 52;
+    const sunX = Math.cos(angle) * radius;
+    const sunY = Math.max(3.0, Math.sin(angle) * radius);
+    const sunZ = -14 + Math.sin(angle * 0.5) * 26;
 
-    const geom = new THREE.PlaneGeometry(width, depth, nx - 1, nz - 1);
-    geom.rotateX(-Math.PI / 2);
+    this.sunLight.position.set(sunX, sunY, sunZ);
 
-    const pos = geom.attributes.position;
+    if (hour > 17.2 || hour < 6.8) {
+      this.sunLight.color.setHex(0xf97316);
+      this.sunLight.intensity = 1.25;
+      this.ambientLight.intensity = 0.42;
+      this.interiorFillLight.intensity = 1.35;
+      this.scene.background.setHex(0x090f1d);
+      this.scene.fog.color.setHex(0x090f1d);
+    } else if (hour > 15.8 || hour < 8.0) {
+      this.sunLight.color.setHex(0xfde68a);
+      this.sunLight.intensity = 1.85;
+      this.ambientLight.intensity = 0.56;
+      this.interiorFillLight.intensity = 0.95;
+      this.scene.background.setHex(0x0f1b33);
+      this.scene.fog.color.setHex(0x0f1b33);
+    } else {
+      this.sunLight.color.setHex(0xfffbeb);
+      this.sunLight.intensity = 2.15;
+      this.ambientLight.intensity = 0.68;
+      this.interiorFillLight.intensity = 0.75;
+      this.scene.background.setHex(0x0c192e);
+      this.scene.fog.color.setHex(0x0c192e);
+    }
+
+    if (this.weakSignalsSystem) {
+      if (typeof this.weakSignalsSystem.updateNightLighting === 'function') {
+        this.weakSignalsSystem.updateNightLighting(hour);
+      } else if (typeof this.weakSignalsSystem.updateDomoticLighting === 'function') {
+        this.weakSignalsSystem.updateDomoticLighting(hour);
+      }
+    }
+  }
+
+  buildEnvironment() {
+    // Esfera celeste / horizonte de atardecer sobre el Río Paraguay
+    const skyGeo = new THREE.SphereGeometry(420, 32, 20);
+    const skyCanvas = document.createElement('canvas');
+    skyCanvas.width = 512;
+    skyCanvas.height = 512;
+    const sCtx = skyCanvas.getContext('2d');
+    const grad = sCtx.createLinearGradient(0, 0, 0, 512);
+    grad.addColorStop(0.0, '#071124');
+    grad.addColorStop(0.42, '#132a4a');
+    grad.addColorStop(0.50, '#f59e0b');
+    grad.addColorStop(0.55, '#1e293b');
+    grad.addColorStop(1.0, '#090d16');
+    sCtx.fillStyle = grad;
+    sCtx.fillRect(0, 0, 512, 512);
+
+    const skyTex = new THREE.CanvasTexture(skyCanvas);
+    skyTex.colorSpace = THREE.SRGBColorSpace;
+    const skyMat = new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide });
+    const skyDome = new THREE.Mesh(skyGeo, skyMat);
+    this.scene.add(skyDome);
+
+    // Río Paraguay hacia el Norte/Noroeste (para disfrutar la vista panorámica animada desde la Galería y el 2do Piso)
+    const waterGeo = new THREE.PlaneGeometry(700, 360, 32, 32);
+    const waterMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0369a1,
+      roughness: 0.08,
+      metalness: 0.15,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.1,
+      reflectivity: 0.95
+    });
+    this.riverWaterMesh = new THREE.Mesh(waterGeo, waterMat);
+    this.riverWaterMesh.rotation.x = -Math.PI / 2;
+    this.riverWaterMesh.position.set(-25, -13.5, 165);
+    this.scene.add(this.riverWaterMesh);
+  }
+
+  // Perfil topográfico real basado en GEO-STAN #2956 y la excavación real ejecutada en obra:
+  // - Calle Tte. Guillermo Arias y explanada de cochera rellenada (z <= 1.50m) en Cota +100.00m (Y = 0.00m)
+  // - Desde z = 1.50m (Muro de Contención) hasta z = 13.50m (Eje A) dentro de la huella del lote (|x| <= 4.95m):
+  //   el terreno está 100% excavado y nivelado plano en Y = -2.38m (dejando libres el pasillo antihumedad z=1.50..3.00m
+  //   y los 100,71 m² completos bajo toda la Primera Losa z=3.00..13.34m).
+  getTerrainHeight(x, z) {
+    if (Math.abs(x) <= 4.95) {
+      if (z <= 1.48) {
+        return 0.0;
+      }
+      if (z >= 1.50 && z <= 13.50) {
+        return -2.38;
+      }
+    }
+    if (z <= -1.8) {
+      return 0.0;
+    }
+    const zn = Math.min(45, Math.max(0, z + 1.8));
+    let drop = 0;
+    if (zn < 5.0) {
+      drop = (zn / 5.0) * 1.35;
+    } else if (zn < 16.0) {
+      drop = 1.35 + ((zn - 5.0) / 11.0) * 2.10;
+    } else {
+      drop = 3.45 + ((zn - 16.0) / 29.0) * 5.80;
+    }
+    return -drop;
+  }
+
+  buildTopography() {
+    this.groups.topography.clear();
+
+    // Terreno enfocado en el lote de Leo (9.89m × 31.00m) y sus bordes naturales inmediatos
+    const width = 34;
+    const depth = 48;
+    const segX = 72;
+    const segZ = 104;
+
+    const geo = new THREE.PlaneGeometry(width, depth, segX, segZ);
+    geo.rotateX(-Math.PI / 2);
+
+    const pos = geo.attributes.position;
+    const colors = [];
+
     for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const z = pos.getZ(i);
-      const elevation = this.getTerrainHeight(x, z);
-      pos.setY(i, elevation);
-    }
-    geom.computeVertexNormals();
+      const vx = pos.getX(i);
+      const vz = pos.getZ(i) + 11;
+      pos.setZ(i, vz);
 
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#6a4a35';
-    ctx.fillRect(0, 0, 512, 512);
-    for (let i = 0; i < 6000; i++) {
-      const px = Math.random() * 512;
-      const py = Math.random() * 512;
-      ctx.fillStyle = Math.random() > 0.5 ? '#7a553e' : '#573d2a';
-      ctx.fillRect(px, py, 2, 2);
+      let vy = this.getTerrainHeight(vx, vz);
+
+      // Dentro de la huella del lote (|x| <= 4.95m), desde el Muro de Contención (z=1.50m) hasta el Eje A (z=13.50m),
+      // el subsuelo está 100% libre y excavado plano en Y = -2.38m (100,71 m² de subsuelo + 14,61 m² de pasillo antihumedad)
+      if (Math.abs(vx) <= 4.95 && vz >= 1.50 && vz <= 13.50) {
+        vy = -2.38;
+      }
+      pos.setY(i, vy);
+
+      const c = new THREE.Color();
+      if (Math.abs(vx) <= FIXED_STRUCTURAL_GRID.lot.width / 2 && vz >= -4 && vz <= 27) {
+        // Césped Esmeralda cuidado en el patio y jardín del lote
+        if (vz > 13.34) c.setHex(0x15803d);
+        else c.setHex(0x3f6212);
+      } else {
+        // Barranco vegetado natural alrededor
+        c.setHex(0x14532d);
+      }
+      colors.push(c.r, c.g, c.b);
     }
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(6, 12);
+
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    geo.computeVertexNormals();
 
     const mat = new THREE.MeshStandardMaterial({
-      color: 0x8a6348,
-      roughness: 0.85,
-      metalness: 0.05,
-      map: texture
+      vertexColors: true,
+      roughness: 0.88,
+      metalness: 0.04,
+      side: THREE.DoubleSide
     });
 
-    this.terrainMesh = new THREE.Mesh(geom, mat);
-    this.terrainMesh.receiveShadow = true;
-    this.terrainMesh.userData = { type: 'terrain', name: 'Terreno Natural (Pendiente Itá Pytã Punta)' };
-    this.groups.terrain.add(this.terrainMesh);
+    const terrainMesh = new THREE.Mesh(geo, mat);
+    terrainMesh.receiveShadow = true;
+    this.groups.topography.add(terrainMesh);
 
-    // Lot boundary outline
-    const lotPoints = [
-      new THREE.Vector3(-4.95, this.getTerrainHeight(-4.95, -4) + 0.05, -4),
-      new THREE.Vector3(4.95, this.getTerrainHeight(4.95, -4) + 0.05, -4),
-      new THREE.Vector3(4.95, this.getTerrainHeight(4.95, 27) + 0.05, 27),
-      new THREE.Vector3(-4.95, this.getTerrainHeight(-4.95, 27) + 0.05, 27),
-      new THREE.Vector3(-4.95, this.getTerrainHeight(-4.95, -4) + 0.05, -4)
-    ];
-    const lotLineGeom = new THREE.BufferGeometry().setFromPoints(lotPoints);
-    const lotLineMat = new THREE.LineDashedMaterial({ color: 0xf59e0b, dashSize: 0.8, gapSize: 0.4 });
-    const lotLine = new THREE.Line(lotLineGeom, lotLineMat);
-    lotLine.computeLineDistances();
-    this.groups.terrain.add(lotLine);
-
-    this.buildContourLines();
-
-    // Street curb (Calle Guillermo Arias Cota +100.00m)
-    const streetGeom = new THREE.BoxGeometry(26, 0.4, 6);
-    const streetMat = new THREE.MeshStandardMaterial({ color: 0x22262d, roughness: 0.7 });
-    const streetMesh = new THREE.Mesh(streetGeom, streetMat);
-    streetMesh.position.set(0, -0.2, -7);
-    streetMesh.receiveShadow = true;
-    streetMesh.userData = { name: "Calle Guillermo Arias (Cota +100.00m)" };
-    this.groups.terrain.add(streetMesh);
-  }
-
-  getTerrainHeight(x, z) {
-    let baseH = 0;
-    if (z <= -4) {
-      baseH = 0;
-    } else if (z <= 2) {
-      const t = (z - (-4)) / 6;
-      baseH = -0.16 * t;
-    } else if (z <= 16) {
-      const t = (z - 2) / 14;
-      baseH = -0.16 - (2.69 * t);
-    } else if (z <= 27) {
-      const t = (z - 16) / 11;
-      baseH = -2.85 - (0.95 * t);
-    } else {
-      const t = (z - 27) / 26;
-      baseH = -3.80 - (18.0 * Math.pow(t, 1.4));
-    }
-
-    if (x >= -4.8 && x <= 4.8 && z >= 2 && z <= 15) {
-      const houseT = Math.min(1, Math.max(0, (z - 2) / 13));
-      const targetPlat = -0.5 - (1.2 * houseT);
-      baseH = baseH * 0.4 + targetPlat * 0.6;
-    }
-
-    const noise = Math.sin(x * 0.3) * Math.cos(z * 0.2) * 0.15;
-    return baseH + noise;
-  }
-
-  buildContourLines() {
-    const contourLevels = [
-      { y: 0.0, label: "+100.00 m (Calle Guillermo Arias)" },
-      { y: -1.0, label: "+99.00 m" },
-      { y: -2.0, label: "+98.00 m" },
-      { y: -3.0, label: "+97.00 m (Nivel Subsuelo)" },
-      { y: -4.0, label: "+96.00 m (Fondo Terreno)" }
+    // Línea sutil demarcatoria del Lote (9.89m × 31.00m)
+    const halfW = FIXED_STRUCTURAL_GRID.lot.width / 2;
+    const zStart = -4.0;
+    const zEnd = 27.0;
+    const borderPts = [];
+    const corners = [
+      [-halfW, zStart],
+      [halfW, zStart],
+      [halfW, zEnd],
+      [-halfW, zEnd],
+      [-halfW, zStart]
     ];
 
-    contourLevels.forEach(lvl => {
-      const points = [];
-      for (let x = -12; x <= 12; x += 0.5) {
-        let matchedZ = -4;
-        for (let testZ = -4; testZ <= 30; testZ += 0.2) {
-          if (this.getTerrainHeight(x, testZ) <= lvl.y) {
-            matchedZ = testZ;
-            break;
-          }
-        }
-        points.push(new THREE.Vector3(x, lvl.y + 0.03, matchedZ));
+    for (let c = 0; c < corners.length - 1; c++) {
+      const [x1, z1] = corners[c];
+      const [x2, z2] = corners[c + 1];
+      const steps = 28;
+      for (let s = 0; s <= steps; s++) {
+        const t = s / steps;
+        const px = x1 + (x2 - x1) * t;
+        const pz = z1 + (z2 - z1) * t;
+        const py = this.getTerrainHeight(px, pz) + 0.08;
+        borderPts.push(new THREE.Vector3(px, py, pz));
       }
-      const geom = new THREE.BufferGeometry().setFromPoints(points);
-      const mat = new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.55 });
-      const line = new THREE.Line(geom, mat);
-      line.userData = { type: 'contour', label: lvl.label };
-      this.groups.terrain.add(line);
-    });
-  }
+    }
 
-  buildRiver() {
-    this.groups.river.clear();
-
-    const riverGeom = new THREE.PlaneGeometry(160, 90, 32, 32);
-    riverGeom.rotateX(-Math.PI / 2);
-
-    const riverMat = new THREE.MeshStandardMaterial({
-      color: 0x1d4ed8,
-      roughness: 0.15,
-      metalness: 0.8,
+    const lotLineGeo = new THREE.BufferGeometry().setFromPoints(borderPts);
+    const lotLineMat = new THREE.LineBasicMaterial({
+      color: 0xf59e0b,
       transparent: true,
-      opacity: 0.88
+      opacity: 0.55
     });
-
-    const riverMesh = new THREE.Mesh(riverGeom, riverMat);
-    riverMesh.position.set(0, -22, 85);
-    riverMesh.userData = { name: "Río Paraguay", desc: "Vista panorámica Noroeste desde la galería" };
-    this.groups.river.add(riverMesh);
-
-    const bankGeom = new THREE.BoxGeometry(160, 4, 30);
-    const bankMat = new THREE.MeshStandardMaterial({ color: 0x1b382b, roughness: 0.9 });
-    const bankMesh = new THREE.Mesh(bankGeom, bankMat);
-    bankMesh.position.set(0, -20, 135);
-    this.groups.river.add(bankMesh);
+    this.groups.topography.add(new THREE.Line(lotLineGeo, lotLineMat));
   }
 
-  // Geotechnical boreholes and 3D soil stratigraphy
-  buildGeotech() {
+  /**
+   * Entorno Natural Limpio y Realista (SIN cubos de edificios vecinos ni carteles flotantes gigantes):
+   * - Solo se ve en 3D la casa de Leo sobre su lote (9.89m × 31.00m).
+   * - Calle Tte. Guillermo Arias asfaltada/empedrada al frente con cordón vereda.
+   * - Árboles subtropicales orgánicos (Lapachos / Mangos) enmarcando los laterales del barranco sin tapar la casa.
+   */
+  buildUrbanContext() {
+    this.groups.urbanContext.clear();
+
+    // 1. Calle Tte. Guillermo Arias al frente (z = -11.5m a -5.65m)
+    const streetGroup = new THREE.Group();
+    const streetLength = 34;
+    const streetWidth = 6.2;
+    const streetGeo = new THREE.BoxGeometry(streetLength, 0.14, streetWidth);
+    const streetMat = new THREE.MeshStandardMaterial({
+      color: 0x334155,
+      roughness: 0.85,
+      metalness: 0.08
+    });
+    const streetMesh = new THREE.Mesh(streetGeo, streetMat);
+    streetMesh.position.set(0, -0.06, -8.75);
+    streetMesh.receiveShadow = true;
+    streetMesh.userData = {
+      type: 'urban_street',
+      name: 'Calle Tte. Guillermo Arias (Frente del Lote • Cota +100.00m)',
+      dimensions: 'Calzada frente al lote de 9.89m',
+      status: 'Tramo Sin Salida (Cul-de-sac Residencial)',
+      desc: 'Tramo final sin salida de la Calle Tte. Guillermo Arias frente a la propiedad.'
+    };
+    streetGroup.add(streetMesh);
+
+    // Cordón de vereda
+    const curbMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.65 });
+    const curbNorth = new THREE.Mesh(new THREE.BoxGeometry(streetLength, 0.18, 0.20), curbMat);
+    curbNorth.position.set(0, 0.01, -5.65);
+    streetGroup.add(curbNorth);
+    this.groups.urbanContext.add(streetGroup);
+
+    // 2. Vegetación Subtropical Orgánica (enmarcando el barranco hacia el río sin tapar la casa)
+    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.9 });
+    const foliageDarkMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.82 });
+    const foliageLightMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.78 });
+
+    const treePositions = [
+      [-9.5, 16.5, 1.1],
+      [-11.2, 23.0, 1.3],
+      [9.8, 17.5, 1.0],
+      [11.5, 24.5, 1.25],
+      [-3.2, 25.2, 0.85],
+      [3.5, 25.5, 0.9]
+    ];
+
+    treePositions.forEach(([tx, tz, scale]) => {
+      const ty = this.getTerrainHeight(tx, tz);
+      const tree = new THREE.Group();
+      tree.position.set(tx, ty, tz);
+
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.14 * scale, 0.22 * scale, 2.4 * scale, 10),
+        trunkMat
+      );
+      trunk.position.y = 1.2 * scale;
+      trunk.castShadow = true;
+      tree.add(trunk);
+
+      const canopy1 = new THREE.Mesh(new THREE.SphereGeometry(1.35 * scale, 14, 12), foliageDarkMat);
+      canopy1.position.set(0, 2.7 * scale, 0);
+      canopy1.castShadow = true;
+      tree.add(canopy1);
+
+      const canopy2 = new THREE.Mesh(new THREE.SphereGeometry(1.05 * scale, 12, 10), foliageLightMat);
+      canopy2.position.set(0.6 * scale, 2.4 * scale, 0.4 * scale);
+      tree.add(canopy2);
+
+      const canopy3 = new THREE.Mesh(new THREE.SphereGeometry(0.95 * scale, 12, 10), foliageLightMat);
+      canopy3.position.set(-0.55 * scale, 2.5 * scale, -0.35 * scale);
+      tree.add(canopy3);
+
+      this.groups.urbanContext.add(tree);
+    });
+  }
+
+  buildGeotechnicalLayer() {
     this.groups.geotech.clear();
 
-    GEOTECHNICAL_DATA.boreholes.forEach((bh) => {
+    const colorMap = {
+      fill: 0x78716c,
+      sand_loose: 0xfacc15,
+      sand_med: 0xf97316,
+      sand_dense: 0xdc2626
+    };
+
+    const boreholesList = GEOTECHNICAL_DATA.sondeos || GEOTECHNICAL_DATA.boreholes || [];
+    boreholesList.forEach((s) => {
       const bhGroup = new THREE.Group();
-      const mouthY = this.getTerrainHeight(bh.xRel, bh.yRel);
-      bhGroup.position.set(bh.xRel, mouthY, bh.yRel);
+      const bx = Array.isArray(s.pos) ? s.pos[0] : (s.xRel ?? 0);
+      const bz = Array.isArray(s.pos) ? s.pos[2] : (s.yRel ?? 10);
+      const surfaceY = this.getTerrainHeight(bx, bz);
 
-      bh.estratos.forEach((estrato) => {
-        const thickness = estrato.a - estrato.de;
-        const radius = 0.28;
-        const geom = new THREE.CylinderGeometry(radius, radius, thickness, 20);
-        const mat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(estrato.color),
-          roughness: 0.7,
-          metalness: 0.1
+      (s.estratos || []).forEach((est) => {
+        const len = est.a - est.de;
+        const cylGeo = new THREE.CylinderGeometry(0.28, 0.28, len, 18);
+        const cylMat = new THREE.MeshStandardMaterial({
+          color: est.color || colorMap[est.colorKey] || 0xc49a45,
+          roughness: 0.6
         });
-        const mesh = new THREE.Mesh(geom, mat);
-        mesh.position.y = - (estrato.de + thickness / 2);
-        mesh.userData = {
-          type: 'estrato',
-          borehole: bh.name,
-          estrato: estrato.tipo,
-          desc: estrato.desc,
-          nspt: estrato.nspt,
-          interval: `${estrato.de.toFixed(1)}m a ${estrato.a.toFixed(1)}m`
+        const cyl = new THREE.Mesh(cylGeo, cylMat);
+        const centerY = surfaceY - (est.de + len / 2);
+        cyl.position.set(bx, centerY, bz);
+        cyl.userData = {
+          type: 'borehole',
+          name: s.name || `Sondeo SPT ${s.id} (GEO-STAN #2956)`,
+          cota: s.cotaBoca,
+          prof: s.profundidadFinal || s.profundidad,
+          estratos: s.estratos,
+          desc: `Perforación geotécnica ${s.id} en Cota +${s.cotaBoca}m. Rechazo SPT en arenisca cementada de Itá Pytã Punta.`
         };
-        bhGroup.add(mesh);
+        bhGroup.add(cyl);
       });
-
-      const ringGeom = new THREE.TorusGeometry(0.35, 0.08, 12, 24);
-      ringGeom.rotateX(Math.PI / 2);
-      const ringMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.8, roughness: 0.2 });
-      const ringMesh = new THREE.Mesh(ringGeom, ringMat);
-      bhGroup.add(ringMesh);
-
-      const pinGeom = new THREE.ConeGeometry(0.35, 0.9, 16);
-      pinGeom.rotateX(Math.PI);
-      const pinMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0x7f1d1d, roughness: 0.3 });
-      const pinMesh = new THREE.Mesh(pinGeom, pinMat);
-      pinMesh.position.y = 1.0;
-      pinMesh.userData = {
-        type: 'borehole',
-        id: bh.id,
-        name: bh.name,
-        cota: bh.cotaBoca,
-        prof: bh.profundidad,
-        estratos: bh.estratos
-      };
-      bhGroup.add(pinMesh);
 
       this.groups.geotech.add(bhGroup);
     });
   }
 
-  // Muro de Contención Estacionamiento (Frontal sobre Guillermo Arias)
-  buildParkingRetainingWall() {
-    this.groups.parkingWall.clear();
-
-    const wallMat = new THREE.MeshStandardMaterial({
-      color: 0x475569,
-      roughness: 0.9,
-      metalness: 0.1
-    });
-
-    const beamMat = new THREE.MeshStandardMaterial({
-      color: 0x64748b,
-      roughness: 0.6
-    });
-
-    // Muro frontal de mampostería armada de 30cm (9.89m ancho x 2.2m alto)
-    const wallGeom = new THREE.BoxGeometry(9.89, 2.2, 0.3);
-    const wallMesh = new THREE.Mesh(wallGeom, wallMat);
-    wallMesh.position.set(0, -0.6, -1.8);
-    wallMesh.castShadow = true;
-    wallMesh.receiveShadow = true;
-    wallMesh.userData = {
-      type: 'muro_cochera',
-      name: "Muro de Contención de Estacionamiento",
-      dimensions: "9.89m x 2.20m x 0.30m",
-      desc: "Mampostería armada de 30cm con refuerzos cada 0.80m y drenajes con barbacanas hacia la calle.",
-      costo: "12.767.308 Gs. (Muro) + 6.024.126 Gs. (Viga fundación)",
-      status: "Próxima Etapa Inmediata"
-    };
-    this.groups.parkingWall.add(wallMesh);
-
-    // Viga superior de coronamiento
-    const beamGeom = new THREE.BoxGeometry(9.89, 0.3, 0.35);
-    const beamMesh = new THREE.Mesh(beamGeom, beamMat);
-    beamMesh.position.set(0, 0.55, -1.8);
-    beamMesh.castShadow = true;
-    this.groups.parkingWall.add(beamMesh);
-
-    // Piso / Platea de Estacionamiento (relleno compactado + hormigón fratasado)
-    const parkingSlabGeom = new THREE.BoxGeometry(9.4, 0.15, 5.0);
-    const parkingSlabMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 });
-    const parkingSlab = new THREE.Mesh(parkingSlabGeom, parkingSlabMat);
-    parkingSlab.position.set(0, 0.05, -4.3);
-    parkingSlab.receiveShadow = true;
-    parkingSlab.userData = {
-      name: "Platea de Estacionamiento (2 Vehículos)",
-      area: "47.00 m2",
-      desc: "Capa de rodadura sobre 69 m³ de relleno compactado."
-    };
-    this.groups.parkingWall.add(parkingSlab);
-  }
-
-  // Foundation footings (Z1..Z20), columns, ground beams, and 2-phase slab
+  /**
+   * Construye con texturas PBR de Hormigón Visto (`concretePBR`) toda la estructura real de la casa:
+   * - 14 Zapatas (`Z1..Z20`) en `Y = -4.64m`
+   * - Vigas de fundación `VC.T-1` y Pórticos de Subsuelo 1–7 en `Y = -2.34m`
+   * - Platea/Contrapiso de los 100,71 m² libres completos bajo toda la 1ra Losa (`Eje G z=3.00m` a `Eje A z=13.34m`)
+   * - 20 Pilares (`P1..P20`) en sus coordenadas exactas sobre Ejes `9..1` y `G..A`
+   * - Escalera 1 de H°A° real hacia el Subsuelo (`buildExistingStaircase3D`)
+   * - 1ra Losa (`L2-L4` en `Y=0.00m` y `L1` Galería rebajada en `Y=-0.45m` con Viga Invertida en Eje B)
+   * - 2da Losa (`Y=+2.88m` con voladizo `z=2.15m`) y Techo Termoacústico Isopanel (`Y=+5.64m`)
+   */
   buildStructure() {
     this.groups.structure.clear();
     this.groups.losaFase1.clear();
     this.groups.losaFase2.clear();
-
-    const concreteMat = new THREE.MeshStandardMaterial({
-      color: 0x9ca3af,
-      roughness: 0.65,
-      metalness: 0.1
-    });
-
-    const zPositions = [3, 9, 15, 21];
-    const xPositions = [-3.8, -1.9, 0, 1.9, 3.8];
-
-    let count = 1;
-    zPositions.forEach((z) => {
-      xPositions.forEach((x) => {
-        const footingGroup = new THREE.Group();
-
-        const groundY = this.getTerrainHeight(x, z);
-        const footingDepth = -1.2;
-        const footingY = groundY + footingDepth;
-
-        const zapataGeom = new THREE.BoxGeometry(1.2, 0.4, 1.2);
-        const zapataMesh = new THREE.Mesh(zapataGeom, concreteMat.clone());
-        zapataMesh.position.set(x, footingY, z);
-        zapataMesh.castShadow = true;
-        zapataMesh.receiveShadow = true;
-        zapataMesh.userData = {
-          type: 'zapata',
-          name: `Zapata Z${count}`,
-          desc: `Fundación aislada H°A° (1.20 x 1.20 x 0.40m). Apoyo en arena densa SM.`,
-          cota: (100 + footingY).toFixed(2) + " m",
-          status: "Ejecutado al 100% (Verificado en Acta JIVESA)"
-        };
-        footingGroup.add(zapataMesh);
-
-        const colTopY = 0.1;
-        const colHeight = colTopY - (footingY + 0.2);
-        if (colHeight > 0.3) {
-          const colGeom = new THREE.BoxGeometry(0.3, colHeight, 0.15);
-          const colMesh = new THREE.Mesh(colGeom, concreteMat.clone());
-          colMesh.position.set(x, footingY + 0.2 + colHeight / 2, z);
-          colMesh.castShadow = true;
-          colMesh.userData = {
-            type: 'pilar',
-            name: `Pilar P${count}`,
-            dimensions: "15cm x 30cm",
-            height: colHeight.toFixed(2) + " m",
-            status: "Hormigonado y verificado (100%)"
-          };
-          footingGroup.add(colMesh);
-        }
-
-        this.groups.structure.add(footingGroup);
-        count++;
-      });
-    });
-
-    // Encadenado beams linking columns
-    zPositions.forEach((z) => {
-      const beamGeom = new THREE.BoxGeometry(8.2, 0.3, 0.2);
-      const beamMesh = new THREE.Mesh(beamGeom, concreteMat);
-      beamMesh.position.set(0, -0.1, z);
-      beamMesh.castShadow = true;
-      this.groups.structure.add(beamMesh);
-    });
-
-    xPositions.forEach((x) => {
-      const beamGeom = new THREE.BoxGeometry(0.2, 0.3, 19);
-      const beamMesh = new THREE.Mesh(beamGeom, concreteMat);
-      beamMesh.position.set(x, -0.1, 12);
-      beamMesh.castShadow = true;
-      this.groups.structure.add(beamMesh);
-    });
-
-    // --- LOSA FASE 1 (Ya ejecutada, Hormigón existente gris claro) ---
-    const losa1Geom = new THREE.BoxGeometry(8.0, 0.2, 9.0);
-    const losa1Mat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.7 });
-    const losa1Mesh = new THREE.Mesh(losa1Geom, losa1Mat);
-    losa1Mesh.position.set(0, 0.0, 7.5);
-    losa1Mesh.receiveShadow = true;
-    losa1Mesh.castShadow = true;
-    losa1Mesh.userData = {
-      name: "Losa Fase 1 (Ejecutada)",
-      desc: "Primera parte de la losa de entrepiso y arranque ya cargada en hormigón armado.",
-      status: "Ejecutado"
-    };
-    this.groups.losaFase1.add(losa1Mesh);
-
-    // --- LOSA FASE 2 (Segunda parte a levantar, Resaltada en Verde/Cian) ---
-    const losa2Geom = new THREE.BoxGeometry(8.0, 0.2, 9.5);
-    const losa2Mat = new THREE.MeshStandardMaterial({
-      color: 0x0ea5e9,
-      roughness: 0.5,
-      metalness: 0.2
-    });
-    const losa2Mesh = new THREE.Mesh(losa2Geom, losa2Mat);
-    losa2Mesh.position.set(0, 0.0, 16.75);
-    losa2Mesh.receiveShadow = true;
-    losa2Mesh.castShadow = true;
-    losa2Mesh.userData = {
-      name: "Segunda Parte de la Losa (A Ejecutar)",
-      desc: "Completamiento de la losa con viguetas pretensadas Loza Rap y hormigón H21.",
-      costoEstimado: "41.230.000 Gs. (Losa + Vigas superiores)",
-      status: "Próxima Etapa Inmediata"
-    };
-    this.groups.losaFase2.add(losa2Mesh);
-  }
-
-  // Architectural Model & Shell
-  buildArchitecture() {
-    this.groups.archMain.clear();
-    this.groups.archSubsuelo.clear();
     this.groups.roof.clear();
-    this.groups.galleryFinish.clear();
-    this.groups.windowsFinish.clear();
 
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.8, metalness: 0.05 });
-    const brickMat = new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.8 });
-    const woodDeckMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.45, metalness: 0.1 });
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x93c5fd,
-      transmission: 0.85,
-      opacity: 0.35,
-      transparent: true,
-      roughness: 0.1,
-      ior: 1.5
+    const mats = this.archVizMats;
+    const isHoyEnObra = this.currentScenario === 'hoy_en_obra';
+    const isFinished = ['escenario350', 'escenario370', 'escenario440', 'edifica460', 'edifica573'].includes(this.currentScenario);
+
+    const concreteFootMat = mats.concreteFoundationPBR;
+    const concreteColMat = isFinished ? mats.plasterExteriorPBR : mats.concretePBR;
+    const slabFase1Mat = mats.concretePBR;
+    const fase2ColMat = isFinished ? mats.plasterExteriorPBR : mats.concretePBR;
+    const fase2SlabMat = mats.concretePBR;
+
+    const rebarMat = new THREE.MeshStandardMaterial({
+      color: 0xb45309,
+      roughness: 0.45,
+      metalness: 0.8
+    });
+    const sikadurMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      roughness: 0.35,
+      metalness: 0.15
+    });
+    const deadPillarCapMat = new THREE.MeshStandardMaterial({
+      color: 0xdc2626,
+      roughness: 0.4
     });
 
-    // TECHO / CUBIERTA METÁLICA TERMOACÚSTICA (86 m2)
-    const roofGeom = new THREE.BoxGeometry(8.6, 0.18, 17.5);
-    roofGeom.rotateX(-0.04); // subtle 2.5 degree slope towards river for rainwater
-    const roofMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4, metalness: 0.6 });
-    const roofMesh = new THREE.Mesh(roofGeom, roofMat);
-    roofMesh.position.set(0, 3.25, 11.5);
-    roofMesh.castShadow = true;
-    roofMesh.userData = {
-      name: "Techo Metálico Termoacústico (Isopanel)",
-      area: "86.00 m2",
-      costo: "32.637.000 Gs. + 7.800.000 Gs. (Canaletas y bajadas)",
-      desc: "Chapa trapezoidal prepintada con aislación de poliuretano inyectado de 30mm y caída pluvial hacia el barranco."
+    // 1. 14 Zapatas de H°A° (Aisladas y Combinadas) en Cota Y = -4.64m
+    const footingBaseY = -4.64;
+    const footingH = 0.55;
+    const renderedFootings = new Set();
+
+    FIXED_COLUMNS_AND_FOOTINGS.forEach((col) => {
+      const fKey = col.combinedGroup || col.zapataId;
+      if (renderedFootings.has(fKey)) return;
+      renderedFootings.add(fKey);
+
+      const isCombined = Boolean(col.combinedGroup);
+      const members = isCombined
+        ? FIXED_COLUMNS_AND_FOOTINGS.filter((c) => c.combinedGroup === col.combinedGroup)
+        : [col];
+      const memberLabels = members.map((m) => `${m.pilarId} (${m.axisLabel})`).join(' + ');
+
+      const fGroup = new THREE.Group();
+      const baseGeo = new THREE.BoxGeometry(col.zapW, footingH, col.zapD);
+      const baseMesh = new THREE.Mesh(baseGeo, concreteFootMat);
+      baseMesh.position.set(col.zapCenterX, footingBaseY + footingH / 2, col.zapCenterZ);
+      baseMesh.castShadow = true;
+      baseMesh.receiveShadow = true;
+
+      const metaFoot = {
+        type: 'structure',
+        name: isCombined
+          ? `Zapata Combinada ${col.zapataId} — Pilares ${memberLabels}`
+          : `Zapata Aislada ${col.zapataId} — Pilar ${col.pilarId} (Eje ${col.axisLabel})`,
+        dimensions: `${col.zapW.toFixed(2)}m × ${col.zapD.toFixed(2)}m × ${footingH.toFixed(2)}m (Cota -4.64m)`,
+        status: 'Ejecutado 100% (H°A° HA-25)',
+        costo: isCombined ? 'Gs. 6.850.000 (Ejecutado)' : 'Gs. 3.450.000 (Ejecutado)',
+        desc: `Fundación directa sobre arenisca densa (GEO-STAN #2956). Soporta ${memberLabels}.`
+      };
+      baseMesh.userData = metaFoot;
+      fGroup.add(baseMesh);
+
+      const trunkGeo = new THREE.BoxGeometry(col.zapW * 0.62, 0.30, col.zapD * 0.62);
+      const trunkMesh = new THREE.Mesh(trunkGeo, concreteFootMat);
+      trunkMesh.position.set(col.zapCenterX, footingBaseY + footingH + 0.15, col.zapCenterZ);
+      trunkMesh.userData = metaFoot;
+      fGroup.add(trunkMesh);
+
+      this.groups.structure.add(fGroup);
+    });
+
+    // 2. Vigas de Fundación VC.T-1 (40×50cm) y Vigas Pórticos de Subsuelo (Y = -2.34m)
+    const addTieBeam = (x1, z1, x2, z2, yLevel, w, h, name, desc) => {
+      const len = Math.hypot(x2 - x1, z2 - z1);
+      if (len < 0.1) return;
+      const geo = new THREE.BoxGeometry(len, h, w);
+      const mesh = new THREE.Mesh(geo, concreteFootMat);
+      mesh.position.set((x1 + x2) / 2, yLevel, (z1 + z2) / 2);
+      mesh.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = {
+        type: 'structure',
+        name,
+        dimensions: `Sección ${(w * 100).toFixed(0)}×${(h * 100).toFixed(0)}cm • L=${len.toFixed(2)}m`,
+        status: 'Ejecutado 100% 🔒',
+        desc
+      };
+      this.groups.structure.add(mesh);
     };
-    this.groups.roof.add(roofMesh);
 
-    // Canaleta pluvial posterior
-    const gutterGeom = new THREE.BoxGeometry(8.6, 0.15, 0.2);
-    const gutterMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8 });
-    const gutter = new THREE.Mesh(gutterGeom, gutterMat);
-    gutter.position.set(0, 2.9, 20.3);
-    this.groups.roof.add(gutter);
+    addTieBeam(-4.87, 3.00, 4.87, 3.00, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje G • z=3.00m)', 'Viga de equilibrio y arriostramiento de zapatas frontales (40×50cm).');
+    addTieBeam(-4.87, 9.94, 4.87, 9.94, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje B • z=9.94m)', 'Viga de equilibrio bajo línea de transición de galería.');
+    addTieBeam(-4.87, 13.34, 4.87, 13.34, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje A • z=13.34m)', 'Viga de arriostramiento de zapatas posteriores hacia el barranco.');
+    addTieBeam(-4.87, 3.00, -4.87, 13.34, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje 9 • x=-4.87m)', 'Viga de arriostramiento sobre medianera Oeste Eje 9.');
+    addTieBeam(4.87, 3.00, 4.87, 13.34, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje 1 • x=+4.87m)', 'Viga de arriostramiento sobre medianera Este Eje 1.');
 
-    // Muros perimetrales exteriores (Cerramiento para "Cerrar Todo")
-    // Muro frontal (Z = 3.0) con puerta de seguridad
-    this.createWallWithOpening(this.groups.archMain, 8.0, 2.9, 0.2, 0, 1.55, 3.0, 1.2, 2.2, wallMat, glassMat);
+    const subsueloY = -2.34;
+    addTieBeam(-4.87, 3.00, 4.87, 3.00, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje G (z=3.00m • Frente ventilado hacia Pasillo Antihumedad)', 'Viga frontal del subsuelo de 100 m² libres sobre el Eje G.');
+    addTieBeam(-4.87, 4.77, 4.87, 4.77, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje E (z=4.77m • Cota +97.66m)', 'Viga de pórtico de subsuelo en Y=-2.34m.');
+    addTieBeam(-4.87, 7.37, 3.84, 7.37, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje C (z=7.37m • Cota +97.66m)', 'Viga central de arriostramiento de subsuelo en Y=-2.34m.');
+    addTieBeam(-4.87, 9.94, 4.87, 9.94, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje B (z=9.94m • Cota +97.66m)', 'Viga intermedia de subsuelo en Eje B (Y=-2.34m).');
+    addTieBeam(-4.87, 13.34, 4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje A (z=13.34m • Salida a Jardín)', 'Viga posterior de cierre de los 100,71 m² de subsuelo en Eje A.');
+    addTieBeam(-4.87, 3.00, -4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 9 (x=-4.87m)', 'Viga lateral Oeste de subsuelo entre Eje G y Eje A.');
+    addTieBeam(-1.64, 3.00, -1.64, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 6 (x=-1.64m)', 'Viga longitudinal interna de pórtico de subsuelo.');
+    addTieBeam(4.87, 3.00, 4.87, 13.34, subsueloY, 0.25, 0.40, 'Viga Pórtico Subsuelo Eje 1 (x=+4.87m)', 'Viga lateral Este de subsuelo junto a Escalera 1.');
 
-    // Muros laterales izquierdo y derecho (X = -4.0 y +4.0)
-    const wallLeft = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.9, 17.0), wallMat);
-    wallLeft.position.set(-4.0, 1.55, 11.5);
-    wallLeft.castShadow = true;
-    this.groups.archMain.add(wallLeft);
+    // Plataforma estructural completa de los 100.71 m² LIBRES bajo toda la Primera Losa (Eje G z=3.00m a Eje A z=13.34m, Y = -2.34m)
+    const subSlabW = 9.74;
+    const subSlabD = 13.34 - 3.00; // 10.34m -> 9.74m * 10.34m = 100.71 m²
+    const subSlabMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(subSlabW, 0.16, subSlabD),
+      concreteFootMat
+    );
+    subSlabMesh.position.set(0, subsueloY - 0.08, (3.00 + 13.34) / 2);
+    subSlabMesh.receiveShadow = true;
+    subSlabMesh.userData = {
+      type: 'structure',
+      name: 'Platea de Subsuelo 100% Libre bajo Toda la 1ra Losa (Eje G z=3.00m a Eje A z=13.34m)',
+      dimensions: '9.74m × 10.34m (100.71 m² Libres) • Cota +97.66m (Y = -2.34m)',
+      area: 100.71,
+      status: '100,71 m² Despejados en Obra (No rellenado) 🔒',
+      desc: 'A diferencia del anteproyecto que preveía rellenar parte del nivel inferior, en obra quedaron 100% libres y aprovechables los 100,71 m² completos debajo de toda la primera losa (de Eje G a Eje A), protegidos de la humedad por el pasillo frontal en z=1.50..3.00m.'
+    };
+    this.groups.structure.add(subSlabMesh);
 
-    const wallRight = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.9, 17.0), wallMat);
-    wallRight.position.set(4.0, 1.55, 11.5);
-    wallRight.castShadow = true;
-    this.groups.archMain.add(wallRight);
-
-    // Muro posterior (Z = 20.0)
-    this.createWallWithOpening(this.groups.archMain, 8.0, 2.9, 0.2, 0, 1.55, 20.0, 5.0, 2.4, wallMat, glassMat);
-
-    // GALERÍA PANORÁMICA (3.50m x 9.55m)
-    const deckGeom = new THREE.BoxGeometry(9.55, 0.2, 3.5);
-    const deckMesh = new THREE.Mesh(deckGeom, woodDeckMat);
-    deckMesh.position.set(0, 0.1, 16.25);
-    deckMesh.receiveShadow = true;
-    deckMesh.castShadow = true;
-    deckMesh.userData = ARCHITECTURAL_ROOMS.find(r => r.id === 'galeria');
-    this.groups.galleryFinish.add(deckMesh);
-
-    const pergolaGeom = new THREE.BoxGeometry(9.55, 0.1, 3.5);
-    const pergolaMesh = new THREE.Mesh(pergolaGeom, roofMat);
-    pergolaMesh.position.set(0, 3.2, 16.25);
-    pergolaMesh.castShadow = true;
-    this.groups.galleryFinish.add(pergolaMesh);
-
-    [-4.5, 0, 4.5].forEach(x => {
-      const colGeom = new THREE.CylinderGeometry(0.06, 0.06, 3.1, 16);
-      const colMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 });
-      const col = new THREE.Mesh(colGeom, colMat);
-      col.position.set(x, 1.65, 17.8);
-      col.castShadow = true;
-      this.groups.galleryFinish.add(col);
-    });
-
-    const railGeom = new THREE.BoxGeometry(9.4, 1.0, 0.04);
-    const railMesh = new THREE.Mesh(railGeom, glassMat);
-    railMesh.position.set(0, 0.7, 17.95);
-    this.groups.galleryFinish.add(railMesh);
-
-    const parrillaGeom = new THREE.BoxGeometry(1.6, 2.8, 1.0);
-    const parrillaMesh = new THREE.Mesh(parrillaGeom, brickMat);
-    parrillaMesh.position.set(3.8, 1.5, 16.2);
-    parrillaMesh.castShadow = true;
-    parrillaMesh.userData = { name: "Parrilla Tradicional y Campana", costo: "7.500.000 Gs." };
-    this.groups.galleryFinish.add(parrillaMesh);
-
-    // VENTANALES BLINDEX (Fase de Terminaciones)
-    const glassSlidingGeom = new THREE.BoxGeometry(5.0, 2.4, 0.06);
-    const glassSliding = new THREE.Mesh(glassSlidingGeom, glassMat);
-    glassSliding.position.set(0, 1.3, 20.0);
-    glassSliding.userData = { name: "Ventanales Blindex Corredizos", costo: "18.000.000 Gs." };
-    this.groups.windowsFinish.add(glassSliding);
-
-    // SUBSUELO
-    const subFloorGeom = new THREE.BoxGeometry(7.6, 0.15, 8.0);
-    const subFloor = new THREE.Mesh(subFloorGeom, wallMat);
-    subFloor.position.set(0, -2.9, 18.0);
-    subFloor.receiveShadow = true;
-    this.groups.archSubsuelo.add(subFloor);
-
-    const stoneMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.95 });
-    const retainingWall = new THREE.Mesh(new THREE.BoxGeometry(8.0, 3.0, 0.4), stoneMat);
-    retainingWall.position.set(0, -1.5, 14.0);
-    retainingWall.castShadow = true;
-    this.groups.archSubsuelo.add(retainingWall);
-
-    this.createWallWithOpening(this.groups.archSubsuelo, 7.6, 2.6, 0.2, 0, -1.6, 22.0, 3.0, 2.0, wallMat, glassMat);
-
-    [-3.8, 3.8].forEach(x => {
-      const sw = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.6, 8.0), wallMat);
-      sw.position.set(x, -1.6, 18.0);
-      sw.castShadow = true;
-      this.groups.archSubsuelo.add(sw);
-    });
-
-    this.buildExteriorStairs();
-  }
-
-  createWallWithOpening(parent, totalW, totalH, thickness, cx, cy, cz, openW, openH, wallMat, glassMat) {
-    const wallGroup = new THREE.Group();
-    wallGroup.position.set(cx, cy, cz);
-
-    const sideW = (totalW - openW) / 2;
-    const leftMesh = new THREE.Mesh(new THREE.BoxGeometry(sideW, totalH, thickness), wallMat);
-    leftMesh.position.set(-totalW / 2 + sideW / 2, 0, 0);
-    leftMesh.castShadow = true;
-    wallGroup.add(leftMesh);
-
-    const rightMesh = new THREE.Mesh(new THREE.BoxGeometry(sideW, totalH, thickness), wallMat);
-    rightMesh.position.set(totalW / 2 - sideW / 2, 0, 0);
-    rightMesh.castShadow = true;
-    wallGroup.add(rightMesh);
-
-    const topH = totalH - openH;
-    if (topH > 0) {
-      const topMesh = new THREE.Mesh(new THREE.BoxGeometry(openW, topH, thickness), wallMat);
-      topMesh.position.set(0, totalH / 2 - topH / 2, 0);
-      topMesh.castShadow = true;
-      wallGroup.add(topMesh);
-    }
-
-    const glassMesh = new THREE.Mesh(new THREE.BoxGeometry(openW, openH, thickness * 0.4), glassMat);
-    glassMesh.position.set(0, -totalH / 2 + openH / 2, 0);
-    wallGroup.add(glassMesh);
-
-    parent.add(wallGroup);
-  }
-
-  buildExteriorStairs() {
-    const numSteps = 16;
-    const stepH = 3.0 / numSteps;
-    const stepD = 0.35;
-    const stepW = 1.0;
-    const concreteMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.7 });
-
-    for (let i = 0; i < numSteps; i++) {
-      const stepMesh = new THREE.Mesh(new THREE.BoxGeometry(stepW, stepH, stepD), concreteMat);
-      stepMesh.position.set(4.5, - (i * stepH) - stepH / 2, 14.2 + (i * stepD));
-      stepMesh.castShadow = true;
-      this.groups.archSubsuelo.add(stepMesh);
-    }
-  }
-
-  // Interactive 3D Photo Hotspots
-  buildPhotoHotspots() {
-    this.groups.photos.clear();
-
-    const photoPositions = [
-      { x: 0, y: 1.0, z: -2, index: 0, title: "Vista Panorámica del Terreno" },
-      { x: 0, y: 0.8, z: 4, index: 1, title: "Replanteo y Sondeo Geotécnico" },
-      { x: 2, y: 0.5, z: 9, index: 2, title: "Excavación y Movimiento de Suelo" },
-      { x: -1, y: -0.5, z: 14, index: 3, title: "Armaduras y Carga de Zapatas" },
-      { x: 3, y: -1.2, z: 18, index: 4, title: "Muros de Contención de Piedra" },
-      { x: -2, y: 0.6, z: 11, index: 5, title: "Pilares y Primera Losa" },
-      { x: 0, y: 2.0, z: 16, index: 6, title: "Atardecer hacia el Río Paraguay" },
-      { x: 0, y: 1.5, z: 23, index: 7, title: "Perspectiva General de Obra" }
+    // 3. 20 Pilares Reales (`P1..P20`) con coordenadas exactas
+    const rebarOffsets = [
+      [-0.045, -0.08],
+      [0.045, -0.08],
+      [-0.045, 0.08],
+      [0.045, 0.08]
     ];
 
-    photoPositions.forEach(p => {
-      const group = new THREE.Group();
-      const realY = this.getTerrainHeight(p.x, p.z) + 1.2;
-      group.position.set(p.x, realY, p.z);
+    FIXED_COLUMNS_AND_FOOTINGS.forEach((col) => {
+      const isEjeA = Math.abs(col.z - 13.34) < 0.08;
+      const topFase1Y = isEjeA ? -0.45 : 0.00;
+      const shaftBottomY = footingBaseY + footingH;
+      const shaftH1 = topFase1Y - shaftBottomY;
 
-      const badgeGeom = new THREE.CylinderGeometry(0.35, 0.35, 0.08, 24);
-      badgeGeom.rotateX(Math.PI / 2);
-      const badgeMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x1d4ed8, emissiveIntensity: 0.4 });
-      const badge = new THREE.Mesh(badgeGeom, badgeMat);
-      group.add(badge);
-
-      const lensGeom = new THREE.CylinderGeometry(0.18, 0.18, 0.1, 16);
-      lensGeom.rotateX(Math.PI / 2);
-      const lensMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const lens = new THREE.Mesh(lensGeom, lensMat);
-      lens.position.z = 0.02;
-      group.add(lens);
-
-      group.userData = {
-        type: 'photoHotspot',
-        index: p.index,
-        data: CURATED_PHOTOS[p.index]
+      const colGeo1 = new THREE.BoxGeometry(col.colW, shaftH1, col.colD);
+      const colMesh1 = new THREE.Mesh(colGeo1, concreteColMat);
+      colMesh1.position.set(col.x, shaftBottomY + shaftH1 / 2, col.z);
+      colMesh1.castShadow = true;
+      colMesh1.receiveShadow = true;
+      colMesh1.userData = {
+        type: 'structure',
+        name: `Pilar ${col.pilarId} — Eje ${col.axisLabel} (Fuste Libre en Subsuelo de 100 m²)`,
+        dimensions: `Sección ${(col.colW * 100).toFixed(0)}×${(col.colD * 100).toFixed(0)}cm • X=${col.x.toFixed(2)}m, Z=${col.z.toFixed(2)}m`,
+        status: col.diesInPB
+          ? '⚠️ Ejecutado hasta 1ra Losa (MUERE EN PB 0.00m)'
+          : 'Ejecutado hasta 1ra Losa 🔒',
+        costo: 'Ejecutado en Obra',
+        desc: `Pilar ${col.pilarId} sobre ${col.zapataId} en intersección de Eje ${col.axisLabel}, bajando limpio por el subsuelo libre de 100,71 m². Armadura: ${col.rebarSpec}.`
       };
+      this.groups.structure.add(colMesh1);
 
-      this.groups.photos.add(group);
+      if (col.diesInPB) {
+        const capGeo = new THREE.BoxGeometry(col.colW + 0.04, 0.05, col.colD + 0.04);
+        const capMesh = new THREE.Mesh(capGeo, deadPillarCapMat);
+        capMesh.position.set(col.x, topFase1Y + 0.025, col.z);
+        capMesh.userData = {
+          type: 'structure',
+          name: `⚠️ ${col.pilarId} (Eje ${col.axisLabel}) — MUERE EN PLANTA BAJA (0.00m)`,
+          dimensions: `Sección ${(col.colW * 100).toFixed(0)}×${(col.colD * 100).toFixed(0)}cm • Termina en Cota +100.00m`,
+          status: 'No continúa a Planta Alta (Según Plano E6/E9)',
+          desc: `El pilar ${col.pilarId} termina en la 1ra Losa (0.00m) y no sube al 2do piso.`
+        };
+        this.groups.structure.add(capMesh);
+      } else {
+        // Pelos de espera expuestos cuando se visualiza "Hoy en Obra"
+        if (isHoyEnObra) {
+          rebarOffsets.forEach(([ox, oz]) => {
+            const barGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.60, 8);
+            const barMesh = new THREE.Mesh(barGeo, rebarMat);
+            barMesh.position.set(col.x + ox, topFase1Y + 0.30, col.z + oz);
+            barMesh.userData = {
+              type: 'structure',
+              bankCategory: 'refaccion_amarillo',
+              name: `Pelos de Espera Ø12/16mm Expuestos a Intemperie — Pilar ${col.pilarId} (Eje ${col.axisLabel})`,
+              dimensions: 'Longitud expuesta 0.60m sobre 1ra Losa (Requiere Desoxidado + Epóxico Sikadur-32)',
+              status: 'A Tratar con Desoxidante Fosfatizante + Sikadur-32 🟡',
+              desc: `Arranque de armadura dejado en espera desde dic/2025 sobre la 1ra Losa para continuar el pilar ${col.pilarId}. Requiere cepillado mecánico, pasivador de óxido y puente epóxico estructural Sikadur-32 antes de hormigonar.`
+            };
+            this.groups.structure.add(barMesh);
+          });
+        }
+
+        // Continuación de los 17 pilares en Planta Baja hacia Losa 2do Piso (Y = +2.88m)
+        const targetPA_Y = 2.88;
+        const hPBtoPA = targetPA_Y - topFase1Y;
+
+        if (!isFinished) {
+          const collarGeo = new THREE.BoxGeometry(col.colW + 0.03, 0.24, col.colD + 0.03);
+          const collarMesh = new THREE.Mesh(collarGeo, sikadurMat);
+          collarMesh.position.set(col.x, topFase1Y + 0.12, col.z);
+          collarMesh.userData = {
+            type: 'structure_fase2',
+            bankCategory: 'refaccion_amarillo',
+            name: `Tratamiento de Arranque: Desoxidado + Puente Epóxico Sikadur-32 — Pilar ${col.pilarId}`,
+            dimensions: `Junta fría en Cota ${isEjeA ? '+99.55m' : '+100.00m'} (17 Pilares continúan a PA)`,
+            costo: 'Incluido en Tratamiento de Losa 1 y Pelos Expuestos',
+            status: 'Refacción / Tratamiento de Empalme Estructural (Amarillo en Banco) 🟡',
+            desc: `Cepillado de acero expuesto a lluvias, escarificado de hormigón en junta fría y aplicación de adhesivo epóxico estructural Sikadur-32 Gel en el arranque del pilar ${col.pilarId}.`
+          };
+          this.groups.losaFase2.add(collarMesh);
+        }
+
+        const colPBGeo = new THREE.BoxGeometry(col.colW, hPBtoPA, col.colD);
+        const colPBMesh = new THREE.Mesh(colPBGeo, fase2ColMat);
+        colPBMesh.position.set(col.x, topFase1Y + hPBtoPA / 2, col.z);
+        colPBMesh.castShadow = true;
+        colPBMesh.receiveShadow = true;
+        colPBMesh.userData = {
+          type: 'structure_fase2',
+          bankCategory: 'hormigon_verde',
+          name: `Pilar ${col.pilarId} (Eje ${col.axisLabel}) — Tramo Planta Baja a 2do Piso`,
+          dimensions: `${(col.colW * 100).toFixed(0)}×${(col.colD * 100).toFixed(0)}cm • Altura ${hPBtoPA.toFixed(2)}m (hasta +2.88m)`,
+          status: 'Sostén de Losa 2do Piso 🎯',
+          costo: 'Incluido en Estructura Planta Alta',
+          desc: `Continuación del pilar ${col.pilarId} desde la 1ra Losa existente hasta el fondo de la Losa del 2do Piso (+102.88m).`
+        };
+        this.groups.losaFase2.add(colPBMesh);
+
+        if (col.topLevel === 'techo') {
+          const roofY = 5.64;
+          const hPAtoRoof = roofY - targetPA_Y;
+          const colPAGeo = new THREE.BoxGeometry(col.colW, hPAtoRoof, col.colD);
+          const colPAMesh = new THREE.Mesh(colPAGeo, fase2ColMat);
+          colPAMesh.position.set(col.x, targetPA_Y + hPAtoRoof / 2, col.z);
+          colPAMesh.castShadow = true;
+          colPAMesh.receiveShadow = true;
+          colPAMesh.userData = {
+            type: 'structure_fase2',
+            bankCategory: 'hormigon_verde',
+            name: `Pilar ${col.pilarId} (Eje ${col.axisLabel}) — Tramo Planta Alta a Techo`,
+            dimensions: `${(col.colW * 100).toFixed(0)}×${(col.colD * 100).toFixed(0)}cm • De +2.88m a +5.64m`,
+            status: 'Sostén de Techo General 🎯',
+            desc: `Fuste superior del pilar ${col.pilarId} hasta Cota +105.64m.`
+          };
+          this.groups.losaFase2.add(colPAMesh);
+        }
+      }
     });
+
+    // 3B. MURALLAS PERIMETRALES YA EXISTENTES ALREDEDOR DEL TERRENO (`this.groups.structure` — Color Negro en Carpeta Banco)
+    const perimWallMat = mats.brickWallPBR || mats.plasterRoughPBR;
+    const perimExistingMeta = {
+      type: 'structure',
+      bankCategory: 'existente_negro',
+      name: 'Murallas Perimetrales YA EXISTENTES alrededor del Terreno (Oeste, Este y Fondo Norte)',
+      dimensions: 'Perímetro Lateral 26.00m × 2 lados + Fondo 9.89m • Altura media 1.85m',
+      costo: 'Gs. 0 (Murallas Perimetrales Ya Construidas en el Terreno)',
+      status: 'Ejecutado 100% en Sitio (Color Negro en Carpeta Banco) 🔒',
+      desc: 'El terreno de Ruth y Leo ya cuenta con sus murallas perimetrales construidas alrededor. Solo se requiere levantar un tramo adicional de 3,00m × 2,00m (6,00 m²) en el costado próximo a la calle donde el piso del vecino está abierto.'
+    };
+
+    // Muralla Perimetral Oeste existente (x = -4.95m, desde Línea Municipal z=-4.00m hasta Fondo z=21.80m)
+    const westPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.85, 25.80), perimWallMat);
+    westPerimExisting.position.set(-4.95, 0.925 - 0.85, 8.90);
+    westPerimExisting.userData = perimExistingMeta;
+    this.groups.structure.add(westPerimExisting);
+
+    // Muralla Perimetral Este existente (x = +4.95m, desde Línea Municipal z=-4.00m hasta Fondo z=21.80m)
+    const eastPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.85, 25.80), perimWallMat);
+    eastPerimExisting.position.set(4.95, 0.925 - 0.85, 8.90);
+    eastPerimExisting.userData = perimExistingMeta;
+    this.groups.structure.add(eastPerimExisting);
+
+    // Muralla Perimetral Fondo Norte existente (z = 21.80m, ancho 9.90m en cota jardín Y=-2.34m)
+    const northPerimExisting = new THREE.Mesh(new THREE.BoxGeometry(9.90, 1.90, 0.18), perimWallMat);
+    northPerimExisting.position.set(0, -2.34 + 0.95, 21.80);
+    northPerimExisting.userData = perimExistingMeta;
+    this.groups.structure.add(northPerimExisting);
+
+    // 4. Escalera 1 de H°A° Real hacia el Subsuelo (y tramo superior a PA) con zanca inclinada, 14 peldaños y baranda
+    buildExistingStaircase3D(THREE, this.groups.structure, this.groups.losaFase2, mats, this.currentScenario);
+
+    // 5. PRIMERA LOSA YA CONSTRUIDA (`this.groups.losaFase1`) con abertura real para la Escalera 1 (x=3.84..4.87m, z=5.26..9.94m):
+    const mainL234W = 3.84 - (-4.87); // 8.71m
+    const mainL234D = 9.94 - 3.00;    // 6.94m
+    const l234Mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(mainL234W, 0.18, mainL234D),
+      slabFase1Mat
+    );
+    l234Mesh.position.set((-4.87 + 3.84) / 2, -0.09, (3.00 + 9.94) / 2);
+    l234Mesh.castShadow = true;
+    l234Mesh.receiveShadow = true;
+    l234Mesh.userData = {
+      type: 'losa_existente',
+      bankCategory: 'hormigon_verde',
+      name: '1ra Losa H°A° Ejecutada — Sector Interior (Losas L2, L3 y L4) + Tratamiento por Exposición al Sol',
+      dimensions: '9.74m × 6.94m (67.60 m²) • Espesor 18cm • Cota +100.00m (Y = 0.00m)',
+      area: 67.6,
+      status: 'Ejecutado 100% en Obra (Con Protocolo de Sellado por Exposición Solar dic/2025–hoy) 🔒',
+      costo: 'Patrimonio ejecutado Fase 1 + Gs. 2.850.000 (Hidrolavado + Sellado SikaTop/SikaLatex)',
+      desc: 'Losa de hormigón armado de Nivel Calle ejecutada en diciembre de 2025. Al haber estado expuesta al sol y lluvias de Asunción sin techo encima, incluye previo al piso un hidrolavado a 2500 PSI, sellado elástico de microfisuras térmicas de retracción (Sikaflex-1A / SikaTop-107) y puente de adherencia SikaLatex.'
+    };
+    this.groups.losaFase1.add(l234Mesh);
+
+    // Membrana / Capa de Tratamiento Previo de Losa 1 Expuesta al Sol e Intemperie (Amarillo en Modo Carpeta Bancaria)
+    const sunTreatmentLayer = new THREE.Mesh(
+      new THREE.BoxGeometry(mainL234W - 0.15, 0.008, mainL234D - 0.15),
+      new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        roughness: 0.4,
+        transparent: true,
+        opacity: isHoyEnObra ? 0.38 : 0.15
+      })
+    );
+    sunTreatmentLayer.position.set((-4.87 + 3.84) / 2, 0.003, (3.00 + 9.94) / 2);
+    sunTreatmentLayer.userData = {
+      type: 'tratamiento_losa_intemperie',
+      bankCategory: 'refaccion_amarillo',
+      name: 'Tratamiento Previo de 1ra Losa Expuesta al Sol e Intemperie (Hidrolavado + Sellado Microfisuras + SikaLatex + Sikadur-32)',
+      dimensions: '100,71 m² de Superficie Superior (Losa 1 + Galería L1) + 17 Arranques de Pilares',
+      costo: 'Gs. 3.450.000 (SikaTop-107 Seal + SikaLatex + Sikadur-32 + Mano de Obra)',
+      status: 'A Tratar / Refaccionar Antes de Levantar Paredes y Pisos (Amarillo en Banco) 🟡☀️',
+      desc: 'Como la primera losa estuvo expuesta al sol directo y lluvias desde su hormigonado, se ejecuta hidrolavado industrial 2500 PSI, sellado de microfisuras térmicas por dilatación solar con SikaTop-107, imprimación SikaLatex para la carpeta y epóxico Sikadur-32 en los pelos de los 17 pilares.'
+    };
+    this.groups.losaFase1.add(sunTreatmentLayer);
+
+    // Sector Este delante de la Escalera 1 (x = 3.84m a 4.87m, z = 3.00m a 5.26m)
+    const stairLandingPB = new THREE.Mesh(
+      new THREE.BoxGeometry(1.03, 0.18, 5.26 - 3.00),
+      slabFase1Mat
+    );
+    stairLandingPB.position.set((3.84 + 4.87) / 2, -0.09, (3.00 + 5.26) / 2);
+    stairLandingPB.userData = l234Mesh.userData;
+    this.groups.losaFase1.add(stairLandingPB);
+
+    // Sector Galería al Río (Losa L1): desde Eje B (z=9.94m) hasta Eje A (z=13.34m), rebajada -0.45m en Y = -0.45m
+    const l1Mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(9.74, 0.18, 13.34 - 9.94),
+      slabFase1Mat
+    );
+    l1Mesh.position.set(0, -0.45 - 0.09, (9.94 + 13.34) / 2);
+    l1Mesh.castShadow = true;
+    l1Mesh.receiveShadow = true;
+    l1Mesh.userData = {
+      type: 'losa_existente',
+      bankCategory: 'hormigon_verde',
+      name: '1ra Losa H°A° Ejecutada — Sector Galería al Río (Losa L1 Rebajada -0.45m)',
+      dimensions: '9.74m × 3.40m (33.12 m²) • Cota +99.55m (Y = -0.45m)',
+      area: 33.1,
+      status: 'Ejecutado 100% (Desnivel -0.45m según Plano E4) 🔒',
+      costo: 'Patrimonio ejecutado Fase 1',
+      desc: 'Losa L1 del sector Galería / Quincho entre Eje B y Eje A, ejecutada a -0.45m respecto al nivel interior.'
+    };
+    this.groups.losaFase1.add(l1Mesh);
+
+    // Viga Invertida de Transición en Eje B (z = 9.94m)
+    const vigaTransMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(9.74, 0.65, 0.22),
+      concreteColMat
+    );
+    vigaTransMesh.position.set(0, -0.25, 9.94);
+    vigaTransMesh.castShadow = true;
+    vigaTransMesh.userData = {
+      type: 'structure',
+      bankCategory: 'hormigon_verde',
+      name: 'Viga Invertida de Transición V.Eje B (z = 9.94m • Desnivel -0.45m)',
+      dimensions: 'Largo 9.74m × Sección 22×65cm',
+      status: 'Ejecutado 100% 🔒',
+      desc: 'Viga principal sobre el Eje B que articula el salto de nivel de 45cm entre las losas interiores L2-L4 (+100.00m) y la losa L1 de Galería (+99.55m).'
+    };
+    this.groups.losaFase1.add(vigaTransMesh);
+
+    // 6. LOSA DEL SEGUNDO PISO (`this.groups.losaFase2` en Y = +2.88m / Cota +102.88m) con hueco de Escalera 2 desplazado a x = 2.84m..3.84m
+    this.buildLosaFase2(fase2SlabMat, fase2ColMat);
+
+    // 7. CUBIERTA GENERAL CON CONMUTADOR 3D (`this.groups.roof` en Y = +5.64m / Cota +105.64m):
+    //    Opción A (`'isopanel'`): Cubierta Termoacústica Sandwich Isopanel PIR 50mm + Cielorraso Acústico Durlock c/ Lana de Vidrio
+    //    Opción B (`'tejas'`): Techo Tradicional Paraguayo de Tejas Cerámicas de Tobatí sobre Tirantes de Lapacho/Yvyra Pytã y Tejuelones
+    this.currentRoofStyle = this.currentRoofStyle || 'isopanel';
+    const roofMinZ = 1.90;
+    const roofMaxZ = 13.60;
+    const roofW = 10.30;
+    const roofD = roofMaxZ - roofMinZ;
+    const roofCenterZ = (roofMinZ + roofMaxZ) / 2;
+    const roofBaseY = 5.64;
+
+    // --- 7A. SUBGRUPO OPCIÓN A: TECHO ISOPANEL PIR 50mm + CIELORRASO ACÚSTICO DURLOCK ---
+    this.roofIsopanelGroup = new THREE.Group();
+    this.roofIsopanelGroup.name = 'roof_style_isopanel';
+
+    const purlinMat = mats.stainlessMat;
+    for (let z = roofMinZ + 0.35; z <= roofMaxZ - 0.25; z += 1.15) {
+      const slopeOffset = ((roofMaxZ - z) / roofD) * 0.32;
+      const pMesh = new THREE.Mesh(new THREE.BoxGeometry(roofW - 0.2, 0.10, 0.06), purlinMat);
+      pMesh.position.set(0, roofBaseY + slopeOffset, z);
+      pMesh.userData = {
+        type: 'techo',
+        bankCategory: 'nuevo_rojo',
+        name: 'Correas Estructurales Perfil C Galvanizado 100×50×2mm (Opción Isopanel)',
+        dimensions: 'Largo 10.10m • Separación c/ 1.15m',
+        status: 'Estructura Metálica Liviana 🎯',
+        desc: 'Perfiles C galvanizados anclados a las vigas de coronamiento en Cota +105.64m.'
+      };
+      this.roofIsopanelGroup.add(pMesh);
+    }
+
+    const acousticCeiling = new THREE.Mesh(
+      new THREE.BoxGeometry(roofW - 0.65, 0.06, roofD - 0.80),
+      mats.plasterPBR
+    );
+    acousticCeiling.position.set(0, roofBaseY - 0.14, roofCenterZ);
+    acousticCeiling.userData = {
+      type: 'techo',
+      bankCategory: 'nuevo_rojo',
+      name: 'Cielorraso Acústico Durlock + Lana de Vidrio 50mm bajo Isopanel (Atenuación Ruido de Lluvia)',
+      dimensions: '9.65m × 10.90m • Cámara Fonoabsorbente sobre Dormitorio 2do Piso',
+      costo: 'Gs. 14.850.000 (Recomendado si se elige Isopanel sobre Dormitorio en 2do Piso)',
+      status: 'Barrera Acústica Antilluvia ✨',
+      desc: 'Como el dormitorio de Ruth y Leo está en el 2do piso justo debajo del techo, el panel metálico Isopanel requiere un cielorraso suspendido con lana mineral para amortiguar el ruido de impacto de lluvias torrenciales.'
+    };
+    this.roofIsopanelGroup.add(acousticCeiling);
+
+    const roofPanelMat = new THREE.MeshStandardMaterial({
+      color: 0x334155,
+      roughness: 0.32,
+      metalness: 0.68
+    });
+    const roofPanelMesh = new THREE.Mesh(new THREE.BoxGeometry(roofW, 0.12, roofD), roofPanelMat);
+    roofPanelMesh.position.set(0, roofBaseY + 0.22, roofCenterZ);
+    roofPanelMesh.rotation.x = 0.028;
+    roofPanelMesh.castShadow = true;
+    roofPanelMesh.receiveShadow = true;
+    roofPanelMesh.userData = {
+      type: 'techo',
+      bankCategory: 'nuevo_rojo',
+      name: 'Cubierta Termoacústica Sandwich Isopanel PIR 50mm (Cota +105.64m)',
+      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (150 m² • Pendiente 6%)`,
+      area: 150,
+      status: 'Opción A: Montaje Rápido y Liviano 🎯',
+      costo: 'Gs. 63.390.000 (Chapa Sandwich PIR 50mm + Estructura C)',
+      desc: 'Cubierta metálica con núcleo de poliisocianurato (PIR) de 50mm. Excelente aislación térmica y montaje rápido; ante lluvia torrencial directa genera mayor rumor metálico (~58-62 dB sin cielorraso fonoabsorbente).'
+    };
+    this.roofIsopanelGroup.add(roofPanelMesh);
+
+    // --- 7B. SUBGRUPO OPCIÓN B: TECHO DE TEJAS CERÁMICAS DE TOBATÍ SOBRE TIRANTES DE LAPACHO Y TEJUELONES ---
+    this.roofTejasGroup = new THREE.Group();
+    this.roofTejasGroup.name = 'roof_style_tejas';
+
+    const clayTerracottaMat = new THREE.MeshStandardMaterial({
+      color: 0xc2410c,
+      roughness: 0.68,
+      metalness: 0.04
+    });
+    const clayDarkRidgeMat = new THREE.MeshStandardMaterial({
+      color: 0x9a3412,
+      roughness: 0.72,
+      metalness: 0.05
+    });
+    const tejuelonUnderMat = new THREE.MeshStandardMaterial({
+      color: 0xd97706,
+      roughness: 0.75,
+      metalness: 0.03
+    });
+
+    const tejasMeta = {
+      type: 'techo',
+      bankCategory: 'nuevo_rojo',
+      name: 'Techo Tradicional de Tejas Cerámicas de Tobatí + Tejuelones y Tirantes de Lapacho/Yvyra Pytã',
+      dimensions: `${roofW.toFixed(2)}m × ${roofD.toFixed(2)}m (158 m² en 2 Aguas • Pendiente 28%)`,
+      area: 158,
+      status: 'Opción B: Máximo Confort Acústico ante Lluvias Torrenciales ✨',
+      costo: 'Gs. 71.850.000 (Tijerales y Tirantes Madera Dura + Tejuelones + Aislación + Tejas Prensadas)',
+      desc: 'Cubierta tradicional paraguaya en dos aguas con maderamen de Lapacho/Yvyra Pytã, tejuelones cerámicos vistos desde el dormitorio, membrana hidrófuga/térmica y tejas cerámicas coloniales de Tobatí. Su alta masa cerámica absorbe el impacto de lluvias torrenciales (~42-45 dB, sonido grave y silencioso ideal para dormir en el 2do piso).'
+    };
+
+    const halfD = roofD / 2;
+    const ridgeRise = 1.32;
+    const pitchAngle = Math.atan2(ridgeRise, halfD);
+    const slopeLen = Math.hypot(halfD, ridgeRise) + 0.25;
+
+    for (let tx = -4.60; tx <= 4.65; tx += 1.15) {
+      [-1, 1].forEach((dirZ) => {
+        const rafter = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 0.16, slopeLen),
+          mats.woodDoorPBR
+        );
+        rafter.position.set(tx, roofBaseY + ridgeRise / 2 - 0.02, roofCenterZ + (dirZ * halfD) / 2);
+        rafter.rotation.x = dirZ * pitchAngle;
+        rafter.userData = tejasMeta;
+        this.roofTejasGroup.add(rafter);
+      });
+    }
+
+    [-1, 1].forEach((dirZ) => {
+      const tejuelonDeck = new THREE.Mesh(
+        new THREE.BoxGeometry(roofW, 0.06, slopeLen),
+        tejuelonUnderMat
+      );
+      tejuelonDeck.position.set(0, roofBaseY + ridgeRise / 2 + 0.06, roofCenterZ + (dirZ * halfD) / 2);
+      tejuelonDeck.rotation.x = dirZ * pitchAngle;
+      tejuelonDeck.userData = tejasMeta;
+      this.roofTejasGroup.add(tejuelonDeck);
+
+      const tileLayer = new THREE.Mesh(
+        new THREE.BoxGeometry(roofW + 0.12, 0.09, slopeLen + 0.08),
+        clayTerracottaMat
+      );
+      tileLayer.position.set(0, roofBaseY + ridgeRise / 2 + 0.14, roofCenterZ + (dirZ * halfD) / 2);
+      tileLayer.rotation.x = dirZ * pitchAngle;
+      tileLayer.castShadow = true;
+      tileLayer.receiveShadow = true;
+      tileLayer.userData = tejasMeta;
+      this.roofTejasGroup.add(tileLayer);
+
+      for (let rx = -roofW / 2 + 0.20; rx <= roofW / 2 - 0.20; rx += 0.28) {
+        const barrelTile = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.055, 0.065, slopeLen + 0.06, 8),
+          clayDarkRidgeMat
+        );
+        barrelTile.rotation.x = Math.PI / 2 + dirZ * pitchAngle;
+        barrelTile.position.set(rx, roofBaseY + ridgeRise / 2 + 0.19, roofCenterZ + (dirZ * halfD) / 2);
+        barrelTile.userData = tejasMeta;
+        this.roofTejasGroup.add(barrelTile);
+      }
+    });
+
+    const ridgeCap = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.14, roofW + 0.20, 12),
+      clayDarkRidgeMat
+    );
+    ridgeCap.rotation.z = Math.PI / 2;
+    ridgeCap.position.set(0, roofBaseY + ridgeRise + 0.20, roofCenterZ);
+    ridgeCap.userData = tejasMeta;
+    this.roofTejasGroup.add(ridgeCap);
+
+    this.roofIsopanelGroup.visible = this.currentRoofStyle !== 'tejas';
+    this.roofTejasGroup.visible = this.currentRoofStyle === 'tejas';
+
+    this.groups.roof.add(this.roofIsopanelGroup);
+    this.groups.roof.add(this.roofTejasGroup);
   }
 
-  // --- Dynamic Construction Scenarios (300M, 370M, 440M Gs.) ---
-  setScenario(scenarioKey) {
-    this.currentScenario = scenarioKey;
-    const scenario = ESCENARIOS_INVERSION[scenarioKey];
-    if (!scenario) return;
+  /**
+   * Construye la Losa del 2do Piso (`Y = +2.88m` / Cota `+102.88m`) dejando el hueco de la
+   * Escalera 2 desplazada por la Auditoría de Ingeniería Civil en `x = 2.84m..3.84m, z = 5.26m..9.94m`
+   * (al lado Oeste del Eje 2), mientras que la franja `x = 3.84m..4.87m` es losa llena sobre la
+   * Escalera 1 garantizando `> 2,25m` de paso de cabeza libre.
+   */
+  buildLosaFase2(
+    fase2SlabMat = this.archVizMats.concretePBR,
+    fase2ColMat = ['escenario350', 'escenario370', 'escenario440', 'edifica460', 'edifica573'].includes(this.currentScenario)
+      ? this.archVizMats.plasterExteriorPBR
+      : this.archVizMats.concretePBR
+  ) {
+    const losa2Y = 2.88;
+    const losa2Meta = {
+      type: 'losa_fase2',
+      bankCategory: 'hormigon_verde',
+      name: 'Losa 2do Piso / Planta Alta (Cota +102.88m • Hueco Escalera 2 en x=2.84..3.84m, Losa Llena sobre Escalera 1)',
+      dimensions: '9.74m × 11.19m (108.99 m²) • Espesor 20cm • Hueco Escalera 2: x=2.84..3.84m, z=5.26..9.94m',
+      area: 109.0,
+      status: 'Estructura Planta Alta (Paso de Cabeza > 2,25m s/ Escalera 1) 🎯',
+      costo: 'Gs. 54.022.500 (Losa + Vigas Encadenado)',
+      desc: 'Losa de entrepiso de Planta Alta en Cota +102.88m. El hueco de la Escalera 2 queda en x=2.84..3.84m (z=5.26..9.94m, al Oeste del Eje 2), mientras que la franja Este (x=3.84..4.87m) es losa llena/pasarela de desembarco sobre la Escalera 1 dando >2,25m de paso libre.'
+    };
 
-    if (scenarioKey === 'escenario300') {
-      // 300M Gs: Muro cochera + 2da Losa + Techo + Cierre perimetral básico
-      this.groups.parkingWall.visible = true;
-      this.groups.losaFase1.visible = true;
-      this.groups.losaFase2.visible = true;
+    // 1. Paño Principal Oeste (desde Eje 9 x=-4.87m hasta el borde Oeste del hueco de Escalera 2 en x=2.84m, z=2.15..13.34m)
+    const losa2WestW = 2.84 - (-4.87); // 7.71m
+    const losa2FullD = 13.34 - 2.15;   // 11.19m
+    const losa2Mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(losa2WestW, 0.20, losa2FullD),
+      fase2SlabMat
+    );
+    losa2Mesh.position.set((-4.87 + 2.84) / 2, losa2Y + 0.10, (2.15 + 13.34) / 2);
+    losa2Mesh.castShadow = true;
+    losa2Mesh.receiveShadow = true;
+    losa2Mesh.userData = losa2Meta;
+    this.groups.losaFase2.add(losa2Mesh);
+
+    // 2. Franja Central del Hueco (x = 2.84m..3.84m): Tramo Frontal (z = 2.15m..5.26m) y Tramo Posterior de Desembarco (z = 9.94m..13.34m)
+    const stairOpeningW = 3.84 - 2.84; // 1.00m (Hueco libre en z = 5.26m..9.94m)
+    const losa2MidFront = new THREE.Mesh(
+      new THREE.BoxGeometry(stairOpeningW, 0.20, 5.26 - 2.15),
+      fase2SlabMat
+    );
+    losa2MidFront.position.set((2.84 + 3.84) / 2, losa2Y + 0.10, (2.15 + 5.26) / 2);
+    losa2MidFront.castShadow = true;
+    losa2MidFront.receiveShadow = true;
+    losa2MidFront.userData = losa2Meta;
+    this.groups.losaFase2.add(losa2MidFront);
+
+    const losa2MidRear = new THREE.Mesh(
+      new THREE.BoxGeometry(stairOpeningW, 0.20, 13.34 - 9.94),
+      fase2SlabMat
+    );
+    losa2MidRear.position.set((2.84 + 3.84) / 2, losa2Y + 0.10, (9.94 + 13.34) / 2);
+    losa2MidRear.castShadow = true;
+    losa2MidRear.receiveShadow = true;
+    losa2MidRear.userData = losa2Meta;
+    this.groups.losaFase2.add(losa2MidRear);
+
+    // 3. Franja Este Continua (x = 3.84m..4.87m, z = 2.15m..13.34m): Losa llena y pasarela de desembarco en Y=+2.88m sobre la Escalera 1 (>2,25m de paso de cabeza)
+    const losa2EastFullW = 4.87 - 3.84; // 1.03m
+    const losa2EastFull = new THREE.Mesh(
+      new THREE.BoxGeometry(losa2EastFullW, 0.20, losa2FullD),
+      fase2SlabMat
+    );
+    losa2EastFull.position.set((3.84 + 4.87) / 2, losa2Y + 0.10, (2.15 + 13.34) / 2);
+    losa2EastFull.castShadow = true;
+    losa2EastFull.receiveShadow = true;
+    losa2EastFull.userData = {
+      ...losa2Meta,
+      name: 'Losa Llena / Pasarela 2do Piso sobre Escalera 1 (x = 3.84m..4.87m • Y = +2.88m • > 2,25m de Paso de Cabeza)'
+    };
+    this.groups.losaFase2.add(losa2EastFull);
+
+    // Vigas de encadenado de Planta Alta y Coronamiento
+    const addFase2Beam = (x, y, z, w, h, d, name, desc) => {
+      const bm = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), fase2ColMat);
+      bm.position.set(x, y, z);
+      bm.castShadow = true;
+      bm.userData = {
+        type: 'losa_fase2',
+        bankCategory: 'hormigon_verde',
+        name,
+        dimensions: `${w.toFixed(2)}×${h.toFixed(2)}×${d.toFixed(2)}m`,
+        status: 'Viga Estructural Planta Alta 🎯',
+        desc
+      };
+      this.groups.losaFase2.add(bm);
+    };
+
+    addFase2Beam(0, 2.72, 2.15, 9.74, 0.32, 0.20, 'Viga Borde Voladizo Frontal PA (z=2.15m)', 'Viga frontal del voladizo de 85cm de Planta Alta.');
+    addFase2Beam(0, 2.72, 3.00, 9.74, 0.38, 0.20, 'Viga Principal Eje G Planta Alta (z=3.00m)', 'Viga portante sobre Eje G.');
+    addFase2Beam(0, 2.72, 9.94, 9.74, 0.38, 0.22, 'Viga Principal Eje B Planta Alta (z=9.94m)', 'Viga portante central sobre Eje B.');
+    addFase2Beam(0, 2.72, 13.34, 9.74, 0.38, 0.20, 'Viga Posterior Eje A Planta Alta (z=13.34m)', 'Viga de borde hacia el Río Paraguay sobre Eje A.');
+    addFase2Beam(2.84, 2.72, (5.26 + 9.94) / 2, 0.18, 0.34, 9.94 - 5.26, 'Viga Borde Hueco Escalera 2 (x=2.84m, z=5.26..9.94m)', 'Viga de borde del hueco de la Escalera 2 desplazada al Oeste del Eje 2.');
+    addFase2Beam(3.84, 2.72, (5.26 + 9.94) / 2, 0.18, 0.34, 9.94 - 5.26, 'Viga Eje 2 Sostén Escalera 2 y Losa Este (x=3.84m, P6-P5)', 'Viga sobre Eje 2 entre P6 y P5 que separa el hueco de Escalera 2 (x=2.84..3.84m) de la losa llena sobre Escalera 1 (x=3.84..4.87m).');
+  }
+
+  /**
+   * Conmuta en tiempo real entre:
+   * - `'isopanel'`: Techo Termoacústico Sandwich Isopanel PIR 50mm + Cielorraso Acústico Durlock
+   * - `'tejas'`: Techo Tradicional de Tejas Cerámicas de Tobatí con Tirantes de Lapacho y Tejuelones
+   */
+  setRoofStyle(style = 'isopanel') {
+    const cleanStyle = String(style || 'isopanel').toLowerCase().includes('teja') ? 'tejas' : 'isopanel';
+    this.currentRoofStyle = cleanStyle;
+    if (this.roofIsopanelGroup && this.roofTejasGroup) {
+      this.roofIsopanelGroup.visible = cleanStyle === 'isopanel';
+      this.roofTejasGroup.visible = cleanStyle === 'tejas';
       this.groups.roof.visible = true;
-      this.groups.archMain.visible = true;
-      this.groups.galleryFinish.visible = false;
-      this.groups.windowsFinish.visible = false;
-    } else if (scenarioKey === 'escenario370') {
-      // 370M Gs: Todo lo anterior + Galería al río con deck y parrilla
-      this.groups.parkingWall.visible = true;
-      this.groups.losaFase1.visible = true;
-      this.groups.losaFase2.visible = true;
-      this.groups.roof.visible = true;
-      this.groups.archMain.visible = true;
-      this.groups.galleryFinish.visible = true;
-      this.groups.windowsFinish.visible = false;
-    } else if (scenarioKey === 'escenario440') {
-      // 440M Gs: Todo completo con ventanales Blindex y terminaciones
-      this.groups.parkingWall.visible = true;
-      this.groups.losaFase1.visible = true;
-      this.groups.losaFase2.visible = true;
-      this.groups.roof.visible = true;
-      this.groups.archMain.visible = true;
-      this.groups.galleryFinish.visible = true;
-      this.groups.windowsFinish.visible = true;
+      this.rebuildInteractables();
+    } else {
+      this.buildStructure();
+      this.rebuildInteractables();
+    }
+    if (this.bankColorMode) {
+      this.setBankColorMode(true);
+    }
+    return cleanStyle;
+  }
+
+  /**
+   * Construye:
+   * 1) El Relleno Compactado y Explanada de Estacionamiento a Nivel Calle (`z = -4.00m` a `z = +1.50m`, `5.50m` de fondo en `Y = 0.00m`).
+   * 2) El Muro de Contención del Estacionamiento en `z = +1.50m` (bajando de `Y = 0.00m` a `Y = -2.34m`).
+   * 3) El Pasillo Cámara de Aire Antihumedad (`z = +1.50m` a `z = +3.00m`, ancho `1.50m × 9.74m = 14.61 m²` en `Y = -2.34m`).
+   * 4) La Sobreelevación Lateral Antirrobo de `3.00m × 2.00m = 6.00 m²` sobre la muralla del costado junto a la calle/vecino.
+   */
+  buildMuroEstacionamiento() {
+    this.groups.muroEstacionamiento.clear();
+    const mats = this.archVizMats;
+
+    const muroData = {
+      type: 'muro_estacionamiento',
+      bankCategory: 'nuevo_rojo',
+      name: 'Muro de Contención del Estacionamiento en z = +1.50m (Dejado a 1,50m del Eje G para Pasillo Antihumedad)',
+      dimensions: 'Frente 9.74m × Altura 2.34m × Esp. 30cm (En z = +1.50m • De Y=0.00m a Y=-2.34m)',
+      status: 'Contención + Cámara Antihumedad 🎯',
+      costo: 'Gs. 38.495.560',
+      desc: 'Muro de contención ubicado estratégicamente en z = +1.50m (a 1,50m de distancia de la pared del Eje G en z = 3.00m) para contener el relleno de la cochera de 5,50m de fondo y generar un pasillo ventilado que evita al 100% que la humedad del terreno toque la pared de los 100 m² libres del subsuelo.'
+    };
+
+    // Muro de Contención Principal en z = +1.50m (baja desde Y=0.00m hasta Y=-2.34m)
+    const retainingWall = new THREE.Mesh(new THREE.BoxGeometry(9.74, 2.34, 0.30), mats.stoneWallPBR);
+    retainingWall.position.set(0, -1.17, 1.50);
+    retainingWall.castShadow = true;
+    retainingWall.receiveShadow = true;
+    retainingWall.userData = muroData;
+    this.groups.muroEstacionamiento.add(retainingWall);
+
+    // Alas laterales de contención del relleno de cochera (z = -4.00m a z = +1.50m)
+    [-4.72, 4.72].forEach((sideX) => {
+      const wing = new THREE.Mesh(new THREE.BoxGeometry(0.30, 1.60, 5.50), mats.stoneWallPBR);
+      wing.position.set(sideX, -0.80, -1.25);
+      wing.castShadow = true;
+      wing.userData = muroData;
+      this.groups.muroEstacionamiento.add(wing);
+    });
+
+    // SOBREELEVACIÓN DE MURALLA LATERAL ANTIRROBO DE 3,00m × 2,00m (6,00 m²) EN EL COSTADO JUNTO A LA CALLE/VECINO
+    if (this.currentScenario !== 'hoy_en_obra') {
+      const sideWallRaise = new THREE.Mesh(
+        new THREE.BoxGeometry(0.20, 2.00, 3.00),
+        this.currentScenario === 'escenario300' ? mats.brickWallPBR : mats.plasterExteriorPBR
+      );
+      sideWallRaise.position.set(-4.92, 1.00 + 1.00, -2.50); // Largo 3.00m (z = -4.00m a -1.00m) × Alto 2.00m adicionales
+      sideWallRaise.castShadow = true;
+      sideWallRaise.receiveShadow = true;
+      sideWallRaise.userData = {
+        type: 'sobreelevacion_muralla_seguridad',
+        bankCategory: 'nuevo_rojo',
+        name: 'Sobreelevación de Muralla Lateral Antirrobo 3,00m × 2,00m (6,00 m² a Construir junto a Calle/Vecino)',
+        dimensions: 'Largo 3.00m × Alto Adicional 2.00m (6,00 m² • Esp. 20cm con Encadenado Superior)',
+        area: 6.0,
+        costo: 'Gs. 1.680.000 (Mampostería 6 m² + Revoque + Viga Cadena Superior)',
+        status: 'Obra Nueva de Seguridad Perimetral (Rojo en Carpeta Banco) 🛡️🧱',
+        desc: 'Como el terreno ya cuenta con murallas perimetrales pero el piso a nivel del vecino en uno de los costados junto a la calle está abierto, se levanta este tramo adicional de 3,00m × 2,00m (6,00 m²) para impedir cualquier intrusión saltando desde la calle.'
+      };
+      this.groups.muroEstacionamiento.add(sideWallRaise);
+    }
+
+    // Explanada de Estacionamiento a Nivel de Calle (Y = 0.00m, desde Línea Municipal z=-4.00m hasta Muro de Contención z=+1.50m -> 5.50m de largo)
+    const slabParking = new THREE.Mesh(
+      new THREE.BoxGeometry(9.44, 0.18, 5.50),
+      mats.concreteFoundationPBR
+    );
+    slabParking.position.set(0, -0.09, -1.25);
+    slabParking.receiveShadow = true;
+    slabParking.userData = {
+      type: 'muro_estacionamiento',
+      bankCategory: 'nuevo_rojo',
+      name: 'Explanada de Estacionamiento a Nivel de Calle (z = -4.00m a z = +1.50m)',
+      dimensions: '9.44m × 5.50m (51.9 m² a Nivel Cota +100.00m / Y = 0.00m)',
+      status: 'Plataforma Vehicular Doble a Nivel Calle 🎯',
+      costo: 'Incluido en Partida 1.3',
+      desc: 'Explanada vehicular sobre el relleno contenido por el muro en z = +1.50m, permitiendo estacionar cómodamente la SUV Chery Tiggo 2 Pro 2026 y un segundo vehículo a nivel de calle.'
+    };
+    this.groups.muroEstacionamiento.add(slabParking);
+
+    // PASILLO CÁMARA DE AIRE ANTIHUMEDAD (entre Muro de Contención z = +1.50m y Pared Eje G z = +3.00m, en cota Y = -2.34m)
+    const pasilloGroup = new THREE.Group();
+    const pasilloFloor = new THREE.Mesh(
+      new THREE.BoxGeometry(9.74, 0.14, 1.50),
+      mats.porcelainSubsueloPBR
+    );
+    pasilloFloor.position.set(0, -2.34 - 0.05, 2.25);
+    pasilloFloor.receiveShadow = true;
+    pasilloGroup.add(pasilloFloor);
+
+    const drainGrate = new THREE.Mesh(
+      new THREE.BoxGeometry(9.40, 0.03, 0.16),
+      mats.blackMetalMat
+    );
+    drainGrate.position.set(0, -2.34 + 0.02, 1.75);
+    pasilloGroup.add(drainGrate);
+
+    const guardLeft = new THREE.Mesh(new THREE.BoxGeometry(4.90, 0.90, 0.05), mats.blackMetalMat);
+    guardLeft.position.set(-2.35, 0.45, 1.50);
+    pasilloGroup.add(guardLeft);
+
+    const guardMid = new THREE.Mesh(new THREE.BoxGeometry(2.10, 0.90, 0.05), mats.blackMetalMat);
+    guardMid.position.set(2.65, 0.45, 1.50);
+    pasilloGroup.add(guardMid);
+
+    const pasilloMeta = {
+      type: 'pasillo_antihumedad',
+      bankCategory: 'nuevo_rojo',
+      name: 'Pasillo Cámara de Aire Antihumedad (Entre Muro Contención z=1.50m y Eje G z=3.00m)',
+      dimensions: 'Ancho 1.50m × Largo 9.74m (14.61 m² en Cota Y = -2.34m)',
+      status: 'Diseño Inteligente Antihumedad ✨',
+      costo: 'Incluido en Obra de Contención y Drenaje',
+      desc: 'Separa el muro de contención del relleno de cochera respecto a la pared frontal del subsuelo (Eje G), evitando al 100% que la humedad de la tierra se pegue a la pared de los 100 m² libres del subsuelo.'
+    };
+    pasilloGroup.userData = pasilloMeta;
+    pasilloGroup.traverse((ch) => {
+      if (ch.isMesh) ch.userData = pasilloMeta;
+    });
+    this.groups.muroEstacionamiento.add(pasilloGroup);
+
+    // Pasarelas / Puentes de Acceso en Y = 0.00m salvando el pasillo de 1.50m (z = 1.50m a z = 3.00m) hacia Puerta Principal (x=+0.85m) y Puerta de Servicio (x=+4.355m)
+    const bridgeMain = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.16, 1.54), mats.porcelainPBR);
+    bridgeMain.position.set(0.85, -0.06, 2.25);
+    bridgeMain.userData = {
+      type: 'fachada_exterior',
+      bankCategory: 'nuevo_rojo',
+      name: 'Puente Peatonal de Acceso a Puerta Principal (Salva el Pasillo Antihumedad z=1.50..3.00m)',
+      dimensions: 'Ancho 1.65m × Largo 1.50m (Cota +100.00m)',
+      status: 'Ingreso Principal sobre Pasillo Antihumedad ✨',
+      desc: 'Losa puente peatonal que vincula la explanada de estacionamiento (z=1.50m) con la Puerta Principal en Eje G (z=3.00m, x=+0.85m).'
+    };
+    this.groups.muroEstacionamiento.add(bridgeMain);
+
+    const bridgeService = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.16, 1.54), mats.porcelainPBR);
+    bridgeService.position.set(4.32, -0.06, 2.25);
+    bridgeService.userData = {
+      type: 'fachada_exterior',
+      bankCategory: 'nuevo_rojo',
+      name: 'Puente de Acceso a Puerta de Servicio y Escalera 1 (z=1.50..3.00m, x=+4.35m)',
+      dimensions: 'Ancho 1.15m × Largo 1.50m (Cota +100.00m)',
+      status: 'Ingreso Independiente a Escalera / Lavadero ✨',
+      desc: 'Pasarela lateral que conecta la cochera con la Puerta de Servicio (x=+4.35m, Eje G) alineada con la Escalera 1.'
+    };
+    this.groups.muroEstacionamiento.add(bridgeService);
+
+    // Fachada Frontal y Portón sobre Línea Municipal (z = -4.00m) con mejoras estéticas según presupuesto
+    buildFacadeAndGate3D(THREE, this.groups.muroEstacionamiento, mats, this.currentScenario);
+  }
+
+  /**
+   * Construye todo el interior hiper-realista
+   */
+  buildArchitecture() {
+    this.patioRefs = buildHyperRealisticInterior3D(
+      THREE,
+      this.groups,
+      this.archVizMats,
+      this.currentScenario,
+      Boolean(this.forcePoolQuinchoVisible)
+    );
+  }
+
+  /**
+   * Permite activar o desactivar bajo demanda el módulo de Piscina (4,65×2,45m) + Quincho en el Patio Trasero
+   */
+  setPoolQuinchoVisibility(visible) {
+    this.forcePoolQuinchoVisible = Boolean(visible);
+    if (this.patioRefs && this.patioRefs.poolQuinchoSubGroup) {
+      this.patioRefs.poolQuinchoSubGroup.visible = Boolean(visible);
+      this.rebuildInteractables();
+    } else {
+      this.buildArchitecture();
+      this.rebuildInteractables();
     }
   }
 
-  // Measurement Tool
-  handleClick(event) {
-    const rect = this.renderer.domElement.getBoundingClientRect();
-    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  /**
+   * Sincroniza en tiempo real los muros, aberturas y ambientes editados en el Editor 2D (`floorplanEditor.js`)
+   */
+  updateFromFloorplan(planState) {
+    if (!planState || !planState.levels) return;
 
-    this.raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = this.raycaster.intersectObjects(this.scene.children, true);
-
-    if (this.measureMode) {
-      if (intersects.length > 0) {
-        const hit = intersects[0].point;
-        this.addMeasurePoint(hit);
-      }
+    this.patioRefs = buildHyperRealisticInterior3D(
+      THREE,
+      this.groups,
+      this.archVizMats,
+      this.currentScenario,
+      Boolean(this.forcePoolQuinchoVisible)
+    );
+    if (this.currentScenario === 'hoy_en_obra') {
+      this.rebuildInteractables();
       return;
     }
 
-    if (intersects.length > 0) {
-      let obj = intersects[0].object;
-      while (obj && !obj.userData?.type && !obj.userData?.name && obj.parent !== this.scene) {
-        obj = obj.parent;
-      }
-      if (obj && (obj.userData?.type || obj.userData?.name)) {
-        if (this.onSelectObject) this.onSelectObject(obj.userData, intersects[0].point);
-      }
+    const mats = this.archVizMats;
+    const isBase300 = this.currentScenario === 'escenario300';
+
+    const levelElevationMap = {
+      subsuelo: -2.34,
+      planta_baja: 0.00,
+      planta_alta: 2.88
+    };
+
+    Object.entries(planState.levels).forEach(([levelKey, lvlData]) => {
+      if (!lvlData) return;
+      const targetGroup = levelKey === 'subsuelo' ? this.groups.archSubsuelo : this.groups.archMain;
+      const defaultBaseY = levelElevationMap[levelKey] ?? 0.00;
+
+      (lvlData.walls || []).forEach((w) => {
+        const dx = w.x2 - w.x1;
+        const dz = w.z2 - w.z1;
+        const len = Math.hypot(dx, dz);
+        if (len < 0.05) return;
+
+        const cat = WALL_CATALOG[w.type] || WALL_CATALOG.ladrillo_15;
+        const isActive = w.activeStage !== false && w.built !== false;
+        if (!isActive) return;
+
+        const midX = (w.x1 + w.x2) / 2;
+        const midZ = (w.z1 + w.z2) / 2;
+        const isGaleriaWall = levelKey === 'planta_baja' && midZ >= 9.94;
+        const wallBaseY = isGaleriaWall ? -0.45 : defaultBaseY;
+        const wallH = w.height || cat.heightDefault || (levelKey === 'subsuelo' ? 2.28 : 2.75);
+        const wallThick = cat.thickness || 0.15;
+
+        const wallGeo = new THREE.BoxGeometry(len, wallH, wallThick);
+        let wallMat;
+
+        if (cat.isGlazed) {
+          wallMat = mats.glassBlindexMat;
+        } else if (w.type === 'ciclopeo_30') {
+          wallMat = mats.stoneWallPBR;
+        } else if (isBase300) {
+          wallMat = mats.plasterRoughPBR;
+        } else {
+          wallMat = mats.plasterPBR;
+        }
+
+        const wallMesh = new THREE.Mesh(wallGeo, wallMat);
+        wallMesh.position.set(midX, wallBaseY + wallH / 2, midZ);
+        wallMesh.rotation.y = -Math.atan2(dz, dx);
+        wallMesh.castShadow = !cat.isGlazed;
+        wallMesh.receiveShadow = true;
+
+        const areaM2 = Number((len * wallH).toFixed(2));
+        const unitCost = (cat.costPerM2Gs || 115000) + (cat.revoquePerM2Gs || 0) * 2 + (cat.pinturaPerM2Gs || 0) * 2;
+        const wallCostGs = Math.round(areaM2 * unitCost).toLocaleString('es-PY');
+
+        wallMesh.userData = {
+          type: 'wall_bim',
+          bankCategory: 'nuevo_rojo',
+          name: `${cat.name} (${levelKey.replace('_', ' ').toUpperCase()})`,
+          dimensions: `Largo ${len.toFixed(2)}m × Alto ${wallH.toFixed(2)}m (${areaM2} m²) • Esp. ${(wallThick * 100).toFixed(0)}cm`,
+          area: areaM2,
+          costo: `Gs. ${wallCostGs}`,
+          status: 'Sincronizado desde Plano 2D ✨',
+          desc: cat.desc
+        };
+
+        targetGroup.add(wallMesh);
+      });
+    });
+
+    this.setFloorCutaway(this.currentCutawayMode);
+    if (this.bankColorMode) {
+      this.setBankColorMode(true);
+    }
+    this.rebuildInteractables();
+  }
+
+  buildPhotoHotspots() {
+    this.groups.photos.clear();
+    const hotSpotPhotos = CURATED_PHOTOS.filter((p) => p.pos3D);
+
+    hotSpotPhotos.forEach((photo) => {
+      const geo = new THREE.OctahedronGeometry(0.26, 0);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xf43f5e,
+        emissive: 0xe11d48,
+        emissiveIntensity: 0.6,
+        roughness: 0.2
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(...photo.pos3D);
+      mesh.userData = {
+        type: 'photoHotspot',
+        title: photo.title,
+        data: photo
+      };
+      this.groups.photos.add(mesh);
+    });
+  }
+
+  setScenario(scenarioKey) {
+    this.currentScenario = scenarioKey;
+    const config = ESCENARIOS_INVERSION[scenarioKey];
+
+    // Reconstruir geometría PBR para reflejar texturas y equipamiento de este escenario
+    this.buildStructure();
+    this.buildMuroEstacionamiento();
+    this.buildArchitecture();
+
+    const isHabitableScenario = scenarioKey !== 'hoy_en_obra';
+
+    if (config && config.capas3D) {
+      this.setLayerVisibility('muroEstacionamiento', config.capas3D.muroEstacionamiento ?? isHabitableScenario);
+      this.setLayerVisibility('losaFase2', config.capas3D.losaFase2 ?? isHabitableScenario);
+      this.setLayerVisibility('techo', config.capas3D.techo ?? isHabitableScenario);
+      this.setLayerVisibility('architecture', isHabitableScenario);
+      this.setLayerVisibility('subsuelo', isHabitableScenario);
+
+      const mapChk = {
+        'layer-muro-parking': config.capas3D.muroEstacionamiento ?? isHabitableScenario,
+        'layer-losa2': config.capas3D.losaFase2 ?? isHabitableScenario,
+        'layer-techo': config.capas3D.techo ?? isHabitableScenario,
+        'layer-arch': isHabitableScenario,
+        'layer-subsuelo': isHabitableScenario
+      };
+
+      Object.entries(mapChk).forEach(([id, state]) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = state;
+      });
+    } else if (!isHabitableScenario) {
+      this.setLayerVisibility('losaFase2', false);
+      this.setLayerVisibility('techo', false);
+      this.setLayerVisibility('architecture', false);
+      this.setLayerVisibility('subsuelo', false);
+    } else {
+      this.setLayerVisibility('muroEstacionamiento', true);
+      this.setLayerVisibility('losaFase2', true);
+      this.setLayerVisibility('techo', true);
+      this.setLayerVisibility('architecture', true);
+      this.setLayerVisibility('subsuelo', true);
+    }
+
+    this.setFloorCutaway(this.currentCutawayMode);
+    if (this.bankColorMode) {
+      this.setBankColorMode(true);
+    }
+    this.rebuildInteractables();
+  }
+
+  setFloorCutaway(mode = 'full') {
+    const cleanMode = String(mode || 'full').trim();
+    this.currentCutawayMode = cleanMode;
+
+    this.renderer.clippingPlanes = [];
+
+    this.groups.roof.visible = this.layers.techo && this.currentScenario !== 'hoy_en_obra';
+    this.groups.losaFase2.visible = this.layers.losaFase2 && this.currentScenario !== 'hoy_en_obra';
+    this.groups.losaFase1.visible = this.layers.structure;
+    this.groups.archMain.visible = this.layers.architecture && this.currentScenario !== 'hoy_en_obra';
+    this.groups.archSubsuelo.visible = this.layers.subsuelo && this.currentScenario !== 'hoy_en_obra';
+
+    this.groups.archMain.children.forEach((ch) => {
+      ch.visible = true;
+    });
+
+    if (cleanMode === 'cut_roof') {
+      this.groups.roof.visible = false;
+    } else if (cleanMode === 'cut_pa') {
+      this.groups.roof.visible = false;
+      this.groups.losaFase2.visible = false;
+      this.groups.archMain.children.forEach((ch) => {
+        if (ch.position.y > 2.75) {
+          ch.visible = false;
+        }
+      });
+    } else if (cleanMode === 'cut_pb') {
+      this.groups.roof.visible = false;
+      this.groups.losaFase2.visible = false;
+      this.groups.losaFase1.visible = false;
+      this.groups.archMain.visible = false;
+      this.groups.archSubsuelo.visible = true;
+    } else if (cleanMode === 'longitudinal_section') {
+      const sectionPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 2.10);
+      this.renderer.clippingPlanes = [sectionPlane];
     }
   }
 
-  addMeasurePoint(point) {
-    this.measurePoints.push(point);
+  setSectionCut(mode) {
+    this.setFloorCutaway(mode);
+  }
 
-    const marker = new THREE.Mesh(
-      new THREE.SphereGeometry(0.15, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0x10b981 })
-    );
-    marker.position.copy(point);
-    this.groups.measure.add(marker);
-    this.measureMeshes.push(marker);
+  focusRoom(roomKey) {
+    const preset = ROOM_CAMERA_PRESETS[roomKey];
+    if (!preset) return;
 
-    if (this.measurePoints.length === 2) {
-      const p1 = this.measurePoints[0];
-      const p2 = this.measurePoints[1];
-      const dist = p1.distanceTo(p2);
-
-      const geom = new THREE.BufferGeometry().setFromPoints([p1, p2]);
-      const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x10b981, linewidth: 3 }));
-      this.groups.measure.add(line);
-      this.measureMeshes.push(line);
-
-      const deltaX = Math.abs(p2.x - p1.x);
-      const deltaY = Math.abs(p2.y - p1.y);
-      const deltaZ = Math.abs(p2.z - p1.z);
-
-      if (this.onMeasurementUpdate) {
-        this.onMeasurementUpdate({
-          distance: dist.toFixed(2),
-          dx: deltaX.toFixed(2),
-          dy: deltaY.toFixed(2),
-          dz: deltaZ.toFixed(2)
-        });
-      }
-
-      this.measurePoints = [];
+    if (roomKey === 'piscina_quincho') {
+      this.setPoolQuinchoVisibility(true);
+      this.groups.archMain.visible = true;
     }
-  }
 
-  clearMeasurements() {
-    this.measureMeshes.forEach(m => this.groups.measure.remove(m));
-    this.measureMeshes = [];
-    this.measurePoints = [];
-    if (this.onMeasurementUpdate) this.onMeasurementUpdate(null);
-  }
+    if (preset.cutaway) {
+      this.setFloorCutaway(preset.cutaway);
+    }
 
-  setMeasureMode(enabled) {
-    this.measureMode = enabled;
-    if (!enabled) this.clearMeasurements();
+    const startPos = this.camera.position.clone();
+    const endPos = new THREE.Vector3(...preset.pos);
+    const startTarget = this.controls.target.clone();
+    const endTarget = new THREE.Vector3(...preset.target);
+
+    let progress = 0;
+    const animateFocus = () => {
+      progress += 0.055;
+      if (progress < 1) {
+        const ease = 1 - Math.pow(1 - progress, 3);
+        this.camera.position.lerpVectors(startPos, endPos, ease);
+        this.controls.target.lerpVectors(startTarget, endTarget, ease);
+        requestAnimationFrame(animateFocus);
+      } else {
+        this.camera.position.copy(endPos);
+        this.controls.target.copy(endTarget);
+      }
+    };
+    animateFocus();
   }
 
   setLayerVisibility(layerName, visible) {
     this.layers[layerName] = visible;
     switch (layerName) {
+      case 'muroEstacionamiento':
+        this.groups.muroEstacionamiento.visible = visible;
+        break;
+      case 'losaFase2':
+        this.groups.losaFase2.visible = visible;
+        break;
+      case 'techo':
+        this.groups.roof.visible = visible;
+        break;
       case 'architecture':
         this.groups.archMain.visible = visible;
         break;
@@ -841,136 +1685,294 @@ export class ProjectScene {
         break;
       case 'structure':
         this.groups.structure.visible = visible;
+        this.groups.losaFase1.visible = visible;
         break;
       case 'geotech':
         this.groups.geotech.visible = visible;
         break;
       case 'topography':
-        this.groups.terrain.visible = visible;
+        this.groups.topography.visible = visible;
+        break;
+      case 'entornoUrbano':
+        this.groups.urbanContext.visible = visible;
+        break;
+      case 'pluvial':
+        this.groups.pluvialHydro.visible = visible;
+        break;
+      case 'senalesDebiles':
+        this.groups.weakSignals.visible = visible;
+        break;
+      case 'ductos':
+      case 'ductosYEnchufes':
+        this.layers.ductos = visible;
+        this.layers.ductosYEnchufes = visible;
+        this.groups.ductosYEnchufes.visible = visible;
         break;
       case 'photos':
         this.groups.photos.visible = visible;
         break;
-      case 'muroEstacionamiento':
-        this.groups.parkingWall.visible = visible;
-        break;
-      case 'losaFase2':
-        this.groups.losaFase2.visible = visible;
-        break;
-      case 'techo':
-        this.groups.roof.visible = visible;
-        break;
     }
   }
 
-  setXRayMode(enabled) {
-    this.xRayMode = enabled;
-    this.groups.archMain.traverse(child => {
-      if (child.isMesh && child.material) {
-        child.material.transparent = enabled;
-        child.material.opacity = enabled ? 0.22 : 1.0;
-      }
-    });
-
-    this.groups.structure.traverse(child => {
-      if (child.isMesh && child.material) {
-        if (enabled) {
-          child.material.color.setHex(0x06b6d4);
-          child.material.emissive.setHex(0x083344);
-        } else {
-          child.material.color.setHex(0x9ca3af);
-          child.material.emissive.setHex(0x000000);
+  toggleXRay(enabled) {
+    this.xrayMode = enabled;
+    const allGroups = [
+      this.groups.structure,
+      this.groups.losaFase1,
+      this.groups.losaFase2,
+      this.groups.muroEstacionamiento,
+      this.groups.archMain,
+      this.groups.archSubsuelo,
+      this.groups.roof,
+      this.groups.topography
+    ];
+    allGroups.forEach((grp) => {
+      if (!grp) return;
+      grp.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material.wireframe = enabled;
         }
-      }
+      });
     });
   }
 
-  setTimeOfDay(hour) {
-    const angle = ((hour - 6) / 12) * Math.PI;
-    const radius = 45;
-    const x = Math.cos(angle) * radius;
-    const y = Math.max(1, Math.sin(angle) * radius);
-    const z = (hour >= 16) ? 35 : -15;
+  /**
+   * Activa/Desactiva el Modo de Colores Normativos del Banco en el modelo 3D:
+   * - ⚫ NEGRO (#1e293b): Construcciones ya existentes (`Zapatas Z1..Z20`, `Pilares construidos hasta Losa 1`, `Escalera 1`, `Murallas perimetrales existentes`, `Portón balancín existente`)
+   * - 🟢 VERDE (#16a34a): Hormigón Armado (`Losa 1 existente`, `Losa 2do Piso`, `Vigas y Pilares de H°A°`)
+   * - 🔴 ROJO (#dc2626): Construcciones nuevas a realizar (`Muros de ladrillo`, `Muro de contención z=+1.50m`, `Sobreelevación Muralla 3m×2m`, `Vereda Reglamentaria + Basurero`, `Motor Portón`, `Techo`, `Cerramientos`)
+   * - 🟡 AMARILLO (#eab308): A demoler o refaccionar (`Tratamiento Losa 1 expuesta al sol e intemperie con SikaTop/SikaLatex`, `Desoxidado + Sikadur-32 en pelos de los 17 pilares`, `Impermeabilización medianera Eje 9`)
+   */
+  setBankColorMode(enabled) {
+    this.bankColorMode = Boolean(enabled);
+    if (!this._bankMats) {
+      this._bankMats = {
+        NEGRO: new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.55, metalness: 0.2 }),
+        VERDE: new THREE.MeshStandardMaterial({ color: 0x16a34a, roughness: 0.45, metalness: 0.15 }),
+        ROJO: new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.5, metalness: 0.15 }),
+        AMARILLO: new THREE.MeshStandardMaterial({ color: 0xeab308, roughness: 0.38, metalness: 0.25 })
+      };
+    }
 
-    this.sunLight.position.set(x, y, z);
-    this.sunMesh.position.copy(this.sunLight.position);
+    const applyGroupBankMat = (grp, defaultBankKey) => {
+      if (!grp) return;
+      grp.traverse((child) => {
+        if (!child.isMesh) return;
+        const uData = child.userData || {};
+        // Mantener colores reales para el vehículo (Chery Tiggo 2 Pro 2026) y las mascotas (Emma y Serafina)
+        if (uData.type === 'vehiculo_propietario' || uData.type === 'mascota_familia' || uData.type === 'planta_decorativa') {
+          return;
+        }
+        if (this.bankColorMode) {
+          if (!uData._origMat) {
+            uData._origMat = child.material;
+          }
+          const cat = uData.bankCategory;
+          const nameStr = String(uData.name || '').toLowerCase();
+          let key = defaultBankKey;
 
-    if (hour >= 17) {
-      this.sunLight.color.setHex(0xff7733);
-      this.sunLight.intensity = 2.8;
-      this.ambientLight.color.setHex(0xffaa77);
-      this.ambientLight.intensity = 0.45;
-      this.scene.background.setHex(0x1a0f1c);
-      this.scene.fog.color.setHex(0x1a0f1c);
-    } else if (hour <= 7) {
-      this.sunLight.color.setHex(0xffc077);
-      this.sunLight.intensity = 1.8;
-      this.ambientLight.color.setHex(0x93c5fd);
-      this.ambientLight.intensity = 0.5;
-      this.scene.background.setHex(0x0d1b2a);
-      this.scene.fog.color.setHex(0x0d1b2a);
-    } else {
-      this.sunLight.color.setHex(0xfff6ea);
-      this.sunLight.intensity = 2.2;
-      this.ambientLight.color.setHex(0xd9e5ff);
-      this.ambientLight.intensity = 0.6;
-      this.scene.background.setHex(0x0e131f);
-      this.scene.fog.color.setHex(0x0e131f);
+          if (cat === 'existente_negro') {
+            key = 'NEGRO';
+          } else if (cat === 'hormigon_verde') {
+            key = 'VERDE';
+          } else if (cat === 'nuevo_rojo') {
+            key = 'ROJO';
+          } else if (cat === 'refaccion_amarillo') {
+            key = 'AMARILLO';
+          } else if (
+            nameStr.includes('sikadur') ||
+            nameStr.includes('pelos') ||
+            nameStr.includes('intemperie') ||
+            nameStr.includes('eje 9')
+          ) {
+            key = 'AMARILLO';
+          } else if (
+            nameStr.includes('losa') ||
+            nameStr.includes('viga') ||
+            nameStr.includes('hormigón') ||
+            nameStr.includes('hormigon')
+          ) {
+            key = 'VERDE';
+          }
+          child.material = this._bankMats[key] || this._bankMats[defaultBankKey];
+        } else if (uData._origMat) {
+          child.material = uData._origMat;
+        }
+      });
+    };
+
+    applyGroupBankMat(this.groups.structure, 'NEGRO');
+    applyGroupBankMat(this.groups.losaFase1, 'VERDE');
+    applyGroupBankMat(this.groups.losaFase2, 'VERDE');
+    applyGroupBankMat(this.groups.muroEstacionamiento, 'ROJO');
+    applyGroupBankMat(this.groups.archMain, 'ROJO');
+    applyGroupBankMat(this.groups.archSubsuelo, 'ROJO');
+    applyGroupBankMat(this.groups.roof, 'ROJO');
+    return this.bankColorMode;
+  }
+
+  toggleMeasureMode(enabled) {
+    this.measureMode = enabled;
+    if (!enabled) {
+      this.clearMeasurements();
     }
   }
 
-  setCameraView(viewKey) {
-    const view = CAMERA_VIEWS[viewKey];
-    if (!view) return;
-
-    this.animateCamera(
-      new THREE.Vector3(...view.pos),
-      new THREE.Vector3(...view.target),
-      1200
-    );
+  clearMeasurements() {
+    this.measurePoints = [];
+    while (this.groups.measurements.children.length > 0) {
+      this.groups.measurements.remove(this.groups.measurements.children[0]);
+    }
+    if (this.onMeasurementUpdate) {
+      this.onMeasurementUpdate(null);
+    }
   }
 
-  animateCamera(targetPos, targetLookAt, duration = 1000) {
+  setCameraView(viewName) {
+    if (ROOM_CAMERA_PRESETS[viewName]) {
+      this.focusRoom(viewName);
+      return;
+    }
+
+    const views = {
+      overview: { pos: [16.5, 11.5, 22.0], target: [0, 1.1, 6.8], cutaway: 'full' },
+      front: { pos: [3.2, 3.2, -12.5], target: [0, 1.0, 2.5], cutaway: 'full' },
+      river: { pos: [-7.5, 5.2, 23.5], target: [0, 1.2, 8.0], cutaway: 'full' },
+      side: { pos: [21.0, 4.8, 7.5], target: [0, 0.8, 7.5], cutaway: 'longitudinal_section' },
+      geotech: { pos: [-15.5, 2.8, 8.5], target: [0, -2.2, 7.5], cutaway: 'full' },
+      top: { pos: [0, 26.0, 7.5], target: [0, 0, 7.5], cutaway: 'cut_pa' },
+      mirador: { pos: [0.0, 4.35, 11.5], target: [-12.0, 1.5, 65.0], cutaway: 'full' }
+    };
+
+    const preset = views[viewName] || views.overview;
+    if (preset.cutaway) {
+      this.setFloorCutaway(preset.cutaway);
+    }
+
     const startPos = this.camera.position.clone();
+    const endPos = new THREE.Vector3(...preset.pos);
     const startTarget = this.controls.target.clone();
-    const startTime = performance.now();
+    const endTarget = new THREE.Vector3(...preset.target);
 
-    const updateCam = () => {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(1, elapsed / duration);
-      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-      this.camera.position.lerpVectors(startPos, targetPos, ease);
-      this.controls.target.lerpVectors(startTarget, targetLookAt, ease);
-      this.controls.update();
-
+    let progress = 0;
+    const animateCam = () => {
+      progress += 0.06;
       if (progress < 1) {
-        requestAnimationFrame(updateCam);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        this.camera.position.lerpVectors(startPos, endPos, ease);
+        this.controls.target.lerpVectors(startTarget, endTarget, ease);
+        requestAnimationFrame(animateCam);
+      } else {
+        this.camera.position.copy(endPos);
+        this.controls.target.copy(endTarget);
       }
     };
-    requestAnimationFrame(updateCam);
+    animateCam();
   }
 
-  setupInteractions() {
-    this.renderer.domElement.addEventListener('click', this.handleClick.bind(this));
+  setupEvents() {
+    window.addEventListener('resize', () => {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    let pointerDownPos = { x: 0, y: 0 };
+    this.renderer.domElement.addEventListener('pointerdown', (e) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    });
+
+    this.renderer.domElement.addEventListener('pointerup', (e) => {
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 5) return;
+
+      const rect = this.renderer.domElement.getBoundingClientRect();
+      this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+
+      if (this.measureMode) {
+        const allObjects = [this.groups.topography, ...this.interactableMeshes];
+        const intersects = this.raycaster.intersectObjects(allObjects, true);
+        if (intersects.length > 0) {
+          this.handleMeasureClick(intersects[0].point);
+        }
+        return;
+      }
+
+      const visibleInteractables = this.interactableMeshes.filter((m) => {
+        let p = m;
+        while (p) {
+          if (p.visible === false) return false;
+          p = p.parent;
+        }
+        return true;
+      });
+
+      const intersects = this.raycaster.intersectObjects(visibleInteractables, true);
+      if (intersects.length > 0) {
+        let hitObj = intersects[0].object;
+        while (hitObj && (!hitObj.userData || (!hitObj.userData.type && !hitObj.userData.name)) && hitObj.parent) {
+          hitObj = hitObj.parent;
+        }
+        if (this.onSelectObject && hitObj && hitObj.userData) {
+          this.onSelectObject(hitObj.userData, intersects[0].point);
+        }
+      } else if (this.onSelectObject) {
+        this.onSelectObject(null);
+      }
+    });
   }
 
-  onResize() {
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientHeight;
-    this.camera.aspect = this.width / this.height;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.width, this.height);
+  handleMeasureClick(point) {
+    if (this.measurePoints.length >= 2) {
+      this.clearMeasurements();
+    }
+
+    this.measurePoints.push(point.clone());
+
+    const markerGeo = new THREE.SphereGeometry(0.14, 16, 16);
+    const markerMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+    const marker = new THREE.Mesh(markerGeo, markerMat);
+    marker.position.copy(point);
+    this.groups.measurements.add(marker);
+
+    if (this.measurePoints.length === 2) {
+      const [p1, p2] = this.measurePoints;
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const lineMat = new THREE.LineBasicMaterial({ color: 0xf43f5e, linewidth: 3 });
+      const line = new THREE.Line(lineGeo, lineMat);
+      this.groups.measurements.add(line);
+
+      const distance = p1.distanceTo(p2);
+      const dx = Math.abs(p2.x - p1.x);
+      const dy = Math.abs(p2.y - p1.y);
+      const dz = Math.abs(p2.z - p1.z);
+
+      if (this.onMeasurementUpdate) {
+        this.onMeasurementUpdate({
+          distance: distance.toFixed(2),
+          dx: dx.toFixed(2),
+          dy: dy.toFixed(2),
+          dz: dz.toFixed(2)
+        });
+      }
+    }
   }
 
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(() => this.animate());
 
-    const time = performance.now() * 0.002;
-    this.groups.photos.children.forEach((hotspot, i) => {
-      hotspot.position.y += Math.sin(time + i) * 0.0015;
-      hotspot.rotation.y = time * 0.5;
-    });
+    const t = performance.now() * 0.001;
+
+    if (this.pluvialSystem && this.layers.pluvial && this.groups.pluvialHydro.visible) {
+      if (typeof this.pluvialSystem.updateRainFlow === 'function') {
+        this.pluvialSystem.updateRainFlow(t);
+      } else if (typeof this.pluvialSystem.updateAnimation === 'function') {
+        this.pluvialSystem.updateAnimation(t);
+      }
+    }
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);

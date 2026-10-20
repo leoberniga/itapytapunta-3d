@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Itá Pytã Punta • Explorador BIM 3D y Presupuesto por Escenarios</title>
-  <meta name="description" content="Plataforma de exploración 3D, análisis geotécnico y simulador de inversión por escenarios de obra (300M a 440M Gs) para Itá Pytã Punta, Asunción.">
+  <title>Itá Pytã Punta • Gemelo Digital BIM/CAD 3D, Ingeniería Estructural y Auditoría</title>
+  <meta name="description" content="Plataforma de ingeniería BIM/CAD 2D/3D, análisis geotécnico GEO-STAN #2956, cálculo estructural E1-E9 y auditoría forense de obra para Residencia Itá Pytã Punta, Asunción.">
   
-  <!-- Google Fonts: Plus Jakarta Sans, Outfit, Inter -->
+  <!-- Google Fonts: Plus Jakarta Sans, Outfit, Inter, IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
       <div class="auth-header">
         <div class="auth-badge">Acceso Restringido • Privado</div>
         <h2 class="auth-title">Residencia Itá Pytã Punta</h2>
-        <p class="auth-subtitle">Explorador BIM 3D, Geotecnia y Presupuesto</p>
-        <p class="auth-location"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Guillermo Arias • Asunción, Paraguay</p>
+        <p class="auth-subtitle">Gemelo Digital BIM/CAD 3D, Geotecnia y Auditoría Forense</p>
+        <p class="auth-location"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Calle Tte. Guillermo Arias (Cul-de-sac) • Asunción, Paraguay</p>
       </div>
 
       <form id="auth-form" class="auth-form" autocomplete="on">
@@ -69,37 +69,50 @@
       <span class="brand-badge">BIM 3D</span>
       <div class="brand-title">
         <h1>Residencia Itá Pytã Punta</h1>
-        <p>Calle Guillermo Arias • Asunción, PY • Vista al Río Paraguay</p>
+        <p>Calle Tte. Guillermo Arias (Sin Salida) • Ejes 1-9 / A-G • Vista al Río</p>
       </div>
     </div>
 
-    <!-- Central Scenario Quick Selector (Osanna Style) -->
-    <div class="scenario-selector-bar glass-panel">
-      <span class="scenario-label"><i data-lucide="calculator" style="width:13px;height:13px;"></i> Escenario de Obra:</span>
+    <!-- Central Scenario Quick Selector -->
+    <div class="scenario-selector-bar glass-panel scenario-selector">
+      <span class="scenario-label"><i data-lucide="layers" style="width:13px;height:13px;"></i> Escalones de Crédito:</span>
       <div class="scenario-pills">
-        <button id="btn-scen-300" class="scenario-pill active" data-scenario="escenario300">
-          <span class="pill-title">300 Millones</span>
-          <span class="pill-desc">Cierre + Techo</span>
+        <button id="btn-scen-hoy" class="scenario-pill" data-scenario="hoy_en_obra" title="Estado real hoy según Acta de Recepción 29/12/2025 (Gs. 163.820.972): Esqueleto H°A° hasta Losa 1 (+100.00m) + 100.71 m² libres en Subsuelo + Escalera 1">
+          <span class="pill-title">Hoy en Obra (163,8M)</span>
+          <span class="pill-desc">Esqueleto H°A° + 100m² Subsuelo Libre</span>
         </button>
-        <button id="btn-scen-370" class="scenario-pill" data-scenario="escenario370">
-          <span class="pill-title">370 Millones</span>
-          <span class="pill-desc">+ Galería al Río</span>
+        <button id="btn-scen-300" class="scenario-pill active" data-scenario="escenario300" title="Crédito 300 Millones Gs.: 2do Piso Dormitorio/Estudio + Nivel Calle Sala/Comedor/Cocina + Subsuelo Lavadero/Depósito + Pasillo Antihumedad 1.50m">
+          <span class="pill-title">Crédito 300 Millones</span>
+          <span class="pill-desc">Dorm. 2do Piso + Sala/Cocina PB + Lavadero Sub.</span>
         </button>
-        <button id="btn-scen-440" class="scenario-pill" data-scenario="escenario440">
-          <span class="pill-title">440 Millones</span>
-          <span class="pill-desc">Fase 1 Completa</span>
+        <button id="btn-scen-370" class="scenario-pill" data-scenario="escenario350" title="Crédito 350 Millones Gs.: Suma Porcelanato 60×60 + Amoblamiento Completo Cocina + Blindex al Río + Jardín Césped (con Palancas de Combinación)">
+          <span class="pill-title">Crédito 350 Millones</span>
+          <span class="pill-desc">+ Cocina Full + Blindex Río + Porcelanato</span>
+        </button>
+        <button id="btn-scen-460" class="scenario-pill" data-scenario="escenario440" title="Crédito 440 Millones Gs.: 3 Niveles Terminados + Blindex Habitaciones + Rejas Balcones + Deck Galería L1 + Portón Automatizado">
+          <span class="pill-title">Crédito 440 Millones</span>
+          <span class="pill-desc">3 Niveles Full + Rejas + Deck + Portón</span>
+        </button>
+        <button id="btn-toggle-pool-top" class="scenario-pill pool-toggle-pill" data-pool-visible="off" title="Visualizar u ocultar la futura Piscina (4,65×2,45m) y Quincho en el Jardín 3D sin cambiar de escalón de crédito">
+          <span class="pill-title">🏊 Ver Piscina + Quincho 3D</span>
+          <span class="pill-desc">Vista Opcional Jardín (Sin alterar crédito)</span>
         </button>
       </div>
     </div>
 
     <div class="header-actions">
+      <a id="btn-download-pdf-top" href="./assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" target="_blank" download="Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" class="btn-header glass-panel" style="border-color:rgba(244,63,94,0.65); background:linear-gradient(135deg, rgba(225,29,72,0.28), rgba(159,18,57,0.38)); color:#ffe4e6; font-weight:700; text-decoration:none;" title="Abrir / Descargar Presentación Ejecutiva PDF de la Residencia Itá Pytã Punta (Ruth y Leo)">
+        <span>📕 Presentación Ejecutiva PDF</span>
+      </a>
+      <button id="btn-toggle-bank-colors" class="btn-header glass-panel" data-bank-colors="off" style="border-color:rgba(245,158,11,0.55); color:#fde68a; font-weight:700;" title="Activar Código de Colores Normativo del Banco en el Modelo 3D y Editor 2D: ⚫ Negro (Ya construido) | 🟢 Verde (Hormigón) | 🔴 Rojo (A construir) | 🟡 Amarillo (A refaccionar/adecuar)">
+        <span>🎨 Colores Banco: OFF</span>
+      </button>
+      <button id="btn-toggle-roof-style" class="btn-header btn-primary" data-roof-style="isopanel" title="Alternar en vivo el Techo 3D (+105.64m) entre Chapa Termoacústica Isopanel (Gs. 47,85M) y Tejas Cerámicas de Tobatí s/ Tejuelón Visto (Gs. 49,40M)">
+        <span>🏠 Techo 3D: Isopanel vs Tejas</span>
+      </button>
       <button id="btn-toggle-ui" class="btn-header glass-panel" title="Ocultar/Mostrar Interfaz">
         <i data-lucide="eye"></i>
         <span>UI</span>
-      </button>
-      <button id="btn-open-cloud" class="btn-header btn-primary" title="Nube Google Cloud y Backup">
-        <i data-lucide="cloud"></i>
-        <span>Nube Gratuita</span>
       </button>
       <button id="btn-logout" class="btn-header glass-panel" title="Cerrar Sesión" style="border-color:rgba(239,68,68,0.3); color:#fca5a5;">
         <i data-lucide="log-out"></i>
@@ -111,10 +124,10 @@
   <!-- Left Sidebar Controls -->
   <aside id="left-sidebar" class="left-sidebar glass-panel">
     
-    <!-- KPI Summary Card (Osanna Style) -->
+    <!-- KPI Summary Card -->
     <div class="kpi-panel">
       <div class="kpi-header">
-        <span class="kpi-tag" id="kpi-scenario-name">Escenario 1 (300M Gs)</span>
+        <span class="kpi-tag" id="kpi-scenario-name">Crédito 300 Millones Gs.</span>
         <span class="kpi-status-badge ok" id="kpi-semaforo">
           <span class="status-dot"></span>
           <span>En Rango</span>
@@ -122,76 +135,170 @@
       </div>
       <div class="kpi-main-metric">
         <span class="currency">Gs.</span>
-        <span class="amount" id="kpi-total-amount">298.500.000</span>
+        <span class="amount" id="kpi-total-amount">299.832.034</span>
       </div>
       <div class="kpi-sub-row">
         <span>Costo / m² estimado:</span>
-        <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Gs. 1.850.000 / m²</strong>
+        <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Gs. 1.680.484 / m²</strong>
       </div>
       <p id="kpi-objective-desc" class="kpi-desc">
-        Muro de contención de estacionamiento + 2da parte de la losa + techo termoacústico + cerramiento perimetral exterior.
+        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Dormitorio en Suite y Estudio en 2do Piso (+102.88m), Gran Sala-Comedor-Cocina en Nivel Calle (+100.00m) y Lavadero + Depósito en los 100.71 m² libres del Subsuelo (+97.66m) con Pasillo Antihumedad de 1.50m.
       </p>
     </div>
 
-    <!-- Layers Toggles -->
+    <!-- Recorrido por Habitación y Detalle (3 Niveles de Ruth y Leo) -->
     <div class="panel-section">
       <div class="panel-section-title">
-        <span>Capas del Modelo 3D</span>
+        <span>Recorrido 3D por Nivel y Habitación</span>
+        <i data-lucide="compass" style="width:14px;height:14px;color:var(--accent-cyan);"></i>
+      </div>
+      <div class="room-tour-grid" id="room-tour-buttons">
+        <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio en Suite de Ruth y Leo (Sommier 1.40m, 2 Tocadores, Placard) y Balcón con Vista al Río">
+          <span class="rt-icon">🛏️</span>
+          <span class="rt-text">2do Piso: Dormitorio Suite al Río</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="planta_alta" title="2do Piso (+102.88m): Área de Estudio / Home-Office (2 Escritorios, Máquina de Coser Antigua y Cama 1 Plaza)">
+          <span class="rt-icon">💻</span>
+          <span class="rt-text">2do Piso: Estudio y Costura</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="estar_comedor" title="Planta Nivel Calle (+100.00m): Gran Sala de Estar (Sofá 4 piezas, TV 32&quot;) y Comedor de 6 Sillas sin dormitorios que achiquen el área social">
+          <span class="rt-icon">🛋️</span>
+          <span class="rt-text">Nivel Calle: Sala y Comedor (6 Sillas)</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="cocina_isla" title="Planta Nivel Calle (+100.00m): Cocina Integrada Amplia (Mesada c/ Bacha, Cocina c/ Garrafa, Heladera, Air Fryer 6L y Alacenas)">
+          <span class="rt-icon">🍳</span>
+          <span class="rt-text">Nivel Calle: Cocina Amplia e Isla</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="bano_suite" title="Baño Principal Completo en Suite (2do Piso) + Toilette Social en Planta Nivel Calle">
+          <span class="rt-icon">🚿</span>
+          <span class="rt-text">Baño Suite 2do Piso y Toilette PB</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="galeria_parrilla" title="Galería L1 (-0.45m) al Río Paraguay con Parrilla Portátil de Ruth y Leo (Parrilla fija opcional)">
+          <span class="rt-icon">🔥</span>
+          <span class="rt-text">Galería al Río y Parrilla Portátil</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="subsuelo_depto" title="Subsuelo (+97.66m • 100.71 m² libres bajo Losa 1): Lavadero (Lavarropas propio + Pileta) y Depósito Cerrado desde el Día 1">
+          <span class="rt-icon">🧺</span>
+          <span class="rt-text">Subsuelo (100m²): Lavadero y Depósito</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="fachada_porton" title="Cochera Frontal (z=-4.00 a +1.50m), Muro de Contención en z=+1.50m y Pasillo Cámara de Aire Antihumedad de 1.50m (z=+1.50 a +3.00m)">
+          <span class="rt-icon">🛡️</span>
+          <span class="rt-text">Muro Contención y Pasillo Antihumedad</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="escalera_subsuelo" title="Puerta Principal + Puerta de Servicio en Eje G alineada con la Escalera 1 de H°A° hacia Subsuelo y 2do Piso">
+          <span class="rt-icon">🪜</span>
+          <span class="rt-text">Puerta Servicio y Escalera 1</span>
+        </button>
+        <button class="room-tour-btn" data-room-focus="piscina_quincho" title="Patio Trasero Norte (+96.20m): Jardín con Césped Esmeralda + Piscina Oficial 4.65m × 2.45m y Quincho (Etapa Opcional)">
+          <span class="rt-icon">🏊</span>
+          <span class="rt-text">Jardín y Piscina 4.65×2.45m (Opc.)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Corte de Nivel (Dollhouse / Vista Interior por Piso) -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>Corte de Nivel (Vista Interior)</span>
+        <i data-lucide="layers" style="width:14px;height:14px;color:#fbbf24;"></i>
+      </div>
+      <div class="cutaway-modes-grid" id="cutaway-mode-buttons">
+        <button class="cutaway-btn active" data-cutaway-mode="full" title="Mostrar todos los niveles y techos completos">
+          Completa
+        </button>
+        <button class="cutaway-btn" data-cutaway-mode="cut_roof" title="Ocultar el techo (+105.64m) para ver el Dormitorio en Suite y Estudio del 2do Piso (+102.88m)">
+          2do Piso (Dorm./Estudio)
+        </button>
+        <button class="cutaway-btn" data-cutaway-mode="cut_pa" title="Abrir techo y 2do piso para inspeccionar Nivel Calle (+100.00m: Gran Sala, Comedor 6 sillas y Cocina)">
+          Nivel Calle (Sala/Cocina)
+        </button>
+        <button class="cutaway-btn" data-cutaway-mode="cut_pb" title="Abrir niveles superiores para inspeccionar los 100.71 m² libres del Subsuelo (+97.66m), Pasillo Antihumedad 1.50m, Lavadero y Depósito">
+          Subsuelo (Lavadero/100m²)
+        </button>
+      </div>
+    </div>
+
+    <!-- 12 Capas CAD 3D Toggles -->
+    <div class="panel-section">
+      <div class="panel-section-title">
+        <span>12 Capas CAD / BIM 3D</span>
         <i data-lucide="sliders" style="width:14px;height:14px;"></i>
       </div>
       <div class="layers-grid">
+        <label class="layer-toggle"><input type="checkbox" id="layer-ductos" checked> <span class="check-box"></span> 🔌🚰 Ductos, Pases Losa 1 y Enchufes (26 Tomas + Smart DIN)</label>
         <label class="layer-item">
           <div class="layer-info">
-            <span class="layer-dot" style="background: #475569;"></span>
-            <span>Muro Contención Cochera</span>
+            <span class="layer-dot" style="background: #f59e0b;"></span>
+            <span>Muro Contención + Pasillo 1.50m</span>
           </div>
           <input type="checkbox" id="layer-muro-parking" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
-            <span class="layer-dot" style="background: #0ea5e9;"></span>
-            <span>Segunda Parte de la Losa</span>
+            <span class="layer-dot" style="background: #10b981;"></span>
+            <span>Losa 2do Piso +102.88m y Pilares PA</span>
           </div>
           <input type="checkbox" id="layer-losa2" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
             <span class="layer-dot" style="background: #334155;"></span>
-            <span>Techo Termoacústico</span>
+            <span>Cubierta +105.64m (Isopanel / Tejas)</span>
           </div>
           <input type="checkbox" id="layer-techo" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
             <span class="layer-dot" style="background: #f8fafc;"></span>
-            <span>Muros y Arquitectura PB</span>
+            <span>Nivel Calle (Sala/Cocina) + 2do Piso</span>
           </div>
           <input type="checkbox" id="layer-arch" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
             <span class="layer-dot" style="background: #94a3b8;"></span>
-            <span>Departamento Subsuelo</span>
+            <span>Subsuelo 100m² (Lavadero y Depósito)</span>
           </div>
           <input type="checkbox" id="layer-subsuelo" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
             <span class="layer-dot" style="background: #06b6d4;"></span>
-            <span>Estructura H°A° (Zapatas/Pilares)</span>
+            <span>Esqueleto H°A° Ejes A-G / 1-9</span>
           </div>
           <input type="checkbox" id="layer-struct" checked>
         </label>
         <label class="layer-item">
           <div class="layer-info">
-            <span class="layer-dot" style="background: #ef4444;"></span>
-            <span>Sondeos Suelo (GEO-STAN)</span>
+            <span class="layer-dot" style="background: #22d3ee;"></span>
+            <span>Entorno Satelital y Barrio 3D</span>
           </div>
-          <input type="checkbox" id="layer-geotech" checked>
+          <input type="checkbox" id="layer-entorno">
         </label>
         <label class="layer-item">
           <div class="layer-info">
-            <span class="layer-dot" style="background: #f59e0b;"></span>
+            <span class="layer-dot" style="background: #0284c7;"></span>
+            <span>Red Pluvial y Drenaje Francés 3D</span>
+          </div>
+          <input type="checkbox" id="layer-pluvial">
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #a855f7;"></span>
+            <span>Señales Débiles, CCTV y Domótica</span>
+          </div>
+          <input type="checkbox" id="layer-senales">
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #ef4444;"></span>
+            <span>Sondeos Geotécnicos GEO-STAN</span>
+          </div>
+          <input type="checkbox" id="layer-geotech">
+        </label>
+        <label class="layer-item">
+          <div class="layer-info">
+            <span class="layer-dot" style="background: #84cc16;"></span>
             <span>Terreno y Curvas de Nivel</span>
           </div>
           <input type="checkbox" id="layer-topo" checked>
@@ -202,12 +309,12 @@
     <!-- Camera View Presets -->
     <div class="panel-section">
       <div class="panel-section-title">
-        <span>Cámaras de Inspección</span>
+        <span>Cámaras Exteriores y Geotecnia</span>
         <i data-lucide="video" style="width:14px;height:14px;"></i>
       </div>
       <div class="views-grid">
         <button class="view-btn" data-cam="aerial">
-          <i data-lucide="globe"></i> Aérea
+          <i data-lucide="globe"></i> Aérea / Barrio
         </button>
         <button class="view-btn" data-cam="parking">
           <i data-lucide="shield"></i> Muro Cochera
@@ -216,13 +323,13 @@
           <i data-lucide="layers"></i> 2da Losa/Techo
         </button>
         <button class="view-btn" data-cam="gallery">
-          <i data-lucide="sunset"></i> Al Río
+          <i data-lucide="sunset"></i> Vista al Río
         </button>
         <button class="view-btn" data-cam="soil">
-          <i data-lucide="split"></i> Suelo
+          <i data-lucide="split"></i> Suelo SPT
         </button>
         <button class="view-btn" data-cam="structure">
-          <i data-lucide="box"></i> H°A°
+          <i data-lucide="box"></i> Esqueleto H°A°
         </button>
       </div>
     </div>
@@ -230,15 +337,16 @@
     <!-- Solar Simulation -->
     <div class="panel-section">
       <div class="panel-section-title">
-        <span>Sol y Puesta de Sol</span>
+        <span>Sol y Domótica Nocturna</span>
         <span id="sun-time-display" style="color:var(--accent-gold); font-size:11px;">17:30 (Atardecer Río)</span>
       </div>
       <div class="sun-control">
-        <input type="range" id="sun-slider" min="6" max="19" step="0.5" value="17.5">
+        <input type="range" id="sun-slider" min="6" max="21" step="0.5" value="17.5">
         <div class="sun-labels">
-          <span>06:00 (Amanecer)</span>
+          <span>06:00</span>
           <span>12:00</span>
-          <span>18:30 (Puesta de sol)</span>
+          <span>17:30 (Río)</span>
+          <span>21:00 (LED)</span>
         </div>
       </div>
     </div>
@@ -246,7 +354,7 @@
     <!-- CAD Tools (X-Ray & Tape Measurement) -->
     <div class="panel-section">
       <div class="panel-section-title">
-        <span>Herramientas CAD</span>
+        <span>Herramientas CAD 3D</span>
         <i data-lucide="compass" style="width:14px;height:14px;"></i>
       </div>
       <div class="tools-bar">
@@ -294,21 +402,23 @@
 
   <!-- Bottom Floating Dock Navigation -->
   <nav class="bottom-dock glass-panel">
+    <button class="dock-item active" data-modal="modal-editor-2d" style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.55);">
+      <span style="color:#6ee7b7; font-weight:800;">📐 Editor CAD 2D/3D</span>
+    </button>
     <button class="dock-item" data-modal="modal-renders" style="background:rgba(245,158,11,0.18); border:1px solid rgba(245,158,11,0.5);">
-      <i data-lucide="sparkles" style="color:var(--accent-gold);"></i>
-      <span style="color:#fde68a; font-weight:700;">Vistas 3D Realistas</span>
+      <span style="color:#fde68a; font-weight:700;">🛰️ Satélite &amp; MEP</span>
     </button>
-    <button class="dock-item active" data-modal="modal-insumos" style="background:rgba(6,182,212,0.18); border:1px solid rgba(6,182,212,0.5);">
+    <button class="dock-item" data-modal="modal-insumos" style="background:rgba(6,182,212,0.18); border:1px solid rgba(6,182,212,0.5);">
       <i data-lucide="wrench" style="color:var(--accent-cyan);"></i>
-      <span style="color:#67e8f9; font-weight:700;">Insumos y Métricas</span>
+      <span style="color:#67e8f9; font-weight:700;">Insumos &amp; Ladrillos Tobatí</span>
     </button>
-    <button class="dock-item" data-modal="modal-simulador">
+    <button class="dock-item" data-modal="modal-simulador" style="background:rgba(168,85,247,0.18); border:1px solid rgba(168,85,247,0.5);">
       <i data-lucide="calculator"></i>
-      <span>Presupuesto JIVESA</span>
+      <span style="color:#e9d5ff; font-weight:700;">Cómputo 300M / 350M / 440M</span>
     </button>
     <button class="dock-item" data-modal="modal-planos">
       <i data-lucide="file-text"></i>
-      <span>Planos CAD</span>
+      <span>Planos &amp; Presup. (23)</span>
     </button>
     <button class="dock-item" data-modal="modal-geotech">
       <i data-lucide="activity"></i>
@@ -316,85 +426,237 @@
     </button>
     <button class="dock-item" data-modal="modal-photos">
       <i data-lucide="camera"></i>
-      <span>Fotos Obra</span>
-    </button>
-    <button class="dock-item" data-modal="modal-cloud">
-      <i data-lucide="smartphone"></i>
-      <span>Móvil & Nube</span>
+      <span>Fotos Obra (118)</span>
     </button>
   </nav>
 
-  <!-- Modals -->
+  <!-- ===================================================================== -->
+  <!-- MODALS                                                                -->
+  <!-- ===================================================================== -->
 
-  <!-- Modal 0A: VISTAS ILUSTRADAS 3D FOTORREALISTAS (CALIDAD CASI REALISTA) -->
+  <!-- Modal 00: EDITOR INTERACTIVO CAD 2D/3D DE PLANOS (#modal-editor-2d) -->
+  <div id="modal-editor-2d" class="modal-overlay">
+    <div class="modal-content glass-panel modal-editor-2d-content">
+      <div class="modal-header" style="margin-bottom:10px; padding-bottom:10px;">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="compass" style="color:#34d399;"></i>
+            Editor Interactivo CAD/BIM 2D ↔ 3D (Grilla Estructural Exacta Ejes 1-9 / A-G)
+          </h2>
+          <p style="font-size:11.5px; color:var(--text-muted);">
+            Edita muros, aberturas y etapas constructivas por nivel sobre los 20 pilares reales (P1..P20). Cada cambio actualiza el modelo 3D en vivo y permite exportar planos a escala 1:50 en SVG, PNG y JSON.
+          </p>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div id="floorplan-editor-container" class="floorplan-editor-host"></div>
+    </div>
+  </div>
+
+  <!-- Modal 0A: ENTORNO SATELITAL REAL, ESQUEMAS MEP Y AUDITORÍA FORENSE (#modal-renders) -->
   <div id="modal-renders" class="modal-overlay">
-    <div class="modal-content glass-panel" style="max-width:1040px;">
+    <div class="modal-content glass-panel" style="max-width:1160px;">
       <div class="modal-header">
         <div>
-          <h2 style="font-family:var(--font-display); font-size:22px; display:flex; align-items:center; gap:8px;">
-            <i data-lucide="sparkles" style="color:var(--accent-gold);"></i>
-            Vistas Ilustradas 3D Fotorrealistas de Alta Definición
+          <h2 style="font-family:var(--font-display); font-size:21px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="satellite" style="color:var(--accent-gold);"></i>
+            Centro Técnico: Implantación Satelital Real, Ingeniería MEP y Auditoría Forense
           </h2>
           <p style="font-size:12px; color:var(--text-muted);">
-            Visualización arquitectónica inmersiva del proyecto terminado y de la etapa inmediata de obra en Itá Pytã Punta.
+            Relevamiento satelital georreferenciado (UTM 21S 433024E, 7203554N), cálculo pluvial/hidrófugo, red de señales débiles/CCTV PoE y Acta de Recepción JIVESA/PROBETI.
           </p>
         </div>
         <button class="modal-close-btn">&times;</button>
       </div>
 
-      <!-- Selector de vistas -->
-      <div class="renders-nav-pills">
-        <button class="render-thumb-btn active" data-render="rio_atardecer">
-          <img src="/assets/render_rio_atardecer.jpg" alt="Vista al Río">
-          <div class="render-thumb-info">
-            <h5>Vista al Río Paraguay</h5>
-            <span>Atardecer en Galería</span>
-          </div>
+      <!-- 5 Pestañas Interactivas del Centro Técnico -->
+      <div class="tech-tabs-bar" id="renders-tech-tabs">
+        <button class="tech-tab-btn active" data-tech-tab="tab-satelital">
+          <span>🛰️ 1. Implantación Satelital y Catastral</span>
         </button>
-        <button class="render-thumb-btn" data-render="fachada_calle">
-          <img src="/assets/render_fachada_calle.jpg" alt="Fachada Calle">
-          <div class="render-thumb-info">
-            <h5>Fachada Guillermo Arias</h5>
-            <span>Muro Cochera y Acceso</span>
-          </div>
+        <button class="tech-tab-btn" data-tech-tab="tab-pluvial">
+          <span>💧 2. Esquema Pluvial, Drenaje Francés e Hidrófugo</span>
         </button>
-        <button class="render-thumb-btn" data-render="corte_obra">
-          <img src="/assets/render_corte_obra.jpg" alt="Corte Estructural">
-          <div class="render-thumb-info">
-            <h5>Corte 3D de Obra</h5>
-            <span>Fundación + Losa + Techo</span>
-          </div>
+        <button class="tech-tab-btn" data-tech-tab="tab-senales">
+          <span>📹 3. Señales Débiles, CCTV PoE y Domótica</span>
+        </button>
+        <button class="tech-tab-btn" data-tech-tab="tab-acta">
+          <span>📋 4. Acta de Recepción, PROBETI y Prácticas PY</span>
+        </button>
+        <button class="tech-tab-btn" data-tech-tab="tab-ductos-especialistas" style="border-color:rgba(16,185,129,0.5); color:#6ee7b7; font-weight:700;">
+          <span>🔌👷‍♂️ 5. Pases Losa 1, China DIN y 6 Especialistas</span>
         </button>
       </div>
 
-      <!-- Hero Preview -->
-      <div class="renders-gallery-hero">
-        <img id="render-hero-img" src="/assets/render_rio_atardecer.jpg" alt="Vista 3D Principal">
-        <div class="renders-hero-overlay">
-          <div class="renders-hero-title">
-            <h3 id="render-hero-title">Vista Panorámica al Río Paraguay (Atardecer)</h3>
-            <p id="render-hero-desc">Ilustración fotorrealista del remate de la obra hacia el Río Paraguay: ventanales corredizos piso-techo, terraza voladiza con deck de madera, barandas de cristal y cubierta metálica termoacústica.</p>
+      <!-- Pestaña 1: Implantación Satelital y Catastral Real -->
+      <div id="tab-satelital" class="tech-tab-panel active">
+        <div class="sat-grid-layout">
+          <div class="sat-visual-col">
+            <div class="sat-image-switcher">
+              <button class="sat-img-pill active" data-sat-img="./assets/entorno/contexto_satelital_anotado.png" data-sat-caption="Contexto Satelital Anotado: Calle Tte. Guillermo Arias (sin salida), Molinos Harineros al Sur y Río Paraguay a 85–96m al Noroeste.">
+                Ortofoto Anotada
+              </button>
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/satelital_lote_zoom19.jpg" data-sat-caption="Ortofoto Satelital Zoom 19 (Esri World Imagery): Detalle de cumbreras vecinas de tejas y barranco de Itá Pytã Punta.">
+                Satelital Zoom 19
+              </button>
+              <button class="sat-img-pill" data-sat-img="./assets/entorno/mapa_urbano_osm.png" data-sat-caption="Cartografía Urbana y Vial (OpenStreetMap): Tramo cul-de-sac al Oeste de Pedro Melo de Portugal y Mirador Itá Pytã Punta.">
+                Mapa Urbano OSM
+              </button>
+              <button class="sat-img-pill" data-sat-img="./assets/ubicacion_02-1.png" data-sat-caption="Plano Oficial de Ubicación de Sondeos S1, S2, S3 y Punto RN (GEO-STAN S.R.L. Estudio N° 2956 — UTM 21S 433024E, 7203554N).">
+                Croquis GEO-STAN UTM
+              </button>
+            </div>
+            <div class="sat-hero-frame">
+              <img id="sat-main-preview" src="./assets/entorno/contexto_satelital_anotado.png" alt="Contexto Satelital Real Itá Pytã Punta">
+              <div class="sat-hero-caption" id="sat-main-caption">
+                Contexto Satelital Anotado: Calle Tte. Guillermo Arias (sin salida), Molinos Harineros al Sur y Río Paraguay a 85–96m al Noroeste.
+              </div>
+            </div>
           </div>
-          <a id="render-hero-link" href="/assets/render_rio_atardecer.jpg" target="_blank" class="btn-primary" style="padding:8px 14px; font-size:11px; text-decoration:none; display:flex; align-items:center; gap:6px;">
-            <i data-lucide="maximize-2" style="width:14px;height:14px;"></i>
-            <span>Ver en Alta Resolución</span>
-          </a>
+
+          <div class="sat-info-col">
+            <div class="tech-info-card">
+              <span class="badge-pill" style="border-color:var(--accent-gold); color:var(--accent-gold); font-weight:700;">GEORREFERENCIACIÓN EXACTA WGS84 / UTM 21S</span>
+              <h3 style="font-size:16px; margin:8px 0 6px; color:#fff;">Calle Tte. Guillermo Arias (Tramo Sin Salida / Cul-de-Sac)</h3>
+              <p style="font-size:12px; color:#cbd5e1; line-height:1.55; margin-bottom:10px;" id="sat-context-desc">
+                Implantada en el tramo sin salida de la Calle Tte. Guillermo Arias (pasando Pedro Melo de Portugal hacia el Oeste), a la vuelta del acantilado sobre el Río Paraguay.
+              </p>
+              <div class="tech-kv-list">
+                <div class="tech-kv-row">
+                  <span>Coordenadas UTM (RN):</span>
+                  <strong>Zona 21S • 433024 E, 7203554 N (+100.00m)</strong>
+                </div>
+                <div class="tech-kv-row">
+                  <span>Coordenadas WGS84:</span>
+                  <strong>-25.282799°, -57.665301° (25°16'58.1"S 57°39'55.1"W)</strong>
+                </div>
+                <div class="tech-kv-row">
+                  <span>Dimensiones del Lote:</span>
+                  <strong>9.89m frente (9.74m est.) × 31.00m fondo (306.59 m²)</strong>
+                </div>
+                <div class="tech-kv-row">
+                  <span>Distancia al Río / Mirador:</span>
+                  <strong style="color:#38bdf8;">85 m a 96.8 m dirección Noroeste (NNW)</strong>
+                </div>
+                <div class="tech-kv-row">
+                  <span>Cota de Superación Visual:</span>
+                  <strong style="color:#34d399;">2do Piso +102.88m / Techo +105.64m (supera techos vecinos)</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="tech-info-card" style="margin-top:10px;">
+              <h4 style="font-size:12px; text-transform:uppercase; color:var(--accent-cyan); margin-bottom:8px;">Accesos Cartográficos y Gemelo Urbano 3D</h4>
+              <div class="sat-action-buttons">
+                <a id="link-gmaps-sat" href="https://www.google.com/maps/place/25%C2%B016'58.1%22S+57%C2%B039'55.1%22W/@-25.282799,-57.665301,19z/data=!3m1!1e3" target="_blank" rel="noopener" class="sat-ext-btn">
+                  <i data-lucide="globe"></i>
+                  <span>Google Maps Satélite</span>
+                </a>
+                <a id="link-gmaps-sv" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-25.282799,-57.665301&heading=315&pitch=5" target="_blank" rel="noopener" class="sat-ext-btn">
+                  <i data-lucide="navigation"></i>
+                  <span>Google Street View Cercano</span>
+                </a>
+                <a id="link-osm-map" href="https://www.openstreetmap.org/#map=19/-25.282799/-57.665301" target="_blank" rel="noopener" class="sat-ext-btn">
+                  <i data-lucide="map"></i>
+                  <span>OpenStreetMap Catastral</span>
+                </a>
+                <button id="btn-activate-urban-3d" class="btn-primary sat-3d-cta">
+                  <i data-lucide="box"></i>
+                  <span>Ver Barrio 3D y Ortofoto en Escena</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Specs Grid -->
-      <div class="render-specs-grid" id="render-specs-container">
-        <div class="render-spec-item">
-          <span>Orientación e Iluminación</span>
-          <strong id="render-spec-1">Noroeste (Atardecer sobre el Río)</strong>
+      <!-- Pestaña 2: Esquema Pluvial, Drenaje Francés y Plan Hidrófugo -->
+      <div id="tab-pluvial" class="tech-tab-panel">
+        <div class="mep-tab-grid">
+          <div class="mep-specs-col">
+            <div class="mep-kpi-strip">
+              <div class="mep-kpi-box">
+                <span>Intensidad Diseño Asunción</span>
+                <strong id="pluv-intensidad">165 mm/h</strong>
+                <small>Tormenta subtropical pico 5-15 min</small>
+              </div>
+              <div class="mep-kpi-box">
+                <span>Caudal Total Evacuado</span>
+                <strong id="pluv-caudal" style="color:#38bdf8;">8.65 L/s</strong>
+                <small>Techo 86m² (3.94 L/s) + Galería/Patio</small>
+              </div>
+              <div class="mep-kpi-box">
+                <span>Desnivel Hidráulico</span>
+                <strong id="pluv-desnivel" style="color:var(--accent-gold);">-3.64 m</strong>
+                <small>Calle +100.00m → Barranco +96.20m</small>
+              </div>
+            </div>
+
+            <div class="tech-info-card" id="pluvial-specs-list" style="margin-top:10px;">
+              <!-- Populated dynamically from PLUVIAL_HYDRO_DATA -->
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+              <button id="btn-activate-pluvial-3d" class="btn-primary" style="padding:10px 16px; font-size:12px; display:flex; align-items:center; gap:8px; cursor:pointer; border-radius:8px;">
+                <i data-lucide="droplets" style="width:16px;height:16px;"></i>
+                <span>Activar Flujo Pluvial Animado en 3D</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mep-blueprint-col">
+            <div class="sat-image-switcher" style="margin-bottom:8px;">
+              <button class="sat-img-pill active" data-pluv-img="./assets/planos/instalacion_desague_pluvial.png">
+                Plano IAA — Desagüe Pluvial
+              </button>
+              <button class="sat-img-pill" data-pluv-img="./assets/planos/instalacion_sanitaria_agua.png">
+                Plano IS/IH — Sanitaria y Cámara Séptica
+              </button>
+            </div>
+            <div class="mep-plan-frame">
+              <img id="pluvial-plan-img" src="./assets/planos/instalacion_desague_pluvial.png" alt="Plano de Instalación Pluvial y Sanitaria">
+            </div>
+          </div>
         </div>
-        <div class="render-spec-item">
-          <span>Materiales Principales</span>
-          <strong id="render-spec-2">Hormigón Visto de Tabla, Vidrio Templado y Techo Isopanel</strong>
+      </div>
+
+      <!-- Pestaña 3: Esquema de Señales Débiles, CCTV PoE y Domótica -->
+      <div id="tab-senales" class="tech-tab-panel">
+        <div class="mep-tab-grid">
+          <div class="mep-specs-col">
+            <div id="weak-signals-details">
+              <!-- Populated dynamically from WEAK_SIGNALS_DATA -->
+            </div>
+            <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+              <button id="btn-activate-cctv-3d" class="btn-primary" style="padding:10px 16px; font-size:12px; display:flex; align-items:center; gap:8px; cursor:pointer; border-radius:8px;">
+                <i data-lucide="video" style="width:16px;height:16px;"></i>
+                <span>Activar Conos de Visión CCTV en 3D</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mep-blueprint-col">
+            <div style="font-size:11px; font-weight:700; color:var(--accent-cyan); margin-bottom:6px; text-transform:uppercase;">
+              Lámina Ejecutiva ISD — Instalación de Señales Débiles (Cat6, CCTV, Wi-Fi y Portero)
+            </div>
+            <div class="mep-plan-frame">
+              <img src="./assets/planos/instalacion_senales_debiles.png" alt="Plano de Señales Débiles ISD">
+            </div>
+          </div>
         </div>
-        <div class="render-spec-item">
-          <span>Estado del Sector</span>
-          <strong id="render-spec-3" style="color:#34d399;">Horizonte de Inversión (Etapa Final)</strong>
+      </div>
+
+      <!-- Pestaña 4: Acta de Recepción, Ensayos PROBETI y Prácticas Paraguay -->
+      <div id="tab-acta" class="tech-tab-panel">
+        <div id="acta-probeti-container">
+          <!-- Populated dynamically from ACTA_RECEPCION_SUMMARY and ARQUITECTURA_PARAGUAY_BEST_PRACTICES -->
+        </div>
+      </div>
+
+      <!-- Pestaña 5: Pases Diamantados en Losa 1, Compra Directa en China (Smart DIN + Zigbee) y Auditoría de 6 Especialistas -->
+      <div id="tab-ductos-especialistas" class="tech-tab-panel">
+        <div id="renders-ductos-especialistas-host">
+          <!-- Populated dynamically from DUCTOS_PASES_ENCHUFES_DATOS, ESTRATEGIA_COMPRA_CHINA_DOMOTICA_ELECTRICA and AUDITORIA_SEIS_ESPECIALISTAS -->
         </div>
       </div>
     </div>
@@ -614,29 +876,101 @@
           </div>
         </div>
       </div>
+
+      <!-- Sección Completa: Comparativa Acústica/Térmica de Techos + Calculadora de Ladrillos de Tobatí por Nivel y Proveedores Directos -->
+      <div id="tobati-bricks-roof-comparison-host" style="margin-top:18px;"></div>
     </div>
   </div>
 
-  <!-- Modal 1: SIMULADOR DE ESCENARIOS Y RUBROS (Inspirado en Osanna.app) -->
+  <!-- Modal 1: SIMULADOR DE CÓMPUTO MÉTRICO, EL CRÉDITO NUEVO (CAJA MUTUAL), COLORES DEL BANCO Y AUDITORÍA (#modal-simulador) -->
   <div id="modal-simulador" class="modal-overlay">
-    <div class="modal-content glass-panel" style="max-width:980px;">
+    <div class="modal-content glass-panel" style="max-width:1240px;">
       <div class="modal-header">
         <div>
           <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
             <i data-lucide="calculator" style="color:var(--accent-gold);"></i>
-            Simulador de Presupuestos y Partidas de Obra (Paraguay)
+            Planilla Bancaria (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo), «El Crédito Nuevo» (Caja Mutual 9,9%) y Cómputo Métrico
           </h2>
-          <p style="font-size:11px; color:var(--text-muted);">
-            Precios unitarios en Guaraníes basados en presupuestos de JIVESA S.A., Loza Rap y referencias de mercado 2026.
+          <p style="font-size:11.5px; color:var(--text-muted);">
+            Cumple 100% los requisitos técnicos del Banco (Código de Colores Normativo + Desglose Materiales vs. Mano de Obra) + Condiciones cerradas de <strong>El Crédito Nuevo (Caja Mutual 9,9% anual · 15 años / 180 cuotas · A sola firma · Con Seguros Incluidos)</strong> + 5 Ajustes Reales de Obra de Leo.
           </p>
         </div>
         <button class="modal-close-btn">&times;</button>
       </div>
 
-      <!-- Live Budget Summary Banner -->
+      <!-- 0. PANEL PRINCIPAL: EL CRÉDITO NUEVO (CAJA MUTUAL 250M / 300M / 350M / 440M) + TABLA 6,5% VS 9,9% + PROTOCOLO LOSA 1 + ALARMA + CLOACA DUAL -->
+      <div id="bank-credit-and-requirements-host"></div>
+
+      <!-- PANEL 1: 🛡️ CONTROL DEL PROPIETARIO Y NEGOCIACIÓN CON ARQUITECTO -->
+      <div id="owner-control-architect-host"></div>
+
+      <!-- PANEL 2: 📦⚡ EVALUACIÓN DE COMPRA DIRECTA EN CHINA: TABLERO INTELIGENTE DIN + DOMÓTICA ZIGBEE CON NEUTRO + PREVENCIÓN ACTIVA DE FALLAS -->
+      <div id="china-smart-electrical-host"></div>
+
+      <!-- PANEL 3: 👷‍♂️🔍 AUDITORÍA MULTIDISCIPLINARIA DE 6 ESPECIALISTAS + TABLA DE PASES DIAMANTADOS EN LOSA 1 EXISTENTE -->
+      <div id="six-specialists-and-ducts-host"></div>
+
+      <!-- 1. COMPARADOR MULTI-PRESUPUESTO LADO A LADO + TRANSCRIPCIÓN ÍNTEGRA EDIFICA STUDIO -->
+      <div class="multi-budget-box">
+        <div class="multi-budget-header">
+          <div>
+            <h3>📊 Comparador Lado a Lado de los 6 Presupuestos del Proyecto</h3>
+            <p>Contraste directo entre lo ejecutado en obra (Acta 29/12/2025), las planillas de JIVESA/LG-RB, las 2 propuestas referenciales de 1 solo nivel de <strong>Edifica Studio E.A.S.</strong> y la Tabla Maestra de 3 niveles auditada por IA:</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="btn-toggle-edifica-table" class="btn-header glass-panel" style="padding:7px 12px; font-size:11px; border-color:#3b82f6; color:#93c5fd; font-weight:700;">
+              📐 Ver Planillas Íntegras Edifica Studio (573.8M vs 460.1M Gs)
+            </button>
+          </div>
+        </div>
+
+        <div id="comparador-multi-grid" class="comparador-multi-grid">
+          <!-- Populated dynamically from COMPARADOR_MULTI_PRESUPUESTO -->
+        </div>
+
+        <!-- Desplegable con la Transcripción Exacta e Íntegra de Edifica Studio (Opción A y Opción B) -->
+        <div id="edifica-full-transcription-panel" class="edifica-transcription-panel" style="display:none;">
+          <div class="edifica-panel-top">
+            <div>
+              <h4 style="color:#93c5fd; font-size:14px; font-weight:800;">
+                📐 Transcripción Exacta e Íntegra — EDIFICA STUDIO E.A.S. (Arq. Lissie Amarilla R.P. 4.688 &amp; Arq. Roque León R.P. 4.598)
+              </h4>
+              <p style="font-size:11px; color:#cbd5e1; margin-top:2px;">
+                Presupuesto estrictamente referencial de 1 solo nivel (sin 2do Piso). En los documentos originales de Edifica Studio las columnas <code>Unid.</code>, <code>Cantidad</code> y <code>Precio Unitario</code> vienen <strong>en blanco</strong> (solo consignan <code>Precio Total</code> global con materiales y mano de obra incluidos).
+              </p>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <a href="./assets/planos/edifica_studio_573m_pag1.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#3b82f6; color:#93c5fd;">🔍 Hoja 1 (573.8M)</a>
+              <a href="./assets/planos/edifica_studio_573m_pag2.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#3b82f6; color:#93c5fd;">🔍 Hoja 2 y Firmas (573.8M)</a>
+              <a href="./assets/planos/edifica_studio_460m_completo.png" target="_blank" class="badge-pill" style="text-decoration:none; border-color:#60a5fa; color:#bfdbfe;">🔍 Planilla Reducida (460.1M)</a>
+            </div>
+          </div>
+          <div id="edifica-sections-container">
+            <!-- Populated dynamically from EDIFICA_STUDIO_BUDGETS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SECCIÓN DESTACADA: 10 CUESTIONES FUNDAMENTALES OMITIDAS EN PLANILLAS ORIGINALES -->
+      <div class="forensic-omissions-box">
+        <div class="forensic-omissions-header">
+          <div>
+            <h3>⚠️ Alerta de Ingeniería: 10 Cuestiones Fundamentales Omitidas en Planillas Originales</h3>
+            <p>Hallazgos de la auditoría cruzada entre el Estudio Geotécnico GEO-STAN #2956, el Cálculo Estructural E1-E9, los Informes Técnicos 2/3 y las planillas de presupuesto:</p>
+          </div>
+          <button id="btn-add-all-forensic" class="btn-primary" style="padding:7px 12px; font-size:11px; border-radius:6px; cursor:pointer; white-space:nowrap;">
+            ✓ Incluir las Correcciones Forenses en Cómputo
+          </button>
+        </div>
+        <div id="omisiones-criticas-grid" class="omisiones-grid">
+          <!-- Populated dynamically from OMISIONES_CRITICAS_PRESUPUESTO -->
+        </div>
+      </div>
+
+      <!-- 3. LIVE BUDGET SUMMARY BANNER -->
       <div class="simulador-summary-banner">
         <div class="sim-stat">
-          <span class="label">Inversión Estimada:</span>
+          <span class="label">Inversión Estimada Activa:</span>
           <span class="value" id="sim-total-display">Gs. 298.500.000</span>
         </div>
         <div class="sim-stat">
@@ -648,29 +982,69 @@
           <span class="value" id="sim-saldo-display" style="color:#10b981;">+ 1.500.000 Gs.</span>
         </div>
         <div class="sim-stat">
-          <span class="label">Costo / m² Construido:</span>
-          <span class="value" id="sim-m2-display" style="color:var(--accent-gold);">Gs. 1.850.000 / m²</span>
+          <span class="label">Cuota Caja Mutual (9,9% 15a c/ seg.):</span>
+          <span class="value" id="sim-m2-display" style="color:var(--accent-gold);">Gs. 3.529.773 / mes</span>
         </div>
       </div>
 
-      <!-- Quick Preset Buttons -->
-      <div style="display:flex; gap:10px; margin: 16px 0;">
-        <button class="tool-btn active" id="btn-preset-300">Preset 300 Millones (Cierre + 2da Losa + Techo)</button>
-        <button class="tool-btn" id="btn-preset-370">Preset 370 Millones (+ Galería al Río + Redes)</button>
-        <button class="tool-btn" id="btn-preset-440">Preset 440 Millones (Envolvente Completa Blindex)</button>
+      <!-- 4. QUICK PRESET & EXPORT BUTTONS -->
+      <div class="computo-toolbar">
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="tool-btn" id="btn-preset-hoy" style="flex:initial;">⚫ Hoy en Obra (163,8M Ejecutado)</button>
+          <button class="tool-btn active" id="btn-preset-300" style="flex:initial;">💳 Crédito 300M (Cuota Gs. 3.529.773)</button>
+          <button class="tool-btn" id="btn-preset-370" style="flex:initial;">💳 Crédito 350M (Cuota Gs. 4.118.068)</button>
+          <button class="tool-btn" id="btn-preset-440" style="flex:initial;">💳 Crédito 440M (Cuota Gs. 5.177.000)</button>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-header btn-primary" id="btn-export-computo-xlsx" style="font-size:11px; padding:7px 14px; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; font-weight:700;">
+            <span>📊 Descargar Planilla Excel (.XLSX — 6 Hojas c/ Fórmulas + Formato LG-RB)</span>
+          </button>
+          <a id="btn-download-pdf-modal" href="./assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" target="_blank" download="Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf" class="btn-header glass-panel" style="font-size:11px; padding:7px 12px; border-color:rgba(244,63,94,0.65); background:rgba(225,29,72,0.22); color:#ffe4e6; font-weight:700; text-decoration:none;">
+            <span>📕 Presentación Ejecutiva PDF</span>
+          </a>
+          <button class="btn-header glass-panel" id="btn-export-computo-csv" style="font-size:11px; padding:7px 12px;">
+            <span>📥 Exportar Planilla Bancaria CSV (Colores + Mat./M.O.)</span>
+          </button>
+          <button class="btn-header glass-panel" id="btn-print-computo" style="font-size:11px; padding:7px 12px;">
+            <span>🖨️ Imprimir Carpeta PDF para el Banco</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Interactive Checkbox Table -->
-      <div style="overflow-x:auto; margin-top:10px;">
+      <!-- 5. FILTROS RÁPIDOS POR COLOR BANCARIO, FUENTE/ORIGEN Y CATEGORÍA -->
+      <div class="computo-toolbar" style="margin-top:-4px; margin-bottom:10px; gap:10px;">
+        <div class="computo-filters" id="computo-origin-filters">
+          <span style="font-size:11px; font-weight:700; color:#94a3b8; align-self:center; margin-right:4px;">Filtrar Origen / Color Banco:</span>
+          <button class="computo-filter-btn active" data-origin-filter="ALL">Todos los Rubros</button>
+          <button class="computo-filter-btn" data-origin-filter="COLOR_VERDE">🟢 Verde (Hormigón H°A°)</button>
+          <button class="computo-filter-btn" data-origin-filter="COLOR_ROJO">🔴 Rojo (Obra Nueva)</button>
+          <button class="computo-filter-btn" data-origin-filter="COLOR_AMARILLO">🟡 Amarillo (Refacción/Losa 1)</button>
+          <button class="computo-filter-btn" data-origin-filter="PLANILLA_JIVESA_LGRB">📄 Planillas JIVESA / LG-RB</button>
+          <button class="computo-filter-btn" data-origin-filter="EDIFICA_STUDIO">📐 Edifica Studio</button>
+          <button class="computo-filter-btn" data-origin-filter="IA_AUDITORIA">🤖 Ajustes Obra / Auditoría IA</button>
+        </div>
+        <div class="computo-filters" id="computo-category-filters">
+          <button class="computo-filter-btn active" data-cat-filter="ALL">Todas las Categorías</button>
+          <button class="computo-filter-btn" data-cat-filter="Forense">Auditoría Forense / Losa 1 / Cloaca</button>
+          <button class="computo-filter-btn" data-cat-filter="Edifica">Vereda / Exteriores / Cocina</button>
+          <button class="computo-filter-btn" data-cat-filter="Hidrófugo">Plan Hidrófugo</button>
+          <button class="computo-filter-btn" data-cat-filter="Señales">Alarma Pet-Immune y Red</button>
+        </div>
+      </div>
+
+      <!-- 6. INTERACTIVE CHECKBOX & QUANTITY EDITABLE TABLE WITH BANK COLORS & MATERIALES VS MANO DE OBRA -->
+      <div class="computo-table-wrapper">
         <table class="budget-table">
           <thead>
             <tr>
-              <th style="width:40px;">Activo</th>
-              <th>Partida / Rubro</th>
-              <th>Categoría</th>
-              <th>Cantidad</th>
-              <th>P. Unitario (Gs.)</th>
-              <th style="text-align:right;">Subtotal (Gs.)</th>
+              <th style="width:38px;">Activo</th>
+              <th style="width:110px;">Color Banco</th>
+              <th>Partida / Rubro Técnico y Fórmula Dimensional</th>
+              <th style="width:230px;">Fuente / Detalle de Obra</th>
+              <th style="width:105px;">Cantidad</th>
+              <th style="width:120px;">P. Unitario (Gs.)</th>
+              <th style="text-align:right; width:135px;">Materiales / Mano Obra</th>
+              <th style="text-align:right; width:135px;">Subtotal (Gs.)</th>
             </tr>
           </thead>
           <tbody id="budget-items-tbody">
@@ -681,68 +1055,128 @@
     </div>
   </div>
 
-  <!-- Modal 2: Planos CAD y Editables -->
+  <!-- Modal 2: VISOR DE LOS 23 PLANOS CAD, TÉCNICOS Y PRESUPUESTOS ESCANEADOS (#modal-planos) -->
   <div id="modal-planos" class="modal-overlay">
-    <div class="modal-content glass-panel" style="max-width:960px;">
+    <div class="modal-content glass-panel" style="max-width:1140px;">
       <div class="modal-header">
-        <h2 style="font-family:var(--font-display); font-size:20px;">Planos Arquitectónicos y Geotécnicos (Vectoriales)</h2>
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="file-text" style="color:var(--accent-cyan);"></i>
+            Repositorio Completo de 23 Planos Ejecutivos CAD, MEP, Geotécnicos y Presupuestos
+          </h2>
+          <p style="font-size:11.5px; color:var(--text-muted);">
+            Láminas oficiales de Cálculo Estructural (E1–E9 Ing. Gustavo Velázquez), Instalaciones MEP (IS/IH, IAA, ISD, IE), Arquitectura (Arq. Gabriela Rolón), Geotecnia (GEO-STAN #2956) y Presupuestos Edifica Studio.
+          </p>
+        </div>
         <button class="modal-close-btn">&times;</button>
       </div>
-      <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
-        <button class="tool-btn active" id="btn-plano-acotado">Planta Baja Acotada</button>
-        <button class="tool-btn" id="btn-plano-corte">Corte del Terreno</button>
-        <button class="tool-btn" id="btn-plano-ubicacion">Ubicación y Lote</button>
-        <button class="tool-btn" id="btn-plano-subsuelo">Subsuelo Ejecutivo</button>
+
+      <!-- Filtros por Categoría -->
+      <div class="blueprint-controls-bar">
+        <div class="computo-filters" id="bp-category-filters">
+          <button class="computo-filter-btn active" data-bp-cat="ALL">Todos (23)</button>
+          <button class="computo-filter-btn" data-bp-cat="Estructurales">Estructural (6)</button>
+          <button class="computo-filter-btn" data-bp-cat="Instalaciones">Instalaciones MEP (5)</button>
+          <button class="computo-filter-btn" data-bp-cat="Arquitectura">Arquitectura (5)</button>
+          <button class="computo-filter-btn" data-bp-cat="Geotecnia y Entorno">Geotecnia y Satelital (4)</button>
+          <button class="computo-filter-btn" data-bp-cat="Presupuestos">Presupuestos Edifica Studio (3)</button>
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <!-- Selector de Contraste -->
+          <div class="blueprint-themes-group" id="blueprint-contrast-group">
+            <button class="theme-pill-btn active" id="btn-theme-white" data-bp-theme="original">Papel Blanco</button>
+            <button class="theme-pill-btn" id="btn-theme-blueprint" data-bp-theme="high-contrast">Blueprint Azul</button>
+            <button class="theme-pill-btn" id="btn-theme-dark" data-bp-theme="autocad">Invertido AutoCAD</button>
+          </div>
+
+          <!-- Controles de Zoom -->
+          <div class="blueprint-zoom-group">
+            <button class="zoom-btn" id="btn-zoom-out" title="Alejar (-)">-</button>
+            <button class="theme-pill-btn" id="btn-zoom-reset" title="Restaurar 100%"><span id="bp-zoom-level">100%</span></button>
+            <button class="zoom-btn" id="btn-zoom-in" title="Acercar (+)">+</button>
+          </div>
+
+          <!-- Descarga Directa -->
+          <a id="bp-download-btn" href="./assets/planos/estructural_e1_replanteo.png" download class="btn-primary" style="padding:6px 12px; border-radius:6px; font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+            <i data-lucide="download" style="width:13px;height:13px;"></i>
+            <span>Descargar Lámina</span>
+          </a>
+        </div>
       </div>
-      <div id="blueprint-viewer" style="background:#020617; border:1px solid var(--border-subtle); border-radius:12px; height:460px; overflow:auto; display:flex; align-items:center; justify-content:center; padding:10px;">
-        <img id="blueprint-img" src="/assets/plano_acotado.svg" style="max-width:100%; max-height:100%; object-fit:contain;" alt="Plano">
+
+      <!-- Selector de Láminas (Pills) -->
+      <div id="blueprint-selector-strip" class="blueprint-selector-strip">
+        <!-- Populated from ALL_BLUEPRINTS_CATALOG -->
+      </div>
+
+      <!-- Visor Principal con Zoom y Contraste -->
+      <div id="blueprint-viewport" class="blueprint-viewport-wrapper theme-white">
+        <img id="blueprint-img" class="blueprint-img-canvas" src="./assets/planos/estructural_e1_replanteo.png" alt="Plano Técnico">
+      </div>
+
+      <!-- Metadatos de la Lámina Activa -->
+      <div id="blueprint-meta-bar" class="blueprint-meta-bar">
+        <div>
+          <span id="bp-meta-code" class="bp-pill-code" style="margin-right:6px;">E1</span>
+          <strong id="bp-meta-title" style="color:#fff; font-size:13px;">E1 — Planta de Fundación y Ejes de Replanteo</strong>
+          <p id="bp-meta-desc" style="font-size:11.5px; color:#94a3b8; margin-top:2px;"></p>
+        </div>
+        <div style="text-align:right; white-space:nowrap;">
+          <span id="bp-meta-author" class="badge-pill">Ing. Gustavo Velázquez</span>
+          <span id="bp-meta-scale" class="badge-pill" style="border-color:var(--accent-gold); color:var(--accent-gold);">Escala 1:50</span>
+          <span id="bp-meta-status" class="badge-pill" style="border-color:#10b981; color:#34d399;">Ejecutado 100%</span>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Modal 3: Estudio Geotécnico GEO-STAN -->
   <div id="modal-geotech" class="modal-overlay">
-    <div class="modal-content glass-panel">
+    <div class="modal-content glass-panel" style="max-width:940px;">
       <div class="modal-header">
-        <h2 style="font-family:var(--font-display); font-size:20px;">Estudio Geotécnico Nº 2956 • GEO-STAN S.R.L.</h2>
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:20px;">Estudio Geotécnico Nº 2956 • GEO-STAN S.R.L.</h2>
+          <p style="font-size:11px; color:var(--text-muted);">Coordenadas UTM Zona 21S (RN: 433024E, 7203554N) • Profundización de Zapatas Verificada en Acta 29/12/2025</p>
+        </div>
         <button class="modal-close-btn">&times;</button>
       </div>
       <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
         <p style="margin-bottom:14px;">
-          Se ejecutaron <strong>3 sondeos de penetración estándar (SPT)</strong> hasta 10.05m de profundidad, con nivelación óptica referida a cota +100.00m.
+          Se ejecutaron <strong>3 sondeos de penetración estándar (SPT)</strong> hasta 10.05m de profundidad, con nivelación óptica referida a cota +100.00m (Calle Guillermo Arias). Durante la obra (Acta 29/12/2025), las zapatas se profundizaron <strong>1.00m adicional</strong> hasta cota <strong>+95.36m (-4.64m)</strong> para apoyar directamente sobre el estrato firme.
         </p>
         <div style="overflow-x:auto;">
           <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
               <tr style="border-bottom:1px solid var(--border-subtle); color:var(--accent-cyan);">
                 <th style="padding:8px;">Sondeo</th>
-                <th style="padding:8px;">Ubicación</th>
+                <th style="padding:8px;">Ubicación / UTM</th>
                 <th style="padding:8px;">Cota Boca</th>
                 <th style="padding:8px;">Prof.</th>
                 <th style="padding:8px;">Estrato Superior</th>
-                <th style="padding:8px;">Rechazo SPT (>50)</th>
+                <th style="padding:8px;">Rechazo SPT (&gt;50)</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                <td style="padding:8px; font-weight:700;">S-1</td>
-                <td style="padding:8px;">Frente (Jardín)</td>
+                <td style="padding:8px; font-weight:700;">S-1 (P1)</td>
+                <td style="padding:8px;">Frente Cochera (433018E, 7203560N)</td>
                 <td style="padding:8px;">+99.84 m</td>
                 <td style="padding:8px;">10.05 m</td>
                 <td style="padding:8px;">Arena limosa SM (Nspt 16-20)</td>
                 <td style="padding:8px; color:var(--accent-gold);">5.00 m (Arenisca)</td>
               </tr>
               <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                <td style="padding:8px; font-weight:700;">S-2</td>
-                <td style="padding:8px;">Centro (Vivienda)</td>
+                <td style="padding:8px; font-weight:700;">S-2 (P2)</td>
+                <td style="padding:8px;">Centro / Subsuelo (433020E, 7203579N)</td>
                 <td style="padding:8px;">+97.15 m</td>
                 <td style="padding:8px;">10.04 m</td>
                 <td style="padding:8px;">Arena limosa SM (Nspt 11-18)</td>
                 <td style="padding:8px; color:var(--accent-gold);">5.00 m (Arenisca)</td>
               </tr>
               <tr>
-                <td style="padding:8px; font-weight:700;">S-3</td>
-                <td style="padding:8px;">Fondo (Barranco)</td>
+                <td style="padding:8px; font-weight:700;">S-3 (P3)</td>
+                <td style="padding:8px;">Fondo / Barranco (433017E, 7203591N)</td>
                 <td style="padding:8px;">+96.20 m</td>
                 <td style="padding:8px;">10.05 m</td>
                 <td style="padding:8px;">Relleno + Arena SM (Nspt 7-12)</td>
@@ -751,56 +1185,71 @@
             </tbody>
           </table>
         </div>
-        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:8px; padding:12px; margin-top:16px;">
-          <strong style="color:var(--accent-cyan);">Conclusión Geotécnica:</strong> Terreno sumamente firme y libre de nivel freático. Las zapatas directas a 1.20m de profundidad sobre suelo SM tienen capacidad portante admisible de <strong>10.0 a 17.9 Tn/m²</strong>, garantizando absoluta estabilidad sin asentamientos diferenciales.
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:14px;">
+          <a href="./assets/sondeo_p1-1.png" target="_blank" style="text-decoration:none; color:#67e8f9; background:rgba(15,23,42,0.7); padding:8px; border-radius:8px; border:1px solid var(--border-subtle); text-align:center; font-size:11px;">📄 Ver Perfil SPT P1</a>
+          <a href="./assets/sondeo_p2-1.png" target="_blank" style="text-decoration:none; color:#67e8f9; background:rgba(15,23,42,0.7); padding:8px; border-radius:8px; border:1px solid var(--border-subtle); text-align:center; font-size:11px;">📄 Ver Perfil SPT P2</a>
+          <a href="./assets/sondeo_p3-1.png" target="_blank" style="text-decoration:none; color:#67e8f9; background:rgba(15,23,42,0.7); padding:8px; border-radius:8px; border:1px solid var(--border-subtle); text-align:center; font-size:11px;">📄 Ver Perfil SPT P3</a>
+        </div>
+        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:8px; padding:12px; margin-top:14px;">
+          <strong style="color:var(--accent-cyan);">Conclusión Geotécnica y Estructural:</strong> Terreno sumamente firme y libre de nivel freático hasta 10.05m. Las 14 zapatas (aisladas y combinadas) arriostradas con vigas centradoras <code>VC.T-1 (40×50cm)</code> trabajan con holgura sobre el estrato compacto.
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal 4: Galería de Fotos de Obra -->
+  <!-- Modal 4: GALERÍA COMPLETA DE LAS 118 FOTOS DE OBRA (#modal-photos) -->
   <div id="modal-photos" class="modal-overlay">
-    <div class="modal-content glass-panel" style="max-width:980px;">
+    <div class="modal-content glass-panel" style="max-width:1120px;">
       <div class="modal-header">
         <div>
-          <h2 style="font-family:var(--font-display); font-size:20px;">Registro Fotográfico en Obra</h2>
-          <p style="font-size:11px; color:var(--text-muted);">118 fotografías del avance desde Google Photos</p>
+          <h2 style="font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="camera" style="color:var(--accent-gold);"></i>
+            Registro Fotográfico Completo en Obra (118 Fotografías Reales)
+          </h2>
+          <p style="font-size:11.5px; color:var(--text-muted);">
+            Archivo cronológico de las 5 etapas ejecutadas hasta el Acta de Recepción (29/12/2025). Haz clic en cualquier foto para abrir el visor Lightbox de alta resolución.
+          </p>
         </div>
         <button class="modal-close-btn">&times;</button>
       </div>
+
+      <!-- Filtros por las 5 Etapas Constructivas -->
+      <div class="computo-filters" id="photo-stage-filters" style="margin-bottom:12px;">
+        <button class="computo-filter-btn active" data-photo-stage="ALL">Todas las Fotos (118)</button>
+        <button class="computo-filter-btn" data-photo-stage="Terreno y Sondeos">1. Terreno y Sondeos (#1-#24)</button>
+        <button class="computo-filter-btn" data-photo-stage="Excavación Subsuelo">2. Excavación Subsuelo (#25-#48)</button>
+        <button class="computo-filter-btn" data-photo-stage="Zapatas y Fundaciones">3. Zapatas y VC.T-1 (#49-#78)</button>
+        <button class="computo-filter-btn" data-photo-stage="Pilares y Encofrado">4. Pilares P1-P20 y Encofrado (#79-#102)</button>
+        <button class="computo-filter-btn" data-photo-stage="Losa 1 y Estado Actual">5. Losa 1 y Estado Actual (#103-#118)</button>
+      </div>
+
       <div id="photo-gallery-container" class="photo-grid"></div>
     </div>
   </div>
 
-  <!-- Modal 5: Nube Gratuita y Soberanía de Datos -->
-  <div id="modal-cloud" class="modal-overlay">
-    <div class="modal-content glass-panel">
-      <div class="modal-header">
-        <h2 style="font-family:var(--font-display); font-size:20px;">Soberanía y Despliegue en la Nube Gratuita</h2>
-        <button class="modal-close-btn">&times;</button>
+  <!-- Lightbox Modal para Ampliar Fotografías con Navegación Anterior / Siguiente -->
+  <div id="photo-lightbox" class="lightbox-overlay">
+    <div class="lightbox-card glass-panel">
+      <div class="lightbox-header">
+        <div>
+          <span id="lightbox-stage-badge" class="badge-pill">Etapa</span>
+          <h3 id="lightbox-title" style="font-size:16px; color:#fff; margin-top:4px;">Registro de Obra</h3>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <a id="lightbox-ext-link" href="#" target="_blank" rel="noopener" class="btn-header" style="font-size:11px; padding:6px 10px; text-decoration:none;">
+            <span>Abrir Original</span>
+          </a>
+          <button id="lightbox-close" class="modal-close-btn">&times;</button>
+        </div>
       </div>
-      <div style="font-size:13px; line-height:1.7; color:#cbd5e1;">
-        <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:14px; margin-bottom:16px;">
-          <h4 style="color:#34d399; font-size:14px; margin-bottom:4px;">
-            <i data-lucide="check-circle" style="width:16px;height:16px;vertical-align:middle;"></i>
-            Independencia total de suscripciones de Antigravity (100 USD)
-          </h4>
-          <p style="font-size:12px; color:#a7f3d0;">
-            Todo el código, modelos 3D y assets quedan guardados en tu repositorio de GitHub y alojados en Google Cloud / Firebase Hosting en su plan gratuito permanente (Spark Tier: 10 GB almacenamiento, 360 MB/día de transferencia, SSL global incluido).
-          </p>
-        </div>
-
-        <h4 style="color:#fff; margin-bottom:6px;">¿Cómo seguir el proyecto desde el celular cuando apagues la laptop?</h4>
-        <ol style="margin-left:20px; margin-bottom:16px; font-size:12px; color:#94a3b8;">
-          <li style="margin-bottom:6px;">El sitio web está desplegado en una URL pública y segura (ej: <code>https://itapytapunta.web.app</code> o Cloudflare Pages).</li>
-          <li style="margin-bottom:6px;">Abre el enlace en Google Chrome o Safari desde tu teléfono móvil. Funciona con gestos táctiles fluidos (1 dedo para rotar, 2 dedos para zoom y paneo).</li>
-          <li style="margin-bottom:6px;">Si realizas cambios en el código o deseas agregar fotos, un simple <code>git push</code> en GitHub dispara el despliegue automático mediante GitHub Actions sin encender tu laptop.</li>
-        </ol>
-
-        <div style="padding:12px; background:rgba(255,255,255,0.05); border-radius:8px; font-family:monospace; font-size:11px;">
-          git remote add origin https://github.com/leoberniga/itapytapunta-3d.git<br>
-          git push -u origin main
-        </div>
+      <div class="lightbox-Stage">
+        <button id="lightbox-prev" class="lightbox-nav-btn" title="Anterior (←)">&#10094;</button>
+        <img id="lightbox-img" src="" alt="Fotografía de Obra Ampliada">
+        <button id="lightbox-next" class="lightbox-nav-btn" title="Siguiente (→)">&#10095;</button>
+      </div>
+      <div class="lightbox-footer">
+        <p id="lightbox-desc" style="font-size:12px; color:#cbd5e1;"></p>
+        <span id="lightbox-counter" style="font-family:var(--font-mono); font-size:11px; color:var(--accent-gold);">1 / 118</span>
       </div>
     </div>
   </div>

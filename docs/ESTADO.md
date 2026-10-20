@@ -1,21 +1,32 @@
 # Estado del Proyecto • Residencia Itá Pytã Punta 3D
-**Fecha de actualización:** 2026-10-19 / 2026-10-20
+**Fecha de actualización:** 2026-10-20
 
-## 1. Hitos Alcanzados
-- [x] Repositorio Git centralizado y sincronizado en `https://github.com/leoberniga/itapytapunta-3d`.
-- [x] Respaldo completo del proyecto copiado a carpeta local permanente: `/media/carmen/Datos/Dev/itapytapunta-3d/`.
-- [x] Modelo 3D paramétrico Three.js implementado con pendiente natural (-3.64m), Río Paraguay y simulador solar.
-- [x] 3 Renders fotorrealistas en alta definición generados y vinculados (`render_rio_atardecer.jpg`, `render_fachada_calle.jpg`, `render_corte_obra.jpg`).
-- [x] Autenticación criptográfica con SHA-256 (`leo` / `itapytapunta2026`).
-- [x] Visor de planos CAD con control de contraste (Papel Blanco, Blueprint Azul, AutoCAD Oscuro) y zoom.
-- [x] Simulador métrico e insumos técnicos para propietarios no arquitectos (bolsas de cemento, kg de hierro, arena, piedra).
-- [x] Inclusión de partidas de **Plan Hidrófugo** (drenajes, membrana asfáltica) y **Señales Débiles** (CCTV, Wi-Fi Mesh, domótica).
-- [x] Contexto satelital y enlaces a Google Maps, Street View y OpenStreetMap.
-- [x] Corrección de CI/CD `package-lock.json` y diagnóstico de GitHub Pages (el repositorio al ser privado en cuenta gratuita requiere que sea público o se use Firebase/VPS para Pages).
-
-## 2. Próximos Pasos para Antigravity Multi-Agente
-1. Abrir la carpeta `/media/carmen/Datos/Dev/itapytapunta-3d` directamente en Antigravity CLI / Multi-agente.
-2. Despliegue gratuito en Firebase Hosting (`npx firebase-tools deploy --only hosting`) o Cloudflare Pages/VPS.
-3. Incorporar soporte para exportación de reportes PDF de cómputo métrico.
-4. Ajustar los puntos de iluminación nocturna en el modelo 3D según el esquema de señales débiles y domótica.
-
+## 1. Hitos Alcanzados (Actualización Multi-Agente CAD/BIM 2D/3D + Auditoría 6 Especialistas + Domótica China + Excel .XLSX + PDF Ejecutivo)
+- [x] **Corrección de Autenticación (`src/auth.js` y `src/main.js`):** Se agregó `async/await` en la verificación de sesión y login, más fallback SHA-256 puro en JS para funcionar tanto en `localhost` como en LAN HTTP (`192.168.100.12:5173`). Credenciales operativas: `leo` / `itapytapunta2026` (o `admin` / `itapyta2026`). Se eliminó el botón técnico interno de `"Nube Gratuita"` / `"Móvil & Nube"`.
+- [x] **Eliminación de `"Ref. 573,9M (Edifica A)"` de la Barra Superior y Nuevo Panel de Control del Propietario / Negociación con Arquitecto (`CONTROL_PROPIETARIO_Y_NEGOCIACION_ARQUITECTO`):**
+  - Se quitó el botón referencial `Ref. 573,9M (Edifica A)` de la barra de navegación superior (`index.html` y `main.js`), dejando únicamente el estado certificado hoy (`Hoy en Obra 163,8M`), los 3 topes de crédito reales de Leo (`Crédito 300 Millones`, `Crédito 350 Millones`, `Crédito 440 Millones`) y un botón independiente `🏊 Ver Piscina + Quincho 3D`.
+  - Se incorporó el panel interactivo **Control del Propietario y Estrategia de Negociación con Arquitecto**, explicando por qué el presupuesto referencial de Edifica Studio (`Gs. 460,2M–573,9M` por un solo nivel) duplicaba `Gs. 80,75M` de estructura ya ejecutada y cargaba `~28%` de margen empresarial cerrado, y comparando **Gestión Supervisada por Leo (`6%–8% = Gs. 18,5M` + Imprevistos `Gs. 6,9M`, ahorrando `Gs. 52,9M`)** vs. **Administración Delegada Open-Book (`10%–12%`)** vs. **Llave en Mano Auditado (`+22%–28%`)**, con 5 hitos quincenales de certificación (`20%` c/u).
+- [x] **Auditoría Multidisciplinaria de 6 Especialistas (`AUDITORIA_SEIS_ESPECIALISTAS`) y Correcciones Geométricas 3D/2D (`src/archVizInterior.js`, `src/scene.js`, `src/floorplanEditor.js`):**
+  1. **Ingeniero Civil y Estructural (`Ing. Civil MOPC`):** Desplazó la **Escalera 2 (PB → 2do Piso)** en estructuras livianas de acero (`UPN 200`) y peldaños de Lapacho al vano paralelo `x = 2.84m..3.84m` (al Oeste del Eje 2), garantizando un **paso de cabeza libre `> 2,25m / 2,88m`** sobre la Escalera 1 existente (`x = 3.84m..4.87m`) y ajustando el hueco en la Losa del 2do Piso (`scene.js`). Exigió tabiquería liviana estricta sobre `P12, P13 y P15` que mueren en PB (`Gs. 8.910.000`).
+  2. **Arquitecto de Interior:** Reubicó las 2 **Bibliotecas de 4 estantes de 2,00m (`8,00 ml` c/u)** sobre muros portantes firmes (`PB: x=-4.66m, z=8.65m` y `2do Piso: x=-0.35m, z=8.55m`), reubicó la **Máquina de Coser Antigua** (`x=2.45m, z=4.65m`) libre del desembarco de escalera, sumó la **2da Silla Ergonómica de Oficina (`Gs. 850.000`)** para el Home-Office doble de Ruth y Leo, incorporó **Campana Extractora de Humos con Ducto al Exterior** desde `300M`, **Nicho Exterior Ventilado para Garrafa GLP 13 kg** sobre `Eje G (z=2.78m)` (`Gs. 2.150.000`), porcelanato satinado antideslizante `R9/R10` para las patas de **Emma (caniche)** y mallas de protección en balcones del 2do piso para **Serafina (gata calicó)**.
+  3. **Arquitecto de Exterior y Paisajismo:** Incorporó **Topes de Rueda (`Wheel Stops` en `z = +0.65m`)** en la cochera para proteger la **SUV Chery Tiggo 2 Pro 2026**, goterones cortagotas en bordes de losas `L1` y `2do Piso`, y validó las distancias reglamentarias en el patio posterior entre el **Pozo Ciego (`x = -3.25m, z = 20.20m`)** y la **Piscina proyectada (`x = +0.50m, z = 18.80m`, separación libre `> 2,50m`)**.
+  4. **Técnico de Seguridad Física y Electrónica:** Añadió la **Puerta-Reja de Seguridad con Cerrojo al pie de la Escalera 1 en el Subsuelo (`z = 9.94m`, `Gs. 1.650.000`)**, calibró el sistema de **Alarma Pet-Immune (`Gs. 5.450.000`)** con sensores de cortina/doble tecnología para que Serafina no dispare falsas alarmas al trepar a muebles, y sumó **Módulo 4G Dual-SIM + Mini-UPS LiFePO4** para el router de fibra y NVR.
+  5. **Ingeniero Electricista Categoría A (ANDE / INTN):** Especificó **Acometida Trifásica ANDE `3×380/220V` (`TM 3×40A`)**, **Protector de Sobretensión Transitoria DPS Clase II (`40 kA`)**, disyuntores diferenciales `30 mA`, jabalina `Copperweld Ø 5/8" × 2,40m`, circuito dedicado `20A (4 mm²)` en cocina para Air Fryer 6L + Microondas y luces de emergencia LED autónomas en ambas escaleras.
+  6. **Maestro Plomero e Hidrosanitario (ESSAP):** Incorporó **Tanque Cisterna Tricapa de `1.000 L` + Bomba Presurizadora Inteligente Rowa (`2,0 bar`)** en el área técnica del Subsuelo (para garantizar presión plena en la ducha del 2do Piso a `+104,80m`), **Cámara Desgrasadora exclusiva Cocina/Lavadero** y **Acople Rápido PVC `Ø 100mm` con tapón a rosca** para desagote limpio por camión cisterna atmosférico bajando la manguera (`~27m`) por la Escalera Lateral de Servicio (eliminando el motor de bombeo cloacal y ahorrando `Gs. 2.600.000`).
+- [x] **Visualización 3D y CAD 2D de los 4 Pases con Sacabocado Diamantado en Losa 1 Maciza, Electroductos, 26 Tomacorrientes (`20A/16A`) y 7 Llaves Inteligentes (`DUCTOS_PASES_ENCHUFES_DATOS`, `src/mepSystems.js`, `src/scene.js`, `src/floorplanEditor.js`):**
+  - Como la Losa 1 existente (`Y = 0.00m`, `315 kg/cm²`) es maciza y no tiene pases previstos, se diseñaron y modelaron en 3D y 2D únicamente **4 perforaciones limpias con broca diamantada (`Core Drill`) en encuentros de muros**: `PASE #1 (Ø50mm Eléctrico Trifásico)`, `PASE #2 (Ø50mm Fibra/Cat6/Zigbee PoE)`, `PASE #3 (Ø115mm Columna Cloacal PVC Ø100mm)` y `PASE #4 (Ø63mm Agua Fría/Caliente PPR)`, llevando todos los tendidos horizontales por los `5 cm` del contrapiso antes de colocar el porcelanato (`0 cm` de picado estructural en la losa).
+- [x] **Evaluación de Compra Directa en China: Tablero Inteligente Riel DIN + Domótica Zigbee con Neutro + Prevención Activa de Fallas (`ESTRATEGIA_COMPRA_CHINA_DOMOTICA_ELECTRICA`):**
+  - Se establecieron las **4 Reglas de Oro de Obra de Cero (`Costo Extra Gs. 0`)**: 1) Bajar cable Neutro (`Celeste 1,5 mm²`) a las 14 cajas de interruptores; 2) Cajas rectangulares profundas (`5×10×5,5 cm`); 3) Gabinete `TP-PB` de `36 a 48 módulos DIN` con puerta transparente fumée; 4) Conmutación `3-Way` de escaleras por asociación local Zigbee.
+  - Comparativa completa de importación directa (`Alibaba / AliExpress` vía courier aéreo a Asunción):
+    - **Kit 1 Básico (Tablero DIN Smart + 14 Interruptores Zigbee + Hub PoE):** **`Gs. 2.365.000`** puesto en Asunción vs. `Gs. 5.480.000` local (**Ahorro: `Gs. 3.115.000` / `-57%`**).
+    - **Kit 2 Prevención Activa Total (+ 6 Disyuntores RCBO por Circuito con Sensor de Temperatura °C y Fuga mA + 3 Sensores de Inundación que apagan la Bomba Presurizadora + Sirena + Enchufes 20A):** **`Gs. 3.885.000`** puesto en Asunción vs. `Gs. 9.250.000` local (**Ahorro: `Gs. 5.365.000` / `-58%`**).
+- [x] **Exportador Nativo de Libro Excel Multi-Hoja (`.XLSX`) con Fórmulas Activas (`src/xlsxExporter.js`):**
+  - Genera y descarga `Carpeta_Bancaria_y_Computo_ItaPytaPunta_Ruth_y_Leo.xlsx` con **6 hojas completas y más de 470 fórmulas `=SUM(...)` y `=CANT*PU`**:
+    1. `1_CARPETA_BANCO_COLORES` (Colores normativos `⚫ Negro`, `🟢 Verde`, `🔴 Rojo`, `🟡 Amarillo` + `Materiales 62% vs. Mano de Obra 38%`)
+    2. `2_FORMATO_LG_RB_LOZARRAP` (Réplica exacta de las 66 filas de `Planilla computo LG-RB + Lozarrap.xlsx` `Hoja CHAPA` con la Fila 9 `38 m² Lozarrap = Gs. 14.440.000` y rubros en `0 Gs` subsanados)
+    3. `3_CONTROL_Y_ARQUITECTO` (Comparativa Gestión Supervisada vs. Open-Book vs. Llave en Mano + 5 Hitos)
+    4. `4_CREDITO_CAJA_MUTUAL` (`El Crédito Nuevo` `9,9%` vs. `6,5%` a 15, 20 y 30 años para `250M, 300M, 350M y 440M`)
+    5. `5_AUDITORIA_6_ESPECIALISTAS` (Dictamen completo de los 6 especialistas + tabla de los 4 pases diamantados)
+    6. `6_COMPRA_CHINA_DOMOTICA` (Kits 1 y 2 en USD y Gs. + 4 Reglas de Obra + Matriz de Prevención Activa).
+- [x] **Presentación Ejecutiva Exhaustiva en PDF de Alta Estética (`Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` — 12 Páginas Landscape, 19,06 MB):**
+  - Generada en `/media/carmen/Datos/Dev/itapytapunta-3d/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` y servida en `/assets/Presentacion_Ejecutiva_Residencia_Ita_Pyta_Punta_Ruth_y_Leo.pdf` con 3 nuevos renders fotorrealistas por etapa (`render_etapa_300m_habitable.jpg`, `render_suite_estudio_2do_piso.jpg`, `render_tablero_domotica_china_mep.jpg`) más el compendio integral del proyecto.

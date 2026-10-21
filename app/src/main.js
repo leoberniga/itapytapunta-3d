@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let persistCustomStateNow = null;
 
   const CUSTOM_STATE_STORAGE_KEY = 'itapytapunta_custom_project_v1';
+  const CUSTOM_PROJECT_STORAGE_KEY = CUSTOM_STATE_STORAGE_KEY;
   const CUSTOM_SNAPSHOTS_STORAGE_KEY = 'itapytapunta_custom_snapshots_v1';
 
   const buildDefaultEditablePartidas = () =>
@@ -2589,19 +2590,19 @@ document.addEventListener('DOMContentLoaded', () => {
         scene.focusRoom(roomKey);
       }
       // Also update cutaway buttons visual state if focusRoom auto-adjusts cutaway
-      if (roomKey === 'estar_comedor' || roomKey === 'cocina_isla' || roomKey === 'bano_suite' || roomKey === 'dormitorio_suite' || roomKey === 'galeria_parrilla') {
+      if (roomKey === 'estar_comedor' || roomKey === 'cocina_isla' || roomKey === 'galeria_parrilla' || roomKey === 'escalera_subsuelo') {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'cut_pa');
         });
-      } else if (roomKey === 'subsuelo_depto' || roomKey === 'escalera_subsuelo') {
+      } else if (roomKey === 'subsuelo_depto') {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'cut_pb');
         });
-      } else if (roomKey === 'planta_alta') {
+      } else if (roomKey === 'planta_alta' || roomKey === 'dormitorio_suite' || roomKey === 'bano_suite') {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'cut_roof');
         });
-      } else if (roomKey === 'fachada_porton' || roomKey === 'corte_estructural') {
+      } else if (roomKey === 'fachada_porton' || roomKey === 'corte_estructural' || roomKey === 'piscina_quincho') {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'full');
         });
@@ -3397,20 +3398,20 @@ document.addEventListener('DOMContentLoaded', () => {
       title: '1. Planta Baja +100.00m con Hueco 38m² Loza Rap y Núcleo Húmedo Eje F-G',
       cota: '+100.00m (Galería L1 -0.45m)',
       highlights: [
-        { x: -1.45, z: 3.10, w: 3.10, d: 1.65, color: '#0ea5e9', label: 'NÚCLEO HÚMEDO EJE F-G (Cocina + Toilette PB + Columna Ø100mm)' },
-        { x: -2.00, z: 5.30, w: 6.80, d: 5.60, color: '#10b981', label: 'HUECO 38m² LOZA RAP (Estar-Comedor Integrado c/ Vista al Río)' },
+        { x: -0.74, z: 3.00, w: 4.58, d: 6.94, color: '#0ea5e9', label: 'LOSA MACIZA L4 ESTE (Cocina + Comedor + Baño Social + Pases #1..#4)' },
+        { x: -4.87, z: 3.00, w: 4.13, d: 6.94, color: '#10b981', label: 'SECTOR SIN LOSA 38m² LOZA RAP OESTE (Estar Social c/ Vista al Río)' },
         { x: -4.80, z: 1.50, w: 9.60, d: 1.50, color: '#f59e0b', label: 'PASILLO ANTIHUMEDAD 1.50m + REJILLA OXIGENACIÓN SUBSUELO' }
       ]
     },
     sheet_pa: {
       code: 'LAM-02-PA',
       levelKey: 'planta_alta',
-      title: '2. Planta Alta +102.88m con 2 Dormitorios, Vestidor, 2 Baños y Desk al subir escalera',
+      title: '2. Planta Alta +102.88m con Suite Principal (+X), Dormitorio 2, 2 Baños, Vestidor y Escritorio Extendido (-X)',
       cota: '+102.88m (Cubierta +105.64m)',
       highlights: [
-        { x: 1.80, z: 5.26, w: 2.00, d: 2.20, color: '#38bdf8', label: 'DESK / HOME-OFFICE AL SUBIR ESCALERA 1' },
-        { x: -4.80, z: 7.40, w: 5.20, d: 5.80, color: '#a855f7', label: 'SUITE RUTH & LEO + VESTIDOR + BALCÓN AL RÍO' },
-        { x: -4.80, z: 3.05, w: 4.10, d: 4.20, color: '#10b981', label: 'DORMITORIO 2 + 2 BAÑOS SUPERPUESTOS (EJE F-G)' }
+        { x: -4.87, z: 6.00, w: 3.07, d: 7.34, color: '#38bdf8', label: 'ESCRITORIO EXTENDIDO HASTA GALERÍA EJE A + SUBIDA ESCALERA 2 (-X)' },
+        { x: 0.60, z: 4.85, w: 4.27, d: 5.09, color: '#a855f7', label: 'SUITE PRINCIPAL RUTH & LEO + VESTIDOR + BAÑO SUITE (+X)' },
+        { x: -1.80, z: 6.00, w: 2.40, d: 3.94, color: '#10b981', label: 'DORMITORIO 2 (CENTRO) + SSHH 2 FRONTAL OESTE' }
       ]
     },
     sheet_sub: {
@@ -3421,18 +3422,18 @@ document.addEventListener('DOMContentLoaded', () => {
       highlights: [
         { x: -4.80, z: 1.50, w: 9.60, d: 1.50, color: '#22d3ee', label: 'REJILLA DE OXIGENACIÓN Y CÁMARA DE AIRE FRONTAL (z=1.50..3.00m)' },
         { x: -3.50, z: 10.10, w: 5.50, d: 3.10, color: '#f97316', label: 'PARRILLA INTEGRADA AL PATIO TRASERO Y GALERÍA INFERIOR' },
-        { x: 1.20, z: 3.20, w: 3.50, d: 4.10, color: '#10b981', label: 'LAVADERO + CISTERNA 1.000L + PRESURIZADORA ROWA' }
+        { x: 2.80, z: 5.20, w: 2.00, d: 4.10, color: '#10b981', label: 'LAVADERO BAJO ESCALERA 1 EN MURO ESTE (+X)' }
       ]
     },
     sheet_mep: {
       code: 'LAM-04-MEP',
       levelKey: 'planta_baja',
-      title: '4. Esquema Integrado Eléctrico y Pluvial/Sanitario Vertical',
+      title: '4. Esquema Integrado Eléctrico y Pluvial/Sanitario Vertical sobre Losa Maciza L4',
       cota: 'Vertical 3 Niveles (+97.66m / +100.00m / +102.88m / +105.64m)',
       highlights: [
-        { x: -1.60, z: 3.00, w: 3.20, d: 1.80, color: '#ec4899', label: 'COLUMNA VERTICAL EJE F-G (4 Pases Diamantados Losa 1 + Cloaca Ø100mm + PPR)' },
-        { x: -4.85, z: 3.00, w: 9.70, d: 10.34, color: '#0284c7', label: 'RED PLUVIAL 165 mm/h (4 Bajadas Ø100mm -> Drenaje Francés -> Barranco)' },
-        { x: -0.90, z: 4.80, w: 2.80, d: 2.40, color: '#ef4444', label: 'TABLERO SMART DIN TRIFÁSICO (Fases R/S/T + 26 Tomas + PoE Zigbee)' }
+        { x: -0.60, z: 3.00, w: 2.40, d: 2.00, color: '#ec4899', label: 'NÚCLEO HÚMEDO Y 4 PASES DIAMANTADOS EN LOSA MACIZA L4 (x=-0.45..+1.48m)' },
+        { x: -4.85, z: 3.00, w: 9.70, d: 10.34, color: '#0284c7', label: 'RED PLUVIAL 165 mm/h (4 Bajadas Ø100mm -> Registro -> Calle Tte. Arias)' },
+        { x: -0.70, z: 4.40, w: 1.40, d: 1.20, color: '#ef4444', label: 'MONTANTE ELÉCTRICA / DATOS (TP-PB + TS-PA + TS-SUB + Rack 6U)' }
       ]
     }
   };
@@ -3720,13 +3721,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const GTA_ZONES = [
     { name: 'Cochera con Pérgola y Portón 2.30m', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 4.9, zMin: -4.0, zMax: 1.5, prompt: '[E] Abrir/Cerrar Portón Balancín 2.30m', action: 'porton_balancin' },
     { name: 'Pasillo Antihumedad y Rejilla Oxigenación', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 4.9, zMin: 1.5, zMax: 3.0, prompt: '[E] Abrir Portoncito Peatonal', action: 'porton_peatonal' },
-    { name: 'Cocina y Baño Social (Núcleo Eje F-G)', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 2.5, zMin: 3.0, zMax: 5.3, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
-    { name: 'Estar-Comedor (Hueco 38m² Losa Rap)', level: 2, cota: '+100.00m', xMin: -4.9, xMax: 3.8, zMin: 5.3, zMax: 9.94, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
-    { name: 'Escalera 1 y Escalera 2 (Ejes 1-2)', level: 2, cota: '+100.00m', xMin: 3.4, xMax: 4.9, zMin: 3.0, zMax: 9.94, prompt: '[1/2/3] Subir a Planta Alta o Bajar al Subsuelo', action: 'luces_domotica' },
+    { name: 'Cocina, Comedor y Baño Social (Sobre Losa Maciza L4 • Este)', level: 2, cota: '+100.00m', xMin: -0.74, xMax: 3.84, zMin: 3.0, zMax: 9.94, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
+    { name: 'Estar Social (Sobre Sector Loza Rap 38m² • Oeste)', level: 2, cota: '+100.00m', xMin: -4.9, xMax: -0.74, zMin: 3.0, zMax: 9.94, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'Escalera 1 al Subsuelo (Ejes 1-2 • Este)', level: 2, cota: '+100.00m', xMin: 3.84, xMax: 4.9, zMin: 3.0, zMax: 9.94, prompt: '[1/2/3] Bajar al Subsuelo o Subir a Planta Alta', action: 'luces_domotica' },
     { name: 'Galería Panorámica al Río Paraguay', level: 2, cota: '+99.55m', xMin: -4.9, xMax: 4.9, zMin: 9.94, zMax: 14.0, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
-    { name: 'Escritorio / Desk al Subir Escalera', level: 3, cota: '+102.88m', xMin: 0.8, xMax: 4.9, zMin: 3.0, zMax: 7.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
-    { name: '2 Baños Superpuestos y Dormitorio 2', level: 3, cota: '+102.88m', xMin: -4.9, xMax: 0.8, zMin: 3.0, zMax: 7.4, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
-    { name: 'Suite Ruth & Leo + Vestidor al Río', level: 3, cota: '+102.88m', xMin: -4.9, xMax: 4.9, zMin: 7.4, zMax: 13.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'Escritorio Extendido hasta Galería Eje A + Escalera 2 (-X)', level: 3, cota: '+102.88m', xMin: -4.9, xMax: -1.80, zMin: 5.2, zMax: 13.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
+    { name: 'SSHH 2 y Dormitorio 2 (Centro / Oeste)', level: 3, cota: '+102.88m', xMin: -3.84, xMax: 0.60, zMin: 3.0, zMax: 9.94, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
+    { name: 'Suite Principal Ruth & Leo + Vestidor + Baño Suite (+X)', level: 3, cota: '+102.88m', xMin: 0.60, xMax: 4.9, zMin: 3.0, zMax: 13.4, prompt: '[E] Encender/Apagar Luces', action: 'luces_domotica' },
     { name: 'Subsuelo — Rejilla Oxigenación y Lavadero', level: 1, cota: '+97.66m', xMin: -4.9, xMax: 4.9, zMin: 1.5, zMax: 8.5, prompt: '[E] Probar Grifería/Ducha', action: 'griferia_ducha' },
     { name: 'Subsuelo — Parrilla al Patio', level: 1, cota: '+97.66m', xMin: -4.9, xMax: 4.9, zMin: 8.5, zMax: 14.5, prompt: '[E] Encender Parrilla Subsuelo', action: 'parrilla_subsuelo' }
   ];
@@ -4639,6 +4640,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Activate Ghost/X-Ray Translucent Architecture Mode + Discipline Filter for Electrician & Plumber
+    const isMepRole = profile.id === 'electricista' || profile.id === 'plomero' || Boolean(profile.ghostMode);
+    if (typeof scene.setArchitectureGhostMode === 'function') {
+      scene.setArchitectureGhostMode(isMepRole, 0.26);
+    }
+    if (typeof scene.setMepDisciplineFilter === 'function') {
+      if (profile.mepDisciplineFilter) {
+        scene.setMepDisciplineFilter(profile.mepDisciplineFilter);
+      } else if (profile.id === 'electricista') {
+        scene.setMepDisciplineFilter('electricista');
+      } else if (profile.id === 'plomero') {
+        scene.setMepDisciplineFilter('plomero');
+      } else {
+        scene.setMepDisciplineFilter('all');
+      }
+    }
+
     // Sync floor cutaway preset
     if (profile.cutawayPreset) {
       scene.setFloorCutaway(profile.cutawayPreset);
@@ -4659,14 +4677,15 @@ document.addEventListener('DOMContentLoaded', () => {
       setComputoDrawerOpen(false);
     }
 
-    // Show/hide MEP interactive simulator panel if role is Plumber or Electrician
+    // Keep floating MEP simulator panel closed on role switch so the 3D view is 100% unobstructed
+    // (it opens on demand when the user clicks "⚡💧 Simular" or a simulation quick action)
     const mepPanel = document.getElementById('mep-sim-panel');
     if (mepPanel) {
-      mepPanel.style.display = profile.openMepSim ? 'block' : 'none';
+      mepPanel.style.display = 'none';
     }
 
     if (window.innerWidth <= 900 && fromUserClick) {
-      if (profile.openDrawer || profile.openMepSim) {
+      if (profile.openDrawer) {
         setMobileSidebarCollapsed(true);
       } else {
         setMobileSidebarCollapsed(false);

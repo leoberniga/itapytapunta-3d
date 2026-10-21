@@ -3173,24 +3173,24 @@ export const GALLERY_ZONES_DATA = [
   {
     id: 'zona_04_galeria_rio_pb',
     zoneNumber: 4,
-    title: 'Zona 4 — Galería Panorámica Rebajada L1 (-0.45m) y Ventanales Blindex al Río Paraguay',
+    title: 'Zona 4 — Acceso Principal Jerarquizado, Cerradura Smart, Baño Social PB y Ventanal Frontal',
     level: 'planta_baja',
-    levelLabel: 'Galería Panorámica PB (+99.55m / -0.45m)',
-    cota: '+99.55m (-0.45m rebajada, Ejes A–B × Ejes 1–9)',
-    dimensions: '9.74m ancho × 3.43m voladizo (33.42 m²)',
+    levelLabel: 'Planta Baja Nivel Calle (+100.00m)',
+    cota: '+100.00m (Eje F–G z = 3.00m..5.00m, Núcleo Húmedo PB y Hall de Entrada)',
+    dimensions: 'Hall Acceso + Baño Social 1.69m × 1.77m + Ventanal Frontal a Cochera',
     image: './assets/zonas/zona_04_galeria_rio_pb.jpg',
-    cameraViewKey: 'galeria_rio',
-    includedInCredit: '350M',
+    cameraViewKey: 'acceso_bano_pb',
+    includedInCredit: '300M',
     summary:
-      'Balcón-galería mirador sobre la Losa L1 ya ejecutada en hormigón visto, orientada al Noroeste hacia el Mirador Itá Pytã Punta y la curva del Río Paraguay (~85–96m). Queda 100% despejada de humo (sin parrilla de material fija) e incorpora impermeabilización SikaTop-107, deck WPC/Lapacho, ventanales Blindex 10mm en Eje B y baranda de seguridad sobre el desnivel de 3.20m.',
+      'Vista interior 1:1 del Hall de Entrada sobre Eje G (z = 3.00m): puerta principal pivotante de madera dura con barral de acero inoxidable y cerradura/teclado inteligente, mesa de recibidor con Espada de San Jorge, puerta hacia el Baño Social PB sobre el núcleo húmedo a la izquierda, pilar estructural central y amplio ventanal con carpintería de aluminio negro mirando a la cochera cubierta.',
     materialsAndProducts: [
-      'Ventanales Corredizos Vidrio Templado Blindex 10mm + Perfilería Aluminio Negro Línea Pesada Módena/Aluar (24 m²)',
-      'Deck WPC Ecológico / Madera Dura Lapacho Cepillado Impregnado Cetol sobre Membrana SikaTop-107 Seal',
-      'Baranda de Protección en Tubo Estructural 40×40mm Galvanizado Negro Mate con barrotes cada <=10cm (9.74 ml)',
-      'Sensores PIR de Cortina Doble Tecnología rasantes al Blindex + Iluminación Exterior Domótica Zigbee'
+      'Puerta Principal en Madera Maciza Lapacho/Cedro 1.20×2.20m con barral inox 80cm y teclado de alarma/acceso inteligente',
+      'Baño Social PB (1.69m × 1.77m) sobre Losa Maciza L4 conectado a PASE #3 (Ø115mm Cloacal) y PASE #4 (Ø63mm PPR)',
+      'Piso Porcelanato Satinado Rectificado 60×60cm Eliane/Portobello Antideslizante R9 en continuidad con la Sala Social',
+      'Ventanal Frontal en Vidrio Templado Blindex 10mm con carpintería de aluminio negro línea pesada mirando a la cochera'
     ],
     familyNotes:
-      'El rincón favorito de Ruth y Leo para contemplar el atardecer sobre el Río Paraguay con su parrilla portátil rodante, mientras Emma y Serafina disfrutan de la brisa del río protegidas por la baranda y malla anticaídas.'
+      'Acceso cómodo y seguro desde la cochera cubierta: Ruth y Leo entran directo desde su Chery Tiggo 2 Pro sin mojarse en días de lluvia, con el teclado de alarma a mano y el toilette social inmediatamente accesible para visitas.'
   },
   {
     id: 'zona_05_escritorio_extendido_pa',
@@ -3204,81 +3204,81 @@ export const GALLERY_ZONES_DATA = [
     cameraViewKey: 'planta_alta',
     includedInCredit: '300M',
     summary:
-      'Al desembarcar de la Escalera 2 se accede libremente al amplio Escritorio / Home-Office Doble y Rincón de Costura, cuyo volumen se extiende hasta el borde mismo de la Galería en el Eje A (z = 13.34m) con ventanal Blindex panorámico al río, acompañado del Dormitorio 2 central ejecutado con tabiquería liviana sobre los ejes donde P12, P13 y P15 mueren en PB.',
+      'Al desembarcar de la Escalera 2 (x = -4.87..-3.84m, junto a la medianera de ladrillo Tobatí) se accede al amplio Escritorio / Home-Office Doble extendido hasta el Eje A (z = 13.34m), equipado con la segunda Biblioteca de 4 estantes de 2.00m, escritorios de trabajo con monitor, acceso al Baño 2 PA al fondo y al Dormitorio 2 central con placard y salida a terraza.',
     materialsAndProducts: [
       'Tabiquería Interior Liviana Durlock W112 / Ladrillo Hueco Cerámico 6 Tubos Itaipú (respetando apeo de P12, P13 y P15)',
-      'Ventanal Frontal y Lateral en Vidrio Templado Blindex 10mm sobre Eje A (z = 13.34m) con visual panorámica al Río',
+      'Escalera 2 (PB ↔ PA en Eje 8–9) con baranda metálica negra de seguridad y llaves conmutadas inteligentes 3-Way Zigbee',
       'Cableado Estructurado UTP Cat6 100% Cobre Furukawa (2 Bocas RJ45 Gigabit) + Nodo Wi-Fi 6 Mesh Deco X50 + Cuádruple Toma 16A',
-      'Escalera 2 de H°A° de 14 peldaños con baranda metálica de seguridad y llaves conmutadas inteligentes 3-Way Zigbee'
+      'Biblioteca de 4 estantes de 2.00m (8.00 ml) + Escritorio Home-Office en madera Lapacho/Melamina sobre porcelanato 60×60cm'
     ],
     familyNotes:
-      'Espacio de teletrabajo e inspiración para Ruth y Leo con sus 2 escritorios, silla ergonómica, cama de 1 plaza para visitas y la máquina de coser antigua frente a la luz natural del río, dejando el desembarco de la Escalera 2 totalmente cómodo.'
+      'Fiel al modelo 3D: muestra el desembarco real de la Escalera 2 con su baranda negra, la biblioteca llena de libros sobre el tabique central, el puesto de trabajo con monitor en primer plano y el Dormitorio 2 contiguo.'
   },
   {
     id: 'zona_06_suite_master_terraza_pa',
     zoneNumber: 6,
-    title: 'Zona 6 — Dormitorio Principal en Suite, Vestidor, Baños Superpuestos y Terraza Deck 2 al Río',
+    title: 'Zona 6 — Dormitorio Principal en Suite (+X), Sommier 1.40m, Tocador, Split AA y Salida a Deck 2',
     level: 'planta_alta',
     levelLabel: 'Planta Alta / 2do Piso (+102.88m)',
-    cota: '+102.88m (+2.88m s/calle, bajo cubierta termoacústica +105.64m)',
-    dimensions: 'Suite 4.13m × 4.94m + Vestidor 2.07m × 2.00m + 2 Baños en Eje F–G + Deck 2',
+    cota: '+102.88m (Sector Este +X, x = +0.50m..+4.87m, z = 5.00m..9.94m)',
+    dimensions: 'Suite Principal 4.37m × 4.94m (21.58 m²) + Salida Blindex a Terraza Deck 2',
     image: './assets/zonas/zona_06_suite_master_terraza_pa.jpg',
     cameraViewKey: 'dormitorio_suite',
     includedInCredit: '300M',
     summary:
-      'Nivel privado superior apoyado sobre los 17 pilares de PB que ya están hormigonados hasta +2.88m. Aloja el Dormitorio Principal en Suite con salida al Deck 2 hacia el río, placares piso-techo en melamina 18mm y el bloque húmedo frontal sobre el Eje F–G (Vestidor, Baño en Suite y Baño 2 PA) con muro frontal cerrado en Eje G y banderolas altas.',
+      'Vista 3D exacta del Dormitorio Principal en Suite en el ala Este (+X) de Planta Alta: sommier de 1.40m con respaldo de madera y mesas de luz iluminadas, equipo Split Inverter de 12.000 BTU sobre la cabecera, tocador con espejo y banqueta sobre el tabique central, puertas independientes hacia el Vestidor en U y el Baño en Suite al fondo, y ventanales Blindex de piso a techo hacia la terraza Deck 2.',
     materialsAndProducts: [
-      'Cubierta Sándwich Termoacústica Isopanel PIR 50mm Cal. 26 + Cielorraso Acústico Durlock c/ Lana de Vidrio 50mm (-18 dB lluvia)',
-      'Placares Empotrados Piso-Techo en MDF Melamina 18mm Masisa/Faplac con cajoneras y puertas corredizas suaves',
-      'Inodoros One-Piece Deca/Incepa + Griferías Monocomando FV/Docol + Termocalefón Tokyo/James 80L en Eje F–G',
-      'Aberturas Corredizas Blindex 10mm en Eje B mirando al Río Paraguay + Split Inverter 12.000 BTU Carrier/Midea'
+      'Aberturas Corredizas Vidrio Templado Blindex 10mm en Eje B mirando al Río Paraguay y saliendo a la Terraza Deck 2',
+      'Aire Acondicionado Split Inverter 12.000 BTU Frío/Calor en circuito dedicado 20A (Fase R) con drenaje oculto a Eje F–G',
+      'Piso Porcelanato Satinado Rectificado 60×60cm Eliane/Portobello + Carpintería interior de madera lustrada',
+      'Cubierta Sándwich Termoacústica Isopanel PIR 50mm Cal. 26 + Cielorraso Acústico Durlock c/ Lana de Vidrio 50mm'
     ],
     familyNotes:
-      'Al elevar el dormitorio a +102.88m, Ruth y Leo superan los techos de tejas vecinos y despiertan mirando el Río Paraguay en silencio total (39 dB aun en tormenta tropical), alojando su sommier de 1.40m, mesas de luz, tocadores y vaporizador Xiaomi.'
+      'Correspondencia 1:1 con el diseño 3D restaurado: el dormitorio principal en suite de Ruth y Leo en el sector Este (+X), con su tocador, sus dos puertas al vestidor y baño privado, y el Dormitorio 2 visible a la izquierda.'
   },
   {
     id: 'zona_07_subsuelo_salon_parrilla',
     zoneNumber: 7,
-    title: 'Zona 7 — Gran Salón del Subsuelo (+97.66m), Lavadero en Pared Lateral y Parrillita al Patio',
-    level: 'subsuelo',
-    levelLabel: 'Nivel Subsuelo (+97.66m / -2.34m)',
-    cota: '+97.66m (-2.34m bajo calle, 100.71 m² libres bajo Losa 1)',
-    dimensions: '9.74m × 10.34m (100.71 m² cubiertos + Foso ventilación 1.50m)',
+    title: 'Zona 7 — Vestidor en U, Baño en Suite con Termocalefón 80L y Baño 2 PA (Núcleo Húmedo Eje F–G)',
+    level: 'planta_alta',
+    levelLabel: 'Planta Alta / 2do Piso (+102.88m)',
+    cota: '+102.88m (Franja Húmeda Frontal Eje F–G, z = 3.00m..5.26m)',
+    dimensions: 'Vestidor en U (3.72m × 1.85m) + Baño en Suite (2.80m × 1.85m) + SSHH 2 PA (2.25m × 1.85m)',
     image: './assets/zonas/zona_07_subsuelo_salon_parrilla.jpg',
-    cameraViewKey: 'subsuelo_depto',
-    includedInCredit: '300M',
+    cameraViewKey: 'bano_suite',
+    includedInCredit: '350M',
     summary:
-      'Aprovecha los 100.71 m² libres debajo de la Losa 1 (retirando el encofrado viejo junto a la Escalera 1) con ventilación cruzada natural por el foso frontal (z = 1.50m..3.00m) y blindaje hidrófugo en la medianera Eje 9. Integra el Gran Salón abierto sin mamparas intermedias, el Lavadero lateral y la Parrillita / Quincho inferior mirando al patio.',
+      'Vista 3D exacta del núcleo húmedo y vestidor de Planta Alta sobre el Eje F–G: en primer plano a la izquierda el Vestidor en U con placares de madera piso-techo, cajoneras y barrales; detrás el Baño en Suite con el Termocalefón de 80L amurado, ducha y ventiluz horizontal; y a la derecha el módulo húmedo superpuesto verticalmente con los pases diamantados #1, #2, #3 y #4.',
     materialsAndProducts: [
-      'Submuración Hidrófuga Medianera Eje 9 con Membrana Cementicia SikaTop-107 Seal + Revoque Sika-1 + Drenaje Francés Bidim',
-      'Barrera de Vapor Polietileno 200 Micrones + Contrapiso y Lecherada Alisada de Cemento INC Vallemí CP II-F 32',
-      'Lavadero Operativo (Pileta Deca/FV + Toma 20A IP55 p/ Lavarropas) + Puerta-Reja de Seguridad al pie de Escalera 1',
-      'Parrilla de Ladrillo Refractario c/ Campana y Herraje Inox AISI 304 vinculada directamente al patio'
+      'Vestidor en U a medida en MDF Melamina 18mm Hidrófuga Masisa/Faplac con barrales cromados, zapateros y cajoneras',
+      'Termocalefón Eléctrico 80L Tokyo/James Acero Vitrificado conectado en línea vertical directa con PASE #4 (Ø63mm PPR)',
+      'Inodoros One-Piece Deca/Incepa + Lavatorios con Vanitory + Griferías Monocomando FV/Docol Agua Fría/Caliente',
+      'Ventiluces Horizontales en Aluminio Negro sobre Eje G (z = 3.00m) para ventilación cruzada e iluminación natural'
     ],
     familyNotes:
-      'Desde el Día 1 Ruth y Leo tienen su lavarropas automático funcionando bajo techo en el subsuelo fresco y seco, un gran salón multiuso de 100 m² y el sector de asado abajo conectado directo al jardín sin ensuciar la sala ni la galería superior.'
+      'Muestra al milímetro cómo quedaron armados el Vestidor en U y el Baño en Suite del Dormitorio Principal de Ruth y Leo arriba del núcleo húmedo de Planta Baja, optimizando el recorrido de agua caliente y desagües.'
   },
   {
     id: 'zona_08_patio_piscina_fondo',
     zoneNumber: 8,
-    title: 'Zona 8 — Jardín Esmeralda (+96.20m), Piscina Transversal en el Fondo y Cloaca Autónoma',
-    level: 'patio_piscina',
-    levelLabel: 'Patio Inferior y Piscina (+96.20m / -3.80m)',
-    cota: '+96.20m (z = 13.34m a 27.00m, Piscina en z = 23.15m..25.55m)',
-    dimensions: '115.00 m² Jardín + Piscina Transversal 5.80m × 2.40m (Prof. 1.40m)',
+    title: 'Zona 8 — Subsuelo Libre 100 m² (-2.34m), Parrillita de Ladrillo, Galería Superior, Jardín y Cloaca Autónoma',
+    level: 'subsuelo',
+    levelLabel: 'Subsuelo (-2.34m) y Patio Inferior (+96.20m)',
+    cota: '+97.66m Subsuelo y +96.20m Jardín (z = 9.94m a 27.00m)',
+    dimensions: '100.71 m² Subsuelo + Parrillita + 115 m² Jardín Esmeralda + Pérgola/Quincho',
     image: './assets/zonas/zona_08_patio_piscina_fondo.jpg',
-    cameraViewKey: 'exterior_hero',
-    includedInCredit: '440M',
+    cameraViewKey: 'piscina_quincho',
+    includedInCredit: '300M',
     summary:
-      'Expansión paisajística en el nivel inferior del terreno (+96.20m) con 115 m² de césped Esmeralda. Ubica en el corredor izquierdo (Ejes 8–9) la Cámara Séptica de 1.500L y el Pozo Ciego Absorbente (Ø1.80×3.50m) con acople para camión cisterna por la Escalera 1, liberando el fondo para la Piscina de H°A° en orientación transversal (5.80m × 2.40m, paralela al muro trasero).',
+      'Vista exterior 3D completa desde el jardín posterior hacia el Subsuelo y la Galería: muestra en el Subsuelo (-2.34m) la Parrillita de ladrillo visto con mesada y bacha a la izquierda y el gran salón abierto de 100 m²; arriba la Galería Panorámica con baranda negra y ventanales Blindex dejando ver el comedor y la sala; y en el césped Esmeralda las tapas de inspección de la Cámara Séptica (1.500L) y Pozo Ciego, el caminero de losetas blancas y la pérgola de madera sobre deck.',
     materialsAndProducts: [
-      'Piscina de Hormigón Armado HA-25 5.80×2.40m c/ Venecita/Epoxi + Filtro y Bomba Vulcano 3/4 HP + Solárium Atérmico Travertino',
-      'Cámara Séptica 1.500L + Pozo Absorbente calzado con 1.200 Ladrillos Comunes de Tobatí Ø1.80×3.50m (Cero bomba eléctrica)',
-      '115 m² de Panes de Césped Esmeralda sobre 10cm de Tierra Negra Vegetal Abonada con pendiente pluvial controlada',
-      'Cámaras IP PoE Hikvision 4MP ColorVu + Reflectores LED Solares/IP65 cubriendo patio y medianeras'
+      'Parrillita en Subsuelo de Ladrillo Visto/Refractario + Mesada de Granito Negro con Bacha Inox conectada a Desgrasadora',
+      'Cámara Séptica Impermeable 1.500L + Pozo Absorbente Ø1.80×3.50m con tapas de H°A° en el retiro izquierdo del jardín',
+      'Pérgola Exterior en Perfilería Metálica Negra y Vigas de Madera Dura sobre Deck + 115 m² de Césped Esmeralda',
+      'Galería Superior Losa L1 con Baranda Metálica Negra y Ventanales Corredizos Blindex 10mm de piso a techo'
     ],
     familyNotes:
-      'El oasis privado de la familia en Asunción: Emma corre feliz por los 115 m² de césped Esmeralda, Serafina explora el jardín seguro amurallado y Ruth y Leo disfrutan de la piscina de 5.80×2.40m sabiendo que el sistema cloacal es 100% autónomo.'
+      'Reúne en una sola toma 1:1 del modelo 3D el Subsuelo abierto con su parrillita bajo techo, el sistema cloacal autónomo en el césped izquierdo, el caminero peatonal y el quincho pergolado en el patio.'
   }
 ];
 
@@ -5541,140 +5541,144 @@ export const AUDITORIA_SEIS_ESPECIALISTAS = [
 // ============================================================================
 export const DUCTOS_PASES_ENCHUFES_DATOS = {
   resumenTecnico:
-    "De acuerdo con el plano original 'instalacion_sanitaria_agua.png', todos los ambientes húmedos están concentrados verticalmente en el Núcleo Húmedo del frente (Eje F–G, z = 3.00m..5.00m): Baño Social y cabecera de Cocina en Planta Baja; Vestidor, Baño en Suite y Baño 2 en Planta Alta; y conexión al Lavadero en el Subsuelo. La bajada de luz ANDE y la caja del medidor de agua ESSAP a nivel de calle se ubican exactamente al costado del portón vehicular sobre la muralla más pequeña que da al vecino (x = -3.85m, z = -4.08m..-4.24m), alimentando la casa con presión directa de red (sin tanque).",
+    "Trazado 100% ortogonal (90°) alineado al diseño real de la Losa 1 (Losa Maciza L4 al Este x = -0.74m..+4.87m y Sector Loza Rap 38 m² al Oeste x = -4.87m..-0.74m) y de la Losa 2 (+2.88m). Los 4 Pases con Sacabocado Diamantado en la Losa 1 existente se ejecutan exclusivamente sobre la Losa Maciza L4 dentro del Núcleo Húmedo y Pleno Técnico del Eje F–G (x = -0.45m..+1.48m, z = 3.28m..4.78m), coincidiendo verticalmente con el Baño Social y la Cocina en Planta Baja, el Baño en Suite y Vestidor en Planta Alta, y la colectora hacia el Lavadero en Subsuelo.",
   pasesLosa1Diamantados: [
     {
       id: "PASE_LOSA1_01_ELECTRICO",
       codigo: "PASE #1 (Ø 50 mm)",
-      nombre: "Pase Diamantado #1 en Losa 1 — Troncal Eléctrico Principal en Núcleo Eje F–G (TP-PB ↔ Subsuelo y Planta Alta)",
+      nombre: "Agujero en Losa 1 y Losa 2 — Troncal Eléctrico Principal 3 Niveles (Sobre Losa Maciza L4 • Eje F / Eje 5)",
       diametroMm: 50,
-      pos3D: [-1.64, 0.0, 4.65],
-      ejeRef: "Pleno Eje F / Eje 6 (x = -1.64m, z = 4.65m — Junto a Pilar P14)",
+      pos3D: [-0.45, 0.0, 4.78],
+      posLosa2: [-0.45, 2.88, 4.78],
+      ejeRef: "Losa Maciza L4 — Eje F / Eje 5 (x = -0.45m, z = 4.78m — Junto a Pilar P13, fuera de viga)",
       colorHex: 0xf97316,
-      conductores: "Cable subterráneo NYY 4×10 mm² + PE 10 mm² desde Bajada ANDE al costado del portón (x=-3.85m) y alimentador 5×6 mm² hacia TS-SUB y TS-PA + Sellado Cortafuego Intumescente.",
-      metodoEjecucion: "Perforación vertical con máquina sacabocado de copa diamantada Ø 50mm húmeda, a 18 cm de la cara del pilar P14 y fuera del alma de la viga."
+      conductores: "Alimentador subterráneo NYY 4×10 mm² + Tierra desde Pilar ANDE (x=-3.85m, z=-4.08m) hacia TP-PB y columna montante 5×6 mm² hacia TS-SUB (Subsuelo) y TS-PA (2do Piso).",
+      metodoEjecucion: "Perforación vertical con sacabocado de copa diamantada Ø 50mm sobre la Losa Maciza L4 (sector Este construido), encamisada con PVC Ø 50mm y sellado cortafuego."
     },
     {
       id: "PASE_LOSA1_02_DATOS",
       codigo: "PASE #2 (Ø 50 mm)",
-      nombre: "Pase Diamantado #2 en Losa 1 — Señales Débiles, Fibra Óptica, UTP Cat6 y Alarma en Eje F–G",
+      nombre: "Agujero en Losa 1 y Losa 2 — Señales Débiles, Fibra Óptica, UTP Cat6 y Domótica (Sobre Losa Maciza L4)",
       diametroMm: 50,
-      pos3D: [-1.64, 0.0, 5.35],
-      ejeRef: "Eje 6 (x = -1.64m, z = 5.35m — Separado 70 cm del Pase Eléctrico s/ Norma ANDE/INTN)",
+      pos3D: [0.25, 0.0, 4.78],
+      posLosa2: [0.25, 2.88, 4.78],
+      ejeRef: "Losa Maciza L4 — Eje F (x = +0.25m, z = 4.78m — Separado 70 cm del Pase Eléctrico #1 s/ Norma ANDE/INTN)",
       colorHex: 0xa855f7,
-      conductores: "Fibra óptica + 6 cables UTP Cat6 100% cobre (CCTV PoE / Wi-Fi 6 Mesh / Escritorio PA) + Bus de sensores de Alarma Pet-Immune.",
-      metodoEjecucion: "Perforación con sacabocado de copa diamantada Ø 50mm con camisa PVC pesada y boquilla anti-filo."
+      conductores: "Fibra óptica + 6 cables UTP Cat6 100% cobre (Rack 6U ↔ Nodos Wi-Fi 6 Mesh en los 3 niveles, 6 Cámaras PoE y Escritorio Extendido PA).",
+      metodoEjecucion: "Perforación con sacabocado de copa diamantada Ø 50mm sobre Losa Maciza L4 con camisa PVC pesada."
     },
     {
       id: "PASE_LOSA1_03_CLOACA",
       codigo: "PASE #3 (Ø 115 mm)",
-      nombre: "Pase Diamantado #3 en Losa 1 — Columna de Bajada Cloacal Vertical PVC Ø 100mm en Núcleo Húmedo Eje F–G",
+      nombre: "Agujero en Losa 1 y Losa 2 — Columna de Bajada Cloacal Vertical PVC Ø 100mm (Baño Suite PA → Baño Social PB → Subsuelo)",
       diametroMm: 115,
-      pos3D: [-1.64, 0.0, 3.45],
-      ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.45m — Pleno Baño Social PB y Baño en Suite / Baño 2 PA)",
+      pos3D: [0.68, 0.0, 3.28],
+      posLosa2: [0.68, 2.88, 3.28],
+      ejeRef: "Losa Maciza L4 — Muro Húmedo Eje G (x = +0.68m, z = 3.28m — Pleno Baño Social PB y Baño en Suite PA)",
       colorHex: 0xd97706,
-      conductores: "Columna montante cloacal PVC reforzado Ø 100mm (unifica descargas de Baño en Suite PA, Baño 2 PA y Baño Social PB hacia Subsuelo y Cámara Séptica en el fondo).",
-      metodoEjecucion: "Perforación con copa diamantada Ø 115mm en pleno técnico del Eje F–G, sellada con mástic poliuretánico Sikaflex-1A."
+      conductores: "Columna montante cloacal PVC reforzado Ø 100mm 100% vertical que recibe los inodoros/duchas de Planta Alta (Baño en Suite y SSHH 2) y el Baño Social + Cocina de Planta Baja, bajando al colector suspendido bajo viga hacia el Lavadero y la Cámara Séptica / Pozo Ciego.",
+      metodoEjecucion: "Perforación con copa diamantada Ø 115mm en Losa Maciza L4 junto al muro frontal Eje G, sellada con mástic poliuretánico Sikaflex-1A."
     },
     {
       id: "PASE_LOSA1_04_AGUA_PPR",
       codigo: "PASE #4 (Ø 63 mm)",
-      nombre: "Pase Diamantado #4 en Losa 1 — Montantes de Agua Fría Directa ESSAP (PPR Ø25mm) y Caliente (PPR Ø20mm) en Eje F–G",
+      nombre: "Agujero en Losa 1 y Losa 2 — Montantes de Agua Fría Directa ESSAP (PPR Ø25mm) y Agua Caliente (PPR Ø20mm)",
       diametroMm: 63,
-      pos3D: [-1.64, 0.0, 3.95],
-      ejeRef: "Núcleo Húmedo Eje F–G / Eje 6 (x = -1.64m, z = 3.95m — Entre Cocina y Baño Social PB)",
+      pos3D: [1.48, 0.0, 3.28],
+      posLosa2: [1.48, 2.88, 3.28],
+      ejeRef: "Losa Maciza L4 — Tabique Húmedo entre Baño Social PB y Cocina Integrada PB (x = +1.48m, z = 3.28m)",
       colorHex: 0x0284c7,
-      conductores: "Subida de Agua Fría Directa ESSAP PPR PN20 Ø 25mm desde la Caja de Medidor a nivel de calle (x=-3.85m, z=-4.24m, sin tanque) hacia PB, PA y Subsuelo + distribución de Agua Caliente PPR PN20 Ø 20mm aislada para Baño en Suite, Baño 2, Baño Social y Cocina.",
-      metodoEjecucion: "Perforación con copa diamantada Ø 63mm encamisada con caño PVC Ø 63mm en pleno Eje F–G."
+      conductores: "Subida vertical de Agua Fría Directa ESSAP PPR PN20 Ø 25mm hacia Cocina PB, Baño Social PB, Baño en Suite PA, SSHH 2 PA y Termocalefón 80L + Retorno vertical de Agua Caliente PPR PN20 Ø 20mm.",
+      metodoEjecucion: "Perforación con copa diamantada Ø 63mm encamisada con caño PVC Ø 63mm en el tabique húmedo sobre Losa Maciza L4."
     }
   ],
   tablerosYEquiposPrincipales: [
     {
       id: "TAB_PILASTRA_ANDE",
       codigo: "M-ANDE 3×40A",
-      nombre: "Bajada de Luz y Medidor Trifásico ANDE al Costado del Portón (en la Muralla Pequeña hacia el Vecino, x = -3.85m)",
-      nivel: "Muralla Pequeña al Costado del Portón (x = -3.85m, z = -4.08m)",
-      pos3D: [-3.85, 1.35, -4.08],
+      nombre: "Pilar de Acometida y Medidor Trifásico ANDE + Jabalina Puesta a Tierra (Muralla Pequeña junto al Portón, x = -3.85m)",
+      nivel: "Frente Municipal (x = -3.85m, z = -4.08m)",
+      pos3D: [-3.85, 1.45, -4.08],
       colorHex: 0xf59e0b,
-      especificacion: "Caño galvanizado de bajada c/ pipeta + Caja homologada ANDE p/ medidor electrónico trifásico + Llave TM 3×40A ubicada exactamente al costado del portón en la muralla pequeña hacia el vecino."
+      especificacion: "Caño galvanizado de bajada c/ pipeta + Caja homologada ANDE p/ medidor trifásico 3×380/220V + Llave TM 3×40A + Jabalina Copperweld Ø 5/8\" × 2.40m en cámara de inspección."
     },
     {
       id: "TAB_TP_PB",
       codigo: "TP-PB (36 DIN)",
-      nombre: "Tablero Principal Planta Baja en Núcleo Eje F–G (36 Módulos DIN + DPS Clase II 40kA + 3 Diferenciales 30mA)",
-      nivel: "Planta Baja (+100.00m)",
-      pos3D: [-1.55, 1.55, 4.65],
+      nombre: "Tablero Principal Planta Baja sobre Losa Maciza L4 (36 DIN + DPS Clase II 40kA + 3 Diferenciales 30mA)",
+      nivel: "Planta Baja (+100.00m • Sobre Losa Maciza L4 en x = -0.45m, z = 4.78m)",
+      pos3D: [-0.45, 1.55, 4.78],
       colorHex: 0xef4444,
-      especificacion: "Corte general 4×40A + Protector de Sobretensiones DPS Tetrapolar Clase II 40kA + 3 Disyuntores Diferenciales 30mA + 12 llaves termomagnéticas sectorizadas."
+      especificacion: "Ubicado exactamente sobre el Pase Diamantado #1 en la Losa Maciza L4. Corte general 4×40A + DPS Tetrapolar Clase II 40kA + 3 Diferenciales 30mA (Fase R Aires, Fase S Cocina/Termo 20A, Fase T Tomas/Luces)."
     },
     {
       id: "TAB_TS_PA",
       codigo: "TS-PA (18 DIN)",
-      nombre: "Subtablero Seccional Planta Alta (+102.88m — Suite, Dormitorio 2, Escritorio, 2 Baños, Splits AA y Termocalefón 80L)",
-      nivel: "Planta Alta (+102.88m)",
-      pos3D: [-0.55, 4.45, 4.65],
+      nombre: "Subtablero Seccional Planta Alta (+102.88m • Alineado Verticalmente con Pase #1 en x = -0.45m, z = 4.78m)",
+      nivel: "Planta Alta (+102.88m • Hall Distribuidor Eje F)",
+      pos3D: [-0.45, 4.35, 4.78],
       colorHex: 0xef4444,
-      especificacion: "Gabinete embutido 18 DIN en Eje F con Diferencial 2×40A 30mA dedicado para Dormitorio en Suite, Dormitorio 2, Escritorio y Termocalefón 80L."
+      especificacion: "Gabinete embutido 18 DIN alineado verticalmente con TP-PB a través del Pase #1 de Losa 2. Protege Suite Principal (+X), Vestidor, Baño Suite, SSHH 2, Dormitorio 2 y Escritorio Extendido (-X)."
     },
     {
       id: "TAB_TS_SUB",
       codigo: "TS-SUB (12 DIN IP65)",
-      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m — Lavarropas en Pared Izquierda, Salón, Parrillita y Exterior)",
-      nivel: "Subsuelo (+97.66m)",
-      pos3D: [-1.64, -0.85, 4.65],
+      nombre: "Subtablero Seccional Estanco Subsuelo (+97.66m • Bajo Pase Diamantado #1 en x = -0.45m, z = 4.78m)",
+      nivel: "Subsuelo (+97.66m • Columna Central Eje 5)",
+      pos3D: [-0.45, -0.95, 4.78],
       colorHex: 0xef4444,
-      especificacion: "Gabinete estanco IP65 de 12 DIN con Diferencial 30mA dedicado para Lavarropas en pared izquierda, Salón Subsuelo, Parrillita inferior y patio."
+      especificacion: "Gabinete estanco IP65 de 12 DIN alimentado directamente desde arriba por el Pase Diamantado #1 de la Losa Maciza L4. Deriva por bandeja/caño Daisa adosado a vigas hacia el Lavadero (+X) y la Parrillita (-X)."
     },
     {
       id: "HID_MEDIDOR_ESSAP",
       codigo: "M-ESSAP ¾\"",
-      nombre: "Caja del Medidor de Agua Potable ESSAP a Nivel de Calle (al Costado del Portón bajo Bajada ANDE, x = -3.85m)",
-      nivel: "Nivel de Calle / Vereda al Costado del Portón (x = -3.85m, z = -4.24m)",
+      nombre: "Caja del Medidor de Agua Potable ESSAP a Nivel de Calle (al Costado del Portón, x = -3.85m, z = -4.24m)",
+      nivel: "Vereda Municipal (x = -3.85m, z = -4.24m)",
       pos3D: [-3.85, 0.08, -4.24],
       colorHex: 0x0284c7,
-      especificacion: "Caja de medidor ESSAP a nivel de calle en la muralla más pequeña al costado del portón (x = -3.85m, z = -4.24m) con llave de paso esférica y válvula de retención. Alimenta directamente la vivienda con buena presión de red (sin tanque)."
+      especificacion: "Caja de medidor ESSAP con llave de paso esférica y válvula de retención. Cañería troncal PPR PN20 Ø 25mm enterrada bajo cochera que sube verticalmente por el Pase Diamantado #4 (x = +1.48m, z = 3.28m) en la Losa Maciza L4."
     }
   ],
   enchufesYTomacorrientes: [
-    // Planta Baja (Y = 0.00m): Tomas de 20A (Rojos) y 16A (Azules)
-    { id: "TOMA_PB_01_AF_MW", codigo: "20A-COC-1", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.32, 1.12, 3.08], label: "Doble Toma 20A (Cable 4mm²) sobre Mesada Eje G — Air Fryer Xiaomi 6L (1500W)" },
-    { id: "TOMA_PB_02_MW_RACK", codigo: "20A-COC-2", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-4.76, 1.05, 4.55], label: "Doble Toma 20A (Cable 4mm²) — Mueble de Microondas y Horno en Cocina" },
-    { id: "TOMA_PB_03_HELADERA", codigo: "16A-HEL", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.65, 5.10], label: "Toma 16A Dedicado — Heladera con Freezer de Ruth y Leo" },
-    { id: "TOMA_PB_04_CAMPANA", codigo: "16A-EXT", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 1.85, 3.92], label: "Toma 16A Alto (h=1.85m) — Campana Extractora de Cocina y Chispero" },
-    { id: "TOMA_PB_05_ISLA", codigo: "16A-ISLA", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-2.10, 0.82, 4.85], label: "Doble Toma 16A + USB-C en Isla / Comedor (Ducto por Carpeta Losa L4)" },
-    { id: "TOMA_PB_06_TV32", codigo: "16A-TV", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.75, 0.55, 5.45], label: "Doble Toma 16A + Boca RJ45 Cat6 — Estar Social (4.95×4.80m) TV 32\"" },
-    { id: "TOMA_PB_07_VAPOR", codigo: "16A-SALA-1", tipo: "toma_16a", nivel: "planta_baja", pos3D: [0.25, 0.35, 5.12], label: "Toma 16A — Estar Social y Vaporizador Xiaomi" },
-    { id: "TOMA_PB_08_PURIF", codigo: "16A-SALA-2", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.42, 0.35, 5.12], label: "Toma 16A — Purificador de Aire Xiaomi Smart Air Purifier" },
-    { id: "TOMA_PB_09_BIBLIO_PB", codigo: "16A-BIB-PB", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.35, 9.10], label: "Doble Toma 16A — Comedor / Lectura junto a Biblioteca de 4 Estantes" },
-    { id: "TOMA_PB_10_AA_SALA", codigo: "20A-AA-PB", tipo: "toma_20a", nivel: "planta_baja", pos3D: [4.76, 2.35, 7.20], label: "Toma 20A Alto — Split Aire Acondicionado 18.000 BTU Estar Social" },
-    { id: "TOMA_PB_11_GALERIA", codigo: "16A-GAL-IP55", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-4.76, 0.45, 11.45], label: "Doble Toma Estanco IP55 en Galería al Río (-0.45m, sin parrilla fija)" },
-    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.35, 1.45, -3.85], label: "Alimentación 20A Estanca — Motor Portón Balancín 2.30m (x=-3.50..-1.20m) y Cerradura Portoncito Peatonal 0.95m (x=+1.25..+2.20m)" },
+    // PLANTA BAJA (Y = 0.00m): Cocina y Comedor en Losa Maciza L4 (Este, x = -0.74..+3.84m) | Estar Social en Sector Loza Rap (Oeste, x = -3.84..-0.74m)
+    { id: "TOMA_PB_01_AF_MW", codigo: "20A-COC-1", tipo: "toma_20a", nivel: "planta_baja", pos3D: [2.15, 1.12, 3.12], label: "Doble Toma 20A (Cable 4mm²) sobre Mesada de Cocina (Losa L4 Este) — Air Fryer 6L y Cafetera" },
+    { id: "TOMA_PB_02_MW_RACK", codigo: "20A-COC-2", tipo: "toma_20a", nivel: "planta_baja", pos3D: [3.35, 1.12, 3.12], label: "Doble Toma 20A (Cable 4mm²) en Cocina Integrada (Losa L4 Este) — Microondas y Horno Eléctrico" },
+    { id: "TOMA_PB_03_HELADERA", codigo: "16A-HEL", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.74, 0.65, 4.30], label: "Toma 16A Dedicado en Muro Este Cocina (x = +3.74m) — Heladera con Freezer" },
+    { id: "TOMA_PB_04_CAMPANA", codigo: "16A-EXT", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.05, 1.95, 3.12], label: "Toma 16A Alto (h=1.95m) sobre Anafe en Cocina (Losa L4 Este) — Campana Extractora y Chispero" },
+    { id: "TOMA_PB_05_ISLA", codigo: "16A-ISLA", tipo: "toma_16a", nivel: "planta_baja", pos3D: [2.45, 0.85, 4.95], label: "Doble Toma 16A + USB-C en Isla Desayunadora de Cocina (Ducto embutido en carpeta sobre Losa L4)" },
+    { id: "TOMA_PB_06_TV32", codigo: "16A-TV", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-3.74, 0.60, 6.60], label: "Doble Toma 16A + Boca RJ45 Cat6 en Muro Oeste Estar Social (x = -3.74m) — Rack TV 32\" y Consola" },
+    { id: "TOMA_PB_07_VAPOR", codigo: "16A-SALA-1", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-1.15, 0.35, 6.60], label: "Toma 16A junto a Sofá de 4 Cuerpos en Estar Social — Lámpara de Pie y Cargadores" },
+    { id: "TOMA_PB_08_PURIF", codigo: "16A-SALA-2", tipo: "toma_16a", nivel: "planta_baja", pos3D: [-3.74, 0.35, 4.10], label: "Toma 16A en Acceso Estar Social (Oeste) — Purificador de Aire y Robot Aspiradora" },
+    { id: "TOMA_PB_09_BIBLIO_PB", codigo: "16A-BIB-PB", tipo: "toma_16a", nivel: "planta_baja", pos3D: [3.74, 0.35, 7.80], label: "Doble Toma 16A en Comedor Principal (Losa L4 Este) — Junto a Mesa de 6 Sillas y Biblioteca #1" },
+    { id: "TOMA_PB_10_AA_SALA", codigo: "20A-AA-PB", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-3.74, 2.38, 6.60], label: "Toma 20A Alto (Fase R) — Split Aire Acondicionado Inverter 18.000 BTU en Estar Social" },
+    { id: "TOMA_PB_11_GALERIA", codigo: "16A-GAL-IP55", tipo: "toma_16a", nivel: "planta_baja", pos3D: [4.72, 0.45, 11.45], label: "Doble Toma Estanco IP55 en Galería Panorámica L1 (Y = -0.45m, Pilar Este P1/P2)" },
+    { id: "TOMA_PB_12_PORTON", codigo: "20A-PORTON", tipo: "toma_20a", nivel: "planta_baja", pos3D: [-2.35, 1.45, -3.85], label: "Alimentación 20A Estanca IP65 — Motor Portón Balancín 2.30m (x = -2.35m) y Electroimán" },
 
-    // Planta Alta (Y = +2.88m): Dormitorio en Suite + Vestidor + Dormitorio 2 + Escritorio + 2 Baños en Eje F-G
-    { id: "TOMA_PA_01_MESALUZ_N", codigo: "16A-ML-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 6.80], label: "Doble Toma 16A + Llave Conmutada — Mesa de Luz #1 en Suite Principal (4.13×4.94m)" },
-    { id: "TOMA_PA_02_MESALUZ_S", codigo: "16A-ML-2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.76, 3.65, 8.60], label: "Doble Toma 16A + Botón S.O.S. — Mesa de Luz #2 en Suite Principal" },
-    { id: "TOMA_PA_03_VESTIDOR", codigo: "16A-VEST", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-3.80, 3.85, 3.12], label: "Doble Toma 16A — Vestidor (2.07×2.00m en Eje F–G) y Tocador" },
-    { id: "TOMA_PA_04_AA_SUITE", codigo: "20A-AA-SUITE", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-4.76, 5.15, 7.70], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Dormitorio en Suite" },
-    { id: "TOMA_PA_05_TERMOCAL", codigo: "20A-TERMO-80L", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-1.64, 4.95, 3.15], label: "Conexión 20A Dedicada — Termocalefón 80L en Núcleo Húmedo Eje F–G (Baño Suite / Baño 2)" },
-    { id: "TOMA_PA_06_VANITORY_PA", codigo: "16A-BANO-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-1.20, 4.05, 3.15], label: "Toma 16A c/ Tapa Húmeda + Luz Espejo LED — Baño en Suite y Baño 2 PA (Eje F–G)" },
-    { id: "TOMA_PA_07_DORM2", codigo: "16A-DORM2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [0.50, 3.55, 5.40], label: "Doble Toma 16A + Boca RJ45 Cat6 — Dormitorio 2 Central (2.54×3.40m)" },
-    { id: "TOMA_PA_08_ESCRITORIO", codigo: "16A-DESK-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [3.20, 3.55, 7.50], label: "Cuádruple Toma 16A + 2 Bocas RJ45 Cat6 — Escritorio / Estudio PA (2.50×3.05m al llegar de Escalera 2)" },
-    { id: "TOMA_PA_09_COSTURA", codigo: "16A-COSER", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.76, 3.55, 8.20], label: "Doble Toma 16A — Rincón de Estudio y Máquina de Coser en Escritorio PA" },
-    { id: "TOMA_PA_10_AA_DORM2_EST", codigo: "20A-AA-EST", tipo: "toma_20a", nivel: "planta_alta", pos3D: [1.80, 5.15, 7.50], label: "Toma 20A Dedicado — Split Aire Acondicionado 12.000 BTU Dormitorio 2 / Escritorio" },
+    // PLANTA ALTA (Y = +2.88m): Dormitorio en Suite + Vestidor + Baño Suite al Este (+X) | Dormitorio 2 al Centro | SSHH 2 y Escritorio Extendido al Oeste (-X)
+    { id: "TOMA_PA_01_MESALUZ_N", codigo: "16A-ML-1", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.72, 3.55, 6.25], label: "Doble Toma 16A + Llave 3-Way sobre Muro Este (x = +4.72m) — Mesa de Luz #1 Sommier Suite Principal" },
+    { id: "TOMA_PA_02_MESALUZ_S", codigo: "16A-ML-2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [4.72, 3.55, 8.65], label: "Doble Toma 16A + Botón Antipánico sobre Muro Este (x = +4.72m) — Mesa de Luz #2 Sommier Suite Principal" },
+    { id: "TOMA_PA_03_VESTIDOR", codigo: "16A-VEST", tipo: "toma_16a", nivel: "planta_alta", pos3D: [0.38, 3.65, 7.45], label: "Doble Toma 16A con Espejo Iluminado — Tocador #1 de Ruth y Vestidor en Suite (Este)" },
+    { id: "TOMA_PA_04_AA_SUITE", codigo: "20A-AA-SUITE", tipo: "toma_20a", nivel: "planta_alta", pos3D: [4.72, 5.15, 7.45], label: "Toma 20A Dedicado (Fase R) — Split Aire Acondicionado Inverter 12.000 BTU en Suite Principal (+X)" },
+    { id: "TOMA_PA_05_TERMOCAL", codigo: "20A-TERMO-80L", tipo: "toma_20a", nivel: "planta_alta", pos3D: [0.95, 4.75, 3.22], label: "Conexión 20A Dedicada (Cable 4mm²) — Termocalefón 80L en Muro Húmedo Eje G sobre Pase #4" },
+    { id: "TOMA_PA_06_VANITORY_PA", codigo: "16A-BANO-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-0.35, 4.05, 3.22], label: "Doble Toma 16A c/ Tapa Hidrófuga — Vanitory Baño en Suite y Vanitory SSHH 2 (Muro Húmedo Eje G)" },
+    { id: "TOMA_PA_07_DORM2", codigo: "16A-DORM2", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-1.72, 3.55, 8.15], label: "Doble Toma 16A + RJ45 Cat6 — Dormitorio 2 Central (Cama 1 Plaza y Tocador #2 en x = -1.80..+0.30m)" },
+    { id: "TOMA_PA_08_ESCRITORIO", codigo: "16A-DESK-PA", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.72, 3.55, 11.40], label: "Cuádruple Toma 16A + 2 Bocas RJ45 Cat6 — Escritorio Doble Extendido hasta Galería (x = -4.87..-1.80m, z = 11.40m)" },
+    { id: "TOMA_PA_09_COSTURA", codigo: "16A-COSER", tipo: "toma_16a", nivel: "planta_alta", pos3D: [-4.72, 3.55, 9.45], label: "Doble Toma 16A — Máquina de Coser y Biblioteca #2 en Escritorio Extendido (Oeste)" },
+    { id: "TOMA_PA_10_AA_DORM2_EST", codigo: "20A-AA-EST", tipo: "toma_20a", nivel: "planta_alta", pos3D: [-4.72, 5.15, 10.80], label: "Toma 20A Dedicado (Fase R) — Split Aire Acondicionado 12.000 BTU en Escritorio Extendido / Dormitorio 2" },
 
-    // Subsuelo (Y = -2.34m): Lavadero en Pared Izquierda (+X), Salón y Parrillita hacia el Patio
-    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [4.62, -1.25, 6.20], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Lavadero contra Pared Izquierda (Eje 1)" },
-    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-SALON-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [1.50, -1.25, 4.20], label: "Doble Toma 16A Estanco IP55 — Gran Salón Abierto en Subsuelo (con piso de lecherada)" },
-    { id: "TOMA_SUB_04_PARRILLITA", codigo: "16A-QUINCHO-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [-3.20, -1.25, 12.20], label: "Doble Toma Estanco IP55 — Parrillita / Quincho Inferior hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m)" }
+    // SUBSUELO (Y = -2.34m): Lavadero en Muro Este (+X bajo Escalera 1) | Salón Central | Parrillita al Oeste (-X hacia el Patio)
+    { id: "TOMA_SUB_01_LAVARROPAS", codigo: "20A-LAV-SUB", tipo: "toma_20a", nivel: "subsuelo", pos3D: [4.72, -1.25, 6.40], label: "Toma 20A Estanco IP55 (Cable 4mm²) — Lavarropas Automático en Lavadero contra Muro Este (Eje 1)" },
+    { id: "TOMA_SUB_03_DEPOSITO", codigo: "16A-SALON-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [1.50, -1.25, 3.25], label: "Doble Toma 16A Estanco IP55 — Gran Salón Abierto del Subsuelo sobre Muro Eje G" },
+    { id: "TOMA_SUB_04_PARRILLITA", codigo: "16A-QUINCHO-SUB", tipo: "toma_16a", nivel: "subsuelo", pos3D: [-3.20, -1.25, 12.40], label: "Doble Toma Estanco IP55 — Mesada y Luz de Parrillita / Quincho Inferior hacia el Patio (Oeste)" }
   ],
   llavesYConmutadas3Way: [
-    { id: "LLAVE_3W_ESC1_PB", codigo: "3W-ESC1-PB", pos3D: [-3.90, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way + Luz Emergencia LED #1 — Arranque Escalera 1 al Subsuelo (Pared Derecha Eje 8–9)" },
-    { id: "LLAVE_3W_ESC1_SUB", codigo: "3W-ESC1-SUB", pos3D: [-3.90, -1.15, 8.56], nivel: "subsuelo", label: "Llave Combinada 3-Way + Luz Emergencia LED #2 — Pie de Escalera 1 en Subsuelo (Eje 8–9)" },
-    { id: "LLAVE_3W_ESCPA_PB", codigo: "3W-ESC2-PB", pos3D: [3.84, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way — Arranque Escalera 2 a Planta Alta (Pared Izquierda Eje 1–2)" },
-    { id: "LLAVE_3W_ESCPA_PA", codigo: "3W-ESC2-PA", pos3D: [3.84, 4.05, 7.37], nivel: "planta_alta", label: "Llave Combinada 3-Way + Luz Emergencia LED #3 — Llegada Escalera 2 al Escritorio en Planta Alta (Eje 1–2)" },
-    { id: "LLAVE_ACCESO_PB", codigo: "LL-ACCESO", pos3D: [0.85, 1.15, 3.12], nivel: "planta_baja", label: "Llave Triple Encendido — Puerta Principal Eje G, Estar Social y Rejilla Frontal" },
-    { id: "LLAVE_COCINA_PB", codigo: "LL-COCINA", pos3D: [-1.64, 1.15, 5.00], nivel: "planta_baja", label: "Llave Doble — Iluminación Cocina/Comedor y Baño Social (Núcleo Eje F–G)" },
-    { id: "LLAVE_SUITE_PA", codigo: "LL-SUITE-PA", pos3D: [-0.74, 4.05, 5.20], nivel: "planta_alta", label: "Llave Combinada 3-Way — Acceso a Dormitorio en Suite, Vestidor y Baño Suite" }
+    { id: "LLAVE_3W_ESC1_PB", codigo: "3W-ESC1-PB", pos3D: [3.84, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way + Luz Emergencia LED #1 — Arranque Escalera 1 al Subsuelo (Lado Este Ejes 1–2)" },
+    { id: "LLAVE_3W_ESC1_SUB", codigo: "3W-ESC1-SUB", pos3D: [3.84, -1.15, 8.80], nivel: "subsuelo", label: "Llave Combinada 3-Way + Luz Emergencia LED #2 — Pie de Escalera 1 y Lavadero en Subsuelo (Lado Este)" },
+    { id: "LLAVE_3W_ESCPA_PB", codigo: "3W-ESC2-PB", pos3D: [-3.84, 1.15, 5.26], nivel: "planta_baja", label: "Llave Combinada 3-Way — Arranque Escalera 2 a Planta Alta (Lado Oeste Ejes 8–9)" },
+    { id: "LLAVE_3W_ESCPA_PA", codigo: "3W-ESC2-PA", pos3D: [-3.84, 4.05, 8.85], nivel: "planta_alta", label: "Llave Combinada 3-Way + Luz Emergencia LED #3 — Desembarco Escalera 2 en Escritorio Extendido PA (Lado Oeste)" },
+    { id: "LLAVE_ACCESO_PB", codigo: "LL-ACCESO", pos3D: [-0.20, 1.15, 3.12], nivel: "planta_baja", label: "Llave Triple Zigbee c/ Neutro — Puerta Principal Eje G, Estar Social y Luz de Cochera" },
+    { id: "LLAVE_COCINA_PB", codigo: "LL-COCINA", pos3D: [1.69, 1.15, 4.85], nivel: "planta_baja", label: "Llave Doble Zigbee c/ Neutro — Cocina Integrada, Isla, Comedor y Baño Social (Sobre Losa L4)" },
+    { id: "LLAVE_SUITE_PA", codigo: "LL-SUITE-PA", pos3D: [0.30, 4.05, 5.35], nivel: "planta_alta", label: "Llave Combinada 3-Way Zigbee — Entrada a Dormitorio Principal en Suite, Vestidor y Baño en Suite (+X)" }
   ]
 };
 

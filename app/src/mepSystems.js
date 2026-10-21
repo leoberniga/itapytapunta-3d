@@ -78,9 +78,9 @@ export const WEAK_SIGNALS_DATA = {
   rackPrincipal: {
     id: "rack_onu_nvr",
     type: "telecom_rack",
-    name: "Gabinete Principal de Telecomunicaciones (Rack 6U Pared)",
-    ubicacion: "Área Técnica en Planta Baja Construida (Cota +100.00m / Y = +1.50m)",
-    pos3D: [-1.55, 1.50, 4.85],
+    name: "Gabinete Principal de Telecomunicaciones (Rack 6U Pared sobre Losa Maciza L4)",
+    ubicacion: "Pleno Técnico Eje F sobre Losa Maciza L4 (x = +0.25m, Y = +1.55m, z = 4.78m)",
+    pos3D: [0.25, 1.55, 4.78],
     equipamiento: [
       "ONU Fibra Óptica Gigabit (acometida subterránea desde poste calle Guillermo Arias)",
       "Switch Gigabit PoE+ de 8 puertos (802.3af/at, 120W) para alimentar las 6 cámaras IP y los 3 nodos Wi-Fi (Subsuelo, PB y 2do Piso)",
@@ -175,8 +175,8 @@ export const WEAK_SIGNALS_DATA = {
     {
       id: "wifi_node_1_pb",
       name: "Nodo Wi-Fi 6 Mesh #1 — Planta Baja Construida (Y = +1.80m)",
-      ubicacion: "Estar / Cocina Integrada Planta Baja (x = -0.80m, z = 6.50m)",
-      pos: [-0.80, 1.80, 6.50],
+      ubicacion: "Estar / Comedor Planta Baja (x = +0.25m, z = 6.50m)",
+      pos: [0.25, 1.80, 6.50],
       radius: 6.0,
       banda: "Dual Band AX3000 (2.4 GHz + 5 GHz 160MHz) • Master Router Gigabit",
       desc: "Vinculado directo al Rack Principal en Planta Baja. Cubre el Estar, Cocina/Comedor, Galería y Cochera."
@@ -184,36 +184,36 @@ export const WEAK_SIGNALS_DATA = {
     {
       id: "wifi_node_2_pa",
       name: "Nodo Wi-Fi 6 Mesh #2 — Segundo Piso / Planta Alta (Y = +4.40m)",
-      ubicacion: "Pasillo Distribuidor y Escritorio de Planta Alta (x = -0.60m, z = 5.60m)",
-      pos: [-0.60, 4.40, 5.60],
+      ubicacion: "Hall Distribuidor Central de Planta Alta (x = +0.25m, z = 5.60m)",
+      pos: [0.25, 4.40, 5.60],
       radius: 6.0,
-      banda: "Wi-Fi 6 Gigabit PoE • Backhaul Cableado Cat6 por Pase de Losa",
-      desc: "Instalado en el centro de Planta Alta para cubrir el Escritorio/Desk, el Dormitorio 2 y la Suite Principal."
+      banda: "Wi-Fi 6 Gigabit PoE • Backhaul Cableado Cat6 por Pase de Losa #2",
+      desc: "Instalado en el centro de Planta Alta para cubrir el Escritorio Extendido, el Dormitorio 2 y la Suite Principal."
     },
     {
       id: "wifi_node_3_sub",
       name: "Nodo Wi-Fi 6 Mesh #3 — Salón Subsuelo y Quincho (Y = -0.55m)",
-      ubicacion: "Salón Abierto del Subsuelo bajo Losa 1 (x = 0.00m, z = 8.50m)",
-      pos: [0.00, -0.55, 8.50],
+      ubicacion: "Salón Abierto del Subsuelo bajo Losa Maciza L4 (x = +0.25m, z = 8.50m)",
+      pos: [0.25, -0.55, 8.50],
       radius: 5.5,
-      banda: "Wi-Fi 6 Gigabit conectado por pase de Losa 1 con UTP Cat6",
+      banda: "Wi-Fi 6 Gigabit conectado por Pase Diamantado #2 en Losa 1 con UTP Cat6",
       desc: "Ubicado bajo la Losa 1 en el centro del Salón del Subsuelo (z = 8.50m), dando cobertura total al subsuelo, lavadero y patio."
     }
   ],
   pasesLosaBoquetes: [
     {
       id: "pase_losa_sub_pb",
-      name: "Pase Diamantado #2 en 1ra Losa Existente Ø2\" (Planta Baja Y=0.00m ↔ Subsuelo)",
-      pos: [-1.55, 0.00, 4.85],
-      dimensions: "Camisa PVC Ø50mm + Sellado Cortafuego/Hidrófugo Sikaflex",
-      desc: "Atraviesa la losa de Planta Baja en el núcleo técnico (x = -1.55m, z = 4.85m) para bajar UTP Cat6 al Nodo Wi-Fi #3 del Subsuelo."
+      name: "Pase Diamantado #2 en Losa Maciza L4 Ø2\" (Planta Baja Y=0.00m ↔ Subsuelo)",
+      pos: [0.25, 0.00, 4.78],
+      dimensions: "Camisa PVC Ø50mm en Losa Maciza L4 (x = +0.25m, z = 4.78m)",
+      desc: "Atraviesa la Losa Maciza L4 en el pleno técnico para bajar UTP Cat6 al Nodo Wi-Fi #3 del Subsuelo."
     },
     {
       id: "pase_losa_pb_pa",
-      name: "Pase en Nueva Losa 2do Piso Ø2\" (Planta Baja ↔ 2do Piso Y=+2.88m)",
-      pos: [-1.55, 2.88, 4.85],
-      dimensions: "Camisa PVC Ø50mm dejada prevista antes de hormigonar Losa Fase 2",
-      desc: "Paso vertical alineado con el Rack Principal (x = -1.55m, z = 4.85m) para subir UTP Cat6 al Nodo Wi-Fi #2 de Planta Alta."
+      name: "Pase #2 en Losa 2do Piso Ø2\" (Planta Baja ↔ 2do Piso Y=+2.88m)",
+      pos: [0.25, 2.88, 4.78],
+      dimensions: "Camisa PVC Ø50mm alineada con el Rack Principal (x = +0.25m, z = 4.78m)",
+      desc: "Paso vertical alineado con el Rack Principal para subir UTP Cat6 al Nodo Wi-Fi #2 y al Escritorio Extendido de Planta Alta."
     }
   ],
   porteroYPorton: {
@@ -372,11 +372,6 @@ export const ARQUITECTURA_PARAGUAY_BEST_PRACTICES = {
 
 /**
  * Construye la capa 3D del Sistema Pluvial, Drenaje Francés de Barranco y Plan Hidrófugo.
- * Ajustado a la geometría real de 3 niveles:
- * - Canaletas ocultas N°24/26 en el Techo General arriba del 2do Piso (Y = +5.80m)
- * - 4 Bajadas verticales Ø100mm que bajan desde Y = +5.80m pasando por la Losa del 2do Piso (Y = +3.00m) y Planta Baja (Y = 0.00m)
- * - Drenajes franceses con geotextil Bidim en Muro Cochera (+98.50m) y Muro Subsuelo (+96.80m) con barbacanas Ø50mm c/ 1.50m
- * - Cámaras desarenadoras 40x40cm, colectores troncales y disipador de energía en el barranco.
  */
 export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) {
   const group = sceneGroups.pluvialHydro || new THREE.Group();
@@ -435,7 +430,7 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
   gutterFront.userData = PLUVIAL_HYDRO_DATA.elementos3D[0];
   group.add(gutterFront);
 
-  // Babeta superior en el borde posterior real del techo (Eje A z = 13.34m, Y = +5.88m — NUNCA flotando en z = 20m)
+  // Babeta superior en el borde posterior real del techo (Eje A z = 13.34m, Y = +5.88m)
   const gutterRearGeom = new THREE.BoxGeometry(9.60, 0.16, 0.18);
   const gutterRear = new THREE.Mesh(gutterRearGeom, galvMat);
   gutterRear.position.set(0, 5.88, 13.34);
@@ -544,10 +539,7 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     group.add(drainGroup);
   };
 
-  // Drenaje Francés Muro Frontal Cochera (z = -3.75m)
   buildFrenchDrain(0, -0.55, -3.75, 9.4, PLUVIAL_HYDRO_DATA.elementos3D[1], 0.20);
-
-  // Drenaje Francés Cámara de Oxigenación Frontal del Subsuelo (z = 2.75m, Y = -2.34m)
   buildFrenchDrain(0, -2.25, 2.75, 8.8, PLUVIAL_HYDRO_DATA.elementos3D[2], 0.25);
 
   // 4. CÁMARAS PLUVIALES (40x40cm) Y COLECTORES QUE DESAGUAN HACIA ADELANTE (CALLE TTE. GUILLERMO ARIAS z = -5.65m)
@@ -581,10 +573,10 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     group.add(boxMesh);
   });
 
-  // Colectores pluviales laterales Ø100mm con flujo HACIA ADELANTE (desde Eje B z = 9.94m → Eje G z = 2.85m → Calle z = -5.65m)
+  // Colectores pluviales laterales Ø100mm rectilíneos con flujo HACIA ADELANTE (desde Eje B z = 9.94m → Eje G z = 2.85m → Calle z = -5.65m)
   const createCollectorTube = (points, label) => {
-    const curve = new THREE.CatmullRomCurve3(points);
-    const tubeGeom = new THREE.TubeGeometry(curve, 32, 0.055, 12, false);
+    const curve = new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.01);
+    const tubeGeom = new THREE.TubeGeometry(curve, 24, 0.055, 12, false);
     const tubeMesh = new THREE.Mesh(tubeGeom, pvcPluvialMat);
     tubeMesh.userData = {
       type: "pluvial_colector",
@@ -623,10 +615,7 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
   streetOutfallGroup.userData = PLUVIAL_HYDRO_DATA.elementos3D[3];
   group.add(streetOutfallGroup);
 
-  // 6. SIMULADOR INTERACTIVO PLUVIAL / HIDROSANITARIO POR CAPAS:
-  //    (a) 'rainstorm': Lluvia torrencial 165 mm/h cayendo sobre el techo Isopanel y la pérgola de cochera, escurriendo HACIA ADELANTE por la canaleta frontal (z=2.95m) y bajadas hacia la Calle Tte. Guillermo Arias (z=-5.65m).
-  //    (b) 'water_supply': Flujo presurizado azul (fría) y rojo (caliente) por el núcleo húmedo Eje F–G (z=3.00..4.85m).
-  //    (c) 'sewage_flow': Descarga cloacal ámbar vertical por columna Ø100mm hacia la Cámara Séptica y Pozo Ciego en el patio trasero.
+  // 6. SIMULADOR INTERACTIVO PLUVIAL / HIDROSANITARIO POR CAPAS (Alineado al Núcleo Húmedo en Losa Maciza L4: x = +0.68..+2.35m, z = 3.28m)
   const simSubGroups = {
     rainstorm: new THREE.Group(),
     water_supply: new THREE.Group(),
@@ -651,11 +640,11 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     const streak = new THREE.Mesh(rainStreakGeo, rainStreakMat);
     const isOverPergola = i < 45;
     const rx = isOverPergola
-      ? -4.4 + ((i * 37) % 100) * 0.042 // Pérgola Cochera x = -4.40..-0.20m
-      : -4.8 + ((i * 53) % 100) * 0.096; // Techo casa x = -4.80..+4.80m
+      ? -4.4 + ((i * 37) % 100) * 0.042
+      : -4.8 + ((i * 53) % 100) * 0.096;
     const rz = isOverPergola
-      ? -3.7 + ((i * 29) % 100) * 0.064 // Pérgola z = -3.70..+2.70m
-      : 2.8 + ((i * 71) % 100) * 0.106; // Casa z = 2.80..13.40m
+      ? -3.7 + ((i * 29) % 100) * 0.064
+      : 2.8 + ((i * 71) % 100) * 0.106;
     const minY = isOverPergola ? 2.75 : 5.75;
     const maxY = 12.5;
     const ry = minY + ((i * 19) % 100) * ((maxY - minY) / 100);
@@ -669,7 +658,6 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     });
   }
 
-  // Esferas de flujo pluvial corriendo HACIA ADELANTE (del techo z=13.0m → canaleta frontal z=2.95m → bajadas frontales → Calle Tte. Guillermo Arias z=-5.65m)
   const dropGeom = new THREE.SphereGeometry(0.09, 10, 10);
   const dropRainMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
   const roofWestPath = new THREE.CatmullRomCurve3([
@@ -678,21 +666,21 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     new THREE.Vector3(-4.75, 5.55, 2.92),
     new THREE.Vector3(-4.75, 2.88, 2.92),
     new THREE.Vector3(-4.75, -0.35, 2.92)
-  ]);
+  ], false, 'catmullrom', 0.02);
   const roofEastPath = new THREE.CatmullRomCurve3([
     new THREE.Vector3(2.5, 5.92, 12.5),
     new THREE.Vector3(3.5, 5.65, 6.5),
     new THREE.Vector3(4.75, 5.55, 2.92),
     new THREE.Vector3(4.75, 2.88, 2.92),
     new THREE.Vector3(4.75, -0.35, 2.92)
-  ]);
+  ], false, 'catmullrom', 0.02);
   const pergolaDrainPath = new THREE.CatmullRomCurve3([
     new THREE.Vector3(-2.35, 2.75, 2.2),
     new THREE.Vector3(-2.35, 2.68, -1.0),
     new THREE.Vector3(-3.80, 2.65, -3.85),
     new THREE.Vector3(-4.65, 0.0, -3.85),
     new THREE.Vector3(-4.65, -0.42, -5.65)
-  ]);
+  ], false, 'catmullrom', 0.02);
 
   [westCurve, eastCurve, roofWestPath, roofEastPath, pergolaDrainPath].forEach((curve, pathIdx) => {
     const count = 12;
@@ -711,49 +699,54 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     }
   });
 
-  // (b) 'water_supply': Flujo directo desde Caja Medidor ESSAP a nivel de calle (x=-3.85m, z=-4.20m) — Sin Tanque, con Buena Presión de Red
+  // (b) 'water_supply': Flujo ortogonal desde Caja Medidor ESSAP (x=-3.85m, z=-4.24m) → Pase #4 en Losa Maciza L4 (x=+1.48m, z=3.28m) → Baño Social PB, Cocina PB, Baño Suite PA, Termocalefón 80L y SSHH 2 PA
   const coldFlowMat = new THREE.MeshBasicMaterial({ color: 0x0ea5e9 });
   const hotFlowMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
   const supplyColdCurveMain = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-3.85, 0.05, -4.18), // Caja del Medidor de Agua ESSAP a nivel de calle (muralla pequeña junto al portón)
-    new THREE.Vector3(-3.85, -0.45, -1.20),// Tramo enterrado bajo cochera
-    new THREE.Vector3(-2.20, -0.45, 3.20), // Ingreso directo con buena presión al Núcleo Húmedo Eje F-G
-    new THREE.Vector3(-2.20, 0.00, 3.20),  // Sube por Núcleo Húmedo Eje F-G a Planta Baja
-    new THREE.Vector3(-3.15, 0.85, 3.42),  // Bacha Doble Cocina PB (Eje F-G)
-    new THREE.Vector3(-1.10, 0.80, 3.45),  // SSHH / Baño Social PB (Eje F-G)
-    new THREE.Vector3(-1.80, 2.95, 3.35),  // Sube a Planta Alta (Baño en Suite sobre Eje F-G)
-    new THREE.Vector3(-1.20, 3.70, 3.45),  // Lavatorio / Inodoro / Ducha Baño en Suite PA
-    new THREE.Vector3(2.65, 3.70, 3.45)    // SSHH 2 / Baño Planta Alta (Eje F-G)
-  ]);
-  const supplyColdCurveSub = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-2.20, -0.45, 3.20),
-    new THREE.Vector3(-4.20, -1.45, 6.50), // Lavadero Subsuelo contra pared Eje 9
-    new THREE.Vector3(-3.20, -1.45, 12.65) // Bacha de Parrillita / Quincho Inferior en Subsuelo
-  ]);
-  const supplyHotCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-2.40, 4.65, 3.35),  // Termocalefón 80L en Núcleo Húmedo Eje F-G PA
-    new THREE.Vector3(-1.50, 3.85, 3.45),  // Ducha y Vanitory Baño en Suite PA
-    new THREE.Vector3(2.55, 3.85, 3.45),   // Ducha y Vanitory SSHH 2 PA
-    new THREE.Vector3(-2.20, 0.88, 3.42),  // Baja directo a Bacha Cocina PB y Baño Social PB
-    new THREE.Vector3(-3.15, 0.88, 3.42)
-  ]);
+    new THREE.Vector3(-3.85, 0.05, -4.24),
+    new THREE.Vector3(-3.85, -0.45, -4.24),
+    new THREE.Vector3(-3.85, -0.45, 2.85),
+    new THREE.Vector3(1.48, -0.45, 2.85),
+    new THREE.Vector3(1.48, -0.45, 3.28),
+    new THREE.Vector3(1.48, 0.00, 3.28),  // PASE #4 en Losa Maciza L4
+    new THREE.Vector3(1.48, 0.85, 3.28),
+    new THREE.Vector3(2.35, 0.85, 3.28),  // Bacha Doble Cocina PB (Este)
+    new THREE.Vector3(1.48, 0.85, 3.28),
+    new THREE.Vector3(0.75, 0.85, 3.28),  // Baño Social PB
+    new THREE.Vector3(1.48, 0.85, 3.28),
+    new THREE.Vector3(1.48, 2.88, 3.28),  // PASE #4 en Losa 2
+    new THREE.Vector3(1.48, 3.70, 3.28),
+    new THREE.Vector3(0.95, 4.75, 3.28),  // Termocalefón 80L
+    new THREE.Vector3(-0.35, 3.70, 3.28), // Baño en Suite PA
+    new THREE.Vector3(-2.65, 3.70, 3.28)  // SSHH 2 PA
+  ], false, 'catmullrom', 0.01);
 
-  // Dibujar tuberías guía semitransparentes en el subgrupo water_supply
+  const supplyColdCurveSub = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(1.48, -0.45, 3.28),
+    new THREE.Vector3(4.45, -0.45, 3.28),
+    new THREE.Vector3(4.45, -0.45, 6.40),
+    new THREE.Vector3(4.45, -1.45, 6.40), // Lavadero Subsuelo (Muro Este Eje 1)
+    new THREE.Vector3(4.45, -2.25, 11.80),
+    new THREE.Vector3(-3.20, -2.25, 11.80),
+    new THREE.Vector3(-3.20, -1.45, 12.40) // Bacha Parrillita Subsuelo (Oeste)
+  ], false, 'catmullrom', 0.01);
+
+  const supplyHotCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0.95, 4.75, 3.22),  // Termocalefón 80L
+    new THREE.Vector3(0.95, 3.82, 3.22),
+    new THREE.Vector3(-0.35, 3.82, 3.22), // Ducha y Vanitory Baño en Suite PA
+    new THREE.Vector3(-2.65, 3.82, 3.22), // Ducha y Vanitory SSHH 2 PA
+    new THREE.Vector3(1.42, 3.82, 3.22),
+    new THREE.Vector3(1.42, 2.88, 3.22),  // Baja por Pase #4 Losa 2
+    new THREE.Vector3(1.42, 0.88, 3.22),
+    new THREE.Vector3(2.35, 0.88, 3.22)   // Bacha Doble Cocina PB
+  ], false, 'catmullrom', 0.01);
+
   [
-    { curve: supplyColdCurveMain, mat: coldFlowMat, r: 0.024 },
-    { curve: supplyColdCurveSub, mat: coldFlowMat, r: 0.020 },
-    { curve: supplyHotCurve, mat: hotFlowMat, r: 0.020 }
-  ].forEach(({ curve, mat, r }) => {
-    const pipe = new THREE.Mesh(
-      new THREE.TubeGeometry(curve, 32, r, 10, false),
-      new THREE.MeshStandardMaterial({
-        color: mat.color,
-        transparent: true,
-        opacity: 0.45,
-        roughness: 0.25
-      })
-    );
-    simSubGroups.water_supply.add(pipe);
+    { curve: supplyColdCurveMain, mat: coldFlowMat },
+    { curve: supplyColdCurveSub, mat: coldFlowMat },
+    { curve: supplyHotCurve, mat: hotFlowMat }
+  ].forEach(({ curve, mat }) => {
     for (let i = 0; i < 14; i++) {
       const pulse = new THREE.Mesh(new THREE.SphereGeometry(0.068, 10, 10), mat);
       const tOffset = i / 14;
@@ -769,29 +762,20 @@ export function buildPluvialAndHydroLayer(THREE, sceneGroups, getTerrainHeight) 
     }
   });
 
-  // (c) 'sewage_flow': Descarga cloacal ámbar vertical por columna Ø100mm desde los baños superpuestos en Eje F–G hacia Cámara Séptica y Pozo Ciego
+  // (c) 'sewage_flow': Descarga cloacal ámbar vertical por PASE #3 (x=+0.68m, z=3.28m en Losa Maciza L4) hacia Cámara Desgrasadora, Cámara Séptica y Pozo Ciego
   const sewageFlowMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
   const sewageStackCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(2.60, 3.10, 3.65),   // Descarga SSHH 2 Planta Alta (Eje F-G)
-    new THREE.Vector3(-1.45, 3.05, 3.65),  // Descarga Baño en Suite Planta Alta (Eje F-G)
-    new THREE.Vector3(-1.45, 0.05, 3.65),  // Recibe SSHH / Baño Social PB + Cocina PB (Eje F-G)
-    new THREE.Vector3(-2.85, -2.25, 3.85), // Baja vertical al colector de Subsuelo
-    new THREE.Vector3(-3.25, -2.35, 6.90), // Recibe Lavadero Subsuelo
-    new THREE.Vector3(-3.25, -2.42, 12.65),// Recibe Bacha de Parrillita en Subsuelo
-    new THREE.Vector3(-3.25, -2.95, 14.55),// Cámara Desgrasadora e Inspección
-    new THREE.Vector3(-3.25, -3.25, 16.55),// Cámara Séptica Bicameral
-    new THREE.Vector3(-3.25, -3.45, 20.20) // Pozo Ciego Absorbente
-  ]);
-  const sewageGuidePipe = new THREE.Mesh(
-    new THREE.TubeGeometry(sewageStackCurve, 36, 0.045, 12, false),
-    new THREE.MeshStandardMaterial({
-      color: 0xb45309,
-      transparent: true,
-      opacity: 0.48,
-      roughness: 0.35
-    })
-  );
-  simSubGroups.sewage_flow.add(sewageGuidePipe);
+    new THREE.Vector3(-2.15, 3.05, 3.28), // Inodoro/Ducha SSHH 2 PA
+    new THREE.Vector3(-2.15, 2.68, 3.28), // Pasa Losa 2 por Pase #3B
+    new THREE.Vector3(0.68, 2.62, 3.28),  // Une a Columna Principal en Pase #3
+    new THREE.Vector3(0.68, 0.00, 3.28),  // Recibe Baño Social PB + Cocina PB y atraviesa Pase #3 en Losa Maciza L4
+    new THREE.Vector3(0.68, -2.20, 3.28), // Pie de columna cloacal en Subsuelo
+    new THREE.Vector3(0.68, -2.28, 6.40), // Recibe ramal Lavadero Subsuelo (+X)
+    new THREE.Vector3(0.68, -2.35, 14.50),// Cámara de Inspección Principal en Patio
+    new THREE.Vector3(-2.20, -2.55, 16.50),// Cámara Séptica Bicameral 1500L
+    new THREE.Vector3(-2.20, -3.10, 19.80) // Pozo Ciego Absorbente Ø1.80m
+  ], false, 'catmullrom', 0.01);
+
   for (let i = 0; i < 16; i++) {
     const slug = new THREE.Mesh(new THREE.SphereGeometry(0.085, 10, 10), sewageFlowMat);
     const tOffset = i / 16;
@@ -1048,14 +1032,15 @@ export function buildWeakSignalsLayer(THREE, sceneGroups, getTerrainHeight) {
     group.add(sleeveMesh);
   });
 
-  // Columna Montante UTP Cat6 uniendo Subsuelo (Y=-0.55m) ↔ Rack PB (Y=+1.5m) ↔ Losa 2do Piso (Y=+2.88m) ↔ Nodo 2do Piso (Y=+4.4m)
+  // Columna Montante UTP Cat6 uniendo Subsuelo (Y=-0.55m) ↔ Pase #2 Losa 1 (x=0.25, z=4.78) ↔ Rack PB (Y=+1.55m) ↔ Pase #2 Losa 2 (Y=+2.88m) ↔ Nodo 2do Piso (Y=+4.4m)
   const cat6Points = [
-    new THREE.Vector3(0.00, -0.55, 8.50),
-    new THREE.Vector3(-1.55, 0.00, 4.85),
+    new THREE.Vector3(0.25, -0.55, 8.50),
+    new THREE.Vector3(0.25, -0.20, 4.78),
+    new THREE.Vector3(0.25, 0.00, 4.78),
     new THREE.Vector3(...rackInfo.pos3D),
-    new THREE.Vector3(-0.80, 1.80, 6.50),
-    new THREE.Vector3(-1.55, 2.88, 4.85),
-    new THREE.Vector3(-0.60, 4.40, 5.60)
+    new THREE.Vector3(0.25, 1.80, 6.50),
+    new THREE.Vector3(0.25, 2.88, 4.78),
+    new THREE.Vector3(0.25, 4.40, 5.60)
   ];
   const cat6Geom = new THREE.BufferGeometry().setFromPoints(cat6Points);
   const cat6Mat = new THREE.LineDashedMaterial({ color: 0x10b981, dashSize: 0.4, gapSize: 0.2 });
@@ -1151,59 +1136,170 @@ export function buildWeakSignalsLayer(THREE, sceneGroups, getTerrainHeight) {
 }
 
 /**
- * Construye la Capa 3D Interactiva de:
- * 1) LOS 4 PASES CON SACABOCADO DIAMANTADO EN LA LOSA 1 EXISTENTE (Y = 0.00m, en el Núcleo Húmedo Eje F–G z=3.00..5.26m):
- * 2) TABLEROS ELÉCTRICOS CON EQUIPAMIENTO INTELIGENTE RIEL DIN (COMPRA CHINA / ANDE) Y CAJA MEDIDOR ESSAP A NIVEL CALLE (SIN TANQUE)
- * 3) ELECTRODUCTOS POR CONTRAPISO/CARPETA (SOBRE LOSA 1 SIN PICAR), MUROS Y VIGAS DE SUBSUELO
- * 4) TODOS LOS ENCHUFES DE 20A (ROJOS) Y 16A (AZULES) + INTERRUPTORES INTELIGENTES ZIGBEE CON NEUTRO Y 3-WAY (VERDES)
- * 5) RED HIDROSANITARIA COMPLETA SUPERPUESTA VERTICALMENTE SOBRE EL NÚCLEO HÚMEDO EJE F–G (z = 3.00m..5.00m)
- * 6) SIMULADOR FUNCIONAL ELÉCTRICO Y DE FALLAS EN VIVO (phase_R_ac, phase_S_kitchen, phase_T_lights, fault_leak_30ma, fault_overtemp_65c, fault_flood_subsuelo)
+ * Crea una etiqueta flotante 3D (Sprite Canvas de alta definición) para identificar agujeros en losa,
+ * tableros, objetos eléctricos y cámaras sanitarias en los modos Electricista y Plomero.
+ */
+function createMepCalloutSprite(THREE, text, subtext, borderHex = '#f59e0b', bgHex = 'rgba(15, 23, 42, 0.92)') {
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  ctx.fillStyle = bgHex;
+  ctx.strokeStyle = borderHex;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  if (ctx.roundRect) {
+    ctx.roundRect(8, 8, 496, 112, 18);
+  } else {
+    ctx.rect(8, 8, 496, 112);
+  }
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 26px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, 256, 54);
+
+  if (subtext) {
+    ctx.fillStyle = borderHex;
+    ctx.font = 'bold 20px JetBrains Mono, monospace';
+    ctx.fillText(subtext, 256, 92);
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.needsUpdate = true;
+  const mat = new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false
+  });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(2.35, 0.58, 1);
+  sprite.renderOrder = 999;
+  return sprite;
+}
+
+/**
+ * Construye la Capa 3D Interactiva de Ingeniería MEP con Separación Disciplinaria:
+ * - `electricalSubGroup`: Agujeros en Losa #1 y #2 (Sobre Losa Maciza L4), Pilar ANDE + Jabalina, Tableros DIN,
+ *   9 Cajas Octogonales Embutidas en Losa + Luminarias LED, 3 Equipos Split AA Inverter, Termocalefón 80L (20A),
+ *   26 Enchufes (20A/16A), 7 Llaves Zigbee/3-Way y Electroductos 100% Ortogonales (90°).
+ * - `plumbingSubGroup`: Agujeros en Losa #3, #3B y #4 (Sobre Losa Maciza L4), Medidor ESSAP, Agua Fría PPR Ø25mm,
+ *   Agua Caliente PPR Ø20mm, Termocalefón 80L, Columna Cloacal Vertical PVC Ø100mm + Ventilación Ø75mm a los 4 vientos,
+ *   Cámara Desgrasadora, Cámara de Inspección, Cámara Séptica Bicameral 1500L y Pozo Ciego Absorbente Ø1.80m.
  */
 export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
   const group = (sceneGroups && sceneGroups.ductosYEnchufes) ? sceneGroups.ductosYEnchufes : new THREE.Group();
   group.clear();
 
+  const electricalSubGroup = new THREE.Group();
+  electricalSubGroup.name = 'mep_electrical_subgroup';
+  const plumbingSubGroup = new THREE.Group();
+  plumbingSubGroup.name = 'mep_plumbing_subgroup';
+  group.add(electricalSubGroup);
+  group.add(plumbingSubGroup);
+
   let mainBoardDinLedMesh = null;
   let mainBoardBoxMesh = null;
 
-  const addTubePath = (pointsVec3, radius, colorHex, meta, targetSubGroup = group) => {
+  // Generador de tuberías/electroductos 100% ORTOGONALES (tramos rectos con codos a 90°, cero diagonales curvas)
+  const addOrthogonalPipePath = (pointsVec3, radius, colorHex, meta, targetSubGroup = electricalSubGroup) => {
     if (!pointsVec3 || pointsVec3.length < 2) return null;
-    const curve = new THREE.CatmullRomCurve3(pointsVec3, false, 'catmullrom', 0.08);
-    const geom = new THREE.TubeGeometry(curve, Math.max(12, pointsVec3.length * 6), radius, 10, false);
+    const pipeGroup = new THREE.Group();
     const mat = new THREE.MeshStandardMaterial({
       color: colorHex,
-      roughness: 0.32,
-      metalness: 0.25
+      emissive: colorHex,
+      emissiveIntensity: 0.22,
+      roughness: 0.28,
+      metalness: 0.3
     });
-    const mesh = new THREE.Mesh(geom, mat);
-    mesh.userData = meta;
-    targetSubGroup.add(mesh);
-    return { mesh, curve };
+
+    for (let i = 0; i < pointsVec3.length - 1; i++) {
+      const p1 = pointsVec3[i];
+      const p2 = pointsVec3[i + 1];
+      const dist = p1.distanceTo(p2);
+      if (dist < 0.005) continue;
+
+      const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+      const cylGeom = new THREE.CylinderGeometry(radius, radius, dist, 10);
+      const cylMesh = new THREE.Mesh(cylGeom, mat);
+      cylMesh.position.copy(mid);
+
+      const dir = new THREE.Vector3().subVectors(p2, p1).normalize();
+      const up = new THREE.Vector3(0, 1, 0);
+      if (Math.abs(dir.dot(up)) > 0.999) {
+        if (dir.y < 0) cylMesh.rotation.x = Math.PI;
+      } else {
+        cylMesh.quaternion.setFromUnitVectors(up, dir);
+      }
+      cylMesh.userData = meta;
+      pipeGroup.add(cylMesh);
+
+      const elbowMesh = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.28, 10, 10), mat);
+      elbowMesh.position.copy(p2);
+      elbowMesh.userData = meta;
+      pipeGroup.add(elbowMesh);
+    }
+
+    const startCap = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.28, 10, 10), mat);
+    startCap.position.copy(pointsVec3[0]);
+    startCap.userData = meta;
+    pipeGroup.add(startCap);
+
+    pipeGroup.userData = meta;
+    targetSubGroup.add(pipeGroup);
+
+    // Curva lineal de tensión 0 para que las esferas animadas sigan el ángulo recto exacto
+    const curve = new THREE.CatmullRomCurve3(pointsVec3, false, 'catmullrom', 0.0);
+    return { mesh: pipeGroup, curve };
   };
 
   // ==========================================================================
-  // 1. LOS 4 PASES DE LOSA CON SACABOCADO DIAMANTADO EN LA LOSA 1 EXISTENTE (Y = 0.00m)
+  // 1. AGUJEROS / PASES EN LOSA 1 (Y = 0.00m, Losa Maciza L4) Y LOSA 2 (Y = +2.88m)
   // ==========================================================================
-  (DUCTOS_PASES_ENCHUFES_DATOS.pasesLosa1Diamantados || []).forEach((pase) => {
+  const buildSlabHoleSleeve = (
+    pos,
+    diametroMm,
+    colorHex,
+    paseMeta,
+    labelTitle,
+    labelSub,
+    targetSubGroup,
+    badgeOffset = [0, 0.58, 0]
+  ) => {
     const paseGroup = new THREE.Group();
-    paseGroup.position.set(...pase.pos3D);
+    paseGroup.position.set(...pos);
 
-    const outerRadius = Math.max(0.065, (pase.diametroMm / 1000) * 1.15);
+    const outerRadius = Math.max(0.085, (diametroMm / 1000) * 1.35);
+    // Camisa exterior de pase en la losa
     const sleeveMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(outerRadius, outerRadius, 0.56, 24),
+      new THREE.CylinderGeometry(outerRadius, outerRadius, 0.34, 24),
       new THREE.MeshStandardMaterial({
-        color: pase.colorHex,
-        emissive: pase.colorHex,
-        emissiveIntensity: 0.55,
+        color: colorHex,
+        emissive: colorHex,
+        emissiveIntensity: 0.6,
         roughness: 0.25,
         metalness: 0.35
       })
     );
     paseGroup.add(sleeveMesh);
 
-    [0.02, -0.19].forEach((ry) => {
+    // Hueco interior oscuro que muestra visualmente la perforación de la losa
+    const boreHole = new THREE.Mesh(
+      new THREE.CylinderGeometry(outerRadius * 0.72, outerRadius * 0.72, 0.36, 20),
+      new THREE.MeshBasicMaterial({ color: 0x020617 })
+    );
+    paseGroup.add(boreHole);
+
+    // Anillos de sellado superior e inferior sobre las caras de la losa
+    [0.14, -0.14].forEach((ry) => {
       const collarRing = new THREE.Mesh(
-        new THREE.TorusGeometry(outerRadius * 1.45, 0.018, 12, 24),
+        new THREE.TorusGeometry(outerRadius * 1.45, 0.022, 12, 24),
         new THREE.MeshBasicMaterial({ color: 0xfef08a })
       );
       collarRing.rotation.x = Math.PI / 2;
@@ -1211,402 +1307,900 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
       paseGroup.add(collarRing);
     });
 
-    const paseMeta = {
-      type: 'pase_losa1_diamantado',
-      bankCategory: 'refaccion_amarillo',
-      name: `${pase.codigo} — ${pase.nombre}`,
-      dimensions: `Diámetro Perforación: Ø ${pase.diametroMm} mm • Ubicación: ${pase.ejeRef}`,
-      costo: 'Incluido en Perforaciones con Copa Diamantada (Gs. 280.000 c/u)',
-      status: 'A Perforar con Sacabocado Diamantado en Losa 1 Existente (Cero Corte de Vigas) 💎🕳️',
-      desc: `${pase.conductores} Método: ${pase.metodoEjecucion}`
-    };
+    if (labelTitle) {
+      const badge = createMepCalloutSprite(
+        THREE,
+        labelTitle,
+        labelSub,
+        '#' + colorHex.toString(16).padStart(6, '0')
+      );
+      if (badge) {
+        badge.position.set(badgeOffset[0] || 0, badgeOffset[1] || 0.58, badgeOffset[2] || 0);
+        paseGroup.add(badge);
+      }
+    }
+
     paseGroup.userData = paseMeta;
     paseGroup.traverse((ch) => {
       if (ch.isMesh) ch.userData = paseMeta;
     });
-    group.add(paseGroup);
+    targetSubGroup.add(paseGroup);
+  };
+
+  (DUCTOS_PASES_ENCHUFES_DATOS.pasesLosa1Diamantados || []).forEach((pase, idx) => {
+    const isPlumbingPase = pase.id.includes('CLOACA') || pase.id.includes('AGUA');
+    const targetSub = isPlumbingPase ? plumbingSubGroup : electricalSubGroup;
+    const isEven = idx % 2 === 1;
+    const badgeOffsetL1 = isEven ? [0.65, 0.30, 0] : [-0.65, 0.78, 0];
+    const badgeOffsetL2 = isEven ? [0.65, 0.28, 0] : [-0.65, 0.74, 0];
+
+    const paseMetaLosa1 = {
+      type: 'pase_losa1_diamantado',
+      bankCategory: 'refaccion_amarillo',
+      name: `${pase.codigo} (Losa 1 PB) — ${pase.nombre}`,
+      dimensions: `Perforación Diamantada Ø ${pase.diametroMm} mm en Losa Maciza L4 • ${pase.ejeRef}`,
+      costo: 'Incluido en Perforaciones con Copa Diamantada (Gs. 280.000 c/u)',
+      status: 'Agujero Real en Losa Maciza L4 (Cero Corte de Vigas) 💎🕳️',
+      desc: `${pase.conductores} Método: ${pase.metodoEjecucion}`
+    };
+
+    buildSlabHoleSleeve(
+      pase.pos3D,
+      pase.diametroMm,
+      pase.colorHex,
+      paseMetaLosa1,
+      `🕳️ ${pase.codigo} EN LOSA 1`,
+      `Losa Maciza L4 (x=${pase.pos3D[0].toFixed(2)}m, z=${pase.pos3D[2].toFixed(2)}m)`,
+      targetSub,
+      badgeOffsetL1
+    );
+
+    if (Array.isArray(pase.posLosa2)) {
+      const paseMetaLosa2 = {
+        ...paseMetaLosa1,
+        name: `${pase.codigo} (Losa 2 PA) — Camisa de Pase Vertical a Planta Alta (+2.88m)`,
+        status: 'Camisa Prevista en Encofrado de Losa 2do Piso 🕳️⬆️'
+      };
+      buildSlabHoleSleeve(
+        pase.posLosa2,
+        pase.diametroMm,
+        pase.colorHex,
+        paseMetaLosa2,
+        `🕳️ ${pase.codigo} EN LOSA 2`,
+        `Planta Alta +2.88m (Alineado Vertical)`,
+        targetSub,
+        badgeOffsetL2
+      );
+    }
   });
 
+  // Pase adicional #3B en Losa 2 (Y = +2.88m) para la descarga del SSHH 2 PA (x = -2.15m, z = 3.28m)
+  buildSlabHoleSleeve(
+    [-2.15, 2.88, 3.28],
+    115,
+    0xd97706,
+    {
+      type: 'pase_losa1_diamantado',
+      bankCategory: 'nuevo_rojo',
+      name: 'PASE #3B (Ø 115 mm en Losa 2) — Bajada Cloacal SSHH 2 Planta Alta',
+      dimensions: 'Camisa PVC Ø 115mm en Losa 2 (x = -2.15m, z = 3.28m)',
+      status: 'Desagüe Inodoro/Ducha SSHH 2 PA hacia Colector Húmedo Eje G 🕳️♻️',
+      desc: 'Permite bajar el desagüe del baño secundario de Planta Alta (SSHH 2) sobre el muro húmedo frontal Eje G y unificarlo hacia la Columna Cloacal Principal en Pase #3.'
+    },
+    '🕳️ PASE #3B EN LOSA 2',
+    'Bajada Cloacal SSHH 2 PA (x=-2.15m)',
+    plumbingSubGroup
+  );
+
   // ==========================================================================
-  // 2. TABLEROS ELÉCTRICOS (CON MONITOREO INTELIGENTE RIEL DIN CHINA), BAJADA ANDE Y MEDIDOR ESSAP A NIVEL CALLE (SIN TANQUE)
+  // 2. TABLEROS ELÉCTRICOS, PILAR ANDE + JABALINA Y MEDIDOR ESSAP
   // ==========================================================================
-  (DUCTOS_PASES_ENCHUFES_DATOS.tablerosYEquiposPrincipales || [])
-    .filter((eq) => eq.id !== 'HID_CISTERNA_BOMBA')
-    .forEach((eq) => {
-      const eqGroup = new THREE.Group();
-      const pos3D = eq.id === 'TAB_PILASTRA_ANDE'
-        ? [-3.85, 1.50, -4.14]
-        : eq.id === 'HID_MEDIDOR_ESSAP'
-          ? [-3.85, 0.06, -4.24]
-          : eq.pos3D;
-      eqGroup.position.set(...pos3D);
+  (DUCTOS_PASES_ENCHUFES_DATOS.tablerosYEquiposPrincipales || []).forEach((eq) => {
+    const isEssap = eq.id === 'HID_MEDIDOR_ESSAP';
+    const targetSub = isEssap ? plumbingSubGroup : electricalSubGroup;
+    const eqGroup = new THREE.Group();
+    eqGroup.position.set(...eq.pos3D);
 
-      if (eq.id === 'HID_MEDIDOR_ESSAP') {
-        const meterBase = new THREE.Mesh(
-          new THREE.BoxGeometry(0.42, 0.14, 0.30),
-          new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 0.4, roughness: 0.3 })
-        );
-        eqGroup.add(meterBase);
-      } else {
-        const isMainBoard = eq.id === 'TAB_TP_PB';
-        const boxW = isMainBoard ? 0.42 : 0.32;
-        const boxH = isMainBoard ? 0.54 : 0.38;
-        const boxD = 0.14;
+    if (isEssap) {
+      const meterBase = new THREE.Mesh(
+        new THREE.BoxGeometry(0.46, 0.24, 0.34),
+        new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 0.45, roughness: 0.25 })
+      );
+      eqGroup.add(meterBase);
+      const badge = createMepCalloutSprite(THREE, '💧 MEDIDOR ESSAP ¾"', 'Entrada Agua Directa (x=-3.85m)', '#38bdf8');
+      if (badge) {
+        badge.position.set(0, 0.65, 0);
+        eqGroup.add(badge);
+      }
+    } else {
+      const isMainBoard = eq.id === 'TAB_TP_PB';
+      const boxW = isMainBoard ? 0.48 : 0.36;
+      const boxH = isMainBoard ? 0.58 : 0.42;
+      const boxD = 0.16;
 
-        const boardBox = new THREE.Mesh(
-          new THREE.BoxGeometry(boxW, boxH, boxD),
-          new THREE.MeshStandardMaterial({
-            color: 0x1e293b,
-            emissive: eq.colorHex,
-            emissiveIntensity: 0.35,
-            roughness: 0.25,
-            metalness: 0.6
-          })
-        );
-        eqGroup.add(boardBox);
+      const boardBox = new THREE.Mesh(
+        new THREE.BoxGeometry(boxW, boxH, boxD),
+        new THREE.MeshStandardMaterial({
+          color: 0x1e293b,
+          emissive: eq.colorHex,
+          emissiveIntensity: 0.4,
+          roughness: 0.22,
+          metalness: 0.65
+        })
+      );
+      eqGroup.add(boardBox);
 
-        const dinLed = new THREE.Mesh(
-          new THREE.BoxGeometry(boxW * 0.72, 0.06, 0.02),
-          new THREE.MeshBasicMaterial({ color: 0x22c55e })
-        );
-        dinLed.position.set(0, boxH * 0.22, boxD / 2 + 0.01);
-        eqGroup.add(dinLed);
+      const dinLed = new THREE.Mesh(
+        new THREE.BoxGeometry(boxW * 0.76, 0.07, 0.02),
+        new THREE.MeshBasicMaterial({ color: 0x22c55e })
+      );
+      dinLed.position.set(0, boxH * 0.22, boxD / 2 + 0.01);
+      eqGroup.add(dinLed);
 
-        if (isMainBoard) {
-          mainBoardDinLedMesh = dinLed;
-          mainBoardBoxMesh = boardBox;
-        }
+      if (isMainBoard) {
+        mainBoardDinLedMesh = dinLed;
+        mainBoardBoxMesh = boardBox;
       }
 
-      const eqMeta = {
-        type: 'tablero_o_equipo_mep',
-        bankCategory: 'nuevo_rojo',
-        name: `${eq.codigo} — ${eq.nombre}`,
-        dimensions: `Nivel: ${eq.nivel}`,
-        costo: eq.id.startsWith('TAB_')
-          ? 'Compatible con Kit Compra China Riel DIN Zigbee/LAN (Gs. 2.365.000 lote completo)'
-          : 'Conexión Directa ESSAP a Nivel de Calle (Sin Tanque ni Bomba)',
-        status: 'Monitoreo Activo y Prevención de Fallas ⚡💧',
-        desc: eq.especificacion
-      };
-      eqGroup.userData = eqMeta;
-      eqGroup.traverse((ch) => {
-        if (ch.isMesh) ch.userData = eqMeta;
-      });
-      group.add(eqGroup);
+      const shortTitle = eq.id === 'TAB_PILASTRA_ANDE'
+        ? '⚡ PILAR ANDE 3×40A + TIERRA'
+        : eq.id === 'TAB_TP_PB'
+          ? '⚡ TABLERO TP-PB (36 DIN)'
+          : eq.id === 'TAB_TS_PA'
+            ? '⚡ SUBTABLERO TS-PA (2do Piso)'
+            : '⚡ SUBTABLERO TS-SUB (Subsuelo)';
+      const shortSub = eq.id === 'TAB_PILASTRA_ANDE'
+        ? 'Acometida Trifásica + Jabalina'
+        : `Sobre Losa Maciza L4 (x=${eq.pos3D[0].toFixed(2)}m)`;
+      const badge = createMepCalloutSprite(THREE, shortTitle, shortSub, '#f59e0b');
+      if (badge) {
+        badge.position.set(0, boxH / 2 + 0.42, 0);
+        eqGroup.add(badge);
+      }
+    }
+
+    const eqMeta = {
+      type: 'tablero_o_equipo_mep',
+      bankCategory: 'nuevo_rojo',
+      name: `${eq.codigo} — ${eq.nombre}`,
+      dimensions: `Nivel: ${eq.nivel}`,
+      costo: eq.id.startsWith('TAB_')
+        ? 'Compatible con Kit Compra China Riel DIN Zigbee/LAN (Gs. 2.365.000 lote completo)'
+        : 'Conexión Directa ESSAP a Nivel de Calle',
+      status: 'Monitoreo Activo y Prevención de Fallas ⚡💧',
+      desc: eq.especificacion
+    };
+    eqGroup.userData = eqMeta;
+    eqGroup.traverse((ch) => {
+      if (ch.isMesh) ch.userData = eqMeta;
     });
+    targetSub.add(eqGroup);
+  });
+
+  // Jabalina de Puesta a Tierra Copperweld Ø 5/8" × 2.40m + Cámara de Inspección junto al Pilar ANDE
+  const groundRodGroup = new THREE.Group();
+  groundRodGroup.position.set(-3.85, -0.45, -3.55);
+  const rodMesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.025, 0.025, 1.80, 12),
+    new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.85, roughness: 0.2 })
+  );
+  rodMesh.position.y = -0.60;
+  groundRodGroup.add(rodMesh);
+  const groundBox = new THREE.Mesh(
+    new THREE.BoxGeometry(0.32, 0.25, 0.32),
+    new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.4 })
+  );
+  groundRodGroup.add(groundBox);
+  groundRodGroup.userData = {
+    type: 'puesta_a_tierra_ande',
+    bankCategory: 'nuevo_rojo',
+    name: 'PAT-01: Jabalina Copperweld Ø 5/8" × 2.40m + Cámara de Inspección',
+    dimensions: 'Conductor Verde/Amarillo 10 mm² • R < 10 Ω s/ Norma ANDE/INTN',
+    status: 'Protección de Vida y Descarga de DPS Clase II 🟢⚡',
+    desc: 'Conectada directamente al borne de tierra del Pilar ANDE y del Tablero Principal TP-PB para derivar rayos/sobretensiones y habilitar el disparo de los 3 disyuntores diferenciales 30mA.'
+  };
+  groundRodGroup.traverse((c) => { if (c.isMesh) c.userData = groundRodGroup.userData; });
+  electricalSubGroup.add(groundRodGroup);
 
   // ==========================================================================
-  // 3. TRAZADO 3D DE ELECTRODUCTOS Y CIRCUITOS POR FASE (R: A/C, S: COCINA 20A, T: ILUMINACIÓN/TOMAS)
+  // 3. OBJETOS ELÉCTRICOS DE LA CASA EN 3D (CAJAS OCTOGONALES EN LOSA, LUMINARIAS LED, 3 SPLITS AA, TERMOCALEFÓN 80L)
   // ==========================================================================
-  const trunkRoute = addTubePath(
+  const octagonBoxesInSlabs = [
+    // Bajo Losa 2 (Iluminación Planta Baja en Y = +2.80m)
+    { id: 'OCT-PB-ESTAR', name: 'Caja Octogonal en Losa + Plafón LED Estar Social PB', pos: [-2.20, 2.80, 6.60], swPos: [-0.20, 1.15, 3.12] },
+    { id: 'OCT-PB-COCINA', name: 'Caja Octogonal en Losa + Plafón LED Cocina Integrada PB (Losa L4)', pos: [2.55, 2.80, 4.25], swPos: [1.69, 1.15, 4.85] },
+    { id: 'OCT-PB-COMEDOR', name: 'Caja Octogonal en Losa + Luminaria Colgante Comedor PB (Losa L4)', pos: [1.80, 2.80, 7.80], swPos: [1.69, 1.15, 4.85] },
+    { id: 'OCT-PB-BANO', name: 'Caja Octogonal en Losa + Plafón LED Baño Social PB (Losa L4)', pos: [1.05, 2.80, 3.90], swPos: [1.69, 1.15, 4.85] },
+    { id: 'OCT-PB-GALERIA', name: 'Caja Octogonal en Losa + Plafón LED Galería Panorámica L1', pos: [1.50, 2.80, 11.45], swPos: [-0.20, 1.15, 3.12] },
+    // Bajo Techo Isopanel (Iluminación Planta Alta en Y = +5.48m)
+    { id: 'OCT-PA-SUITE', name: 'Caja Octogonal + Plafón LED Dormitorio Principal en Suite PA (+X)', pos: [2.60, 5.48, 7.45], swPos: [0.30, 4.05, 5.35] },
+    { id: 'OCT-PA-DORM2', name: 'Caja Octogonal + Plafón LED Dormitorio 2 Central PA', pos: [-0.75, 5.48, 7.80], swPos: [0.30, 4.05, 5.35] },
+    { id: 'OCT-PA-DESK', name: 'Caja Octogonal + Panel LED Escritorio Extendido PA (-X)', pos: [-3.30, 5.48, 10.60], swPos: [-3.84, 4.05, 8.85] },
+    // Bajo Losa Maciza L4 (Iluminación Subsuelo en Y = -0.08m)
+    { id: 'OCT-SUB-SALON', name: 'Caja Octogonal bajo Losa 1 + Tortuga LED Subsuelo y Lavadero', pos: [1.50, -0.08, 6.40], swPos: [3.84, -1.15, 8.80] }
+  ];
+
+  octagonBoxesInSlabs.forEach((oct) => {
+    const octGroup = new THREE.Group();
+    octGroup.position.set(...oct.pos);
+
+    const octBox = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.14, 0.14, 0.08, 8),
+      new THREE.MeshStandardMaterial({ color: 0xfacc15, metalness: 0.5, roughness: 0.3 })
+    );
+    octGroup.add(octBox);
+
+    const ledDisk = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.24, 0.24, 0.04, 20),
+      new THREE.MeshBasicMaterial({ color: 0xfef08a })
+    );
+    ledDisk.position.y = -0.05;
+    octGroup.add(ledDisk);
+
+    const octMeta = {
+      type: 'caja_octogonal_losa_luminaria',
+      bankCategory: 'nuevo_rojo',
+      name: `[${oct.id}] ${oct.name}`,
+      dimensions: 'Caja Octogonal Metálica Pesada 4" en Losa + Luminaria LED Cálida 3000K',
+      status: 'Centro de Iluminación Embutido en Losa 💡',
+      desc: 'Caja octogonal fijada al diseño de la losa que recibe los electroductos ortogonales de iluminación y baja verticalmente hacia las llaves interruptoras.'
+    };
+    octGroup.userData = octMeta;
+    octGroup.traverse((c) => { if (c.isMesh) c.userData = octMeta; });
+    electricalSubGroup.add(octGroup);
+  });
+
+  // 3 Equipos Split Aire Acondicionado Inverter (Objetos Eléctricos de Climatización Fase R)
+  const splitUnits = [
+    {
+      id: 'SPLIT-PB-ESTAR',
+      name: 'Equipo Split Inverter 18.000 BTU — Estar Social / Comedor PB (Fase R)',
+      pos: [-3.68, 2.42, 6.60],
+      rotY: Math.PI / 2,
+      label: '❄️ SPLIT AA 18.000 BTU (Estar PB)'
+    },
+    {
+      id: 'SPLIT-PA-SUITE',
+      name: 'Equipo Split Inverter 12.000 BTU — Dormitorio Principal en Suite PA (+X, Fase R)',
+      pos: [4.68, 5.18, 7.45],
+      rotY: -Math.PI / 2,
+      label: '❄️ SPLIT AA 12.000 BTU (Suite PA)'
+    },
+    {
+      id: 'SPLIT-PA-DESK',
+      name: 'Equipo Split Inverter 12.000 BTU — Escritorio Extendido y Dormitorio 2 PA (-X, Fase R)',
+      pos: [-4.68, 5.18, 10.80],
+      rotY: Math.PI / 2,
+      label: '❄️ SPLIT AA 12.000 BTU (Desk PA)'
+    }
+  ];
+
+  splitUnits.forEach((sp) => {
+    const spGroup = new THREE.Group();
+    spGroup.position.set(...sp.pos);
+    spGroup.rotation.y = sp.rotY;
+
+    const unitBody = new THREE.Mesh(
+      new THREE.BoxGeometry(0.88, 0.28, 0.22),
+      new THREE.MeshStandardMaterial({ color: 0xf8fafc, emissive: 0xa855f7, emissiveIntensity: 0.25, roughness: 0.2 })
+    );
+    spGroup.add(unitBody);
+
+    const displayLed = new THREE.Mesh(
+      new THREE.BoxGeometry(0.18, 0.05, 0.02),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+    );
+    displayLed.position.set(0.25, -0.04, 0.12);
+    spGroup.add(displayLed);
+
+    const badge = createMepCalloutSprite(THREE, sp.label, 'Circuito Dedicado 20A (Fase R)', '#c084fc');
+    if (badge) {
+      badge.position.set(0, 0.45, 0);
+      spGroup.add(badge);
+    }
+
+    const spMeta = {
+      type: 'objeto_electrico_split_aa',
+      bankCategory: 'nuevo_rojo',
+      name: sp.name,
+      dimensions: 'Evaporadora Interior + Caja de Pre-Avance + Toma 20A Cable 4mm² + Desagüe Condensado Ø25mm',
+      status: 'Objeto Eléctrico de Climatización (Fase R Independiente) ❄️⚡',
+      desc: 'Conectado a la Fase R exclusiva del Tablero DIN y con desagüe de condensado embutido hacia las columnas pluviales.'
+    };
+    spGroup.userData = spMeta;
+    spGroup.traverse((c) => { if (c.isMesh) c.userData = spMeta; });
+    electricalSubGroup.add(spGroup);
+  });
+
+  // Termocalefón Eléctrico de 80 Litros (2000W) en el Muro Húmedo Eje G (Visible tanto en Electricista como en Plomero)
+  const buildWaterHeater80L = (targetSub, isElec) => {
+    const whGroup = new THREE.Group();
+    whGroup.position.set(0.95, 4.75, 3.25);
+
+    const tankMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.22, 0.22, 0.78, 20),
+      new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: isElec ? 0xf97316 : 0xef4444,
+        emissiveIntensity: 0.3,
+        roughness: 0.2,
+        metalness: 0.2
+      })
+    );
+    whGroup.add(tankMesh);
+
+    const badge = createMepCalloutSprite(
+      THREE,
+      '🔥 TERMOCALEFÓN 80L (2000W)',
+      isElec ? 'Circuito 20A sobre Pase #4 (x=+0.95m)' : 'Agua Caliente PPR Ø20mm a Baños y Cocina',
+      '#f97316'
+    );
+    if (badge) {
+      badge.position.set(0, 0.65, 0);
+      whGroup.add(badge);
+    }
+
+    const whMeta = {
+      type: 'objeto_mep_termocalefon',
+      bankCategory: 'nuevo_rojo',
+      name: 'Termocalefón Acumulador 80 Litros (2000W) en Muro Húmedo Eje G',
+      dimensions: 'Tanque Esmaltado 80L • Alimentación Eléctrica 20A + Entrada Agua Fría Ø25mm y Salida Caliente Ø20mm',
+      status: 'Objeto Eléctrico e Hidrosanitario Unificado en Núcleo Húmedo 🔥💧',
+      desc: 'Ubicado en Planta Alta sobre el Muro Húmedo Eje G (x=+0.95m, z=3.25m), exactamente arriba del Pase Diamantado #4 en la Losa Maciza L4. Provee agua caliente a Baño en Suite, SSHH 2 y baja directo a la Bacha de Cocina PB.'
+    };
+    whGroup.userData = whMeta;
+    whGroup.traverse((c) => { if (c.isMesh) c.userData = whMeta; });
+    targetSub.add(whGroup);
+  };
+  buildWaterHeater80L(electricalSubGroup, true);
+  buildWaterHeater80L(plumbingSubGroup, false);
+
+  // ==========================================================================
+  // 4. TRAZADO 100% ORTOGONAL DE ELECTRODUCTOS SIGUIENDO EL DISEÑO DE LA LOSA
+  // ==========================================================================
+  // 4.1 Alimentador Subterráneo ANDE (Pilar ANDE x=-3.85, z=-4.08 → PASE #1 en Losa Maciza L4 x=-0.45, z=4.78 → TP-PB)
+  const trunkRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-3.85, 1.50, -4.08),
+      new THREE.Vector3(-3.85, 1.45, -4.08),
       new THREE.Vector3(-3.85, -0.55, -4.08),
-      new THREE.Vector3(-1.64, -0.55, 1.40),
-      new THREE.Vector3(-1.64, -0.25, 4.65),
-      new THREE.Vector3(-1.55, 1.55, 4.65)
+      new THREE.Vector3(-3.85, -0.55, 2.85),
+      new THREE.Vector3(-0.45, -0.55, 2.85),
+      new THREE.Vector3(-0.45, -0.55, 4.78),
+      new THREE.Vector3(-0.45, 0.00, 4.78), // Atraviesa PASE #1 en Losa Maciza L4
+      new THREE.Vector3(-0.45, 1.55, 4.78)  // Llega a Tablero Principal TP-PB
     ],
     0.032,
     0xf59e0b,
     {
       type: 'ducto_electrico_troncal',
       bankCategory: 'nuevo_rojo',
-      name: 'Ducto Troncal Subterráneo ANDE desde Bajada al Costado del Portón (x = -3.85m, z = -4.08m → TP-PB)',
-      dimensions: 'Tramo Muralla Pequeña junto al Portón (x=-3.85m, z=-4.08m) → Bajo Relleno Cochera → Pase Diamantado #1 → TP-PB',
-      costo: 'Incluido en Partida 7.1 (Debe enterrarse ANTES de compactar la cochera)',
-      status: 'Alimentador Trifásico Principal 3×380/220V ⚡',
-      desc: 'Baja desde el medidor ANDE en la muralla pequeña junto al portón (x=-3.85m), ingresa subterráneo a -0.55m bajo el estacionamiento y sube por el Pase Diamantado #1 (x=-1.64m, z=4.65m) directo al Tablero Principal TP-PB.'
-    }
+      name: 'Alimentador Subterráneo Trifásico ANDE (Pilar ANDE → Pase Diamantado #1 en Losa Maciza L4 → TP-PB)',
+      dimensions: 'Cable Subterráneo NYY 4×10 mm² + Tierra 10 mm² en Caño PVC Pesado Ø 50mm',
+      status: 'Acometida Principal 3×380/220V en Ángulo Recto ⚡',
+      desc: 'Baja desde el Pilar ANDE junto al portón (x=-3.85m), corre ortogonalmente enterrado bajo la cochera y sube por el Pase Diamantado #1 en la Losa Maciza L4 (x=-0.45m, z=4.78m) hasta el Tablero TP-PB.'
+    },
+    electricalSubGroup
   );
 
-  const riserRoute = addTubePath(
+  // 4.2 Columna Montante Eléctrica Vertical 100% Recta (TS-SUB ↔ Pase #1 Losa 1 ↔ TP-PB ↔ Pase #1 Losa 2 ↔ TS-PA)
+  const riserRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.64, -0.85, 4.65),
-      new THREE.Vector3(-1.64, 0.00, 4.65),
-      new THREE.Vector3(-1.55, 1.55, 4.65),
-      new THREE.Vector3(-1.55, 2.92, 4.65),
-      new THREE.Vector3(-0.55, 2.92, 4.65),
-      new THREE.Vector3(-0.55, 4.45, 4.65)
+      new THREE.Vector3(-0.45, -0.95, 4.78), // TS-SUB Subsuelo
+      new THREE.Vector3(-0.45, 0.00, 4.78),  // Pase #1 Losa 1 (Losa Maciza L4)
+      new THREE.Vector3(-0.45, 1.55, 4.78),  // TP-PB Planta Baja
+      new THREE.Vector3(-0.45, 2.88, 4.78),  // Pase #1 Losa 2
+      new THREE.Vector3(-0.45, 4.35, 4.78)   // TS-PA Planta Alta
     ],
     0.028,
     0xef4444,
     {
       type: 'ducto_electrico_montante',
       bankCategory: 'nuevo_rojo',
-      name: 'Columna Montante Eléctrica 3 Niveles (TS-SUB ↔ Pase Diamantado #1 Losa 1 ↔ TP-PB ↔ TS-PA 2do Piso)',
-      dimensions: 'Conductores Antiflama 5×6 mm² en Caño Ø 1" (3 Niveles Conectados)',
-      status: 'Columna Vertebral Eléctrica c/ Monitoreo Riel DIN 🎯',
-      desc: 'Une el Tablero Principal TP-PB con el Subtablero del Subsuelo (atravesando el Pase Diamantado #1 en la Losa 1 existente) y sube hacia el Subtablero TS-PA del 2do Piso.'
-    }
+      name: 'Columna Montante Eléctrica 100% Vertical (TS-SUB ↔ Pase #1 Losa 1 ↔ TP-PB ↔ Pase #1 Losa 2 ↔ TS-PA)',
+      dimensions: 'Conductores Antiflama 5×6 mm² en Pleno Vertical Único (x = -0.45m, z = 4.78m)',
+      status: 'Columna Vertebral Eléctrica sobre Losa Maciza L4 🎯',
+      desc: 'Une en línea recta vertical los 3 tableros de la casa atravesando los agujeros previstos en la Losa Maciza L4 (Y=0.00m) y en la Losa 2 (Y=+2.88m).'
+    },
+    electricalSubGroup
   );
 
-  // Ramales Planta Baja (Fase S Cocina/Comedor en Eje 5..9 y Fase T Estar/Escaleras en Eje 1..5)
-  const pbKitchenRoute1 = addTubePath(
+  // 4.3 Circuito Fase S (Cocina 20A sobre Losa Maciza L4 Este: Mesada Eje G, Isla, Microondas y Heladera)
+  const pbKitchenRoute1 = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.55, 1.55, 4.65),
-      new THREE.Vector3(-1.55, 0.035, 4.65),
-      new THREE.Vector3(-2.10, 0.035, 4.65),
-      new THREE.Vector3(-2.32, 0.035, 3.12),
-      new THREE.Vector3(-2.32, 1.12, 3.08)
+      new THREE.Vector3(-0.45, 1.55, 4.78),
+      new THREE.Vector3(-0.45, 0.035, 4.78),
+      new THREE.Vector3(2.15, 0.035, 4.78),
+      new THREE.Vector3(2.15, 0.035, 3.12),
+      new THREE.Vector3(2.15, 1.12, 3.12),  // Toma 20A Air Fryer
+      new THREE.Vector3(3.35, 1.12, 3.12),  // Toma 20A Microondas/Horno
+      new THREE.Vector3(3.05, 1.12, 3.12),
+      new THREE.Vector3(3.05, 1.95, 3.12)   // Toma Campana Extractora
     ],
     0.018,
     0xf97316,
     {
       type: 'ducto_carpeta_pb',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase S (Cocina 20A) — Mesada Húmeda Eje F–G y Air Fryer',
-      dimensions: 'Caño Corrugado ¾" en Carpeta de 5cm sobre Losa 1 (Cero Picado)',
-      status: 'Circuito 20A Cocina sobre Muro Húmedo Eje F–G ✨',
-      desc: 'Alimenta los tomacorrientes de 20A sobre la mesada de granito en Eje F–G.'
-    }
+      name: 'Electroducto Ortogonal Fase S (Cocina 20A sobre Losa Maciza L4 Este) — Mesada, Air Fryer, Horno y Campana',
+      dimensions: 'Caño Corrugado ¾" + Cable 4 mm² embutido en Carpeta de 5cm sobre Losa Maciza L4',
+      status: 'Circuito Dedicado 20A Cocina (Lado Este +X) ✨',
+      desc: 'Corre a 90° por la carpeta de nivelación sobre la Losa Maciza L4 hacia el muro húmedo de la Cocina Integrada (x = +1.69..+3.84m).'
+    },
+    electricalSubGroup
   );
 
-  const pbKitchenRoute2 = addTubePath(
+  const pbKitchenRoute2 = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-2.10, 0.035, 4.65),
-      new THREE.Vector3(-4.72, 0.035, 4.55),
-      new THREE.Vector3(-4.72, 1.05, 4.55),
-      new THREE.Vector3(-4.72, 1.85, 3.92)
+      new THREE.Vector3(2.15, 0.035, 4.78),
+      new THREE.Vector3(2.45, 0.035, 4.78),
+      new THREE.Vector3(2.45, 0.035, 4.95),
+      new THREE.Vector3(2.45, 0.85, 4.95),  // Isla de Cocina
+      new THREE.Vector3(2.45, 0.035, 4.95),
+      new THREE.Vector3(3.74, 0.035, 4.95),
+      new THREE.Vector3(3.74, 0.035, 4.30),
+      new THREE.Vector3(3.74, 0.65, 4.30),  // Heladera en muro Este
+      new THREE.Vector3(3.74, 0.035, 4.30),
+      new THREE.Vector3(3.74, 0.035, 7.80),
+      new THREE.Vector3(3.74, 0.35, 7.80)   // Toma Comedor / Biblioteca #1
     ],
     0.018,
     0xf97316,
     {
       type: 'ducto_carpeta_pb',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase S (Cocina 20A) — Heladera, Microondas y Campana Extractora',
-      dimensions: 'Caño Corrugado ¾" + Cable 4 mm²',
-      status: 'Circuito Dedicado Electrodomésticos Cocina ✨',
-      desc: 'Alimenta la heladera, el horno microondas y la campana en el sector Sur/Izquierdo (Eje 5 a 9).'
-    }
+      name: 'Electroducto Ortogonal Cocina/Comedor (Losa Maciza L4) — Isla, Heladera y Comedor Principal',
+      dimensions: 'Caño ¾" por Carpeta sobre Losa Maciza L4 (Cero Picado de Hormigón)',
+      status: 'Distribución Ortogonal en Carpeta PB ✨',
+      desc: 'Alimenta la Isla desayunadora, la Heladera y el Comedor Principal sobre el sector Este (Losa L4).'
+    },
+    electricalSubGroup
   );
 
-  const pbLightsRoute1 = addTubePath(
+  // 4.4 Circuito Fase T (Iluminación por Cajas Octogonales en Losa + Tomas de Estar Social y Escaleras)
+  const pbLightsRoute1 = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.55, 1.55, 4.65),
-      new THREE.Vector3(0.25, 0.035, 3.15),
-      new THREE.Vector3(3.42, 0.035, 3.15),
-      new THREE.Vector3(3.75, 0.035, 5.45),
-      new THREE.Vector3(3.75, 0.55, 5.45)
+      new THREE.Vector3(-0.45, 1.55, 4.78),
+      new THREE.Vector3(-0.45, 2.80, 4.78), // Sube a Losa 2 para distribuir por cajas octogonales de techo
+      new THREE.Vector3(-2.20, 2.80, 4.78),
+      new THREE.Vector3(-2.20, 2.80, 6.60), // Caja Octogonal Estar Social
+      new THREE.Vector3(-3.74, 2.80, 6.60),
+      new THREE.Vector3(-3.74, 0.60, 6.60), // Baja vertical a Toma TV 32" en Muro Oeste
+      new THREE.Vector3(-3.74, 0.35, 6.60),
+      new THREE.Vector3(-3.74, 0.35, 4.10)  // Toma Purificador Acceso Oeste
     ],
     0.018,
     0x38bdf8,
     {
       type: 'ducto_carpeta_pb',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase T — Estar (Eje 1–5), TV 32" y Escalera 1 (Acceso Servicio)',
-      dimensions: 'Caño Corrugado ¾" en Carpeta PB',
-      status: 'Iluminación Zigbee + Tomas Estar ✨',
-      desc: 'Recorre el Estar en el sector Norte/Derecho (x=-0.74..+3.84m) y alimenta la Escalera 1.'
-    }
+      name: 'Electroducto Ortogonal Fase T — Cajas Octogonales en Losa, Estar Social (Oeste) y Rack TV 32"',
+      dimensions: 'Caño ¾" embutido en Losa y Muro Oeste (x = -3.74m)',
+      status: 'Red de Iluminación y Tomas Estar Social 💡🔌',
+      desc: 'Recorre ortogonalmente las cajas octogonales de losa y baja verticalmente por el muro del Estar Social hacia el Rack de TV 32" y las llaves 3-Way.'
+    },
+    electricalSubGroup
   );
 
-  const pbAcRoute = addTubePath(
+  const pbCeilingLightsGrid = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.55, 1.55, 4.65),
-      new THREE.Vector3(1.80, 0.035, 5.26),
-      new THREE.Vector3(3.80, 0.035, 7.50),
-      new THREE.Vector3(3.80, 2.35, 7.50)
+      new THREE.Vector3(-0.45, 2.80, 4.78),
+      new THREE.Vector3(1.05, 2.80, 4.78),
+      new THREE.Vector3(1.05, 2.80, 3.90),  // Caja Octogonal Baño Social
+      new THREE.Vector3(2.55, 2.80, 3.90),
+      new THREE.Vector3(2.55, 2.80, 4.25),  // Caja Octogonal Cocina
+      new THREE.Vector3(1.80, 2.80, 4.25),
+      new THREE.Vector3(1.80, 2.80, 7.80),  // Caja Octogonal Comedor
+      new THREE.Vector3(1.50, 2.80, 7.80),
+      new THREE.Vector3(1.50, 2.80, 11.45), // Caja Octogonal Galería L1
+      new THREE.Vector3(4.72, 2.80, 11.45),
+      new THREE.Vector3(4.72, 0.45, 11.45)  // Toma IP55 Galería
+    ],
+    0.016,
+    0x38bdf8,
+    {
+      type: 'ducto_losa_iluminacion',
+      bankCategory: 'nuevo_rojo',
+      name: 'Malla Ortogonal de Iluminación en Losa 2 (Centros Octogonales Baño Social, Cocina, Comedor y Galería)',
+      dimensions: 'Caño Corrugado ¾" en Losa uniendo Cajas Octogonales y Llaves Zigbee c/ Neutro',
+      status: 'Trazado en Losa Alineado a Centros de Luz 💡',
+      desc: 'Conecta en ángulo recto las cajas octogonales de techo de Cocina, Baño Social, Comedor y Galería con sus llaves interruptoras.'
+    },
+    electricalSubGroup
+  );
+
+  // 4.5 Circuito Fase R (Climatización Split AA Inverter en PB y PA)
+  const pbAcRoute = addOrthogonalPipePath(
+    [
+      new THREE.Vector3(-0.45, 1.55, 4.78),
+      new THREE.Vector3(-0.45, 2.38, 4.78),
+      new THREE.Vector3(-3.74, 2.38, 4.78),
+      new THREE.Vector3(-3.74, 2.38, 6.60)  // Split AA 18.000 BTU Estar Social (Oeste)
     ],
     0.018,
     0xa855f7,
     {
       type: 'ducto_carpeta_pb',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase R (Climatización Split Inverter) — Estar y Comedor PB',
-      dimensions: 'Caño ¾" + Conductores 4 mm² Independientes p/ Aire Acondicionado',
-      status: 'Fase R Dedicada a Climatización Inverter ❄️⚡',
-      desc: 'Circuito exclusivo en Fase R para evitar parpadeos luminosos durante el arranque de compresores.'
-    }
+      name: 'Electroducto Ortogonal Fase R (Climatización) — Split Inverter 18.000 BTU Estar Social',
+      dimensions: 'Caño ¾" + Conductores 4 mm² Independientes en Fase R',
+      status: 'Fase R Dedicada a Aires Acondicionados ❄️⚡',
+      desc: 'Alimenta de forma exclusiva el equipo Split de 18.000 BTU del Estar Social.'
+    },
+    electricalSubGroup
   );
 
-  // Ramales 2do Piso (Y = +2.92m): Suite, Vestidor/Baño en Suite, Dormitorio 2, SSHH 2 y Desk
-  const paAcSuiteRoute = addTubePath(
+  const paAcSuiteRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-0.55, 4.45, 4.65),
-      new THREE.Vector3(-0.55, 2.92, 4.65),
-      new THREE.Vector3(-4.72, 2.92, 7.50),
-      new THREE.Vector3(-4.72, 5.05, 7.50),
-      new THREE.Vector3(0.55, 5.05, 7.50)
+      new THREE.Vector3(-0.45, 4.35, 4.78), // TS-PA
+      new THREE.Vector3(-0.45, 5.15, 4.78),
+      new THREE.Vector3(4.72, 5.15, 4.78),
+      new THREE.Vector3(4.72, 5.15, 7.45),  // Split AA 12.000 BTU Suite Principal (+X)
+      new THREE.Vector3(-0.45, 5.15, 4.78),
+      new THREE.Vector3(-4.72, 5.15, 4.78),
+      new THREE.Vector3(-4.72, 5.15, 10.80) // Split AA 12.000 BTU Escritorio Extendido (-X)
     ],
     0.018,
     0xa855f7,
     {
       type: 'ducto_2dopiso',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase R (Climatización 2do Piso) — Splits Dormitorio en Suite y Dormitorio 2',
-      dimensions: 'Caño Ø ¾" + Cable Antiflama 4 mm² en Planta Alta',
+      name: 'Electroducto Ortogonal Fase R (2do Piso) — Splits AA Suite Principal (+X) y Escritorio Extendido (-X)',
+      dimensions: 'Caño Ø ¾" + Cable 4 mm² desde Subtablero TS-PA',
       status: 'Climatización Inverter 2do Piso ❄️⚡',
-      desc: 'Alimenta las unidades Split Inverter del Dormitorio Principal en Suite y del Dormitorio 2.'
-    }
+      desc: 'Sale del Subtablero TS-PA y alimenta ortogonalmente el Split de la Suite Principal al Este (x=+4.72m) y el Split del Escritorio Extendido al Oeste (x=-4.72m).'
+    },
+    electricalSubGroup
   );
 
-  const paWetCoreRoute = addTubePath(
+  // 4.6 Circuito 20A Núcleo Húmedo 2do Piso (Termocalefón 80L + Tomas Baño Suite y SSHH 2 sobre Eje G)
+  const paWetCoreRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-0.55, 4.45, 4.65),
-      new THREE.Vector3(-1.80, 2.92, 3.45),
-      new THREE.Vector3(-1.80, 4.65, 3.45),
-      new THREE.Vector3(2.65, 4.25, 3.45)
+      new THREE.Vector3(-0.45, 4.35, 4.78), // TS-PA
+      new THREE.Vector3(-0.45, 4.35, 3.22),
+      new THREE.Vector3(0.95, 4.35, 3.22),
+      new THREE.Vector3(0.95, 4.75, 3.22),  // Termocalefón 80L (20A)
+      new THREE.Vector3(-0.35, 4.35, 3.22),
+      new THREE.Vector3(-0.35, 4.05, 3.22)  // Toma Vanitory Baño Suite / SSHH 2
     ],
     0.018,
     0xf97316,
     {
       type: 'ducto_2dopiso',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto 20A Núcleo Húmedo 2do Piso (Eje F–G) — Termocalefón 80L, Baño en Suite y SSHH 2',
-      dimensions: 'Caño Ø ¾" sobre Muro Húmedo Frontal Eje F–G (z=3.00..5.00m)',
-      status: 'Potencia 20A Baños Superpuestos Eje F–G 🔥⚡',
-      desc: 'Alimenta el Termocalefón de 80L y los tomacorrientes de 20A de los dos baños de Planta Alta sobre el Eje F–G.'
-    }
+      name: 'Electroducto Ortogonal 20A Núcleo Húmedo 2do Piso — Termocalefón 80L y Vanitorys Eje G',
+      dimensions: 'Caño Ø ¾" + Cable 4 mm² sobre Muro Húmedo Frontal Eje G (z = 3.22m)',
+      status: 'Potencia 20A Termocalefón 80L y Baños PA 🔥⚡',
+      desc: 'Conecta el Subtablero TS-PA con el Termocalefón de 80L (ubicado en x=+0.95m sobre el Pase #4) y los tomacorrientes de los baños superiores.'
+    },
+    electricalSubGroup
   );
 
-  const paDeskLightsRoute = addTubePath(
+  // 4.7 Circuito Tomas e Iluminación 2do Piso (Suite Principal al Este +X, Dormitorio 2 al Centro, Escritorio Extendido al Oeste -X)
+  const paDeskLightsRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-0.55, 4.45, 4.65),
-      new THREE.Vector3(-2.35, 2.92, 7.50),
-      new THREE.Vector3(-3.40, 2.92, 8.65),
-      new THREE.Vector3(-3.40, 3.75, 8.65)
+      new THREE.Vector3(-0.45, 4.35, 4.78), // TS-PA
+      new THREE.Vector3(-0.45, 2.92, 4.78), // Baja a carpeta de Losa 2 (+2.92m)
+      new THREE.Vector3(4.72, 2.92, 4.78),
+      new THREE.Vector3(4.72, 2.92, 6.25),
+      new THREE.Vector3(4.72, 3.55, 6.25),  // Mesa de Luz #1 Suite (+X)
+      new THREE.Vector3(4.72, 3.55, 8.65),  // Mesa de Luz #2 Suite (+X)
+      new THREE.Vector3(0.38, 2.92, 7.45),
+      new THREE.Vector3(0.38, 3.65, 7.45),  // Tocador #1 Suite
+      new THREE.Vector3(-1.72, 2.92, 8.15),
+      new THREE.Vector3(-1.72, 3.55, 8.15), // Dormitorio 2 Central
+      new THREE.Vector3(-4.72, 2.92, 8.15),
+      new THREE.Vector3(-4.72, 2.92, 9.45),
+      new THREE.Vector3(-4.72, 3.55, 9.45), // Máquina de Coser en Escritorio Extendido (-X)
+      new THREE.Vector3(-4.72, 3.55, 11.40) // Escritorio Doble Extendido hasta Galería (-X)
     ],
     0.018,
     0x38bdf8,
     {
       type: 'ducto_2dopiso',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Fase T — Escritorio / Desk (Al Subir Escalera 2 en Eje 8–9) e Iluminación PA',
-      dimensions: 'Caño Ø ¾" con Hilo Neutro Celeste para Llaves Zigbee',
-      status: 'Alimentación Home-Office / Desk y Luces PA 💡💻',
-      desc: 'Alimenta los escritorios, biblioteca y máquina de coser ubicados inmediatamente al subir la Escalera 2.'
-    }
+      name: 'Electroducto Ortogonal 2do Piso (Por Carpeta de Losa 2) — Suite (+X), Dormitorio 2 y Escritorio Extendido (-X)',
+      dimensions: 'Caño Ø ¾" embutido en Carpeta de Losa 2 (+2.92m) y Muros de Planta Alta',
+      status: 'Distribución 2do Piso Alineada a Dormitorios y Desk 💡💻',
+      desc: 'Recorre en ángulo recto la carpeta de la Losa 2 hacia las mesas de luz y tocador de la Suite Principal (Este +X), el Dormitorio 2 (Centro) y el Escritorio Extendido hasta la Galería (Oeste -X).'
+    },
+    electricalSubGroup
   );
 
-  // Ramales Subsuelo (Y = -0.32m bajo viga)
-  const subPumpRoute = addTubePath(
+  // 4.8 Circuitos de Subsuelo por Lateral de Viga Bajo Losa 1 (TS-SUB → Lavadero al Este +X y Parrillita al Oeste -X)
+  const subPumpRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.64, -0.85, 4.65),
-      new THREE.Vector3(-1.64, -0.32, 4.65),
-      new THREE.Vector3(1.50, -0.32, 6.50),
-      new THREE.Vector3(1.50, -1.65, 6.50)
+      new THREE.Vector3(-0.45, -0.95, 4.78), // TS-SUB
+      new THREE.Vector3(-0.45, -0.22, 4.78), // Sube al lateral de viga bajo Losa 1
+      new THREE.Vector3(1.50, -0.22, 4.78),
+      new THREE.Vector3(1.50, -0.08, 6.40),  // Caja Octogonal Salón Subsuelo
+      new THREE.Vector3(1.50, -0.22, 3.25),
+      new THREE.Vector3(1.50, -1.25, 3.25)   // Toma Salón Subsuelo
     ],
     0.018,
     0x94a3b8,
     {
       type: 'ducto_subsuelo_viga',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto Galvanizado Daisa por Lateral de Viga en Subsuelo (Iluminación y Tomas Gran Salón 100 m²)',
-      dimensions: 'Caño Galvanizado Ø ¾" engrapado al costado de vigas existentes',
-      status: 'Instalación Industrial Prolija en Subsuelo 🎯',
-      desc: 'Lleva energía por caño galvanizado visto adosado al lateral de las vigas sin picar la Losa 1.'
-    }
+      name: 'Electroducto Galvanizado Daisa por Lateral de Viga bajo Losa 1 (Salón Subsuelo)',
+      dimensions: 'Caño Galvanizado Ø ¾" engrapado al costado de vigas existentes (Y = -0.22m)',
+      status: 'Trazado Ortogonal por Vigas sin Picar Losa 1 🎯',
+      desc: 'Corre engrapado por el lateral de las vigas de hormigón bajo la Losa Maciza L4.'
+    },
+    electricalSubGroup
   );
 
-  const subLaundryAndBbqRoute = addTubePath(
+  const subLaundryAndBbqRoute = addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.64, -0.85, 4.65),
-      new THREE.Vector3(-3.25, -0.32, 6.90),
-      new THREE.Vector3(-4.25, -1.35, 6.50),
-      new THREE.Vector3(-3.25, -1.35, 12.65)
+      new THREE.Vector3(-0.45, -0.95, 4.78), // TS-SUB
+      new THREE.Vector3(-0.45, -0.22, 4.78),
+      new THREE.Vector3(4.72, -0.22, 4.78),
+      new THREE.Vector3(4.72, -0.22, 6.40),
+      new THREE.Vector3(4.72, -1.25, 6.40),  // Toma 20A Lavarropas en Lavadero (Muro Este Eje 1)
+      new THREE.Vector3(-0.45, -0.22, 4.78),
+      new THREE.Vector3(-3.20, -0.22, 4.78),
+      new THREE.Vector3(-3.20, -0.22, 12.40),
+      new THREE.Vector3(-3.20, -1.25, 12.40) // Toma Parrillita Subsuelo (Oeste hacia el Patio)
     ],
     0.018,
     0x94a3b8,
     {
       type: 'ducto_subsuelo_viga',
       bankCategory: 'nuevo_rojo',
-      name: 'Electroducto 20A Subsuelo — Lavadero (Contra Pared Eje 9) y Parrillita hacia el Patio (z=12.65m)',
-      dimensions: 'Caño Ø ¾" + Conductores 4 mm² + Tierra',
-      status: 'Circuito Lavadero + Quincho Subsuelo 🎯',
-      desc: 'Alimenta el Lavarropas en el Subsuelo y la iluminación/extractor de la Parrillita mirando al patio trasero.'
-    }
+      name: 'Electroducto Ortogonal Subsuelo — Lavadero 20A (Muro Este +X) y Parrillita (Oeste -X)',
+      dimensions: 'Caño Galvanizado Ø ¾" + Cable 4 mm² por Vigas de Subsuelo',
+      status: 'Circuito Dedicado Lavarropas + Quincho Inferior 🎯',
+      desc: 'Alimenta el Lavarropas en la pared Este (bajo Escalera 1) y la Parrillita del Subsuelo en el sector Oeste mirando al patio.'
+    },
+    electricalSubGroup
   );
 
   // ==========================================================================
-  // 4. RED HIDROSANITARIA 3D SUPERPUESTA VERTICALMENTE SOBRE EL NÚCLEO HÚMEDO EJE F–G (z = 3.00m..5.00m)
+  // 5. RED HIDROSANITARIA 3D 100% ORTOGONAL EN `plumbingSubGroup` (ALINEADA A LOSA MACIZA L4 Y NÚCLEO HÚMEDO EJE G)
   // ==========================================================================
-  // 4A. Agua Fría Directa de Red ESSAP PPR PN20 Ø25mm (Azul): Desde Caja Medidor ESSAP al costado del portón (x=-3.85m, z=-4.24m) → Núcleo Húmedo Eje F–G (SIN TANQUE)
-  addTubePath(
+  // 5A. Agua Fría Directa ESSAP PPR PN20 Ø25mm (Azul): Medidor ESSAP (x=-3.85, z=-4.24) → PASE #4 en Losa Maciza L4 (x=+1.48, z=3.28)
+  addOrthogonalPipePath(
     [
-      new THREE.Vector3(-3.85, 0.06, -4.24),
-      new THREE.Vector3(-3.85, -0.50, -4.10),
-      new THREE.Vector3(-2.20, -0.50, 3.25),
-      new THREE.Vector3(-4.25, -1.45, 6.50),
-      new THREE.Vector3(-2.20, 0.00, 3.25),
-      new THREE.Vector3(-3.15, 0.85, 3.25),
-      new THREE.Vector3(-1.05, 0.85, 3.25),
-      new THREE.Vector3(-1.80, 3.65, 3.25),
-      new THREE.Vector3(2.65, 3.65, 3.25)
+      new THREE.Vector3(-3.85, 0.08, -4.24), // Caja Medidor ESSAP
+      new THREE.Vector3(-3.85, -0.45, -4.24),
+      new THREE.Vector3(-3.85, -0.45, 2.85),
+      new THREE.Vector3(1.48, -0.45, 2.85),
+      new THREE.Vector3(1.48, -0.45, 3.28),
+      new THREE.Vector3(1.48, 0.00, 3.28),   // Atraviesa PASE #4 en Losa Maciza L4
+      new THREE.Vector3(1.48, 0.85, 3.28),
+      new THREE.Vector3(2.35, 0.85, 3.28),   // Ramal Este → Bacha Doble Cocina PB (Losa L4)
+      new THREE.Vector3(1.48, 0.85, 3.28),
+      new THREE.Vector3(0.75, 0.85, 3.28),   // Ramal Oeste → Lavatorio e Inodoro Baño Social PB (Losa L4)
+      new THREE.Vector3(1.48, 0.85, 3.28),
+      new THREE.Vector3(1.48, 2.88, 3.28),   // Atraviesa PASE #4 en Losa 2 (+2.88m)
+      new THREE.Vector3(1.48, 3.75, 3.28),
+      new THREE.Vector3(0.95, 3.75, 3.28),
+      new THREE.Vector3(0.95, 4.75, 3.28),   // Alimenta Termocalefón 80L
+      new THREE.Vector3(0.95, 3.75, 3.28),
+      new THREE.Vector3(-0.35, 3.75, 3.28),  // Alimenta Baño en Suite PA
+      new THREE.Vector3(-2.65, 3.75, 3.28)   // Alimenta SSHH 2 PA
     ],
-    0.022,
+    0.024,
     0x0284c7,
     {
       type: 'tuberia_agua_fria_ppr',
       bankCategory: 'nuevo_rojo',
-      name: 'Red de Agua Fría Directa ESSAP PPR PN20 Ø 25mm desde Caja Medidor junto al Portón (x=-3.85m) → Núcleo Húmedo Eje F–G (Sin Tanque)',
-      dimensions: 'Tubo PPR Tricapa Ø 25mm (¾") • Conexión Directa con Buena Presión de Red ESSAP',
-      status: 'Alimentación Directa sin Tanque ni Presurizadora (Ahorra Gs. 3.850.000) 💧',
-      desc: 'Parte desde la caja del medidor de agua ESSAP a nivel de calle (al costado del portón en x=-3.85m, z=-4.24m) y sube directamente con la presión de red por la columna montante única del Eje F–G.'
-    }
+      name: 'Red Ortogonal de Agua Fría Directa ESSAP PPR PN20 Ø 25mm (Medidor → Pase #4 Losa Maciza L4 → Cocina, Baño Social y 2 Baños PA)',
+      dimensions: 'Tubo PPR Tricapa Ø 25mm (¾") • Montante Vertical por Pase #4 (x = +1.48m, z = 3.28m)',
+      status: 'Alimentación Directa en Ángulo Recto sobre Losa L4 💧',
+      desc: 'Sube verticalmente por el Pase Diamantado #4 en el tabique húmedo entre Baño Social PB y Cocina PB (sobre la Losa Maciza L4), abasteciendo Cocina, Baño Social, Termocalefón 80L, Baño en Suite y SSHH 2.'
+    },
+    plumbingSubGroup
   );
 
-  // 4B. Agua Caliente Termofusión PPR PN20 Ø20mm (Rojo) en Núcleo Húmedo Eje F–G
-  addTubePath(
+  // Ramal Agua Fría Subsuelo (Desde bajo Pase #4 → Lavadero en Muro Este +X y Bacha Parrillita en Oeste -X)
+  addOrthogonalPipePath(
     [
-      new THREE.Vector3(-2.35, 4.65, 3.32), // Termocalefón 80L en Baño Suite Eje F-G
-      new THREE.Vector3(-1.45, 3.80, 3.32), // Ducha y Vanitory Baño en Suite PA
-      new THREE.Vector3(2.55, 3.80, 3.32),  // Ducha y Vanitory SSHH 2 PA
-      new THREE.Vector3(-2.20, 0.88, 3.32), // Baja directo a Bacha de Cocina PB en Eje F-G
-      new THREE.Vector3(-3.15, 0.88, 3.32)
+      new THREE.Vector3(1.48, -0.45, 3.28),
+      new THREE.Vector3(4.55, -0.45, 3.28),
+      new THREE.Vector3(4.55, -0.45, 6.40),
+      new THREE.Vector3(4.55, -1.35, 6.40),  // Lavadero Subsuelo en Muro Este (Eje 1)
+      new THREE.Vector3(4.55, -0.45, 6.40),
+      new THREE.Vector3(-3.20, -0.45, 6.40),
+      new THREE.Vector3(-3.20, -0.45, 12.40),
+      new THREE.Vector3(-3.20, -1.35, 12.40) // Bacha Parrillita Subsuelo
     ],
-    0.019,
+    0.020,
+    0x0284c7,
+    {
+      type: 'tuberia_agua_fria_ppr',
+      bankCategory: 'nuevo_rojo',
+      name: 'Ramal Ortogonal Agua Fría Subsuelo PPR Ø 20mm (Bajo Losa 1 → Lavadero Este +X y Parrillita Oeste -X)',
+      dimensions: 'Tubo PPR PN20 Ø 20mm adosado bajo vigas de Losa 1',
+      status: 'Provisión de Agua a Lavadero y Quincho Inferior 💧',
+      desc: 'Deriva bajo el Pase #4 hacia el Lavadero ubicado en el muro Este (bajo Escalera 1) y hacia la bacha de la Parrillita en el contrafrente.'
+    },
+    plumbingSubGroup
+  );
+
+  // 5B. Agua Caliente Termofusión PPR PN20 Ø20mm (Rojo): Sale del Termocalefón 80L (x=+0.95, y=4.75, z=3.22) → Baño Suite, SSHH 2 y baja por Pase #4 a Cocina PB
+  addOrthogonalPipePath(
+    [
+      new THREE.Vector3(0.95, 4.75, 3.20),   // Salida Termocalefón 80L
+      new THREE.Vector3(0.95, 3.88, 3.20),
+      new THREE.Vector3(-0.35, 3.88, 3.20),  // Ducha y Vanitory Baño en Suite PA
+      new THREE.Vector3(-2.65, 3.88, 3.20),  // Ducha y Vanitory SSHH 2 PA
+      new THREE.Vector3(1.42, 3.88, 3.20),
+      new THREE.Vector3(1.42, 2.88, 3.20),   // Baja por PASE #4 en Losa 2
+      new THREE.Vector3(1.42, 0.92, 3.20),
+      new THREE.Vector3(2.35, 0.92, 3.20),   // Bacha Doble Cocina PB (Losa L4 Este)
+      new THREE.Vector3(0.75, 0.92, 3.20)    // Lavatorio Baño Social PB
+    ],
+    0.020,
     0xdc2626,
     {
       type: 'tuberia_agua_caliente_ppr',
       bankCategory: 'nuevo_rojo',
-      name: 'Red de Agua Caliente Termofusión PPR PN20 Ø 20mm sobre Núcleo Húmedo Eje F–G',
-      dimensions: 'Tramo Corto de Alta Eficiencia Térmica en Eje F–G (Baño Suite + SSHH 2 + Cocina PB)',
-      status: 'Agua Caliente Instantánea sin Pérdida Térmica 🔥🚿',
-      desc: 'Conecta el Termocalefón en el Eje F–G con el Baño en Suite, el SSHH 2 de Planta Alta y baja verticalmente a la Bacha Doble de la Cocina en Planta Baja.'
-    }
+      name: 'Red Ortogonal de Agua Caliente Termofusión PPR PN20 Ø 20mm (Termocalefón 80L → Baño Suite, SSHH 2 y Bacha Cocina PB por Pase #4)',
+      dimensions: 'Tubo PPR PN20 Tricapa Térmico Ø 20mm sobre Muro Húmedo Eje G',
+      status: 'Agua Caliente en los 2 Baños PA y Cocina PB 🔥🚿',
+      desc: 'Distribución 100% concentrada en el Muro Húmedo Eje G (z=3.20m) que baja verticalmente por el Pase #4 hacia la Cocina y el Baño Social de Planta Baja.'
+    },
+    plumbingSubGroup
   );
 
-  // 4C. Columna Cloacal Vertical Única PVC Ø100mm en Eje F–G + Colector hacia Cámara Séptica y Pozo Ciego
-  addTubePath(
+  // 5C. Columna Montante Cloacal Vertical PVC Ø100mm (PASE #3 en x=+0.68, z=3.28 sobre Losa Maciza L4) + Ventilación Ø75mm a los 4 Vientos + Colector a Cámara Séptica y Pozo Ciego
+  addOrthogonalPipePath(
     [
-      new THREE.Vector3(-1.45, 6.15, 3.65),  // Ventilación Ø75mm a los 4 vientos sobre el techo
-      new THREE.Vector3(2.60, 3.10, 3.65),   // Inodoro/Ducha SSHH 2 PA (Eje F-G)
-      new THREE.Vector3(-1.45, 3.05, 3.65),  // Inodoro/Bidet/Ducha Baño en Suite PA (Eje F-G)
-      new THREE.Vector3(-1.45, 0.05, 3.65),  // Inodoro SSHH / Baño Social PB + Bacha Cocina PB (Eje F-G)
-      new THREE.Vector3(-2.85, -2.25, 3.85), // Pie de columna en Subsuelo
-      new THREE.Vector3(-3.25, -2.35, 6.90), // Lavadero Subsuelo
-      new THREE.Vector3(-3.25, -2.42, 12.65),// Bacha Parrillita Subsuelo
-      new THREE.Vector3(-3.25, -2.95, 14.55),// Cámara Desgrasadora
-      new THREE.Vector3(-3.25, -3.25, 16.55),// Cámara Séptica Bicameral
-      new THREE.Vector3(-3.25, -3.45, 20.20) // Pozo Ciego Absorbente
+      new THREE.Vector3(0.68, 6.25, 3.28),   // Sombrerete de Ventilación Cloacal Ø75mm sobre el Techo Isopanel (+6.25m)
+      new THREE.Vector3(0.68, 2.88, 3.28),   // PASE #3 en Losa 2 (Recibe Inodoro/Ducha Baño en Suite PA)
+      new THREE.Vector3(0.68, 0.00, 3.28),   // PASE #3 en Losa Maciza L4 (Recibe Inodoro Baño Social PB)
+      new THREE.Vector3(0.68, -2.20, 3.28),  // Pie de Columna Cloacal en Subsuelo con Curva a 45°/90°
+      new THREE.Vector3(0.68, -2.30, 14.50), // Colector Principal bajo Subsuelo (Pendiente >2%) hacia Cámara de Inspección en Patio
+      new THREE.Vector3(-2.20, -2.55, 16.50),// Cámara Séptica Bicameral 1.500 L
+      new THREE.Vector3(-2.20, -3.10, 19.80) // Pozo Ciego Absorbente Ø 1.80m × 3.50m
     ],
-    0.045,
-    0xb45309,
+    0.048,
+    0xd97706,
     {
       type: 'columna_cloacal_y_ventilacion',
       bankCategory: 'nuevo_rojo',
-      name: 'Columna Montante Cloacal Vertical Única PVC Ø 100mm en Núcleo Húmedo Eje F–G + Colector a Cámara Séptica y Pozo Ciego',
-      dimensions: 'Caño PVC Pesado Ø 100mm 100% Vertical en Eje F–G + Colector Subsuelo Pendiente >2%',
-      status: 'Desagüe 100% Vertical Alineado al Plano Sanitario Original ♻️',
-      desc: 'Todos los núcleos húmedos de Planta Alta (Vestidor/Baño en Suite y SSHH 2) y Planta Baja (SSHH Social y Cocina) descargan verticalmente sobre el Eje F–G (z=3.00..5.00m) hacia el colector del subsuelo y la Cámara Séptica / Pozo Ciego.'
-    }
+      name: 'Columna Cloacal Vertical Principal PVC Ø 100mm por Pase #3 (Losa Maciza L4) + Ventilación a los 4 Vientos + Colector a Cámara Séptica',
+      dimensions: 'PVC Reforzado Ø 100mm en x = +0.68m, z = 3.28m • Pendiente Colector > 2%',
+      status: 'Columna Cloacal 100% Vertical por Agujero #3 en Losa L4 ♻️',
+      desc: 'Baja en línea recta vertical desde el Baño en Suite PA y el Baño Social PB atravesando el Pase Diamantado #3 en la Losa Maciza L4, y corre con pendiente reglamentaria del 2% hacia la Cámara Séptica y el Pozo Ciego.'
+    },
+    plumbingSubGroup
   );
 
+  // Ramal Cloacal de SSHH 2 PA (por Pase #3B en x=-2.15, z=3.28) + Desagüe Graso de Cocina PB y Lavadero Subsuelo hacia Cámara Desgrasadora
+  addOrthogonalPipePath(
+    [
+      new THREE.Vector3(-2.15, 3.05, 3.28),  // Inodoro/Ducha SSHH 2 PA
+      new THREE.Vector3(-2.15, 2.88, 3.28),  // Atraviesa PASE #3B en Losa 2
+      new THREE.Vector3(-2.15, 2.62, 3.28),
+      new THREE.Vector3(0.68, 2.62, 3.28)    // Empalma a la Columna Principal en x=+0.68m
+    ],
+    0.042,
+    0xd97706,
+    {
+      type: 'ramal_cloacal_sshh2',
+      bankCategory: 'nuevo_rojo',
+      name: 'Ramal Cloacal Suspendido PVC Ø 100mm de SSHH 2 PA (Pase #3B → Columna Principal Pase #3)',
+      dimensions: 'PVC Ø 100mm alojado en pleno de cielorraso del núcleo húmedo Eje G',
+      status: 'Unificación de Ambos Baños PA en 1 Sola Bajada por Losa 1 ♻️',
+      desc: 'Permite que el SSHH 2 de Planta Alta descargue hacia la misma columna montante principal de x=+0.68m sin perforar el sector de Loza Rap de Planta Baja.'
+    },
+    plumbingSubGroup
+  );
+
+  // Línea de Aguas Grises/Jabón/Grasa (Bacha Cocina PB en x=+2.35 + Lavadero Subsuelo en x=+4.55 → Cámara Desgrasadora → Cámara de Inspección)
+  addOrthogonalPipePath(
+    [
+      new THREE.Vector3(2.35, 0.75, 3.28),   // Sifón Doble Bacha Cocina PB (Losa Maciza L4)
+      new THREE.Vector3(2.35, 0.00, 3.28),
+      new THREE.Vector3(2.35, -2.18, 3.28),
+      new THREE.Vector3(2.35, -2.24, 6.40),
+      new THREE.Vector3(4.55, -1.45, 6.40),  // Recibe descarga Lavarropas y Pileta de Lavadero (Muro Este Eje 1)
+      new THREE.Vector3(2.35, -2.24, 6.40),
+      new THREE.Vector3(2.35, -2.32, 13.80), // Cámara Desgrasadora (60×60cm)
+      new THREE.Vector3(0.68, -2.35, 14.50)  // Empalma a Cámara de Inspección Principal
+    ],
+    0.032,
+    0xf59e0b,
+    {
+      type: 'ramal_desgrasador_cocina_lavadero',
+      bankCategory: 'nuevo_rojo',
+      name: 'Ramal Exclusivo Cocina PB + Lavadero Subsuelo PVC Ø 50/75mm → Cámara Desgrasadora',
+      dimensions: 'Caño PVC Ø 75mm con Trampa de Grasa y Espuma de Jabón',
+      status: 'Protección de Permeabilidad del Pozo Ciego 🛡️♻️',
+      desc: 'Separa las aguas con grasa de la Cocina (Este) y el jabón del Lavarropas (Subsuelo Este) llevándolas primero a la Cámara Desgrasadora antes de entrar a la Cámara Séptica.'
+    },
+    plumbingSubGroup
+  );
+
+  // Cámaras Sanitarias 3D en el Patio Trasero (Cámara Desgrasadora, Cámara de Inspección, Cámara Séptica Bicameral y Pozo Ciego Absorbente)
+  const sanitaryStructures = [
+    {
+      id: 'CAM-DESGRASADORA',
+      name: 'Cámara Desgrasadora (Cocina + Lavadero)',
+      badgeTitle: '🧼 CÁMARA DESGRASADORA',
+      badgeSub: 'Retiene Grasa Cocina y Jabón Lavadero',
+      pos: [2.35, -2.34, 13.80],
+      geom: new THREE.BoxGeometry(0.65, 0.55, 0.65),
+      color: 0xf59e0b
+    },
+    {
+      id: 'CAM-INSPECCION-CLOACAL',
+      name: 'Cámara de Inspección Principal Cloacal (60×60 cm)',
+      badgeTitle: '🔍 CÁMARA INSPECCIÓN 60×60',
+      badgeSub: 'Acceso de Desobstrucción Cloacal',
+      pos: [0.68, -2.34, 14.50],
+      geom: new THREE.BoxGeometry(0.72, 0.60, 0.72),
+      color: 0xd97706
+    },
+    {
+      id: 'CAM-SEPTICA-1500L',
+      name: 'Cámara Séptica Bicameral Impermeable (1.500 Litros)',
+      badgeTitle: '♻️ CÁMARA SÉPTICA 1.500 L',
+      badgeSub: 'Decantación Anaeróbica Bicameral',
+      pos: [-2.20, -2.65, 16.50],
+      geom: new THREE.BoxGeometry(1.65, 1.15, 1.10),
+      color: 0xb45309
+    },
+    {
+      id: 'POZO-CIEGO-ABSORBENTE',
+      name: 'Pozo Ciego Absorbente (Ø 1.80m × 3.50m) + Acople Rápido Camión Cisterna',
+      badgeTitle: '🕳️ POZO CIEGO ABSORBENTE',
+      badgeSub: 'Ø 1.80m × 3.50m + Caño Desagote',
+      pos: [-2.20, -3.45, 19.80],
+      geom: new THREE.CylinderGeometry(0.95, 0.95, 2.20, 24),
+      color: 0x92400e
+    }
+  ];
+
+  sanitaryStructures.forEach((st) => {
+    const stGroup = new THREE.Group();
+    stGroup.position.set(...st.pos);
+    const mesh = new THREE.Mesh(
+      st.geom,
+      new THREE.MeshStandardMaterial({
+        color: st.color,
+        emissive: st.color,
+        emissiveIntensity: 0.28,
+        roughness: 0.45,
+        metalness: 0.2
+      })
+    );
+    stGroup.add(mesh);
+
+    const badge = createMepCalloutSprite(THREE, st.badgeTitle, st.badgeSub, '#f59e0b');
+    if (badge) {
+      badge.position.set(0, 1.05, 0);
+      stGroup.add(badge);
+    }
+
+    const stMeta = {
+      type: 'estructura_sanitaria_cloacal',
+      bankCategory: 'nuevo_rojo',
+      name: st.name,
+      dimensions: 'Sistema Autónomo en Patio Nivelado (Independiente de Red Vecinal)',
+      status: 'Tratamiento Cloacal Normativo ESSAP/MOPC ♻️',
+      desc: 'Ubicado en el patio trasero con acceso de manguera de camión atmosférico por la puerta lateral de servicio y la Escalera 1.'
+    };
+    stGroup.userData = stMeta;
+    stGroup.traverse((c) => { if (c.isMesh) c.userData = stMeta; });
+    plumbingSubGroup.add(stGroup);
+  });
+
   // ==========================================================================
-  // 5. CAJAS DE ENCHUFES 20A (ROJOS) Y 16A (AZULES) + INTERRUPTORES ZIGBEE 3-WAY (VERDES)
+  // 6. CAJAS DE ENCHUFES 20A (ROJOS) Y 16A (AZULES) + INTERRUPTORES ZIGBEE 3-WAY (VERDES) EN `electricalSubGroup`
   // ==========================================================================
   const mat20A = new THREE.MeshStandardMaterial({
     color: 0xef4444,
     emissive: 0xdc2626,
-    emissiveIntensity: 0.55,
-    roughness: 0.25
+    emissiveIntensity: 0.65,
+    roughness: 0.22
   });
   const mat16A = new THREE.MeshStandardMaterial({
     color: 0x38bdf8,
     emissive: 0x0284c7,
-    emissiveIntensity: 0.5,
-    roughness: 0.25
+    emissiveIntensity: 0.55,
+    roughness: 0.22
   });
 
   (DUCTOS_PASES_ENCHUFES_DATOS.enchufesYTomacorrientes || []).forEach((toma) => {
@@ -1615,14 +2209,14 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
     boxGroup.position.set(...toma.pos3D);
 
     const plate = new THREE.Mesh(
-      new THREE.BoxGeometry(0.11, 0.08, 0.065),
+      new THREE.BoxGeometry(0.14, 0.10, 0.08),
       is20A ? mat20A : mat16A
     );
     boxGroup.add(plate);
 
-    [-0.024, 0, 0.024].forEach((ox) => {
+    [-0.03, 0, 0.03].forEach((ox) => {
       const pinHole = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.008, 0.008, 0.07, 8),
+        new THREE.CylinderGeometry(0.01, 0.01, 0.085, 8),
         new THREE.MeshBasicMaterial({ color: ox === 0 ? 0x22c55e : 0x0f172a })
       );
       pinHole.rotation.x = Math.PI / 2;
@@ -1645,13 +2239,13 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
     boxGroup.traverse((ch) => {
       if (ch.isMesh) ch.userData = tomaMeta;
     });
-    group.add(boxGroup);
+    electricalSubGroup.add(boxGroup);
   });
 
   const switchMat = new THREE.MeshStandardMaterial({
     color: 0x10b981,
     emissive: 0x059669,
-    emissiveIntensity: 0.6,
+    emissiveIntensity: 0.65,
     roughness: 0.2
   });
 
@@ -1660,14 +2254,14 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
     swGroup.position.set(...sw.pos3D);
 
     const swPlate = new THREE.Mesh(
-      new THREE.BoxGeometry(0.10, 0.10, 0.06),
+      new THREE.BoxGeometry(0.13, 0.13, 0.075),
       switchMat
     );
     swGroup.add(swPlate);
 
     if (sw.label.includes('Emergencia')) {
       const emLight = new THREE.Mesh(
-        new THREE.BoxGeometry(0.22, 0.08, 0.05),
+        new THREE.BoxGeometry(0.24, 0.09, 0.06),
         new THREE.MeshBasicMaterial({ color: 0xfef08a })
       );
       emLight.position.set(0, 1.05, 0);
@@ -1680,21 +2274,18 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
       name: `[${sw.codigo}] ${sw.label}`,
       dimensions: 'Caja Profunda 5×10×5,5cm con Hilo Neutro (Celeste) • Interruptor Inteligente Zigbee 3.0 / 3-Way',
       costo: 'En Kit China: ~Gs. 67.500 c/u (Aqara / Sonoff SwitchMan M5 c/ Neutro)',
-      status: 'Interruptor Inteligente Conectado a Red Interna LAN/Zigbee 🟢💡',
+      status: 'Interruptor Inteligente Conectado a Cajas Octogonales de Losa 🟢💡',
       desc: 'Al hacerse la instalación de cero, todas las cajas de interruptores reciben hilo Neutro (Celeste), permitiendo usar llaves inteligentes Zigbee 3.0 con tecla física, estado en tiempo real y conmutación 3-Way en escaleras y dormitorio.'
     };
     swGroup.userData = swMeta;
     swGroup.traverse((ch) => {
       if (ch.isMesh) ch.userData = swMeta;
     });
-    group.add(swGroup);
+    electricalSubGroup.add(swGroup);
   });
 
   // ==========================================================================
-  // 6. SIMULADOR INTERACTIVO ELÉCTRICO Y DE FALLAS EN VIVO:
-  //    - Circuitos animados por fase: 'phase_R_ac', 'phase_S_kitchen', 'phase_T_lights'
-  //    - Simulación de fallas: 'fault_leak_30ma', 'fault_overtemp_65c', 'fault_flood_subsuelo'
-  //      con destellos de alerta en el punto de falla y corte automático en Tablero DIN (TP-PB)
+  // 7. SIMULADOR INTERACTIVO ELÉCTRICO Y DE FALLAS EN VIVO (EN `electricalSubGroup`)
   // ==========================================================================
   const elecSimSubGroups = {
     phase_R_ac: new THREE.Group(),
@@ -1704,14 +2295,14 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
     fault_overtemp_65c: new THREE.Group(),
     fault_flood_subsuelo: new THREE.Group()
   };
-  Object.values(elecSimSubGroups).forEach((sg) => group.add(sg));
+  Object.values(elecSimSubGroups).forEach((sg) => electricalSubGroup.add(sg));
 
   const animatedCurrentPulses = [];
   const registerCircuitPulses = (routeObj, phaseKey, colorHex) => {
     if (!routeObj || !routeObj.curve) return;
     const pulseMat = new THREE.MeshBasicMaterial({ color: colorHex });
     for (let i = 0; i < 8; i++) {
-      const pMesh = new THREE.Mesh(new THREE.SphereGeometry(0.052, 8, 8), pulseMat);
+      const pMesh = new THREE.Mesh(new THREE.SphereGeometry(0.056, 8, 8), pulseMat);
       const tOffset = i / 8;
       pMesh.position.copy(routeObj.curve.getPointAt(tOffset));
       elecSimSubGroups[phaseKey].add(pMesh);
@@ -1736,10 +2327,11 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
   registerCircuitPulses(subLaundryAndBbqRoute, 'phase_S_kitchen', 0xfb923c);
 
   registerCircuitPulses(pbLightsRoute1, 'phase_T_lights', 0x38bdf8);
+  registerCircuitPulses(pbCeilingLightsGrid, 'phase_T_lights', 0x38bdf8);
   registerCircuitPulses(paDeskLightsRoute, 'phase_T_lights', 0x38bdf8);
   registerCircuitPulses(subPumpRoute, 'phase_T_lights', 0x38bdf8);
 
-  // Marcadores 3D de Falla en Vivo + Alerta de Corte en Tablero Principal DIN (TP-PB en x=-1.55, y=1.55, z=4.65)
+  // Marcadores 3D de Falla en Vivo + Alerta de Corte en Tablero Principal DIN (TP-PB en x=-0.45, y=1.55, z=4.78)
   const faultBeacons = [];
   const createFaultBeacon = (targetKey, pos, colorHex, title, desc) => {
     const fGroup = elecSimSubGroups[targetKey];
@@ -1758,24 +2350,22 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
     haloRing.position.set(...pos);
     fGroup.add(haloRing);
 
-    // Línea de disparo directo hacia el Tablero Inteligente DIN TP-PB (-1.55, 1.55, 4.65)
     const tripCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(...pos),
-      new THREE.Vector3(-1.55, pos[1], 4.65),
-      new THREE.Vector3(-1.55, 1.55, 4.65)
-    ]);
+      new THREE.Vector3(-0.45, pos[1], 4.78),
+      new THREE.Vector3(-0.45, 1.55, 4.78)
+    ], false, 'catmullrom', 0.0);
     const tripTube = new THREE.Mesh(
-      new THREE.TubeGeometry(tripCurve, 20, 0.025, 8, false),
+      new THREE.TubeGeometry(tripCurve, 16, 0.025, 8, false),
       new THREE.MeshBasicMaterial({ color: 0xef4444 })
     );
     fGroup.add(tripTube);
 
-    // Halo de corte automático en el Tablero TP-PB
     const boardAlertHalo = new THREE.Mesh(
-      new THREE.BoxGeometry(0.54, 0.66, 0.22),
+      new THREE.BoxGeometry(0.56, 0.68, 0.24),
       new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true })
     );
-    boardAlertHalo.position.set(-1.55, 1.55, 4.65);
+    boardAlertHalo.position.set(-0.45, 1.55, 4.78);
     fGroup.add(boardAlertHalo);
 
     fGroup.userData = {
@@ -1799,24 +2389,24 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
 
   createFaultBeacon(
     'fault_leak_30ma',
-    [-1.45, 3.65, 3.45],
+    [0.95, 4.75, 3.22],
     0xef4444,
-    '🚨 Falla Simulada: Fuga a Tierra > 30mA en Termocalefón / Ducha Baño Suite (Eje F–G)',
-    'El disyuntor diferencial electrónico Riel DIN detecta una corriente diferencial > 30 mA en menos de 25 ms y corta automáticamente el circuito en el Tablero TP-PB, protegiendo la vida de Ruth y Leo.'
+    '🚨 Falla Simulada: Fuga a Tierra > 30mA en Termocalefón 80L / Baño en Suite (Eje G)',
+    'El disyuntor diferencial electrónico Riel DIN detecta una corriente diferencial > 30 mA en menos de 25 ms y corta automáticamente el circuito en el Tablero TP-PB.'
   );
   createFaultBeacon(
     'fault_overtemp_65c',
-    [-2.32, 1.12, 3.25],
+    [2.15, 1.12, 3.12],
     0xf97316,
-    '🚨 Falla Simulada: Sobretemperatura > 65°C en Toma 20A de Cocina (Eje F–G)',
-    'La llave térmica inteligente Zigbee Riel DIN detecta sobreconsumo y temperatura > 65°C en el circuito de Cocina 20A, abriendo el relé en el Tablero TP-PB y enviando alerta al celular.'
+    '🚨 Falla Simulada: Sobretemperatura > 65°C en Toma 20A de Cocina Integrada (Losa L4 Este)',
+    'La llave térmica inteligente Zigbee Riel DIN detecta sobreconsumo y temperatura > 65°C en el circuito de Cocina 20A, abriendo el relé en el Tablero TP-PB.'
   );
   createFaultBeacon(
     'fault_flood_subsuelo',
-    [-3.25, -2.20, 6.90],
+    [4.55, -1.35, 6.40],
     0x38bdf8,
-    '🚨 Falla Simulada: Sensor de Inundación Activo en Subsuelo (Lavadero / Cisterna)',
-    'El sensor Zigbee de agua en el piso del Subsuelo detecta pérdida hidráulica, cierra la válvula motorizada de la Bomba Rowa y corta el circuito del Subsuelo en TP-PB.'
+    '🚨 Falla Simulada: Sensor de Inundación Activo en Lavadero de Subsuelo (Muro Este)',
+    'El sensor Zigbee de agua en el piso del Lavadero del Subsuelo detecta pérdida hidráulica y corta preventivamente el circuito del Subsuelo en TP-PB.'
   );
 
   let currentElecSimState = 'all_phases';
@@ -1857,8 +2447,23 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
 
   setElectricalSimMode('all_phases');
 
+  // Filtro disciplinario para separar Modo Electricista vs Modo Plomero
+  const setSubLayerFilter = (filterMode = 'all') => {
+    if (filterMode === 'electrical_only' || filterMode === 'electricista') {
+      electricalSubGroup.visible = true;
+      plumbingSubGroup.visible = false;
+    } else if (filterMode === 'plumbing_only' || filterMode === 'plomero') {
+      electricalSubGroup.visible = false;
+      plumbingSubGroup.visible = true;
+    } else {
+      electricalSubGroup.visible = true;
+      plumbingSubGroup.visible = true;
+    }
+  };
+  group.userData.setSubLayerFilter = setSubLayerFilter;
+
   group.userData.updateElectricalAnimation = (t = performance.now() * 0.001) => {
-    if (!group.visible || currentElecSimState === 'off') return;
+    if (!group.visible || !electricalSubGroup.visible || currentElecSimState === 'off') return;
 
     animatedCurrentPulses.forEach((p) => {
       const sg = elecSimSubGroups[p.phaseKey];
@@ -1883,6 +2488,9 @@ export function buildConduitsOutletsAndPlumbingLayer(THREE, sceneGroups) {
 
   return {
     group,
+    electricalSubGroup,
+    plumbingSubGroup,
+    setSubLayerFilter,
     updateAnimation: group.userData.updateElectricalAnimation,
     setSimulationState: setElectricalSimMode,
     simulateElectricalMode: setElectricalSimMode,

@@ -19,7 +19,7 @@
 
 import { DUCTOS_PASES_ENCHUFES_DATOS } from './data/projectData.js';
 
-const STORAGE_KEY = 'itapytapunta_bim_floorplan_v7';
+const STORAGE_KEY = 'itapytapunta_bim_floorplan_v8';
 
 /**
  * Grilla Estructural Exacta según planos de encofrado y fundación (`CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`
@@ -872,6 +872,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     rooms: [
       {
         id: 'sub_pasillo_antihumedad',
+        shortTitle: 'CÁMARA OXIGENACIÓN',
+        subTitle: 'Rejilla Metálica • z=1.50..3.00m',
         name: 'Cámara Oxigenación Subsuelo 1.50m (Piso Rejilla Metálica Electroforjada + Rejas Laterales • z=1.50..3.00m)',
         codeType: 'exterior',
         x: -4.87,
@@ -884,26 +886,15 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
         color: 'rgba(16, 185, 129, 0.22)'
       },
       {
-        id: 'sub_encofrado_existente',
-        name: 'Encofrado H°A° Existente al Costado de Escalera 1 (Previsto originalmente p/ Lavadero — Queda integrado al Gran Salón • x=+1.84..+3.84m)',
-        codeType: 'exterior',
-        x: 1.84,
-        z: 5.26,
-        w: 2.00,
-        d: 2.54,
-        floorCostPerM2Gs: 0,
-        equipCostGs: 0,
-        activeStage: true,
-        color: 'rgba(148, 163, 184, 0.28)'
-      },
-      {
         id: 'sub_lavadero_pared_opuesta',
-        name: 'Lavadero contra Pared Opuesta (Eje 9 x=-4.87..-3.50m, z=5.20..7.80m • Pileta + Lavarropas)',
+        shortTitle: 'LAVADERO',
+        subTitle: 'Bajo Escalera 1 (+X)',
+        name: 'Lavadero bajo Escalera 1 en Muro Este (Eje 1–2 x=+3.10..+4.87m, z=5.20..8.20m • Pileta + Lavarropas)',
         codeType: 'bano',
-        x: -4.87,
+        x: 3.10,
         z: 5.20,
-        w: 1.37,
-        d: 2.60,
+        w: 1.77,
+        d: 3.00,
         floorCostPerM2Gs: 85000,
         equipCostGs: 2837500,
         activeStage: subsueloActive,
@@ -911,6 +902,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_gran_salon_abierto',
+        shortTitle: 'GRAN SALÓN SUBSUELO',
+        subTitle: 'Planta Libre 100.7 m²',
         name: 'Gran Salón Abierto de Subsuelo ("Todo un Salón" 100.71 m² • Suelo Tierra Natural / Lecherada de Cemento)',
         codeType: 'habitable',
         x: -4.87,
@@ -924,6 +917,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_parrilla_quincho',
+        shortTitle: 'PARRILLA / QUINCHO',
+        subTitle: 'Integrada al Patio (-2.34m)',
         name: 'Parrillita / Quincho Inferior en Subsuelo hacia el Patio (x=-4.87..-1.64m, z=11.50..13.34m)',
         codeType: 'exterior',
         x: -4.87,
@@ -937,6 +932,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_patio_inferior',
+        shortTitle: 'JARDÍN Y PATIO TRASERO',
+        subTitle: 'Césped Esmeralda • Cota -2.34m',
         name: 'Patio Trasero 100% Nivelado a Suelo de Subsuelo (Y = -2.34m • Sin Desnivel • z=13.34..26.80m)',
         codeType: 'exterior',
         x: -4.87,
@@ -950,6 +947,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_pozo_septica_bombeo',
+        shortTitle: 'CÁM. SÉPTICA + POZO',
+        subTitle: '1500L + Ø1.80m (Ejes 8–9)',
         name: 'Cámara Séptica + Pozo Ciego Absorbente Autónomo (Patio Trasero Ejes 8–9 • Evita red vecinal precaria)',
         codeType: 'bano',
         x: -4.55,
@@ -963,6 +962,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       },
       {
         id: 'sub_piscina_futura',
+        shortTitle: 'PISCINA 5.80×2.40m',
+        subTitle: 'Reserva al Fondo (z=23.15m)',
         name: 'Piscina Transversal en el Fondo (5.80×2.40m en z=23.15..25.55m • Diseño Original Lámina 2 • Muralla al fondo en z=26.80m)',
         codeType: 'exterior',
         x: -1.25,
@@ -978,8 +979,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     walls: [
       { id: 'w_sub_muro_cont_150', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: 4.87, z2: 1.50, activeStage: subsueloActive, label: 'Muro Contención Estacionamiento z=+1.50m (Cámara Oxigenación 1.50m)' },
       { id: 'w_sub_frente_g', type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: subsueloActive, label: 'Muro Frontal Subsuelo Eje G (z=3.00m)' },
-      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (Contra esta pared va el Lavadero y la Parrillita)' },
-      { id: 'w_sub_cont_1', type: 'ciclopeo_30', x1: 4.87, z1: 1.50, x2: 4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Este Eje 1 (Junto a Escalera 1 existente y su Encofrado)' },
+      { id: 'w_sub_cont_9', type: 'ciclopeo_30', x1: -4.87, z1: 1.50, x2: -4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Oeste Eje 9 (Parrillita y Salida a Cámara Séptica)' },
+      { id: 'w_sub_cont_1', type: 'ciclopeo_30', x1: 4.87, z1: 1.50, x2: 4.87, z2: 13.34, activeStage: subsueloActive, label: 'Muro Este Eje 1 (Junto a Escalera 1 existente y Lavadero)' },
       { id: 'w_sub_muralla_fondo', type: 'ladrillo_20', x1: -4.87, z1: 26.80, x2: 4.87, z2: 26.80, activeStage: true, label: 'Muralla de Fondo del Lote en z=26.80m (Detrás de la Piscina)' }
     ],
     mepNodes: isZeroWallsState ? [] : [
@@ -993,18 +994,19 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
 
   // =========================================================================
   // PLANTA BAJA OFICIAL (+100.00m):
-  // - Frente sobre Calle Tte. Guillermo Arias (z = -4.00m):
-  //   * Portoncito Peatonal (0.95m) a la IZQUIERDA mirando desde la calle (x = +1.725m)
-  //   * Portón Vehicular Balancín (2.30m) a la DERECHA mirando desde la calle (x = -2.35m)
-  // - Doble Puerta de Acceso de Servicio a Escalera 1 (+X, Ejes 1–2):
-  //   * Puerta Exterior de Servicio en Eje G (x = +4.35m, z = 3.00m)
-  //   * Puerta Interior hacia Escalera 1 (x = +3.84m, z = 4.20m)
-  // - Escalera 2 (Sube a 2do Piso) en el costado opuesto (-X, Ejes 8–9, x = -4.87..-3.84m).
+  // - Lado Este (x = -0.74m..+4.87m, Losa Maciza L4):
+  //   * Baño Social / SSHH (x = -0.74m..+0.95m, z = 3.00m..4.77m)
+  //   * Cocina Integrada + Isla + Comedor (x = -0.74m..+3.84m, z = 3.00m..9.94m)
+  //   * Acceso de Servicio y Escalera 1 a Subsuelo (x = +3.84m..+4.87m, z = 3.00m..8.80m)
+  // - Lado Oeste (x = -4.87m..-0.74m, Sector sin losa 38m² Loza Rap):
+  //   * Estar Social / Living Principal (x = -4.87m..-0.74m, z = 3.00m..9.94m) + Escalera 2 a PA (x = -4.87m..-3.84m)
   // =========================================================================
   const buildPlantaBajaRooms = (prefix) => [
     {
       id: `${prefix}_cochera`,
-      name: 'Cochera Frontal (Portoncito Peatonal en +X • Portón Balancín 2.30m en -X • Pérgola Antigranizo • Rejilla Oxigenación z=1.50..3.00m)',
+      shortTitle: 'COCHERA Y PÉRGOLA',
+      subTitle: 'Portón 2.30m + Rejilla Oxig.',
+      name: 'Cochera Frontal (Portoncito Peatonal 0.95m • Portón Balancín 2.30m • Pérgola Antigranizo • Rejilla Oxigenación z=1.50..3.00m)',
       codeType: 'exterior',
       x: -4.87,
       z: -4.00,
@@ -1017,7 +1019,9 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_acceso_servicio_esc1`,
-      name: 'Acceso de Servicio y Escalera 1 a Subsuelo (Eje 1–2 • Puerta Exterior z=3.00m + Puerta Interior x=3.84m)',
+      shortTitle: 'ESC. 1 SERVICIO',
+      subTitle: 'Baja a Subsuelo (+X)',
+      name: 'Acceso de Servicio y Escalera 1 a Subsuelo (Eje 1–2 x=+3.84..+4.87m • Puerta Exterior z=3.00m + Puerta Interior x=3.84m)',
       codeType: 'exterior',
       x: 3.84,
       z: 3.00,
@@ -1030,26 +1034,28 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_bano_social`,
-      name: 'Baño Social / SSHH (1.10m × 2.00m • Núcleo Húmedo Frontal Eje F–G • x=-1.64..-0.40m, z=3.00..5.00m)',
+      shortTitle: 'BAÑO SOCIAL',
+      subTitle: 'Eje F–G (Losa L4)',
+      name: 'Baño Social / SSHH (1.69m × 1.77m • Núcleo Húmedo Frontal Eje F–G sobre Losa Maciza L4 • x=-0.74..+0.95m, z=3.00..4.77m)',
       codeType: 'bano',
-      x: -1.64,
+      x: -0.74,
       z: 3.00,
-      w: 1.24,
-      d: 2.00,
+      w: 1.69,
+      d: 1.77,
       floorCostPerM2Gs: 195000,
       equipCostGs: 4200000,
       activeStage: activeFlag,
-      color: 'rgba(56, 189, 248, 0.22)'
+      color: 'rgba(56, 189, 248, 0.26)'
     },
     {
       id: `${prefix}_cocina_comedor`,
-      name: isZeroWallsState
-        ? 'SECTOR SIN LOSA EN OBRA: 38,00 m² (A cerrar con Loza Rap • Cuadrante Eje 5 a Eje 9 / Eje B a Eje G)'
-        : 'Cocina / Comedor (6.20m × 2.75m • Sector Eje 5 a Eje 9 sobre Loza Rap 38.00 m² + Escalera 2 a PA en Eje 8–9)',
+      shortTitle: 'COCINA Y COMEDOR',
+      subTitle: 'Sobre Losa Maciza L4 (Este)',
+      name: 'Cocina Integrada con Isla y Comedor (4.58m × 6.94m • Sector Este Eje 2 a Eje 5 sobre Losa Maciza L4 + Pases #1..#4)',
       codeType: 'cocina',
-      x: -4.87,
+      x: -0.74,
       z: 3.00,
-      w: 4.13,
+      w: 4.58,
       d: 6.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 8500000,
@@ -1058,11 +1064,15 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_estar_social`,
-      name: 'Estar Social (4.95m × 4.80m • Sector Eje 2 a Eje 5 sobre Losa L4 Maciza junto a Escalera 1)',
+      shortTitle: isZeroWallsState ? 'SIN LOSA: 38 m²' : 'ESTAR SOCIAL',
+      subTitle: isZeroWallsState ? 'A cerrar c/ Loza Rap' : 'Sobre Loza Rap 38 m² (Oeste)',
+      name: isZeroWallsState
+        ? 'SECTOR SIN LOSA EN OBRA: 38,00 m² (A cerrar con Loza Rap • Cuadrante Oeste Eje 5 a Eje 9 / Eje B a Eje G)'
+        : 'Estar Social / Living Principal (4.13m × 6.94m • Sector Oeste Eje 5 a Eje 9 sobre Loza Rap 38.00 m² + Escalera 2 a PA)',
       codeType: 'habitable',
-      x: -0.74,
+      x: -4.87,
       z: 3.00,
-      w: 4.58,
+      w: 4.13,
       d: 6.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 7800000,
@@ -1071,7 +1081,9 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_galeria_rio`,
-      name: 'Galería al Río (3.50m × 9.55m • Eje A–B z=9.94..13.34m • Sin Parrilla — Parrilla en Subsuelo)',
+      shortTitle: 'GALERÍA PANORÁMICA L1',
+      subTitle: 'Vista al Río Paraguay (-0.45m)',
+      name: 'Galería al Río (3.40m × 9.74m • Eje A–B z=9.94..13.34m • Sin Parrilla — Parrilla en Subsuelo)',
       codeType: 'exterior',
       x: -4.87,
       z: 9.94,
@@ -1085,13 +1097,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
   ];
 
   const buildPlantaBajaWalls = (wPrefix) => [
-    { id: `${wPrefix}_muro_ciego_calle`, type: 'ladrillo_20', x1: -4.87, z1: -4.00, x2: 4.87, z2: -4.00, activeStage: activeFlag, label: 'Muro Frontal Ciego (z=-4.00m • Portón Balancín en -X y Portoncito en +X)' },
-    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (z=3.00m • Puerta Principal + Puerta Exterior de Servicio a Subsuelo en x=+4.35m)' },
+    { id: `${wPrefix}_muro_ciego_calle`, type: 'ladrillo_20', x1: -4.87, z1: -4.00, x2: 4.87, z2: -4.00, activeStage: activeFlag, label: 'Muro Frontal Ciego (z=-4.00m • Portón Balancín 2.30m y Portoncito 0.95m)' },
+    { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87, z2: 3.00, activeStage: activeFlag, label: 'Fachada Frontal Eje G (z=3.00m • Puerta Principal + Puerta Exterior de Servicio en x=+4.35m)' },
     { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Oeste Eje 9 (Costado Escalera 2 que sube a Planta Alta)' },
     { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Medianero Este Eje 1 (Costado Escalera 1 existente que baja a Subsuelo)' },
-    { id: `${wPrefix}_bano_soc_s`, type: 'ladrillo_15', x1: -1.64, z1: 5.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Baño Social SSHH (z=5.00m • Eje F–G)' },
-    { id: `${wPrefix}_bano_soc_e`, type: 'ladrillo_15', x1: -0.40, z1: 3.00, x2: -0.40, z2: 5.00, activeStage: activeFlag, label: 'Cerramiento Este Baño Social SSHH (x=-0.40m)' },
-    { id: `${wPrefix}_bano_soc_o`, type: 'ladrillo_15', x1: -1.64, z1: 3.00, x2: -1.64, z2: 5.00, activeStage: activeFlag, label: 'Divisorio Baño Social / Bacha Cocina en Eje 6 (x=-1.64m)' },
+    { id: `${wPrefix}_bano_soc_s`, type: 'ladrillo_15', x1: -0.74, z1: 4.77, x2: 0.95, z2: 4.77, activeStage: activeFlag, label: 'Cerramiento Sur Baño Social SSHH (z=4.77m • Eje E sobre Losa Maciza L4)' },
+    { id: `${wPrefix}_bano_soc_e`, type: 'ladrillo_15', x1: 0.95,  z1: 3.00, x2: 0.95, z2: 4.77, activeStage: activeFlag, label: 'Divisorio Baño Social / Cocina con PASE #3 y PASE #4 (x=+0.95m)' },
+    { id: `${wPrefix}_bano_soc_o`, type: 'ladrillo_15', x1: -0.74, z1: 3.00, x2: -0.74, z2: 4.77, activeStage: activeFlag, label: 'Cerramiento Oeste Baño Social en Eje 5 (x=-0.74m)' },
     { id: `${wPrefix}_esc1_caja`,  type: 'ladrillo_15', x1: 3.84,  z1: 3.00, x2: 3.84,  z2: 8.80, activeStage: activeFlag, label: 'Tabique y Puerta Interior de Acceso a Escalera 1 de Servicio (Eje 2 x=+3.84m)' },
     { id: `${wPrefix}_esc2_caja`,  type: 'ladrillo_15', x1: -3.84, z1: 5.26, x2: -3.84, z2: 8.85, activeStage: activeFlag, label: 'Baranda Escalera 2 que sube a Planta Alta (Eje 8 x=-3.84m)' },
     { id: `${wPrefix}_blindex_b`,  type: 'blindex_corredizo', x1: -3.84, z1: 9.94, x2: 3.84, z2: 9.94, activeStage: activeFlag, label: 'Ventanal Corredizo Eje B hacia Galería al Río' },
@@ -1100,20 +1112,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
 
   // =========================================================================
   // PLANTA ALTA OFICIAL (+102.88m):
-  // - Escalera 2 desembarca en Ejes 8–9 (-X: x=-4.87..-3.84m, z=5.26..8.85m)
-  // - Escritorio / Desk inmediatamente al subir la Escalera 2 (x=-4.87..-1.80m, z=6.00..9.94m)
-  // - Pasillo Distribuidor Franco de 1.15m de ancho (x=-3.84..+0.60m, z=4.85..6.00m)
-  // - Franja Frontal Húmeda Eje F–G (z=3.00..4.85m):
-  //   * SSHH 2 / Baño Planta Alta (x=-3.84..-1.65m, z=3.00..4.85m)
-  //   * Baño en Suite (x=-1.65..+0.60m, z=3.00..4.85m)
-  //   * Vestidor en Suite (x=+2.77..+4.87m, z=3.00..4.85m)
-  // - Dormitorio 2 en el centro (x=-1.80..+0.60m, z=6.00..9.94m)
-  // - Dormitorio Principal en Suite en +X (x=+0.60..+4.87m, z=4.85..9.94m)
-  // - Deck 2 / Terraza al Río en Eje A–B (z=9.94..13.34m)
   // =========================================================================
   const buildPlantaAltaRooms = (prefix) => [
     {
       id: `${prefix}_bano_2`,
+      shortTitle: 'SSHH 2 (PA)',
+      subTitle: 'Baño Planta Alta',
       name: 'SSHH 2 / Baño Planta Alta (2.19m × 1.85m • Núcleo Húmedo Eje F–G • x=-3.84..-1.65m, z=3.00..4.85m)',
       codeType: 'bano',
       x: -3.84,
@@ -1127,11 +1131,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_bano_suite`,
-      name: 'Baño en Suite (2.25m × 1.85m • Núcleo Húmedo Eje F–G arriba de Baño Social PB • x=-1.65..+0.60m, z=3.00..4.85m)',
+      shortTitle: 'BAÑO EN SUITE',
+      subTitle: 'Arriba de Baño Social PB',
+      name: 'Baño en Suite Privado (2.80m × 1.85m • Núcleo Húmedo Eje F–G arriba de Baño Social PB • x=-1.65..+1.15m, z=3.00..4.85m)',
       codeType: 'bano',
       x: -1.65,
       z: 3.00,
-      w: 2.25,
+      w: 2.80,
       d: 1.85,
       floorCostPerM2Gs: 195000,
       equipCostGs: 6800000,
@@ -1140,11 +1146,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_vestidor_suite`,
-      name: 'Vestidor en Suite (2.10m × 1.85m • Eje F–G • x=+2.77..+4.87m, z=3.00..4.85m)',
+      shortTitle: 'VESTIDOR SUITE',
+      subTitle: 'Placares en U (+X)',
+      name: 'Vestidor en Suite Independiente en U (3.72m × 1.85m • Eje F–G • x=+1.15..+4.87m, z=3.00..4.85m)',
       codeType: 'bano',
-      x: 2.77,
+      x: 1.15,
       z: 3.00,
-      w: 2.10,
+      w: 3.72,
       d: 1.85,
       floorCostPerM2Gs: 185000,
       equipCostGs: 3600000,
@@ -1153,11 +1161,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_pasillo_distribuidor`,
+      shortTitle: 'PASILLO PA',
+      subTitle: 'Circulación 1.15m',
       name: 'Pasillo Distribuidor de Planta Alta (Ancho libre 1.15m • Conecta Escalera 2, Desk, SSHH 2, Dormitorio 2 y Suite)',
       codeType: 'habitable',
       x: -3.84,
       z: 4.85,
-      w: 4.44,
+      w: 4.14,
       d: 1.15,
       floorCostPerM2Gs: 180000,
       equipCostGs: 0,
@@ -1166,6 +1176,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_escritorio_desk`,
+      shortTitle: 'ESCRITORIO EXTENDIDO',
+      subTitle: 'Home-Office hasta Eje A (-X)',
       name: 'Escritorio / Desk Extendido hasta Galería Eje A (3.07m × 7.34m • x=-4.87..-1.80m, z=6.00..13.34m)',
       codeType: 'habitable',
       x: -4.87,
@@ -1179,11 +1191,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_dorm_2`,
-      name: 'Dormitorio 2 (2.40m × 3.94m • Centro x=-1.80..+0.60m, z=6.00..9.94m)',
+      shortTitle: 'DORMITORIO 2',
+      subTitle: 'Centro PA',
+      name: 'Dormitorio 2 (2.10m × 3.94m • Centro x=-1.80..+0.30m, z=6.00..9.94m)',
       codeType: 'habitable',
       x: -1.80,
       z: 6.00,
-      w: 2.40,
+      w: 2.10,
       d: 3.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 6400000,
@@ -1192,11 +1206,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_master_suite`,
-      name: 'Dormitorio Principal en Suite (4.27m × 5.09m • x=+0.60..+4.87m, z=4.85..9.94m)',
+      shortTitle: 'SUITE PRINCIPAL',
+      subTitle: 'Ruth & Leo (+X)',
+      name: 'Dormitorio Principal en Suite Armado (4.57m × 5.09m • x=+0.30..+4.87m, z=4.85..9.94m + Baño en Suite + Vestidor)',
       codeType: 'habitable',
-      x: 0.60,
+      x: 0.30,
       z: 4.85,
-      w: 4.27,
+      w: 4.57,
       d: 5.09,
       floorCostPerM2Gs: 190000,
       equipCostGs: 9800000,
@@ -1205,6 +1221,8 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_terraza_rio`,
+      shortTitle: 'TERRAZA / DECK 2',
+      subTitle: 'Mirador al Río (+2.88m)',
       name: 'Deck 2 / Terraza al Río (6.67m × 3.40m • x=-1.80..+4.87m, z=9.94..13.34m)',
       codeType: 'exterior',
       x: -1.80,
@@ -1222,14 +1240,13 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: activeFlag, label: 'Muro Frontal Mampostería PA en Eje G (z=3.00m • SIN Balcón ni Blindex Frontal)' },
     { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 13.34, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 Extendido hasta Eje A (Escalera 2 y Escritorio/Desk)' },
     { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (Vestidor y Dormitorio Principal en Suite)' },
-    { id: `${wPrefix}_pasillo_sur`, type: 'ladrillo_15', x1: -3.84, z1: 4.85, x2: 0.60, z2: 4.85, activeStage: activeFlag, label: 'Muro Sur Pasillo Distribuidor (z=4.85m • Cierre SSHH 2 y Baño en Suite)' },
-    { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.60, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 2)' },
+    { id: `${wPrefix}_pasillo_sur`, type: 'ladrillo_15', x1: -3.84, z1: 4.85, x2: 4.87, z2: 4.85, activeStage: activeFlag, label: 'Muro Continuo z=4.85m (Cierra SSHH 2 hacia Pasillo y cierra Baño en Suite + Vestidor hacia la Suite)' },
+    { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.30, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 2)' },
     { id: `${wPrefix}_sshh2_o`, type: 'ladrillo_15', x1: -3.84, z1: 3.00, x2: -3.84, z2: 4.85, activeStage: activeFlag, label: 'Cierre Oeste SSHH 2 junto a Escalera 2 (x=-3.84m)' },
     { id: `${wPrefix}_sshh2_suite`, type: 'ladrillo_15', x1: -1.65, z1: 3.00, x2: -1.65, z2: 4.85, activeStage: activeFlag, label: 'Divisorio SSHH 2 / Baño en Suite (x=-1.65m)' },
-    { id: `${wPrefix}_vestidor_o`, type: 'ladrillo_15', x1: 2.77, z1: 3.00, x2: 2.77, z2: 4.85, activeStage: activeFlag, label: 'Tabique Vestidor en Suite (x=+2.77m)' },
-    { id: `${wPrefix}_vestidor_n`, type: 'ladrillo_15', x1: 2.77, z1: 4.85, x2: 4.87, z2: 4.85, activeStage: activeFlag, label: 'Cerramiento Vestidor hacia Suite (z=4.85m)' },
+    { id: `${wPrefix}_bano_vestidor`, type: 'ladrillo_15', x1: 1.15, z1: 3.00, x2: 1.15, z2: 4.85, activeStage: activeFlag, label: 'Divisorio Baño en Suite / Vestidor en Suite (x=+1.15m)' },
     { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Muro Este Escritorio-Desk Extendido hasta Eje A (x=-1.80m • Separa Dormitorio 2 y Deck 2)' },
-    { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.60, z1: 3.00, x2: 0.60, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 y Pasillo / Dormitorio Principal en Suite (x=+0.60m)' },
+    { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.30, z1: 4.85, x2: 0.30, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 y Pasillo / Dormitorio Principal en Suite (x=+0.30m)' },
     { id: `${wPrefix}_blindex_desk_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Ventanal Blindex Extremo Norte Escritorio / Desk sobre Eje A (z=13.34m)' },
     { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -1.80, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B (Dormitorio 2 y Suite) hacia Deck 2 / Terraza al Río' },
     { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -1.80, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Deck 2 sobre Eje A (x=-1.80..+4.87m)' }
@@ -1749,10 +1766,13 @@ export class FloorplanEditor {
 
           <div class="fpe-btn-group">
             <button class="fpe-btn active" id="fpe-btn-toggle-conduits" title="Mostrar/Ocultar los 4 Pases con Sacabocado Diamantado en Losa 1, Tableros Smart DIN, Electroductos en contrapiso (5cm) y los 26 Tomacorrientes (20A/16A) + Llaves 3-Way">
-              🔌 Ver Ductos, Pases Losa 1 y Enchufes (26 Tomas + 4 Pases)
+              🔌 Ductos y Pases (26 Tomas + 4 Pases)
+            </button>
+            <button class="fpe-btn gold" id="fpe-btn-split-3d" title="Dividir la pantalla para ver y editar el Plano CAD 2D al lado del Modelo 3D interactivo en vivo">
+              🔀 Vista Dividida 2D + 3D en Vivo
             </button>
             <button class="fpe-btn gold" id="fpe-btn-bank-colors" title="Activar Código de Colores Normativo del Banco en Plano 2D, Exportación SVG/PNG y Escena 3D (Negro: Ya construido | Verde: Hormigón | Rojo: A construir | Amarillo: A refaccionar)">
-              🏦 Colores Banco (Negro/Verde/Rojo/Amarillo)
+              🏦 Colores Banco
             </button>
             <label style="font-size:11px; color:#cbd5e1; display:flex; align-items:center; gap:4px; cursor:pointer;">
               <input type="checkbox" id="fpe-chk-pillar-snap" checked>
@@ -1916,6 +1936,22 @@ export class FloorplanEditor {
       });
     }
 
+    // Botón Vista Dividida 2D + 3D en Vivo
+    const btnSplit3D = this.container.querySelector('#fpe-btn-split-3d');
+    if (btnSplit3D) {
+      btnSplit3D.addEventListener('click', () => {
+        const modalEl = document.getElementById('modal-editor-2d');
+        if (!modalEl) return;
+        const isSplit = modalEl.classList.toggle('split-3d-active');
+        btnSplit3D.classList.toggle('active', isSplit);
+        btnSplit3D.textContent = isSplit ? '🔳 Pantalla Completa 2D' : '🔀 Vista Dividida 2D + 3D en Vivo';
+        setTimeout(() => {
+          this.resetCameraView();
+          this.resizeCanvas();
+        }, 60);
+      });
+    }
+
     // Conmutador de Niveles
     this.container.querySelectorAll('[data-level]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -2035,8 +2071,8 @@ export class FloorplanEditor {
     const badge = this.container.querySelector('#fpe-level-badge');
     if (badge && def) {
       badge.innerHTML = `
-        <strong style="color:${def.statusColor};">${def.fullTitle}</strong>
-        <span style="font-size:10px; color:#e2e8f0; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${def.statusBadge}</span>
+        <strong style="color:${def.statusColor};">${def.shortTitle}</strong>
+        <span style="font-size:10px; color:#e2e8f0; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">Ejes 1–9 × A–G</span>
       `;
     }
   }
@@ -2070,7 +2106,7 @@ export class FloorplanEditor {
     this.viewW = width;
     this.viewH = height;
 
-    if (this.panX === 0 && this.panY === 0) {
+    if (!this._userHasPanned) {
       this.resetCameraView();
     }
     this.render();
@@ -2081,9 +2117,10 @@ export class FloorplanEditor {
   }
 
   resetCameraView() {
-    this.zoom = Math.min(this.viewW / 14.2, this.viewH / 24.0);
+    this._userHasPanned = false;
+    this.zoom = Math.min(this.viewW / 12.8, this.viewH / 16.5);
     this.panX = this.viewW / 2;
-    this.panY = this.viewH * 0.22;
+    this.panY = Math.max(54, this.viewH * 0.50 - 5.2 * this.zoom);
   }
 
   worldToScreen(x, z) {
@@ -2420,80 +2457,70 @@ export class FloorplanEditor {
         z: sw.pos3D[2]
       }));
 
-    // Trazados de electroductos embutidos en contrapiso (5 cm) y muros por nivel (alineados al Núcleo Húmedo Eje F-G)
+    // Trazados 100% ortogonales (90°) de electroductos y cañerías por nivel alineados a los 4 Pases en Losa Maciza L4
     let conduitRoutes = [];
     if (levelKey === 'planta_baja') {
       conduitRoutes = [
         {
           color: '#f59e0b',
-          label: 'Acometida ANDE 4×10mm² Ø50mm',
-          pts: [[-4.72, -3.95], [-1.64, 1.40], [-1.64, 4.65], [-1.55, 4.65]]
+          label: 'Acometida ANDE 4×10mm² Ø50mm (Pilar ANDE → TP-PB)',
+          pts: [[-3.85, -4.08], [-3.85, 3.00], [-0.45, 3.00], [-0.45, 4.78]]
         },
         {
           color: '#f97316',
-          label: 'Ducto Contrapiso 5cm (20A Cocina Eje F–G)',
-          pts: [[-1.55, 4.65], [-2.10, 4.85], [-2.32, 3.08], [-4.76, 3.92], [-4.76, 4.55], [-4.76, 5.10]]
+          label: 'Ducto 20A Cocina e Isla sobre Losa Maciza L4 (+X)',
+          pts: [[-0.45, 4.78], [0.95, 4.78], [0.95, 3.12], [2.40, 3.12], [3.75, 3.12], [3.75, 5.10]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Loza Rap 38m² (Estar Social / TV)',
-          pts: [[-1.55, 4.65], [0.25, 5.12], [3.42, 5.12], [3.75, 5.45], [4.76, 7.20]]
-        },
-        {
-          color: '#10b981',
-          label: 'Ducto Contrapiso 5cm (Comedor / Galería L1)',
-          pts: [[-4.76, 5.10], [-4.76, 9.10], [-4.76, 11.45]]
+          label: 'Ducto 16A Estar Social (Loza Rap 38m² -X) y Comedor (+X)',
+          pts: [[-0.45, 4.78], [-3.80, 4.78], [-4.76, 4.78], [-4.76, 8.80]]
         },
         {
           color: '#38bdf8',
-          label: 'Ducto 3-Way Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2)',
-          pts: [[-3.90, 5.26], [-1.55, 4.65], [0.85, 3.12], [3.84, 5.26]]
+          label: 'Ducto 3-Way Escalera 1 (+X) y Escalera 2 (-X)',
+          pts: [[-3.84, 5.26], [-0.45, 5.26], [-0.45, 4.78], [3.84, 4.78], [3.84, 5.26]]
         },
         {
           color: '#0284c7',
-          label: 'Agua PPR Fría/Caliente en Núcleo Húmedo Eje F–G (Pase #4)',
-          pts: [[-3.40, -4.15], [-1.64, 3.95], [-1.02, 3.95], [-2.80, 3.45]]
+          label: 'Agua Fría PPR Ø25mm (Medidor ESSAP → PASE #4 en Losa L4)',
+          pts: [[-3.85, -4.24], [-3.85, 3.28], [1.48, 3.28], [2.30, 3.28]]
         }
       ];
     } else if (levelKey === 'planta_alta') {
       conduitRoutes = [
         {
           color: '#f97316',
-          label: 'Ducto 20A Termocalefón 80L (Eje F–G) + Splits AA Suite/Dorm2',
-          pts: [[-0.55, 4.65], [-1.64, 3.15], [-4.76, 7.70], [1.80, 7.50]]
+          label: 'Ducto 20A Termocalefón 80L + 3 Splits AA (Suite +X, Dorm 2, Estudio -X)',
+          pts: [[-0.45, 4.78], [1.48, 4.78], [1.48, 3.28], [4.76, 3.28], [4.76, 7.60]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Contrapiso 5cm (Vestidor, Baño Suite y Suite PA)',
-          pts: [[-0.55, 4.65], [-1.20, 3.15], [-3.80, 3.12], [-4.76, 6.80], [-4.76, 8.60]]
+          label: 'Ducto 16A Suite Principal (+X), Vestidor y Dormitorio 2',
+          pts: [[-0.45, 4.78], [0.60, 4.78], [0.60, 8.85], [4.76, 8.85]]
         },
         {
           color: '#38bdf8',
-          label: 'Ducto Dormitorio 2 + Escritorio (Escalera 2 Eje 1–2) + 3-Way',
-          pts: [[-0.55, 4.65], [0.50, 5.40], [3.20, 7.50], [3.84, 7.37], [4.76, 8.20]]
+          label: 'Ducto Escritorio Extendido (-X hasta Eje A z=13.34m) + 3-Way Escalera 2',
+          pts: [[-0.45, 4.78], [-3.84, 4.78], [-3.84, 6.00], [-4.76, 6.00], [-4.76, 12.10]]
         }
       ];
     } else if (levelKey === 'subsuelo') {
       conduitRoutes = [
         {
           color: '#f97316',
-          label: 'Ducto Galvanizado Lateral Viga (Bomba Eje F–G + Lavarropas 20A)',
-          pts: [[-1.64, 4.65], [-4.25, 3.65], [-3.25, 4.80]]
+          label: 'Ducto Galvanizado por Viga (PASE #1 → TS-SUB → Lavarropas 20A bajo Escalera 1)',
+          pts: [[-0.45, 4.78], [3.84, 4.78], [3.84, 6.20], [4.76, 6.20]]
         },
         {
           color: '#10b981',
-          label: 'Ducto Subsuelo (Depósito + Parrillita al Patio + 3-Way Escalera 1 Eje 8–9)',
-          pts: [[-1.64, 4.65], [1.50, 4.20], [-3.90, 8.56], [-3.20, 12.20]]
-        },
-        {
-          color: '#0284c7',
-          label: 'Impulsión Agua PPR Ø25mm (Cisterna 1000L → Pase #4 Eje F–G)',
-          pts: [[-4.25, 3.65], [-1.64, 3.95], [2.50, 5.50], [-3.20, 11.80]]
+          label: 'Ducto Subsuelo (Salón + Parrillita al Patio z=12.40m)',
+          pts: [[-0.45, 4.78], [-0.45, 11.80], [-3.20, 11.80], [-4.76, 12.40]]
         },
         {
           color: '#d97706',
-          label: 'Colector Cloacal PVC Ø100mm (Pase #3 Eje F–G → Cámara Séptica y Pozo Ciego)',
-          pts: [[-1.64, 3.45], [-3.45, 11.80], [-3.45, 14.80], [-3.45, 17.20]]
+          label: 'Colector Cloacal PVC Ø100mm Ortogonal (PASE #3 → Cám. Inspección → Séptica → Pozo Ciego)',
+          pts: [[0.68, 3.28], [0.68, 12.20], [-3.60, 12.20], [-3.60, 17.50], [-3.60, 21.00]]
         }
       ];
     }
@@ -2806,11 +2833,12 @@ export class FloorplanEditor {
 
         const row = document.createElement('div');
         row.className = `fpe-stage-item ${isNow ? '' : 'deferred'}`;
+        const displayTitle = r.shortTitle ? `${r.shortTitle}${r.subTitle ? ' — ' + r.subTitle : ''}` : r.name;
         row.innerHTML = `
           <label style="display:flex; align-items:center; gap:6px; cursor:pointer; flex:1;">
             <input type="checkbox" ${isNow ? 'checked' : ''}>
             <div>
-              <div style="font-weight:600; color:#f8fafc;">${r.name}</div>
+              <div style="font-weight:700; color:#f8fafc; font-size:11.5px;">${displayTitle}</div>
               <div style="font-size:10px; color:#94a3b8;">${area} m² (${r.w.toFixed(2)}×${r.d.toFixed(2)}m) • Gs. ${formatGs(itemCost)}</div>
             </div>
           </label>
@@ -3117,8 +3145,8 @@ export class FloorplanEditor {
         ctx.fillStyle = '#a5f3fc';
         ctx.font = 'bold 9px IBM Plex Mono, monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('LOSA L4 MACIZA HORMIGONADA (JUNTO A ESCALERA 1) 🔒', (l4TL.px + l4BR.px) / 2, (l4TL.py + l4BR.py) / 2 - 14);
-        ctx.fillText('LOSAS L1/L2/L3 MACIZAS HORMIGONADAS 🔒', (l123TL.px + l123BR.px) / 2, (l123TL.py + l123BR.py) / 2 + 18);
+        ctx.fillText('LOSA L4 MACIZA (Ejes 1–5) 🔒', (l4TL.px + l4BR.px) / 2, (l4TL.py + l4BR.py) / 2 - 14);
+        ctx.fillText('LOSAS L1/L2/L3 MACIZAS 🔒', (l123TL.px + l123BR.px) / 2, (l123TL.py + l123BR.py) / 2 + 18);
 
         // SECTOR SIN LOSA / HUECO ABIERTO ENTRE VIGAS DE 38.00 m² en Eje B a Eje G (z=3.00..9.94m) y Eje 5 a Eje 9 (x=-4.87..-0.74m)
         const voidTL = this.worldToScreen(-4.87, 3.00);
@@ -3141,17 +3169,17 @@ export class FloorplanEditor {
 
         const vcx = (voidTL.px + voidBR.px) / 2;
         const vcy = (voidTL.py + voidBR.py) / 2;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
-        ctx.fillRect(vcx - 148, vcy - 22, 296, 40);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+        ctx.fillRect(vcx - 76, vcy - 20, 152, 38);
         ctx.strokeStyle = '#f59e0b';
         ctx.lineWidth = 1.4;
-        ctx.strokeRect(vcx - 148, vcy - 22, 296, 40);
+        ctx.strokeRect(vcx - 76, vcy - 20, 152, 38);
         ctx.fillStyle = '#fde047';
-        ctx.font = 'bold 9.5px IBM Plex Mono, monospace';
-        ctx.fillText('SECTOR SIN LOSA: 38,00 m² (A cerrar con Loza Rap)', vcx, vcy - 5);
+        ctx.font = 'bold 9px IBM Plex Mono, monospace';
+        ctx.fillText('SIN LOSA: 38,00 m²', vcx, vcy - 4);
         ctx.fillStyle = '#fca5a5';
-        ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
-        ctx.fillText('Cuadrante Eje B–G (z=3.00..9.94m) × Eje 5–9 (x=-4.87..-0.74m)', vcx, vcy + 10);
+        ctx.font = 'bold 8px IBM Plex Mono, monospace';
+        ctx.fillText('Cierre Loza Rap (E5–E9)', vcx, vcy + 10);
       } else {
         const pbTL = this.worldToScreen(-4.87, 3.00);
         const pbBR = this.worldToScreen(4.87, 13.34);
@@ -3172,7 +3200,7 @@ export class FloorplanEditor {
         ctx.fillStyle = this.bankColorMode ? '#86efac' : '#fde68a';
         ctx.font = 'bold 8px IBM Plex Mono, monospace';
         ctx.textAlign = 'left';
-        ctx.fillText('PAÑO LOZA RAP 38,00 m² (Cierre Sector sin Losa Eje 5–9 × B–G)', lrTL.px + 6, lrTL.py + 12);
+        ctx.fillText('LOZA RAP 38m² (Eje 5–9)', lrTL.px + 5, lrTL.py + 11);
         ctx.restore();
       }
     }
@@ -3207,9 +3235,9 @@ export class FloorplanEditor {
       ctx.stroke();
 
       ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 9.5px IBM Plex Mono, monospace';
+      ctx.font = 'bold 9px IBM Plex Mono, monospace';
       ctx.textAlign = 'right';
-      ctx.fillText(`Eje ${az.id} (${az.z.toFixed(2)}m)`, p1.px - 4, p1.py + 3);
+      ctx.fillText(`Eje ${az.id} (${az.z.toFixed(2)}m)`, p1.px - 6, p1.py + 3);
     });
     ctx.restore();
 
@@ -3219,15 +3247,11 @@ export class FloorplanEditor {
     const rw2 = this.worldToScreen(rw.x2, rw.z2);
     ctx.save();
     ctx.strokeStyle = this.bankColorMode ? '#dc2626' : '#64748b';
-    ctx.lineWidth = Math.max(5, rw.thickness * this.zoom);
+    ctx.lineWidth = Math.max(4, rw.thickness * this.zoom);
     ctx.beginPath();
     ctx.moveTo(rw1.px, rw1.py);
     ctx.lineTo(rw2.px, rw2.py);
     ctx.stroke();
-    ctx.fillStyle = '#f8fafc';
-    ctx.font = 'bold 9px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🔒 MURO CONTENCIÓN COCHERA (z=+1.50m • 9.89m × 0.30m)', (rw1.px + rw2.px) / 2, rw1.py - 6);
 
     if (this.currentLevel === 'planta_baja') {
       // 6a. Piso de Rejilla Metálica Electroforjada Transitable + Rejas Laterales sobre cámara de oxigenación (z=1.50..3.00m)
@@ -3247,9 +3271,10 @@ export class FloorplanEditor {
         ctx.stroke();
       }
       ctx.fillStyle = '#bae6fd';
-      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.font = 'bold 8px IBM Plex Mono, monospace';
+      ctx.textAlign = 'center';
       ctx.fillText(
-        'PISO REJILLA METÁLICA ELECTROFORJADA TRANSITABLE + REJAS LATERALES (z=1.50..3.00m)',
+        'REJILLA ELECTROFORJADA + MURO CONTENCIÓN (z=1.50..3.00m)',
         (rejTL.px + rejBR.px) / 2,
         (rejTL.py + rejBR.py) / 2 + 3
       );
@@ -3258,16 +3283,16 @@ export class FloorplanEditor {
       const pergTL = this.worldToScreen(-0.50, -3.80);
       const pergBR = this.worldToScreen(4.50, 2.80);
       ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 1.4;
       ctx.setLineDash([5, 3]);
       ctx.strokeRect(pergTL.px, pergTL.py, pergBR.px - pergTL.px, pergBR.py - pergTL.py);
       ctx.setLineDash([]);
       ctx.fillStyle = '#6ee7b7';
-      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
+      ctx.font = 'bold 8px IBM Plex Mono, monospace';
       ctx.fillText(
-        '🌿 PÉRGOLA DE MADERA C/ ENREDADERA + TECHO TRANSLÚCIDO ANTIGRANIZO',
+        '🌿 PÉRGOLA COCHERA ANTIGRANIZO',
         (pergTL.px + pergBR.px) / 2,
-        pergTL.py + 14
+        pergTL.py + 13
       );
 
       // 6c. Muro Frontal 100% Ciego en z=-4.00m con Portón Balancín 2.30m (x=+1.20..+3.50m) y Portoncito Peatonal 0.95m (x=-2.20..-1.25m)
@@ -3289,8 +3314,8 @@ export class FloorplanEditor {
       ctx.lineTo(porton2.px, porton2.py);
       ctx.stroke();
       ctx.fillStyle = '#7dd3fc';
-      ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
-      ctx.fillText('PORTÓN BALANCÍN 2.30m (CHAPA GRAFITO CIEGA)', (porton1.px + porton2.px) / 2, porton1.py - 7);
+      ctx.font = 'bold 8px IBM Plex Mono, monospace';
+      ctx.fillText('PORTÓN 2.30m', (porton1.px + porton2.px) / 2, porton1.py - 6);
 
       const peat1 = this.worldToScreen(-2.20, -4.00);
       const peat2 = this.worldToScreen(-1.25, -4.00);
@@ -3301,15 +3326,15 @@ export class FloorplanEditor {
       ctx.lineTo(peat2.px, peat2.py);
       ctx.stroke();
       ctx.fillStyle = '#fde68a';
-      ctx.fillText('PORTONCITO 0.95m (CIEGO)', (peat1.px + peat2.px) / 2, peat1.py - 7);
+      ctx.fillText('PEATONAL 0.95m', (peat1.px + peat2.px) / 2, peat1.py - 6);
     }
     ctx.restore();
 
     const lvl = this.getActiveLevelData();
 
-    // 7. Ambientes Propuestos (Diferenciando Cerrar Ahora vs Etapa Futura y Modo Colores Banco)
+    // 7. Ambientes Propuestos (Con recorte clip() por caja y títulos cortos limpios sin solapamiento)
     lvl.rooms.forEach((room) => {
-      if (this.planData.presetId === 'hoy_en_obra' && this.currentLevel === 'planta_baja' && room.id.endsWith('_cocina_comedor')) {
+      if (this.planData.presetId === 'hoy_en_obra' && this.currentLevel === 'planta_baja' && room.id.endsWith('_estar')) {
         // El sector sin losa de 38.00 m² (Ejes 5–9) ya se dibuja con sus diagonales estructurales X en Hoy en Obra
         return;
       }
@@ -3349,24 +3374,52 @@ export class FloorplanEditor {
       ctx.lineWidth = isSelected ? 2.2 : 1.4;
       if (!isNow) ctx.setLineDash([5, 4]);
       ctx.strokeRect(tl.px, tl.py, rwPx, rdPx);
+      ctx.setLineDash([]);
 
-      const cx = tl.px + rwPx / 2;
-      const cy = tl.py + rdPx / 2;
-      ctx.fillStyle = pal.text;
-      ctx.font = 'bold 9.5px Inter, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(room.name, cx, cy - 5);
+      // Recortar texto estrictamente dentro del rectángulo del ambiente para que JAMÁS desborde a ambientes vecinos
+      if (rwPx > 28 && rdPx > 20) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(tl.px + 2, tl.py + 2, Math.max(1, rwPx - 4), Math.max(1, rdPx - 4));
+        ctx.clip();
 
-      ctx.font = '9px IBM Plex Mono, monospace';
-      ctx.fillStyle = isNow ? '#67e8f9' : '#fde68a';
-      ctx.fillText(
-        `${codeCheck.area} m² (${room.w.toFixed(2)}×${room.d.toFixed(2)}m)`,
-        cx,
-        cy + 7
-      );
+        const cx = tl.px + rwPx / 2;
+        const cy = tl.py + rdPx / 2;
+        const titleStr = room.shortTitle || String(room.name || '').split('(')[0].trim();
+        const dimStr = `${codeCheck.area} m² (${room.w.toFixed(2)}×${room.d.toFixed(2)}m)`;
+        const showSub = Boolean(room.subTitle && rdPx >= 54 && rwPx >= 95);
+
+        const pillW = Math.min(rwPx - 6, Math.max(76, titleStr.length * 6.5 + 16));
+        const pillH = showSub ? 38 : (rdPx >= 34 ? 26 : 16);
+        ctx.fillStyle = this.theme === 'white_paper' ? 'rgba(255, 255, 255, 0.84)' : 'rgba(7, 17, 32, 0.78)';
+        ctx.fillRect(cx - pillW / 2, cy - pillH / 2, pillW, pillH);
+
+        ctx.fillStyle = pal.text;
+        ctx.font = rwPx < 75 ? 'bold 8px Inter, sans-serif' : 'bold 9.5px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        if (rdPx < 34) {
+          ctx.fillText(titleStr, cx, cy);
+        } else if (!showSub) {
+          ctx.fillText(titleStr, cx, cy - 5);
+          ctx.font = '8px IBM Plex Mono, monospace';
+          ctx.fillStyle = isNow ? '#67e8f9' : '#fde68a';
+          ctx.fillText(dimStr, cx, cy + 6);
+        } else {
+          ctx.fillText(titleStr, cx, cy - 11);
+          ctx.font = '8.5px IBM Plex Mono, monospace';
+          ctx.fillStyle = isNow ? '#67e8f9' : '#fde68a';
+          ctx.fillText(dimStr, cx, cy + 1);
+          ctx.font = '7.5px Inter, sans-serif';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.fillText(room.subTitle, cx, cy + 12);
+        }
+        ctx.restore();
+      }
 
       ctx.fillStyle = isSelected ? '#fbbf24' : '#38bdf8';
-      ctx.fillRect(br.px - 4, br.py - 4, 8, 8);
+      ctx.fillRect(br.px - 4, br.py - 4, 7, 7);
       ctx.restore();
     });
 
@@ -3376,8 +3429,9 @@ export class FloorplanEditor {
       const pozoRadiusPx = 0.90 * this.zoom; // Ø 1.80m
       const camTL = this.worldToScreen(-4.15, 14.35);
       const camBR = this.worldToScreen(-2.75, 15.65);
-      const colStart = this.worldToScreen(-1.64, 3.45);
-      const colMid = this.worldToScreen(-3.45, 11.80);
+      const colStart = this.worldToScreen(0.68, 3.28);
+      const colMid1 = this.worldToScreen(0.68, 11.80);
+      const colMid2 = this.worldToScreen(-3.45, 11.80);
       const colEnd = this.worldToScreen(-3.45, 14.35);
 
       ctx.save();
@@ -3402,18 +3456,19 @@ export class FloorplanEditor {
       ctx.setLineDash([6, 4]);
       ctx.beginPath();
       ctx.moveTo(colStart.px, colStart.py);
-      ctx.lineTo(colMid.px, colMid.py);
+      ctx.lineTo(colMid1.px, colMid1.py);
+      ctx.lineTo(colMid2.px, colMid2.py);
       ctx.lineTo(colEnd.px, colEnd.py);
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = '#fdba74';
-      ctx.fillText('⬇️ Colector Cloacal PVC Ø100mm desde Núcleo Eje F–G (Pendiente >=2%)', colMid.px + 120, colMid.py);
+      ctx.fillText('⬇️ Colector Cloacal PVC Ø100mm (Pendiente >=2%)', (colMid1.px + colMid2.px) / 2, colMid1.py - 6);
       ctx.restore();
     }
 
     // 7b. Escaleras en Costados Opuestos:
-    // - Escalera 1 (Baja a Subsuelo, 3.30×0.90m) en costado izquierdo Eje 8–9 (x=-4.87..-3.90m, z=5.26..8.56m)
-    // - Escalera 2 (Sube a Planta Alta, 3.90×0.80m) en costado derecho Eje 1–2 (x=+3.84..+4.87m, z=5.26..9.16m)
+    // - Escalera 1 (Baja a Subsuelo, -2.34m) en costado Este Eje 1–2 (x=+3.84..+4.87m, z=5.26..8.56m)
+    // - Escalera 2 (Sube a Planta Alta, +2.88m) en costado Oeste Eje 8–9 (x=-4.87..-3.84m, z=5.26..9.16m)
     const drawStaircaseBox = (st, labelTop, labelBottom) => {
       if (!st) return;
       const stl = this.worldToScreen(st.x1, st.z1);
@@ -3422,7 +3477,7 @@ export class FloorplanEditor {
       const sh = sbr.py - stl.py;
 
       ctx.save();
-      ctx.fillStyle = this.bankColorMode ? 'rgba(15, 23, 42, 0.78)' : 'rgba(14, 165, 233, 0.22)';
+      ctx.fillStyle = this.bankColorMode ? 'rgba(15, 23, 42, 0.78)' : 'rgba(14, 165, 233, 0.24)';
       ctx.strokeStyle = this.bankColorMode ? '#94a3b8' : '#38bdf8';
       ctx.lineWidth = 1.6;
       ctx.fillRect(stl.px, stl.py, sw, sh);
@@ -3439,26 +3494,30 @@ export class FloorplanEditor {
         ctx.stroke();
       }
 
+      ctx.fillStyle = 'rgba(7, 17, 32, 0.82)';
+      ctx.fillRect(stl.px + 2, stl.py + sh / 2 - 13, Math.max(10, sw - 4), 24);
       ctx.fillStyle = '#e0f2fe';
-      ctx.font = 'bold 8px IBM Plex Mono, monospace';
+      ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(labelTop, stl.px + sw / 2, stl.py + sh / 2 - 4);
-      ctx.fillText(labelBottom, stl.px + sw / 2, stl.py + sh / 2 + 8);
+      ctx.fillText(labelTop, stl.px + sw / 2, stl.py + sh / 2 - 3);
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = '7px IBM Plex Mono, monospace';
+      ctx.fillText(labelBottom, stl.px + sw / 2, stl.py + sh / 2 + 7);
       ctx.restore();
     };
 
     if (this.currentLevel === 'subsuelo' || this.currentLevel === 'planta_baja') {
       drawStaircaseBox(
         FIXED_STRUCTURAL_GRID.existingStaircase1,
-        '🔒 ESCALERA 1 (Eje 8–9)',
-        'Baja a Subsuelo 3.30×0.90m'
+        'ESC. 1🔒',
+        'Subsuelo'
       );
     }
     if (this.currentLevel === 'planta_baja' || this.currentLevel === 'planta_alta') {
       drawStaircaseBox(
         FIXED_STRUCTURAL_GRID.existingStaircase2,
-        '🔒 ESCALERA 2 (Eje 1–2)',
-        'Sube a PA 3.90×0.80m'
+        'ESC. 2🔒',
+        'Sube PA'
       );
     }
 
@@ -3529,8 +3588,6 @@ export class FloorplanEditor {
     }
 
     // 9. 14 Zapatas (incluyendo combinadas) y 20 Pilares H°A° (P1..P20)
-    // En Hoy en Obra / Planta Baja se destacan los 17 pilares PB YA HORMIGONADOS hasta +2.88m.
-    // En Planta Alta, P12, P13 y P15 se muestran con borde punteado ámbar y etiqueta P12(Muere PB).
     const drawnCombinedFootings = new Set();
     FIXED_COLUMNS_AND_FOOTINGS.forEach((col) => {
       if (!col.combinedGroup || !drawnCombinedFootings.has(col.combinedGroup)) {
@@ -3543,8 +3600,8 @@ export class FloorplanEditor {
         ctx.strokeStyle = this.bankColorMode
           ? '#64748b'
           : col.combinedGroup
-            ? 'rgba(56, 189, 248, 0.42)'
-            : 'rgba(6, 182, 212, 0.30)';
+            ? 'rgba(56, 189, 248, 0.35)'
+            : 'rgba(6, 182, 212, 0.24)';
         ctx.lineWidth = 1;
         ctx.setLineDash([2, 2]);
         ctx.strokeRect(zCenter.px - zapW / 2, zCenter.py - zapD / 2, zapW, zapD);
@@ -3568,9 +3625,9 @@ export class FloorplanEditor {
         ctx.setLineDash([]);
 
         ctx.fillStyle = '#fbbf24';
-        ctx.font = 'bold 9px IBM Plex Mono, monospace';
+        ctx.font = 'bold 8px IBM Plex Mono, monospace';
         ctx.textAlign = 'left';
-        ctx.fillText(`${col.pilarId}(Muere PB)`, center.px + colW / 2 + 3, center.py + 2);
+        ctx.fillText(`${col.pilarId}(PB)`, center.px + colW / 2 + 2, center.py + 2);
       } else {
         const isPBHormigonado288 = !col.diesInPB && this.currentLevel === 'planta_baja';
         const pillarFill = isHoveredSnap
@@ -3590,12 +3647,9 @@ export class FloorplanEditor {
         ctx.strokeRect(center.px - colW / 2, center.py - colD / 2, colW, colD);
 
         ctx.fillStyle = this.theme === 'white_paper' ? '#0f172a' : (this.bankColorMode ? '#f8fafc' : '#a5f3fc');
-        ctx.font = 'bold 9px IBM Plex Mono, monospace';
+        ctx.font = 'bold 8px IBM Plex Mono, monospace';
         ctx.textAlign = 'left';
-        const pTag = this.planData.presetId === 'hoy_en_obra' && isPBHormigonado288
-          ? `${col.pilarId}🔒(+2.88m)`
-          : `${col.pilarId}🔒`;
-        ctx.fillText(pTag, center.px + colW / 2 + 3, center.py - 1);
+        ctx.fillText(col.pilarId, center.px + colW / 2 + 2, center.py - 1);
       }
       ctx.restore();
     });
@@ -3609,26 +3663,29 @@ export class FloorplanEditor {
       ctx.save();
       ctx.fillStyle = cat.color;
       ctx.strokeStyle = isSelected ? '#fbbf24' : '#ffffff';
-      ctx.lineWidth = isSelected ? 2.5 : 1.2;
+      ctx.lineWidth = isSelected ? 2.2 : 1.1;
       ctx.beginPath();
-      ctx.arc(pt.px, pt.py, 8, 0, Math.PI * 2);
+      ctx.arc(pt.px, pt.py, 6.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
 
-      ctx.font = '9.5px sans-serif';
+      ctx.font = '8.5px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(cat.symbol, pt.px, pt.py);
 
-      ctx.font = 'bold 8px IBM Plex Mono, monospace';
-      ctx.fillStyle = pal.text;
-      ctx.fillText(cat.code, pt.px, pt.py + 14);
+      if (this.zoom >= 46 || isSelected) {
+        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
+        ctx.fillStyle = pal.text;
+        ctx.fillText(cat.code, pt.px, pt.py + 11);
+      }
       ctx.restore();
     });
 
     // 11. CAPA DE DUCTOS, 4 PASES DIAMANTADOS EN LOSA 1, TABLEROS SMART DIN Y 26 ENCHUFES (20A / 16A) + LLAVES 3-WAY
     if (this.showConduitsAndOutlets) {
       const { pases, tableros, enchufes, llaves, conduitRoutes } = this.getConduitsAndOutletsForLevel(this.currentLevel);
+      const showDetailedCodes = this.zoom >= 48;
 
       ctx.save();
       conduitRoutes.forEach((route) => {
@@ -3636,7 +3693,7 @@ export class FloorplanEditor {
         ctx.strokeStyle = route.color || '#f97316';
         ctx.lineWidth = 1.8;
         ctx.setLineDash([4, 3]);
-        ctx.globalAlpha = 0.82;
+        ctx.globalAlpha = 0.85;
         ctx.beginPath();
         route.pts.forEach(([rx, rz], idx) => {
           const sp = this.worldToScreen(rx, rz);
@@ -3647,35 +3704,29 @@ export class FloorplanEditor {
       });
       ctx.restore();
 
-      pases.forEach((pase) => {
+      pases.forEach((pase, pIdx) => {
         const pt = this.worldToScreen(pase.x, pase.z);
         const isSel = this.selectedElement?.item?.id === pase.id;
         ctx.save();
         ctx.fillStyle = '#ec4899';
         ctx.strokeStyle = isSel ? '#fde047' : '#ffffff';
-        ctx.lineWidth = isSel ? 2.6 : 1.6;
+        ctx.lineWidth = isSel ? 2.4 : 1.5;
         ctx.beginPath();
-        ctx.arc(pt.px, pt.py, 9.5, 0, Math.PI * 2);
+        ctx.arc(pt.px, pt.py, 8, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.strokeStyle = '#fbcfe8';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([2, 2]);
-        ctx.beginPath();
-        ctx.arc(pt.px, pt.py, 13, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 8px IBM Plex Mono, monospace';
+        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`Ø${pase.diametroMm}`, pt.px, pt.py);
+        ctx.fillText(`P${pIdx + 1}`, pt.px, pt.py);
 
-        ctx.fillStyle = '#f472b6';
-        ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
-        ctx.fillText(`${pase.shortTag} (Ø${pase.diametroMm}mm)`, pt.px, pt.py - 16);
+        if (showDetailedCodes || isSel) {
+          ctx.fillStyle = '#f472b6';
+          ctx.font = 'bold 8px IBM Plex Mono, monospace';
+          ctx.fillText(`${pase.shortTag} Ø${pase.diametroMm}`, pt.px, pt.py - 12);
+        }
         ctx.restore();
       });
 
@@ -3686,19 +3737,19 @@ export class FloorplanEditor {
         ctx.save();
         ctx.fillStyle = isWater ? '#0284c7' : '#ef4444';
         ctx.strokeStyle = isSel ? '#fde047' : '#ffffff';
-        ctx.lineWidth = isSel ? 2.5 : 1.5;
-        ctx.fillRect(pt.px - 10, pt.py - 8, 20, 16);
-        ctx.strokeRect(pt.px - 10, pt.py - 8, 20, 16);
+        ctx.lineWidth = isSel ? 2.2 : 1.3;
+        ctx.fillRect(pt.px - 8, pt.py - 6, 16, 12);
+        ctx.strokeRect(pt.px - 8, pt.py - 6, 16, 12);
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 8px IBM Plex Mono, monospace';
+        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(isWater ? '🚰' : '⚡', pt.px, pt.py);
 
         ctx.fillStyle = isWater ? '#38bdf8' : '#fca5a5';
-        ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
-        ctx.fillText(tab.displayCode, pt.px, pt.py + 15);
+        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
+        ctx.fillText(tab.displayCode.split(' ')[0], pt.px, pt.py + 12);
         ctx.restore();
       });
 
@@ -3709,21 +3760,23 @@ export class FloorplanEditor {
         ctx.save();
         ctx.fillStyle = is20A ? '#f97316' : '#10b981';
         ctx.strokeStyle = isSel ? '#fde047' : '#0f172a';
-        ctx.lineWidth = isSel ? 2.4 : 1.2;
+        ctx.lineWidth = isSel ? 2.2 : 1.0;
         ctx.beginPath();
-        ctx.arc(pt.px, pt.py, 6.5, 0, Math.PI * 2);
+        ctx.arc(pt.px, pt.py, 5.2, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 7px IBM Plex Mono, monospace';
+        ctx.font = 'bold 6.5px IBM Plex Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(is20A ? '20' : '16', pt.px, pt.py);
 
-        ctx.fillStyle = is20A ? '#fdba74' : '#6ee7b7';
-        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
-        ctx.fillText(toma.codigo, pt.px, pt.py + 12);
+        if (showDetailedCodes || isSel) {
+          ctx.fillStyle = is20A ? '#fdba74' : '#6ee7b7';
+          ctx.font = 'bold 7px IBM Plex Mono, monospace';
+          ctx.fillText(toma.codigo, pt.px, pt.py + 10);
+        }
         ctx.restore();
       });
 
@@ -3733,20 +3786,22 @@ export class FloorplanEditor {
         ctx.save();
         ctx.fillStyle = '#38bdf8';
         ctx.strokeStyle = isSel ? '#fde047' : '#0f172a';
-        ctx.lineWidth = isSel ? 2.4 : 1.2;
+        ctx.lineWidth = isSel ? 2.2 : 1.0;
         ctx.beginPath();
-        ctx.moveTo(pt.px, pt.py - 7);
-        ctx.lineTo(pt.px + 7, pt.py);
-        ctx.lineTo(pt.px, pt.py + 7);
-        ctx.lineTo(pt.px - 7, pt.py);
+        ctx.moveTo(pt.px, pt.py - 5.5);
+        ctx.lineTo(pt.px + 5.5, pt.py);
+        ctx.lineTo(pt.px, pt.py + 5.5);
+        ctx.lineTo(pt.px - 5.5, pt.py);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#7dd3fc';
-        ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(sw.codigo, pt.px, pt.py - 10);
+        if (showDetailedCodes || isSel) {
+          ctx.fillStyle = '#7dd3fc';
+          ctx.font = 'bold 7px IBM Plex Mono, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(sw.codigo, pt.px, pt.py - 8);
+        }
         ctx.restore();
       });
     }
@@ -3909,7 +3964,7 @@ export class FloorplanEditor {
 
     // Ambientes acotados
     lvl.rooms.forEach((r) => {
-      if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja' && r.id.endsWith('_cocina_comedor')) {
+      if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja' && r.id.endsWith('_estar')) {
         return;
       }
       const rx = toX(r.x);
@@ -3926,12 +3981,13 @@ export class FloorplanEditor {
         ? (isYellow ? 'rgba(245,158,11,0.20)' : isGreen ? 'rgba(22,163,74,0.18)' : 'rgba(220,38,38,0.16)')
         : 'rgba(56,189,248,0.08)';
       const dash = r.activeStage !== false ? '' : 'stroke-dasharray="5,4"';
+      const shortTitle = r.shortTitle || String(r.name || '').split('(')[0].trim();
       lines.push(`  <rect x="${rx}" y="${ry}" width="${rw}" height="${rd}" fill="${fill}" stroke="${stroke}" stroke-width="1.3" ${dash}/>`);
-      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 - 4}" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">${escXml(r.name)}</text>`);
-      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 + 10}" fill="#67e8f9" font-size="8.5" text-anchor="middle">${area} m² (${r.w.toFixed(2)}m × ${r.d.toFixed(2)}m)</text>`);
+      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 - 4}" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">${escXml(shortTitle)}</text>`);
+      lines.push(`  <text x="${rx + rw / 2}" y="${ry + rd / 2 + 10}" fill="#67e8f9" font-size="8" text-anchor="middle">${area} m² (${r.w.toFixed(2)}×${r.d.toFixed(2)}m)</text>`);
     });
 
-    // Escaleras en costados opuestos: Escalera 1 (Eje 8–9) y Escalera 2 (Eje 1–2)
+    // Escaleras en costados opuestos: Escalera 1 (Eje 1–2 Este) y Escalera 2 (Eje 8–9 Oeste)
     if (levelKey === 'subsuelo' || levelKey === 'planta_baja') {
       const st1 = FIXED_STRUCTURAL_GRID.existingStaircase1;
       const sx = toX(st1.x1);
@@ -3939,7 +3995,7 @@ export class FloorplanEditor {
       const sw = Number(((st1.x2 - st1.x1) * scale).toFixed(2));
       const sd = Number(((st1.z2 - st1.z1) * scale).toFixed(2));
       lines.push(`  <rect x="${sx}" y="${sy}" width="${sw}" height="${sd}" fill="rgba(14,165,233,0.20)" stroke="#38bdf8" stroke-width="1.5"/>`);
-      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="8" font-weight="bold" text-anchor="middle">ESCALERA 1 EJE 8-9 (3.30x0.90m)</text>`);
+      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="7.5" font-weight="bold" text-anchor="middle">ESC. 1 (-2.34m)</text>`);
     }
     if ((levelKey === 'planta_baja' || levelKey === 'planta_alta') && FIXED_STRUCTURAL_GRID.existingStaircase2) {
       const st2 = FIXED_STRUCTURAL_GRID.existingStaircase2;
@@ -3948,7 +4004,7 @@ export class FloorplanEditor {
       const sw = Number(((st2.x2 - st2.x1) * scale).toFixed(2));
       const sd = Number(((st2.z2 - st2.z1) * scale).toFixed(2));
       lines.push(`  <rect x="${sx}" y="${sy}" width="${sw}" height="${sd}" fill="rgba(14,165,233,0.20)" stroke="#38bdf8" stroke-width="1.5"/>`);
-      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="8" font-weight="bold" text-anchor="middle">ESCALERA 2 EJE 1-2 (3.90x0.80m)</text>`);
+      lines.push(`  <text x="${sx + sw / 2}" y="${sy + sd / 2}" fill="#e0f2fe" font-size="7.5" font-weight="bold" text-anchor="middle">ESC. 2 (+2.88m)</text>`);
     }
 
     // Muros a escala y cotas

@@ -2040,8 +2040,8 @@ export class ProjectScene {
     this.groups.archMain.visible = this.layers.architecture && this.currentScenario !== 'hoy_en_obra';
     this.groups.archSubsuelo.visible = this.layers.subsuelo && this.currentScenario !== 'hoy_en_obra';
 
-    this.groups.archMain.children.forEach((ch) => {
-      ch.visible = true;
+    this.groups.archMain.traverse((ch) => {
+      if (ch !== this.groups.archMain) ch.visible = true;
     });
 
     if (cleanMode === 'cut_roof') {
@@ -2049,8 +2049,8 @@ export class ProjectScene {
     } else if (cleanMode === 'cut_pa') {
       this.groups.roof.visible = false;
       this.groups.losaFase2.visible = false;
-      this.groups.archMain.children.forEach((ch) => {
-        if (ch.position.y > 2.75) {
+      this.groups.archMain.traverse((ch) => {
+        if (ch.position && ch.position.y >= 2.65) {
           ch.visible = false;
         }
       });
@@ -2186,6 +2186,61 @@ export class ProjectScene {
   }
 
   /**
+   * Activa/Desactiva el Modo Fantasma / Translúcido para Muros y Losas (`setArchitectureGhostMode`)
+   * Ideal para los modos Electricista y Plomero: permite ver todas las habitaciones, artefactos sanitarios,
+   * cocina, camas y losas con sus agujeros en semitransparencia mientras resaltan al 100% las instalaciones MEP.
+   */
+  setArchitectureGhostMode(enabled = false, opacity = 0.26) {
+    this.ghostMode = Boolean(enabled);
+    const targetGroups = [
+      this.groups.archMain,
+      this.groups.archSubsuelo,
+      this.groups.losaFase1,
+      this.groups.losaFase2
+    ];
+    targetGroups.forEach((grp) => {
+      if (!grp) return;
+      grp.traverse((child) => {
+        if (!child.isMesh || !child.material) return;
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        mats.forEach((m) => {
+          if (this.ghostMode) {
+            if (m.userData._origTransparent === undefined) {
+              m.userData._origTransparent = m.transparent;
+              m.userData._origOpacity = m.opacity;
+              m.userData._origDepthWrite = m.depthWrite;
+            }
+            m.transparent = true;
+            m.opacity = Math.min(m.userData._origOpacity ?? 1.0, opacity);
+            m.depthWrite = false;
+            m.needsUpdate = true;
+          } else if (m.userData._origTransparent !== undefined) {
+            m.transparent = m.userData._origTransparent;
+            m.opacity = m.userData._origOpacity;
+            m.depthWrite = m.userData._origDepthWrite;
+            m.needsUpdate = true;
+          }
+        });
+      });
+    });
+  }
+
+  /**
+   * Filtra la visualización de la capa MEP (`all`, `electricista`, `plomero`)
+   */
+  setMepDisciplineFilter(mode = 'all') {
+    if (this.conduitsOutletsRefs && typeof this.conduitsOutletsRefs.setSubLayerFilter === 'function') {
+      this.conduitsOutletsRefs.setSubLayerFilter(mode);
+    } else if (
+      this.groups.ductosYEnchufes &&
+      this.groups.ductosYEnchufes.userData &&
+      typeof this.groups.ductosYEnchufes.userData.setSubLayerFilter === 'function'
+    ) {
+      this.groups.ductosYEnchufes.userData.setSubLayerFilter(mode);
+    }
+  }
+
+  /**
    * Activa/Desactiva el Simulador Interactivo Pluvial / Tormenta y Desagües (`pluvialNetworkRefs`)
    */
   setPluvialSimulationState(state = {}) {
@@ -2287,8 +2342,6 @@ export class ProjectScene {
 
   /**
    * Activa/Desactiva el Modo Juego (Recorrido Peatonal 1ra / 3ra Persona con Colisión de Paredes Real)
-   * Controles: WASD / Flechas para caminar, Arrastrar ratón para girar la vista, Shift correr, Espacio saltar,
-   * C alternar 1ra/3ra persona, 1/2/3 teletransportar a Planta Baja (0.00m), Planta Alta (+2.88m) o Subsuelo (-2.34m), E interactuar.
    */
   toggleGameMode(enabled) {
     this.gameMode = Boolean(enabled);
@@ -2296,7 +2349,7 @@ export class ProjectScene {
 
     if (this.gameMode) {
       this.controls.enabled = false;
-      this.thirdPersonView = false; // Inicia en 1ra persona ("Ojos") para que ninguna pared tape la cámara
+      this.thirdPersonView = false;
       this.playerPos.set(0.85, 0.0, 0.50);
       this.playerYaw = 0;
       this.playerPitch = 0;
@@ -2320,15 +2373,15 @@ export class ProjectScene {
     if (y < -1.0) {
       if (z < 3.0) return 'Pasillo Cámara Antihumedad (Subsuelo -2.34m)';
       if (z > 13.34) return 'Patio Nivelado, Parrilla y Reserva Piscina (-2.34m)';
-      if (x < -3.2 && z >= 5.0 && z <= 8.2) return 'Lavadero sobre Pared Lateral (Subsuelo -2.34m)';
+      if (x > 3.2 && z >= 5.0 && z <= 8.8) return 'Lavadero bajo Escalera 1 en Muro Este (Subsuelo -2.34m)';
       return 'Gran Salón Abierto de Subsuelo 100 m² (-2.34m)';
     }
     if (y > 1.8) {
       if (x < -1.80 && z >= 6.00) return 'Escritorio / Desk Extendido hasta Galería Eje A (+2.88m)';
       if (z > 9.94) return 'Deck 2 / Terraza Panorámica al Río (+2.88m)';
       if (z >= 4.85 && z <= 6.00 && x >= -3.84 && x <= 0.60) return 'Pasillo Distribuidor de Planta Alta (+2.88m)';
-      if (x >= -1.80 && x <= 0.60 && z >= 6.00) return 'Dormitorio 2 (+2.88m)';
-      if (x > 0.60 && z >= 4.85) return 'Dormitorio Principal en Suite (+2.88m)';
+      if (x >= -1.80 && x <= 0.30 && z >= 6.00) return 'Dormitorio 2 (+2.88m)';
+      if (x > 0.30 && z >= 4.85) return 'Dormitorio Principal en Suite (+2.88m)';
       if (x >= -1.65 && z < 4.85) return 'Vestidor y Baño en Suite (+2.88m)';
       return 'SSHH 2 — Baño de Planta Alta (+2.88m)';
     }
@@ -2336,8 +2389,8 @@ export class ProjectScene {
     if (z < 3.0) return 'Rejilla Galvanizada sobre Foso de Oxigenación (0.00m)';
     if (z > 9.94) return 'Galería Panorámica al Río Paraguay (-0.45m)';
     if (x > 3.75 && z <= 5.26) return 'Hall Puerta de Servicio (Acceso Doble a Subsuelo y Casa 0.00m)';
-    if (x < -0.74) return 'Cocina, Comedor y Baño Social (0.00m)';
-    return 'Estar Social / Living Principal (0.00m)';
+    if (x >= -0.74) return 'Cocina Integrada, Comedor y Baño Social (Sobre Losa Maciza L4 • 0.00m)';
+    return 'Estar Social / Living Principal (Sobre Sector Loza Rap 38 m² • 0.00m)';
   }
 
   _notifyGameHud(customInteraction = null) {

@@ -631,18 +631,20 @@ export const USER_ROLES_CATALOG = Object.freeze({
     emoji: '🚰',
     color: '#06b6d4',
     badge: 'ESSAP DIRECTO • PLUVIAL A CALLE',
-    subtitulo: 'Agua directa desde medidor ESSAP (sin tanque), núcleo vertical Eje F–G, desagüe pluvial a calle y pozo ciego trasero',
+    subtitulo: 'Agua directa desde medidor ESSAP (sin tanque), núcleo vertical Eje F–G sobre Losa Maciza L4, Pases #3/#3B/#4 y pozo ciego trasero',
     resumenEjecutivo:
-      'Aísla en 3D toda la red hidrosanitaria y pluvial: medidor ESSAP a nivel de vereda en la muralla pequeña junto al portón (x = -3.85m), presión directa de red (sin tanque cisterna), bajada cloacal unificada por Pase #3 (Ø115mm), cámara séptica + pozo ciego en el fondo y drenaje pluvial hacia Calle Tte. Guillermo Arias.',
-    cameraPreset: 'fachada_porton',
-    cutawayPreset: 'cut_pa',
+      'Muestra la casa en Modo Rayos-X / Transparencia (Ghost Mode) con toda la red hidrosanitaria y pluvial ortogonal a 90°: medidor ESSAP en fachada (x = -3.85m), agua fría PPR Ø25mm y caliente PPR Ø20mm + Termocalefón 80L por PASE #4 (x = +1.48m en Losa Maciza L4), columna cloacal PVC Ø100mm ventilada por PASE #3 (x = +0.68m en Losa L4) y PASE #3B (x = -3.10m p/ SSHH 2), Cámara Desgrasadora, Cámara de Inspección, Cámara Séptica 1.500L y Pozo Ciego Ø1.80m en el patio trasero.',
+    cameraPreset: 'mep_plomero',
+    cutawayPreset: 'full',
+    ghostMode: true,
+    mepDisciplineFilter: 'plomero',
     openDrawer: false,
     openMepSim: true,
     activeLayers: {
       muroEstacionamiento: true,
       losaFase2: true,
-      techo: true,
-      architecture: false,
+      techo: false,
+      architecture: true,
       subsuelo: true,
       structure: true,
       entornoUrbano: false,
@@ -657,13 +659,13 @@ export const USER_ROLES_CATALOG = Object.freeze({
       { id: 'act_plom_essap', label: '🚰 Simular Agua Directa ESSAP 2.8 bar (Sin Tanque)', type: 'sim_pluvial', target: 'presion_agua' },
       { id: 'act_plom_cloaca', label: '🚽 Simular Descarga Cloacal -> Cámara Séptica y Pozo Ciego', type: 'sim_pluvial', target: 'descarga_cloacal' },
       { id: 'act_plom_stop', label: '⏹️ Detener Simulaciones Hidráulicas', type: 'stop_sims', target: 'off' },
-      { id: 'act_plom_nucleo', label: '🚿 Enfocar Núcleo Húmedo Eje F–G (Baños y Cocina)', type: 'focus_room', target: 'cocina_isla' }
+      { id: 'act_plom_nucleo', label: '🚿 Enfocar Núcleo Húmedo Eje F–G (Baños y Cocina s/ Losa L4)', type: 'focus_room', target: 'cocina_isla' }
     ],
     checklistTecnico: [
       'PROHIBIDO TANQUE DE AGUA: Se utiliza presión directa de red ESSAP (2.8–3.2 bar) desde la caja del medidor en la muralla izquierda (x = -3.85m, z = -4.24m).',
       'Desagüe pluvial 100% hacia ADELANTE (Calle Tte. Guillermo Arias): canaleta oculta N°24 -> 4 bajadas PVC Ø100mm -> registro frontal -> cordón vereda.',
-      'Pases diamantados en Losa 1 maciza (sin picar vigas): PASE #3 Ø115mm (Columna cloacal ventilada) y PASE #4 Ø63mm (Termofusión PPR agua fría/caliente).',
-      'Sistema cloacal autónomo en patio trasero (x = -3.60m, z = 19.50m..22.20m): Cámara Desengrasadora + Cámara Séptica 1.500L + Pozo Ciego Ø1.80m × 3.50m con caño camisa Ø100mm p/ desagote.'
+      'Pases diamantados en Losa 1 Maciza L4 (lado Este x = -0.74m..+4.87m, sin tocar vigas): PASE #3 Ø115mm (Columna cloacal x = +0.68m, z = 3.28m) y PASE #4 Ø63mm (Agua Fría PPR Ø25mm + Caliente PPR Ø20mm x = +1.48m, z = 3.28m).',
+      'Sistema cloacal autónomo en patio trasero (x = -3.60m, z = 14.50m..22.20m): Cámara Desengrasadora + Cámara de Inspección 60×60 + Cámara Séptica 1.500L + Pozo Ciego Ø1.80m × 3.50m con caño camisa Ø100mm p/ desagote.'
     ],
     partidaIds: [
       'instalaciones_sanitarias_desagues',
@@ -684,21 +686,23 @@ export const USER_ROLES_CATALOG = Object.freeze({
     emoji: '⚡',
     color: '#a855f7',
     badge: 'ANDE TRIFÁSICA • SMART DIN CHINA',
-    subtitulo: 'Bajada ANDE al costado del portón (x = -3.85m), tablero 36–48 DIN con telemetría China, 26 tomas y red Zigbee con Neutro',
+    subtitulo: 'Bajada ANDE + Jabalina PAT-01 (x = -3.85m), Tableros TP-PB/TS-PA/TS-SUB alineados en PASE #1, 9 Cajas Octogonales en Losa, 3 Splits AA y 26 Tomas',
     resumenEjecutivo:
-      'Muestra en 3D la acometida aérea trifásica ANDE sobre el pilar de la muralla pequeña junto al portón (x = -3.85m, z = -4.08m), el Tablero Principal Smart DIN (36–48 módulos), los pases diamantados #1 y #2 (Ø50mm), los 26 tomacorrientes (20A/16A) y los 6 conos de cámaras PoE.',
-    cameraPreset: 'fachada_porton',
-    cutawayPreset: 'cut_pa',
+      'Muestra la casa en Modo Rayos-X / Transparencia (Ghost Mode) con la instalación eléctrica 100% ortogonal a 90° siguiendo el diseño de Losa 1 y Losa 2: Pilar ANDE + Jabalina Copperweld PAT-01 (x = -3.85m), Tablero Principal TP-PB (36–48 DIN) alineado verticalmente con TS-PA y TS-SUB a través de PASE #1 (x = -0.45m, z = 4.78m en Losa Maciza L4) y Rack 6U en PASE #2 (x = +0.25m, z = 4.78m), 9 cajas octogonales de techo con luminarias LED, 3 equipos Split AA Inverter, Termocalefón 80L y 26 tomacorrientes (20A/16A).',
+    cameraPreset: 'mep_electricista',
+    cutawayPreset: 'full',
+    ghostMode: true,
+    mepDisciplineFilter: 'electricista',
     openDrawer: false,
     openMepSim: true,
     activeLayers: {
       muroEstacionamiento: true,
       losaFase2: true,
       techo: false,
-      architecture: false,
+      architecture: true,
       subsuelo: true,
       structure: true,
-      entornoUrbano: true,
+      entornoUrbano: false,
       pluvial: false,
       senalesDebiles: true,
       ductos: true,
@@ -709,14 +713,14 @@ export const USER_ROLES_CATALOG = Object.freeze({
       { id: 'act_elec_fuga', label: '⚠️ Simular Fuga Diferencial 30mA (Corte DIN)', type: 'sim_elec', target: 'fuga_30ma' },
       { id: 'act_elec_temp', label: '🔥 Simular Sobretemperatura >65°C en Toma 20A', type: 'sim_elec', target: 'sobretemp_65c' },
       { id: 'act_elec_stop', label: '⏹️ Restaurar Tablero DIN Normal (220V)', type: 'stop_sims', target: 'off' },
-      { id: 'act_elec_pilar', label: '⚡ Enfocar Bajada de Luz ANDE al Costado del Portón', type: 'focus_room', target: 'fachada_porton' },
+      { id: 'act_elec_pilar', label: '⚡ Enfocar Bajada de Luz ANDE + Jabalina PAT-01', type: 'focus_room', target: 'fachada_porton' },
       { id: 'act_elec_china', label: '📦 Ver Kit Domótica China (Tongou/Sonoff/Aqara)', type: 'open_modal', target: 'modal-simulador' }
     ],
     checklistTecnico: [
-      'Bajada de luz ANDE (3×380/220V, TM 3×40A) ubicada exactamente en la muralla frontal pequeña al costado del portón peatonal (x = -3.85m, z = -4.08m).',
-      'Regla de Oro Domótica China (costo extra Gs. 0): pasar SIEMPRE cable Neutro celeste 1.5 mm² a todas las cajas de llaves de luz y usar cajas profundas de 5.5 cm.',
-      'Tablero Principal de 36–48 módulos DIN con DPS Clase II contra rayos, disyuntores 30mA y medidores inteligentes Zigbee con pinzas CT por fase R-S-T.',
-      'Circuitos dedicados de 20A (cable 4 mm² ininflamable) para Aires Split, Termocalefón 80L y mesada de Cocina (Microondas + Air Fryer 1500W).'
+      'Bajada de luz ANDE (3×380/220V, TM 3×40A) + Jabalina Copperweld PAT-01 (Ø5/8"×2.40m) en la muralla frontal junto al portón (x = -3.85m, z = -4.08m).',
+      'Montante vertical por PASE #1 (Ø50mm Eléctrico en x = -0.45m, z = 4.78m sobre Losa Maciza L4) y PASE #2 (Ø50mm Datos/Cat6 en x = +0.25m, z = 4.78m) conectando TS-SUB (-0.95m), TP-PB (+1.55m) y TS-PA (+4.35m).',
+      'Iluminación de techo: 9 cajas octogonales de losa con luminarias plafón LED cálidas 3000K + 7 llaves táctiles Zigbee con cable Neutro celeste 1.5 mm².',
+      'Circuitos dedicados de 20A (cable 4 mm² ininflamable): 3 Aires Split Inverter (Estar, Suite PA, Estudio PA), Termocalefón 80L (2000W) y mesada de Cocina (Microondas + Air Fryer 1500W).'
     ],
     partidaIds: [
       'instalaciones_electricas_embutidas',
@@ -736,9 +740,9 @@ export const USER_ROLES_CATALOG = Object.freeze({
     emoji: '🧱',
     color: '#f97316',
     badge: 'OBRA CIVIL • LADRILLO TOBATÍ',
-    subtitulo: 'Cierre hueco 38 m² con Lozarrap, Losa 2do Piso, protocolo Sikadur-32, mampostería Tobatí y cajón hidrófugo Eje 9',
+    subtitulo: 'Cierre sector sin losa 38 m² con Lozarrap (Oeste), Losa 2do Piso, protocolo Sikadur-32, mampostería Tobatí y cajón hidrófugo Eje 9',
     resumenEjecutivo:
-      'Enfoca el esqueleto estructural H°A° (Ejes 1–9 y A–G), el hueco real de 38.00 m² a cerrar con viguetas Lozarrap en Planta Baja, la advertencia sobre los pilares P12, P13 y P15 (que mueren en PB), el muro de contención de cochera y la calculadora de ladrillos de Tobatí.',
+      'Enfoca el esqueleto estructural H°A° (Ejes 1–9 y A–G), el sector sin losa de 38.00 m² a cerrar con viguetas Lozarrap en el cuadrante Oeste (Ejes 5–9 × B–G, donde va el Estar), la Losa Maciza L4 ya hormigonada en el Este (Ejes 1–5 × B–G), la advertencia sobre los pilares P12, P13 y P15 (que mueren en PB), y la calculadora de ladrillos de Tobatí.',
     cameraPreset: 'corte_estructural',
     cutawayPreset: 'cut_roof',
     openDrawer: false,
@@ -758,16 +762,16 @@ export const USER_ROLES_CATALOG = Object.freeze({
       topography: true
     },
     quickActions: [
-      { id: 'act_alb_hoy', label: '🏗️ Ver Estado «Hoy en Obra» (Hueco 38m² Abierto)', type: 'set_scenario', target: 'hoy_en_obra' },
+      { id: 'act_alb_hoy', label: '🏗️ Ver Estado «Hoy en Obra» (Sector Sin Losa 38m² en Oeste)', type: 'set_scenario', target: 'hoy_en_obra' },
       { id: 'act_alb_300', label: '🧱 Ver Obra con Cierre Lozarrap 38m² + 2do Piso (300M)', type: 'set_scenario', target: 'escenario300' },
       { id: 'act_alb_subsuelo', label: '🔦 Inspeccionar Subsuelo (Sin Encofrado Viejo / Suelo Tierra)', type: 'focus_room', target: 'subsuelo_depto' },
       { id: 'act_alb_planos', label: '📐 Ver Planos Estructurales E1–E9 y Detalles de Vigas', type: 'open_modal', target: 'modal-planos' }
     ],
     checklistTecnico: [
       'ALERTA ESTRUCTURAL: Los pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) MUEREN en Planta Baja (+100.00m). Arriba solo levantar tabiquería liviana o ladrillo hueco.',
-      'Sector sin losa de 38,00 m² en Losa 1 (cuadrante izquierdo Ejes 5–9 × B–G): cerrar con viguetas pretensadas Lozarrap + bovedilla cerámica + malla Ø4.2mm y capa de compresión 5cm (Gs. 14.440.000).',
+      'Sector sin losa de 38,00 m² en Losa 1 (cuadrante Oeste Ejes 5–9 × B–G, x = -4.87m..-0.74m): cerrar con viguetas pretensadas Lozarrap + bovedilla cerámica + malla Ø4.2mm y capa de compresión 5cm (Gs. 14.440.000). El lado Este (Ejes 1–5, x = -0.74m..+4.87m) YA tiene Losa Maciza L4.',
       'Continuidad de los 17 pilares a Planta Alta: cepillado de acero expuesto, desoxidante Sika Rustoff y puente epóxico Sikadur-32 Gel antes de hormigonar.',
-      'Subsuelo (+97.66m): demoler encofrado viejo junto a escalera para dejar gran salón libre, ubicar lavadero contra pared opuesta y ejecutar lecherada sobre suelo natural.'
+      'Subsuelo (+97.66m): demoler encofrado viejo junto a escalera para dejar gran salón libre, ubicar lavadero bajo Escalera 1 en muro Este y ejecutar lecherada sobre suelo natural.'
     ],
     partidaIds: [
       'contencion_cochera',

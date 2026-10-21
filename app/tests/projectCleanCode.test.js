@@ -9,7 +9,9 @@ import {
   ESCENARIOS_INVERSION,
   ITEMS_CREDITO_300M,
   ITEMS_CREDITO_350M,
-  ITEMS_CREDITO_440M
+  ITEMS_CREDITO_440M,
+  CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY,
+  GALLERY_ZONES_DATA
 } from '../src/data/projectData.js';
 
 import {
@@ -22,8 +24,17 @@ import {
   isAnyMepSimulationActive,
   getRoleWorkspaceConfig,
   getRoleBillOfMaterials,
-  generateRoleWorkOrderCsv
+  generateRoleWorkOrderCsv,
+  createCustomBudgetItem,
+  applyItemCustomization,
+  applyCustomOverridesToItems,
+  serializeProjectState,
+  deserializeProjectState,
+  serializeProjectCustomState,
+  deserializeProjectCustomState
 } from '../src/domain/budgetAndSceneService.js';
+
+import { exportProjectWorkbookXLSX } from '../src/xlsxExporter.js';
 
 test('1. BNF Credit Entity: PREVISION_CREDITO_NUEVO and CREDITO_BNF reference Banco Nacional de Fomento (BNF)', () => {
   assert.ok(CREDITO_BNF, 'CREDITO_BNF must be exported');
@@ -204,4 +215,197 @@ test('8. Extended Escritorio to Eje A (z=13.34m), No Floating Subsuelo Blindex &
     'index.html must include mobile bottom-sheet handle and GTA mobile touch controls'
   );
 });
+
+test('9. Paraguay Commercial Products Catalog & Enriched PRESUPUESTO_PARTIDAS', () => {
+  assert.ok(CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY, 'CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY must be exported');
+  assert.ok(CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY.DEFAULT_FALLBACK, 'DEFAULT_FALLBACK must exist');
+
+  for (let i = 1; i <= 28; i++) {
+    const entry = CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY[i];
+    assert.ok(entry, `Catalog entry ${i} must exist`);
+    assert.ok(entry.suggestedProduct && entry.suggestedProduct.length > 5, `Entry ${i} must have suggestedProduct`);
+    assert.ok(entry.commercialUnit && entry.commercialUnit.length > 0, `Entry ${i} must have commercialUnit`);
+    assert.equal(typeof entry.commercialUnitPrice, 'number');
+    assert.ok(entry.supplierRef && entry.supplierRef.length > 2, `Entry ${i} must have supplierRef`);
+    assert.ok(Array.isArray(entry.insumosUnitarios) && entry.insumosUnitarios.length >= 2, `Entry ${i} must have insumosUnitarios`);
+  }
+
+  for (const partida of PRESUPUESTO_PARTIDAS) {
+    assert.ok(partida.suggestedProduct && partida.suggestedProduct.length > 5, `Partida ${partida.id} must have suggestedProduct`);
+    assert.ok(partida.commercialUnit && partida.commercialUnit.length > 0, `Partida ${partida.id} must have commercialUnit`);
+    assert.equal(typeof partida.commercialUnitPrice, 'number');
+    assert.ok(partida.supplierRef && partida.supplierRef.length > 2, `Partida ${partida.id} must have supplierRef`);
+    assert.ok(Array.isArray(partida.unitBreakdown) && partida.unitBreakdown.length >= 1, `Partida ${partida.id} must have unitBreakdown`);
+  }
+});
+
+test('10. Eight Architectural Gallery Zones (GALLERY_ZONES_DATA) with Local Assets ./assets/zonas/zona_01..08.jpg', () => {
+  assert.ok(Array.isArray(GALLERY_ZONES_DATA), 'GALLERY_ZONES_DATA must be an array');
+  assert.equal(GALLERY_ZONES_DATA.length, 8, 'GALLERY_ZONES_DATA must contain 8 zones');
+
+  GALLERY_ZONES_DATA.forEach((zone, idx) => {
+    const numStr = String(idx + 1).padStart(2, '0');
+    assert.equal(zone.zoneNumber, idx + 1);
+    assert.ok(zone.id.startsWith(`zona_${numStr}_`), `Zone id ${zone.id} must start with zona_${numStr}_`);
+    assert.ok(
+      zone.image.includes(`/assets/zonas/zona_${numStr}_`) && zone.image.endsWith('.jpg'),
+      `Zone image ${zone.image} must point to assets/zonas/zona_${numStr}_*.jpg`
+    );
+    assert.ok(zone.title && zone.title.length > 5);
+    assert.ok(zone.level && zone.levelLabel && zone.cota && zone.dimensions);
+    assert.ok(zone.cameraViewKey && zone.summary && zone.familyNotes);
+    assert.ok(Array.isArray(zone.materialsAndProducts) && zone.materialsAndProducts.length >= 3);
+  });
+});
+
+test('11. Custom Budget Item Creation, Overrides (including totalOverride -> unitPrice), and JSON State Serialization', () => {
+  const customItem = createCustomBudgetItem({
+    name: 'Portón Basculante Automatizado Peccinin',
+    category: 'CARPINTERIA_Y_HERRERIA',
+    unit: 'gl',
+    qty: 2,
+    unitPrice: 6500000,
+    suggestedProduct: 'Motor Peccinin 1/2 HP + Chapa Plegada #18',
+    includedInActive: true
+  });
+
+  assert.ok(customItem.id.startsWith('custom_'));
+  assert.equal(customItem.isCustom, true);
+  assert.equal(customItem.qty, 2);
+  assert.equal(customItem.unitPrice, 6500000);
+  assert.equal(customItem.total, 13000000);
+  assert.equal(customItem.includedInActive, true);
+  assert.ok(customItem.suggestedProduct.includes('Peccinin'));
+
+  // Test applyItemCustomization with totalOverride recalculating unitPrice
+  const customizedByTotal = applyItemCustomization(customItem, {
+    qty: 4,
+    totalOverride: 20000000,
+    suggestedProduct: 'Motor PPA JetFlex Rápido + Estructura Galvanizada',
+    includedInActive: false
+  });
+  assert.equal(customizedByTotal.qty, 4);
+  assert.equal(customizedByTotal.unitPrice, 5000000);
+  assert.equal(customizedByTotal.total, 20000000);
+  assert.equal(customizedByTotal.includedInActive, false);
+  assert.equal(customizedByTotal.isModified, true);
+
+  // Test applyCustomOverridesToItems combining base items, overrides, and custom items
+  const combined = applyCustomOverridesToItems(
+    PRESUPUESTO_PARTIDAS.slice(0, 2),
+    {
+      [PRESUPUESTO_PARTIDAS[0].id]: {
+        qty: 10,
+        unitPrice: 500000,
+        suggestedProduct: 'Hormigón Elaborado H25 Especial'
+      }
+    },
+    [customItem]
+  );
+  assert.equal(combined.length, 3);
+  assert.equal(combined[0].qty, 10);
+  assert.equal(combined[0].unitPrice, 500000);
+  assert.equal(combined[0].total, 5000000);
+  assert.equal(combined[2].id, customItem.id);
+
+  // Test serializeProjectState / deserializeProjectState
+  const serializedObj = serializeProjectState({
+    scenarioKey: 'escenario350',
+    activeRoleId: 'arquitecto',
+    items: combined,
+    label: 'Versión aprobada en reunión familiar'
+  });
+  assert.equal(typeof serializedObj, 'object');
+  assert.equal(serializedObj.scenarioKey, 'escenario350');
+  assert.equal(serializedObj.activeRoleId, 'arquitecto');
+  assert.equal(serializedObj.customItems.length, 1);
+  assert.equal(typeof serializeProjectCustomState, 'function');
+  assert.equal(typeof deserializeProjectCustomState, 'function');
+
+  const jsonStr = JSON.stringify(serializedObj);
+  const restored = deserializeProjectState(jsonStr);
+  assert.equal(restored.valid, true);
+  assert.equal(restored.isValid, true);
+  assert.equal(restored.scenarioKey, 'escenario350');
+  assert.equal(restored.activeRoleId, 'arquitecto');
+  assert.ok(restored.mergedItems.some((it) => it.id === customItem.id));
+
+  const invalidRestored = deserializeProjectState('{invalid json');
+  assert.equal(invalidRestored.valid, false);
+  assert.equal(invalidRestored.isValid, false);
+});
+
+test('12. XLSX Exporter includes 15 columns with "Producto Comercial / Marca Sugerida (Paraguay)" and reflects custom items', () => {
+  const customItem = createCustomBudgetItem({
+    id: 'custom_test_pergola_quincho',
+    name: 'Pérgola Metálica Quincho Personalizada',
+    category: 'ESTRUCTURA',
+    unit: 'm²',
+    qty: 15,
+    unitPrice: 450000,
+    suggestedProduct: 'Tubos Estructurales 100x50mm Chacomer + Policarbonato Alveolar',
+    includedInActive: true
+  });
+
+  const customizedItems = applyCustomOverridesToItems(
+    PRESUPUESTO_PARTIDAS,
+    {
+      losa_segunda_parte: {
+        suggestedProduct: 'Losa Rap Precom + Cemento Yguazú Personalizado Test'
+      }
+    },
+    [customItem]
+  );
+
+  const exportResult = exportProjectWorkbookXLSX({
+    items: customizedItems,
+    scenarioKey: 'escenario350'
+  });
+
+  const xlsxBytes = exportResult.bytes;
+  assert.ok(xlsxBytes instanceof Uint8Array, 'exportProjectWorkbookXLSX must return { bytes: Uint8Array }');
+  assert.ok(xlsxBytes.byteLength > 5000, 'Generated XLSX must have non-trivial size');
+
+  const xmlText = new TextDecoder('utf-8').decode(xlsxBytes);
+  assert.ok(
+    xmlText.includes('Producto Comercial / Marca Sugerida (Paraguay)'),
+    'Sheet 1 must contain column header "Producto Comercial / Marca Sugerida (Paraguay)"'
+  );
+  assert.ok(
+    xmlText.includes('Losa Rap Precom + Cemento Yguazú Personalizado Test'),
+    'Sheet 1 must reflect customized suggestedProduct override'
+  );
+  assert.ok(
+    xmlText.includes('Pérgola Metálica Quincho Personalizada'),
+    'Sheet 1 must include user-added custom budget item name'
+  );
+  assert.ok(
+    xmlText.includes('Tubos Estructurales 100x50mm Chacomer + Policarbonato Alveolar'),
+    'Sheet 1 must include user-added custom budget item suggestedProduct'
+  );
+});
+
+test('13. Inverted Losa 1 Fix: Losa Maciza L4 is on +X (Ejes 1-5 around Escalera 1) and Sector Sin Losa (38.00 m²) is on -X (Ejes 5-9 next to Eje 9)', async () => {
+  const fs = await import('node:fs');
+  const sceneCode = fs.readFileSync(new URL('../src/scene.js', import.meta.url), 'utf8');
+  const { FIXED_STRUCTURAL_GRID } = await import('../src/floorplanEditor.js');
+
+  // Verify scene.js places L4 on +X (-0.74 to +3.84) and the 38m2 void on -X (-4.87 to -0.74)
+  assert.ok(
+    sceneCode.includes('l4MainMesh.position.set((-0.74 + 3.84) / 2, -0.09, (3.00 + 9.94) / 2)'),
+    'scene.js must position L4 poured slab on +X (Ejes 1-5, x = -0.74 to +3.84)'
+  );
+  assert.ok(
+    sceneCode.includes('rapMainMesh.position.set((-4.87 + -0.74) / 2, -0.09, (3.00 + 9.94) / 2)'),
+    'scene.js must position the 38m2 Loza Rap void on -X (Ejes 5-9, x = -4.87 to -0.74)'
+  );
+
+  // Verify floorplanEditor.js voidLosa1HoyEnObra has minX: -4.87, maxX: -0.74 (Ejes 5-9)
+  assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.minX, -4.87);
+  assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.maxX, -0.74);
+  assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.minZ, 3.00);
+  assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.maxZ, 9.94);
+});
+
+
 

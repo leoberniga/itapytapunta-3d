@@ -13,8 +13,60 @@ import {
   ESCENARIOS_INVERSION,
   REQUISITOS_BANCO_Y_CUOTAS,
   INVENTARIO_MUEBLES_ACTUALES_LEO,
-  PROYECTOS_COMPUTO_DIMENSIONES
+  PROYECTOS_COMPUTO_DIMENSIONES,
+  CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY,
+  GALLERY_ZONES_DATA
 } from '../data/projectData.js';
+
+export {
+  CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY,
+  GALLERY_ZONES_DATA
+};
+
+/**
+ * Resolves the suggested commercial product metadata in Paraguay for any budget item or partida ID,
+ * with an intelligent fallback for custom or newly created items.
+ *
+ * @param {string | number | object} idOrItem
+ * @returns {object}
+ */
+export function getSuggestedProductForPartida(idOrItem) {
+  const fallback = CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY.DEFAULT_FALLBACK;
+  if (!idOrItem) {
+    return { ...fallback, unitBreakdown: fallback.insumosUnitarios };
+  }
+
+  const rawId = typeof idOrItem === 'object' ? (idOrItem.id ?? idOrItem.codigo ?? idOrItem.catalogNumericId) : idOrItem;
+  const directMatch =
+    CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY[rawId] ||
+    (typeof rawId === 'string' && rawId.startsWith('EXIST-E-0')
+      ? CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY[Number(rawId.replace('EXIST-E-0', ''))]
+      : null);
+
+  if (directMatch) {
+    return {
+      ...directMatch,
+      unitBreakdown: directMatch.insumosUnitarios || fallback.insumosUnitarios
+    };
+  }
+
+  if (typeof idOrItem === 'object' && idOrItem.suggestedProduct) {
+    const breakdown = idOrItem.unitBreakdown || idOrItem.insumosUnitarios || fallback.insumosUnitarios;
+    return {
+      id: idOrItem.id || 'custom',
+      partidaId: idOrItem.id || 'custom',
+      suggestedProduct: idOrItem.suggestedProduct,
+      brand: idOrItem.brand || 'Marca Certificada INTN Paraguay',
+      commercialUnit: idOrItem.commercialUnit || idOrItem.unidad || idOrItem.unit || 'un',
+      commercialUnitPrice: Number(idOrItem.commercialUnitPrice ?? idOrItem.precioUnitarioGs ?? idOrItem.unitPrice ?? 0),
+      supplierRef: idOrItem.supplierRef || fallback.supplierRef,
+      insumosUnitarios: breakdown,
+      unitBreakdown: breakdown
+    };
+  }
+
+  return { ...fallback, unitBreakdown: fallback.insumosUnitarios };
+}
 
 export const ITEM_STATUS = Object.freeze({
   YA_ESTA_EN_OBRA: 'YA_ESTA_EN_OBRA',
@@ -183,8 +235,9 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
     REQUISITOS_BANCO_Y_CUOTAS?.construccionesExistentesNegro?.rubros ||
     [];
 
-  const existingWorkRows = rawBuiltRubros.map((rubro) => {
+  const existingWorkRows = rawBuiltRubros.map((rubro, idx) => {
     const subtotalGs = Number(rubro.montoGs) || 0;
+    const catInfo = getSuggestedProductForPartida(idx + 1);
     return {
       id: `EXIST-${rubro.codigo}`,
       codigo: rubro.codigo,
@@ -192,6 +245,12 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
       categoria: '0. Obra Ya Ejecutada (Acta 29/12/2025)',
       producto: rubro.item,
       item: rubro.item,
+      suggestedProduct: rubro.suggestedProduct || catInfo.suggestedProduct,
+      commercialUnit: catInfo.commercialUnit,
+      commercialUnitPrice: catInfo.commercialUnitPrice,
+      supplierRef: catInfo.supplierRef,
+      insumosUnitarios: catInfo.insumosUnitarios,
+      unitBreakdown: catInfo.unitBreakdown,
       unidad: rubro.unidad || 'gl',
       cantidad: Number(rubro.cantidad) || 1,
       formulaDim: rubro.estado || 'Certificado en obra',
@@ -213,7 +272,8 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
 
   // 2. Budget Partidas Rows (Previsto en este Crédito BNF vs No Incluido)
   const creditPartidaRows = sourcePartidas.map((partida, idx) => {
-    const isIncluded = !isHoy && includedIds.has(partida.id);
+    const hasExplicitOverride = typeof partida.includedInActive === 'boolean';
+    const isIncluded = !isHoy && (hasExplicitOverride ? partida.includedInActive : includedIds.has(partida.id));
     const rawQty =
       isOptionsObj && partida.cantidad !== undefined
         ? Number(partida.cantidad)
@@ -230,6 +290,7 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
     };
     const status = isIncluded ? ITEM_STATUS.PREVISTO_CREDITO : ITEM_STATUS.NO_INCLUIDO;
     const code = `P-${String(idx + 1).padStart(2, '0')}`;
+    const catInfo = getSuggestedProductForPartida(partida);
 
     return {
       id: partida.id,
@@ -238,6 +299,12 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
       categoria: partida.categoria,
       producto: partida.item,
       item: partida.item,
+      suggestedProduct: partida.suggestedProduct || catInfo.suggestedProduct,
+      commercialUnit: partida.commercialUnit || catInfo.commercialUnit,
+      commercialUnitPrice: Number(partida.commercialUnitPrice ?? catInfo.commercialUnitPrice ?? precioUnitarioGs),
+      supplierRef: partida.supplierRef || catInfo.supplierRef,
+      insumosUnitarios: partida.insumosUnitarios || catInfo.insumosUnitarios,
+      unitBreakdown: partida.unitBreakdown || catInfo.unitBreakdown,
       unidad: partida.unidad,
       cantidad,
       formulaDim: partida.formulaDim || '',
@@ -698,7 +765,7 @@ export const USER_ROLES_CATALOG = Object.freeze({
     ],
     checklistTecnico: [
       'ALERTA ESTRUCTURAL: Los pilares P12 (Eje 6-C), P13 (Eje 5-E) y P15 (Eje 8-C) MUEREN en Planta Baja (+100.00m). Arriba solo levantar tabiquería liviana o ladrillo hueco.',
-      'Hueco de 38,00 m² en Losa 1 (cuadrante derecho Estar): cerrar con viguetas pretensadas Lozarrap + bovedilla cerámica + malla Ø4.2mm y capa de compresión 5cm (Gs. 14.440.000).',
+      'Sector sin losa de 38,00 m² en Losa 1 (cuadrante izquierdo Ejes 5–9 × B–G): cerrar con viguetas pretensadas Lozarrap + bovedilla cerámica + malla Ø4.2mm y capa de compresión 5cm (Gs. 14.440.000).',
       'Continuidad de los 17 pilares a Planta Alta: cepillado de acero expuesto, desoxidante Sika Rustoff y puente epóxico Sikadur-32 Gel antes de hormigonar.',
       'Subsuelo (+97.66m): demoler encofrado viejo junto a escalera para dejar gran salón libre, ubicar lavadero contra pared opuesta y ejecutar lecherada sobre suelo natural.'
     ],
@@ -870,3 +937,444 @@ export function generateRoleWorkOrderCsv(roleId, scenarioKey = 'escenario300', c
 
   return '\uFEFF' + [...headerLines, ...itemLines].join('\r\n');
 }
+
+// ============================================================================
+// CUSTOM ITEM CREATION, ITEM PATCHING & VERSIONED PROJECT STATE PERSISTENCE (.JSON)
+// ============================================================================
+
+export const PROJECT_STATE_VERSION = '2026.10.21';
+export const PROJECT_STATE_TITLE = 'Residencia Itá Pytã Punta — Ruth y Leo';
+
+/**
+ * Creates a validated custom budget item with commercial product fallback in Paraguay.
+ *
+ * @param {object} params
+ * @returns {object}
+ */
+export function createCustomBudgetItem({
+  id,
+  category = 'Personalizado / Adicional',
+  level = 'planta_baja',
+  name,
+  unit = 'un',
+  qty = 1,
+  unitPrice = 0,
+  suggestedProduct = '',
+  bnfTier = '300M',
+  includedInActive = true
+} = {}) {
+  const cleanName = String(name || 'Nuevo Rubro Personalizado').trim() || 'Nuevo Rubro Personalizado';
+  const cleanUnit = String(unit || 'un').trim() || 'un';
+  const safeQty = Math.max(Number(qty) || 1, 0.001);
+  const safeUnitPrice = Math.max(Math.round(Number(unitPrice) || 0), 0);
+  const subtotalGs = Math.round(safeQty * safeUnitPrice);
+  const generatedId =
+    id && String(id).trim()
+      ? String(id).trim()
+      : `custom_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+  const fallbackMeta = getSuggestedProductForPartida({
+    id: generatedId,
+    suggestedProduct: suggestedProduct ? String(suggestedProduct).trim() : '',
+    unidad: cleanUnit,
+    precioUnitarioGs: safeUnitPrice
+  });
+
+  const resolvedSuggestedProduct =
+    suggestedProduct && String(suggestedProduct).trim()
+      ? String(suggestedProduct).trim()
+      : fallbackMeta.suggestedProduct;
+
+  return {
+    id: generatedId,
+    categoria: String(category || 'Personalizado / Adicional').trim(),
+    category: String(category || 'Personalizado / Adicional').trim(),
+    level: String(level || 'planta_baja').trim(),
+    item: cleanName,
+    name: cleanName,
+    producto: cleanName,
+    unidad: cleanUnit,
+    unit: cleanUnit,
+    cantidad: safeQty,
+    qty: safeQty,
+    precioUnitarioGs: safeUnitPrice,
+    unitPrice: safeUnitPrice,
+    subtotalGs,
+    precioTotalGs: subtotalGs,
+    total: subtotalGs,
+    suggestedProduct: resolvedSuggestedProduct,
+    commercialUnit: fallbackMeta.commercialUnit || cleanUnit,
+    commercialUnitPrice: safeUnitPrice || fallbackMeta.commercialUnitPrice,
+    supplierRef: fallbackMeta.supplierRef,
+    insumosUnitarios: fallbackMeta.insumosUnitarios,
+    unitBreakdown: fallbackMeta.unitBreakdown,
+    bnfTier: String(bnfTier || '300M'),
+    esencial: bnfTier === '300M',
+    includedInActive: Boolean(includedInActive),
+    included: Boolean(includedInActive),
+    isCustom: true,
+    origenTipo: 'USUARIO_CUSTOM',
+    origenLabel: '✏️ Rubro Personalizado por Usuario',
+    formulaDim: `${safeQty} ${cleanUnit}`
+  };
+}
+
+/**
+ * Applies user customizations to any budget item:
+ * - `qty` / `cantidad`
+ * - `unitPrice` / `precioUnitarioGs`
+ * - `totalOverride` (automatically recalculates `unitPrice = Math.round(totalOverride / Math.max(qty, 0.001))`)
+ * - `suggestedProduct`, `name`, `unit`, and `includedInActive`
+ *
+ * @param {object} item
+ * @param {object} patch
+ * @returns {object}
+ */
+export function applyItemCustomization(item, patch = {}) {
+  if (!item || typeof item !== 'object') {
+    throw new Error('applyItemCustomization requires a valid item object');
+  }
+  if (!patch || typeof patch !== 'object') {
+    return { ...item };
+  }
+
+  const nextQtyRaw =
+    patch.qty !== undefined
+      ? Number(patch.qty)
+      : patch.cantidad !== undefined
+        ? Number(patch.cantidad)
+        : Number(item.cantidad ?? item.qty ?? 1);
+  const safeQty = Number.isFinite(nextQtyRaw) && nextQtyRaw > 0 ? nextQtyRaw : Math.max(Number(item.cantidad ?? item.qty ?? 1), 0.001);
+
+  let nextUnitPrice =
+    patch.unitPrice !== undefined
+      ? Math.round(Number(patch.unitPrice) || 0)
+      : patch.precioUnitarioGs !== undefined
+        ? Math.round(Number(patch.precioUnitarioGs) || 0)
+        : Math.round(Number(item.precioUnitarioGs ?? item.unitPrice ?? 0));
+
+  let nextSubtotal = Math.round(safeQty * nextUnitPrice);
+
+  if (patch.totalOverride !== undefined && patch.totalOverride !== null && patch.totalOverride !== '') {
+    const cleanTotalOverride = Math.max(Math.round(Number(patch.totalOverride) || 0), 0);
+    nextUnitPrice = Math.round(cleanTotalOverride / Math.max(safeQty, 0.001));
+    nextSubtotal = cleanTotalOverride;
+  }
+
+  const nextName =
+    patch.name !== undefined
+      ? String(patch.name).trim()
+      : patch.item !== undefined
+        ? String(patch.item).trim()
+        : (item.item || item.name || item.producto || '');
+
+  const nextUnit =
+    patch.unit !== undefined
+      ? String(patch.unit).trim()
+      : patch.unidad !== undefined
+        ? String(patch.unidad).trim()
+        : (item.unidad || item.unit || 'un');
+
+  const nextCategory =
+    patch.category !== undefined
+      ? String(patch.category).trim()
+      : patch.categoria !== undefined
+        ? String(patch.categoria).trim()
+        : (item.categoria || item.category || 'General');
+
+  const nextSuggestedProduct =
+    patch.suggestedProduct !== undefined
+      ? String(patch.suggestedProduct).trim()
+      : (item.suggestedProduct || getSuggestedProductForPartida(item).suggestedProduct);
+
+  const nextIncluded =
+    patch.includedInActive !== undefined
+      ? Boolean(patch.includedInActive)
+      : patch.included !== undefined
+        ? Boolean(patch.included)
+        : (item.includedInActive ?? item.included ?? true);
+
+  return {
+    ...item,
+    categoria: nextCategory,
+    category: nextCategory,
+    item: nextName,
+    name: nextName,
+    producto: nextName,
+    unidad: nextUnit,
+    unit: nextUnit,
+    cantidad: safeQty,
+    qty: safeQty,
+    precioUnitarioGs: nextUnitPrice,
+    unitPrice: nextUnitPrice,
+    subtotalGs: nextSubtotal,
+    precioTotalGs: nextSubtotal,
+    total: nextSubtotal,
+    suggestedProduct: nextSuggestedProduct,
+    includedInActive: nextIncluded,
+    included: nextIncluded,
+    isModified: true
+  };
+}
+
+/**
+ * Merges an array or map of item overrides and custom items onto a base list of items.
+ *
+ * @param {Array<object>} [baseItems=PRESUPUESTO_PARTIDAS]
+ * @param {Record<string, object> | Array<object>} [itemsOverrides={}]
+ * @param {Array<object>} [customItems=[]]
+ * @returns {Array<object>}
+ */
+export function applyCustomOverridesToItems(
+  baseItems = PRESUPUESTO_PARTIDAS,
+  itemsOverrides = {},
+  customItems = []
+) {
+  const overridesMap = Array.isArray(itemsOverrides)
+    ? itemsOverrides.reduce((acc, ov) => {
+        if (ov && ov.id) acc[ov.id] = ov;
+        return acc;
+      }, {})
+    : (itemsOverrides || {});
+
+  const mergedBase = (baseItems || PRESUPUESTO_PARTIDAS).map((baseItem) => {
+    const patch = overridesMap[baseItem.id];
+    const enrichedBase = {
+      ...baseItem,
+      suggestedProduct: baseItem.suggestedProduct || getSuggestedProductForPartida(baseItem).suggestedProduct
+    };
+    return patch ? applyItemCustomization(enrichedBase, patch) : enrichedBase;
+  });
+
+  const existingIds = new Set(mergedBase.map((it) => it.id));
+  const normalizedCustom = (customItems || [])
+    .filter((c) => c && typeof c === 'object')
+    .map((c) => {
+      const created = createCustomBudgetItem({
+        id: c.id,
+        category: c.categoria || c.category,
+        level: c.level,
+        name: c.item || c.name || c.producto,
+        unit: c.unidad || c.unit,
+        qty: c.cantidad ?? c.qty,
+        unitPrice: c.precioUnitarioGs ?? c.unitPrice,
+        suggestedProduct: c.suggestedProduct,
+        bnfTier: c.bnfTier,
+        includedInActive: c.includedInActive ?? c.included ?? true
+      });
+      const patch = overridesMap[created.id];
+      return patch ? applyItemCustomization(created, patch) : created;
+    })
+    .filter((c) => !existingIds.has(c.id));
+
+  return [...mergedBase, ...normalizedCustom];
+}
+
+/**
+ * Serializes the complete user-adjusted project state into a versioned JSON-ready object.
+ *
+ * @param {object} params
+ * @returns {object}
+ */
+export function serializeProjectState({
+  scenarioKey = 'escenario350',
+  items = [],
+  customOverrides = null,
+  itemsOverrides: explicitItemsOverrides = null,
+  customAddedItems = null,
+  customItems: explicitCustomItems = null,
+  customSectionCaps = {},
+  loanParams = {},
+  activeRoleId = 'pareja',
+  activeRole = null,
+  floorplanState = null,
+  label = 'Configuración Personalizada Ruth y Leo',
+  notes = ''
+} = {}) {
+  const baseMap = new Map(PRESUPUESTO_PARTIDAS.map((p) => [p.id, p]));
+  const itemsOverrides = {
+    ...(explicitItemsOverrides && typeof explicitItemsOverrides === 'object' ? explicitItemsOverrides : {}),
+    ...(customOverrides && typeof customOverrides === 'object' ? customOverrides : {})
+  };
+  const customItems = [
+    ...(Array.isArray(explicitCustomItems) ? explicitCustomItems : []),
+    ...(Array.isArray(customAddedItems) ? customAddedItems : [])
+  ];
+  const seenCustomIds = new Set(customItems.map((c) => c?.id).filter(Boolean));
+
+  (items || []).forEach((it) => {
+    if (!it || typeof it !== 'object' || !it.id) return;
+    const isCustom = Boolean(it.isCustom) || !baseMap.has(it.id);
+    const qty = Number(it.cantidad ?? it.qty ?? 1);
+    const unitPrice = Number(it.precioUnitarioGs ?? it.unitPrice ?? 0);
+    const subtotalGs = Number(it.subtotalGs ?? it.precioTotalGs ?? Math.round(qty * unitPrice));
+    const name = it.item || it.name || it.producto || '';
+    const unit = it.unidad || it.unit || 'un';
+    const category = it.categoria || it.category || 'General';
+    const suggestedProduct = it.suggestedProduct || getSuggestedProductForPartida(it).suggestedProduct;
+    const includedInActive =
+      it.includedInActive !== undefined
+        ? Boolean(it.includedInActive)
+        : it.included !== undefined
+          ? Boolean(it.included)
+          : undefined;
+
+    if (isCustom) {
+      if (!seenCustomIds.has(it.id)) {
+        seenCustomIds.add(it.id);
+        customItems.push({
+          id: it.id,
+          category,
+          categoria: category,
+          level: it.level || 'planta_baja',
+          name,
+          item: name,
+          unit,
+          unidad: unit,
+          qty,
+          cantidad: qty,
+          unitPrice,
+          precioUnitarioGs: unitPrice,
+          subtotalGs,
+          total: subtotalGs,
+          suggestedProduct,
+          bnfTier: it.bnfTier || '300M',
+          includedInActive: includedInActive ?? true,
+          isCustom: true
+        });
+      }
+    } else {
+      itemsOverrides[it.id] = {
+        id: it.id,
+        qty,
+        cantidad: qty,
+        unitPrice,
+        precioUnitarioGs: unitPrice,
+        subtotalGs,
+        total: subtotalGs,
+        name,
+        unit,
+        category,
+        suggestedProduct,
+        ...(includedInActive !== undefined ? { includedInActive } : {})
+      };
+    }
+  });
+
+  const resolvedRoleId = String(activeRole || activeRoleId || 'pareja');
+
+  return {
+    version: PROJECT_STATE_VERSION,
+    project: PROJECT_STATE_TITLE,
+    savedAt: new Date().toISOString(),
+    label: String(notes || label || 'Configuración Personalizada Ruth y Leo'),
+    scenarioKey: String(scenarioKey || 'escenario350'),
+    activeRoleId: resolvedRoleId,
+    activeRole: resolvedRoleId,
+    loanParams: {
+      loanAmount: Number(loanParams.loanAmount || 350000000),
+      loanYears: Number(loanParams.loanYears || 15),
+      activeRateKey: String(loanParams.activeRateKey || 'tasa99'),
+      ...loanParams
+    },
+    customSectionCaps: { ...(customSectionCaps || {}) },
+    itemsOverrides,
+    customOverrides: itemsOverrides,
+    customItems,
+    customAddedItems: customItems,
+    floorplanState: floorplanState ? JSON.parse(JSON.stringify(floorplanState)) : null
+  };
+}
+
+export const serializeProjectCustomState = serializeProjectState;
+
+/**
+ * Safely validates and restores a saved project state from a JSON string or plain object.
+ *
+ * @param {string | object} jsonStringOrObject
+ * @param {Array<object>} [baseItems=PRESUPUESTO_PARTIDAS]
+ * @returns {object}
+ */
+export function deserializeProjectState(jsonStringOrObject, baseItems = PRESUPUESTO_PARTIDAS) {
+  let parsed = null;
+  try {
+    parsed =
+      typeof jsonStringOrObject === 'string'
+        ? JSON.parse(jsonStringOrObject)
+        : jsonStringOrObject;
+  } catch (err) {
+    return {
+      valid: false,
+      isValid: false,
+      error: `JSON inválido: ${err.message}`,
+      scenarioKey: 'escenario350',
+      loanParams: { loanAmount: 350000000, loanYears: 15, activeRateKey: 'tasa99' },
+      customSectionCaps: {},
+      mergedItems: applyCustomOverridesToItems(baseItems, {}, []),
+      floorplanState: null,
+      metadata: null
+    };
+  }
+
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return {
+      valid: false,
+      isValid: false,
+      error: 'El estado del proyecto debe ser un objeto JSON válido',
+      scenarioKey: 'escenario350',
+      loanParams: { loanAmount: 350000000, loanYears: 15, activeRateKey: 'tasa99' },
+      customSectionCaps: {},
+      mergedItems: applyCustomOverridesToItems(baseItems, {}, []),
+      floorplanState: null,
+      metadata: null
+    };
+  }
+
+  const scenarioKey = String(parsed.scenarioKey || 'escenario350');
+  const activeRoleId = String(parsed.activeRoleId || parsed.activeRole || 'pareja');
+  const loanParams = {
+    loanAmount: Number(parsed.loanParams?.loanAmount || 350000000),
+    loanYears: Number(parsed.loanParams?.loanYears || 15),
+    activeRateKey: String(parsed.loanParams?.activeRateKey || 'tasa99'),
+    ...(parsed.loanParams || {})
+  };
+  const customSectionCaps =
+    parsed.customSectionCaps && typeof parsed.customSectionCaps === 'object'
+      ? { ...parsed.customSectionCaps }
+      : {};
+
+  const resolvedOverrides = parsed.itemsOverrides || parsed.customOverrides || {};
+  const resolvedCustomItems = parsed.customItems || parsed.customAddedItems || [];
+
+  const mergedItems = applyCustomOverridesToItems(
+    baseItems,
+    resolvedOverrides,
+    resolvedCustomItems
+  );
+
+  return {
+    valid: true,
+    isValid: true,
+    scenarioKey,
+    activeRoleId,
+    activeRole: activeRoleId,
+    loanParams,
+    customSectionCaps,
+    itemsOverrides: resolvedOverrides,
+    customOverrides: resolvedOverrides,
+    customItems: resolvedCustomItems,
+    customAddedItems: resolvedCustomItems,
+    mergedItems,
+    floorplanState: parsed.floorplanState || null,
+    metadata: {
+      version: parsed.version || PROJECT_STATE_VERSION,
+      project: parsed.project || PROJECT_STATE_TITLE,
+      savedAt: parsed.savedAt || null,
+      label: parsed.label || 'Configuración Restaurada',
+      activeRoleId
+    }
+  };
+}
+
+export const deserializeProjectCustomState = deserializeProjectState;
+

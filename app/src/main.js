@@ -27,7 +27,9 @@ import {
   CONTROL_PROPIETARIO_Y_NEGOCIACION_ARQUITECTO,
   AUDITORIA_SEIS_ESPECIALISTAS,
   DUCTOS_PASES_ENCHUFES_DATOS,
-  ESTRATEGIA_COMPRA_CHINA_DOMOTICA_ELECTRICA
+  ESTRATEGIA_COMPRA_CHINA_DOMOTICA_ELECTRICA,
+  CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY,
+  GALLERY_ZONES_DATA
 } from './data/projectData.js';
 import {
   PLUVIAL_HYDRO_DATA,
@@ -43,7 +45,13 @@ import {
   USER_ROLES_CATALOG,
   getRoleWorkspaceConfig,
   getRoleBillOfMaterials,
-  generateRoleWorkOrderCsv
+  generateRoleWorkOrderCsv,
+  getSuggestedProductForPartida,
+  createCustomBudgetItem,
+  applyItemCustomization,
+  applyCustomOverridesToItems,
+  serializeProjectState,
+  deserializeProjectState
 } from './domain/budgetAndSceneService.js';
 import { FloorplanEditor } from './floorplanEditor.js';
 import { AuthManager } from './auth.js';
@@ -149,17 +157,34 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeComputoCategoryFilter = 'ALL';
   let activeComputoOriginFilter = 'ALL';
   let customTargetOverrideGs = null;
+  let customSectionCaps = {};
   let activeUserRoleId = 'pareja';
   let renderComputoDrawer = null;
   let renderActiveRoleWorkbench = null;
+  let persistCustomStateNow = null;
 
-  // Editable state copy of budget items so user can adjust quantities & unit prices live
-  const editablePartidas = PRESUPUESTO_PARTIDAS.map((p) => ({
-    ...p,
-    cantidadActual: Number(p.cantidad),
-    precioUnitarioActualGs: Number(p.precioUnitarioGs),
-    subtotalActualGs: Math.round(Number(p.cantidad) * Number(p.precioUnitarioGs))
-  }));
+  const CUSTOM_STATE_STORAGE_KEY = 'itapytapunta_custom_project_v1';
+  const CUSTOM_SNAPSHOTS_STORAGE_KEY = 'itapytapunta_custom_snapshots_v1';
+
+  const buildDefaultEditablePartidas = () =>
+    PRESUPUESTO_PARTIDAS.map((p) => {
+      const prodMeta = getSuggestedProductForPartida(p);
+      return {
+        ...p,
+        suggestedProduct: p.suggestedProduct || prodMeta.suggestedProduct,
+        commercialUnit: p.commercialUnit || prodMeta.commercialUnit || p.unidad,
+        commercialUnitPrice: Number(p.commercialUnitPrice || prodMeta.commercialUnitPrice || p.precioUnitarioGs),
+        supplierRef: p.supplierRef || prodMeta.supplierRef,
+        insumosUnitarios: p.insumosUnitarios || prodMeta.insumosUnitarios || [],
+        unitBreakdown: p.unitBreakdown || prodMeta.unitBreakdown || [],
+        cantidadActual: Number(p.cantidad),
+        precioUnitarioActualGs: Number(p.precioUnitarioGs),
+        subtotalActualGs: Math.round(Number(p.cantidad) * Number(p.precioUnitarioGs))
+      };
+    });
+
+  // Editable state copy of budget items so user can adjust quantities, unit prices, total amounts & suggested products live
+  const editablePartidas = buildDefaultEditablePartidas();
 
   const formatGs = (num) => {
     return Math.round(Number(num) || 0).toLocaleString('es-PY');
@@ -386,14 +411,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isHoy = activeScenarioKey === 'hoy_en_obra';
     const scenario = ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300;
-    const target = customTargetOverrideGs
-      ? customTargetOverrideGs
-      : isHoy
-        ? ACTA_RECEPCION_SUMMARY.liquidacionFinancieraJivesa.totalEjecutadoGs
-        : scenario.montoObjetivoGs;
+    const sectionCapOverride = Number(customSectionCaps[activeScenarioKey]);
+    const target =
+      Number.isFinite(sectionCapOverride) && sectionCapOverride > 0
+        ? sectionCapOverride
+        : customTargetOverrideGs
+          ? customTargetOverrideGs
+          : isHoy
+            ? ACTA_RECEPCION_SUMMARY.liquidacionFinancieraJivesa.totalEjecutadoGs
+            : scenario.montoObjetivoGs;
     const diff = target - total;
     const m2Construido = 178.42;
     const costoM2 = Math.round(total / m2Construido);
+
+    const simCustomTargetInput = document.getElementById('sim-custom-target-input');
+    if (simCustomTargetInput && document.activeElement !== simCustomTargetInput) {
+      simCustomTargetInput.value = String(Math.round(target));
+    }
+    const cdCustomTargetInput = document.getElementById('cd-custom-target-input');
+    if (cdCustomTargetInput && document.activeElement !== cdCustomTargetInput) {
+      cdCustomTargetInput.value = String(Math.round(target));
+    }
 
     // Cuota mensual BNF (9,9% anual a 15 años con seguros incluidos) según meta de crédito
     const factorBnf = PREVISION_CREDITO_NUEVO?.factorCuotaConSegurosPorMillonGs || 11765.9090909;
@@ -401,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cuotaBnfGs = Math.round(millonesTarget * factorBnf);
 
     // Update Left Sidebar KPI Card
-    if (isHoy && !customTargetOverrideGs) {
+    if (isHoy && !customTargetOverrideGs && !sectionCapOverride) {
       const liq = ACTA_RECEPCION_SUMMARY.liquidacionFinancieraJivesa;
       if (kpiScenarioName) kpiScenarioName.textContent = '⚫ Hoy en Obra (163,8M Gs)';
       if (kpiTotalAmount) kpiTotalAmount.textContent = formatGs(liq.totalEjecutadoGs);
@@ -415,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (kpiObjectiveDesc) {
         kpiObjectiveDesc.textContent = ACTA_RECEPCION_SUMMARY.estadoRealObraHoy.resumen + ' (JIVESA S.A. / PROBETI #17671).';
       }
-    } else if ((activeScenarioKey === 'edifica460' || activeScenarioKey === 'edifica573') && !customTargetOverrideGs) {
+    } else if ((activeScenarioKey === 'edifica460' || activeScenarioKey === 'edifica573') && !customTargetOverrideGs && !sectionCapOverride) {
       if (kpiTotalAmount) kpiTotalAmount.textContent = formatGs(scenario.montoObjetivoGs);
       if (kpiCostoM2) kpiCostoM2.textContent = `Gs. ${formatGs(Math.round(scenario.montoObjetivoGs / m2Construido))} / m²`;
       if (kpiSemaforo) {
@@ -475,9 +513,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!id || id.startsWith('E-')) return;
       const checkbox = row.querySelector('.budget-chk');
       const subCell = row.querySelector('.computo-subtotal-cell');
+      const totalInput = row.querySelector('.computo-input-total');
+      const priceInput = row.querySelector('.computo-input-price');
       const matMoCell = row.querySelector('.computo-mat-mo-cell');
       const itemObj = editablePartidas.find((item) => item.id === id);
-      if (itemObj && subCell) {
+      if (itemObj && totalInput && document.activeElement !== totalInput) {
+        totalInput.value = String(itemObj.subtotalActualGs);
+      }
+      if (itemObj && priceInput && document.activeElement !== priceInput) {
+        priceInput.value = String(itemObj.precioUnitarioActualGs);
+      }
+      if (itemObj && subCell && !totalInput) {
         subCell.textContent = `Gs. ${formatGs(itemObj.subtotalActualGs)}`;
       }
       if (itemObj && matMoCell) {
@@ -509,6 +555,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (typeof renderActiveRoleWorkbench === 'function') {
       renderActiveRoleWorkbench();
+    }
+    if (typeof persistCustomStateNow === 'function') {
+      persistCustomStateNow();
     }
   };
 
@@ -1025,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Render Interactive Editable Budget Table with Bank Color Code & Materiales vs Mano de Obra
+  // Render Interactive Editable Budget Table with Bank Color Code, Suggested Product, Unit Breakdown & Materiales vs Mano de Obra
   const renderBudgetTable = () => {
     if (!budgetTbody) return;
     budgetTbody.innerHTML = '';
@@ -1062,7 +1111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Render all Editable Partidas (🟢 VERDE / 🔴 ROJO / 🟡 AMARILLO)
+    // 2. Render all Editable Partidas (🟢 VERDE / 🔴 ROJO / 🟡 AMARILLO) with Granular Product & Price Breakdown
     editablePartidas.forEach((p) => {
       if (!matchesComputoCategory(p, activeComputoCategoryFilter)) return;
       if (!matchesComputoOrigin(p, activeComputoOriginFilter)) return;
@@ -1070,16 +1119,36 @@ document.addEventListener('DOMContentLoaded', () => {
       const isChecked = selectedItemIds.has(p.id);
       const isForense = p.id.startsWith('forense_');
       const isEdifica = p.origenTipo === 'EDIFICA_STUDIO';
+      const isCustom = Boolean(p.isCustom) || String(p.id).startsWith('custom_');
       const bm = getPartidaBankMeta(p);
       const tr = document.createElement('tr');
       tr.className = `budget-row ${isChecked ? 'selected' : ''} ${isForense ? 'forense-highlight-row' : ''} ${isEdifica ? 'edifica-highlight-row' : ''}`;
       tr.setAttribute('data-item-id', p.id);
 
       const iaNotes = Array.isArray(p.camposEstimadosIA) ? p.camposEstimadosIA.join(' • ') : '';
-      const hasIaEstimate =
-        p.origenTipo === 'IA_AUDITORIA' ||
-        p.origenTipo === 'EDIFICA_STUDIO' ||
-        (iaNotes && !iaNotes.startsWith('Ninguno:'));
+      const breakdownItems = Array.isArray(p.unitBreakdown) ? p.unitBreakdown : [];
+      const breakdownRowsHtml = breakdownItems.length
+        ? `<details class="unit-breakdown-details" style="margin-top:4px; background:rgba(2,6,23,0.65); border:1px solid rgba(56,189,248,0.22); border-radius:6px; padding:4px 7px;">
+             <summary style="cursor:pointer; font-size:10px; color:#38bdf8; font-weight:700; user-select:none;">
+               🔎 Desglose por Insumo / Unidad Exacta (${breakdownItems.length} componentes por 1 ${p.unidad})
+             </summary>
+             <div style="margin-top:5px; display:flex; flex-direction:column; gap:3px;">
+               ${breakdownItems
+                 .map((ins) => {
+                   const insName = ins.insumo || ins.nombre || ins.item || 'Insumo';
+                   const insQty = ins.qtyPerUnit ?? ins.cantidad ?? 1;
+                   const insUnit = ins.unidad || 'un';
+                   const insPrice = Number(ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
+                   const insSub = Math.round(Number(insQty) * insPrice);
+                   return `<div style="display:flex; justify-content:space-between; gap:6px; font-size:9.5px; color:#cbd5e1; border-bottom:1px dashed rgba(148,163,184,0.14); padding-bottom:2px;">
+                     <span>• <strong>${insName}</strong> <span style="color:#94a3b8;">(${insQty} ${insUnit} × Gs. ${formatGs(insPrice)})</span></span>
+                     <span style="font-family:var(--font-mono); color:#fde68a; white-space:nowrap;">Gs. ${formatGs(insSub)}</span>
+                   </div>`;
+                 })
+                 .join('')}
+             </div>
+           </details>`
+        : '';
 
       tr.innerHTML = `
         <td style="text-align:center;">
@@ -1090,18 +1159,28 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td>
           <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-            <strong style="color:${isForense ? '#fca5a5' : isEdifica ? '#93c5fd' : '#fff'}; font-size:12px;">${p.item}</strong>
+            <strong style="color:${isForense ? '#fca5a5' : isEdifica ? '#93c5fd' : isCustom ? '#fde68a' : '#fff'}; font-size:12px;">${p.item}</strong>
             <span class="badge-pill" style="font-size:9.5px; margin:0;">${p.categoria}</span>
+            ${isCustom ? '<span class="badge-pill" style="font-size:9px; border-color:#f59e0b; color:#fde68a; margin:0;">✨ Personalizado</span>' : ''}
           </div>
           ${p.formulaDim ? `<div style="font-size:10px; color:#67e8f9; font-family:var(--font-mono); margin-top:2px;">📐 Dimensión: ${p.formulaDim}</div>` : ''}
-          <p style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">${p.desc}</p>
+          <p style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">${p.desc || ''}</p>
         </td>
         <td>
           <div style="display:flex; flex-direction:column; gap:4px;">
-            ${getOriginBadgeHtml(p)}
-            <div class="ia-field-detail ${hasIaEstimate ? 'ia-active' : ''}">
-              <strong>Detalle:</strong> ${iaNotes || 'Datos directos de planilla'}
+            <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
+              ${getOriginBadgeHtml(p)}
+              ${p.supplierRef ? `<span style="font-size:9.5px; color:#a7f3d0; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); border-radius:4px; padding:1px 5px;">🏪 ${p.supplierRef}</span>` : ''}
             </div>
+            <div style="display:flex; flex-direction:column; gap:2px; margin-top:2px;">
+              <label style="font-size:9.5px; color:#7dd3fc; font-weight:700;">🏷️ Producto Sugerido Identificado (Editable):</label>
+              <input type="text" class="computo-input-product" value="${(p.suggestedProduct || '').replace(/"/g, '&quot;')}" title="Editar producto comercial o marca sugerida" style="width:100%; padding:4px 6px; border-radius:5px; border:1px solid rgba(56,189,248,0.35); background:rgba(15,23,42,0.9); color:#f8fafc; font-size:10.5px;">
+              <div style="font-size:9.5px; color:#94a3b8; font-family:var(--font-mono);">
+                📦 Ref. Comercial: <strong style="color:#fde68a;">Gs. ${formatGs(p.commercialUnitPrice || p.precioUnitarioActualGs)}</strong> / ${p.commercialUnit || p.unidad}
+              </div>
+            </div>
+            ${breakdownRowsHtml}
+            ${iaNotes ? `<div class="ia-field-detail" style="font-size:9.5px;"><strong>Nota:</strong> ${iaNotes}</div>` : ''}
           </div>
         </td>
         <td>
@@ -1111,13 +1190,18 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </td>
         <td>
-          <input type="number" step="5000" min="0" class="computo-input-price" value="${p.precioUnitarioActualGs}" title="Editar precio unitario (Gs.)">
+          <input type="number" step="5000" min="0" class="computo-input-price" value="${p.precioUnitarioActualGs}" title="Editar precio unitario exacto (Gs.)">
         </td>
         <td class="computo-mat-mo-cell" style="text-align:right; font-family:var(--font-mono);">
           <div style="font-size:10.5px; color:#93c5fd;">Mat (${bm.pctMateriales}%): Gs. ${formatGs(bm.materialesGs)}</div>
           <div style="font-size:10.5px; color:#6ee7b7;">M.O. (${bm.pctManoObra}%): Gs. ${formatGs(bm.manoObraGs)}</div>
         </td>
-        <td class="computo-subtotal-cell">Gs. ${formatGs(p.subtotalActualGs)}</td>
+        <td class="computo-subtotal-cell">
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:3px;">
+            <span class="computo-subtotal-text" style="font-weight:800; color:#fde68a;">Gs. ${formatGs(p.subtotalActualGs)}</span>
+            <input type="number" step="50000" min="0" class="computo-input-total" value="${p.subtotalActualGs}" title="Personalizar monto total directo de esta partida (ajusta automáticamente el precio unitario)" style="width:118px; padding:3px 6px; border-radius:5px; border:1px solid rgba(245,158,11,0.45); background:rgba(15,23,42,0.9); color:#fde68a; font-family:var(--font-mono); font-size:10.5px; text-align:right;">
+          </div>
+        </td>
       `;
 
       const chk = tr.querySelector('.budget-chk');
@@ -1130,10 +1214,25 @@ document.addEventListener('DOMContentLoaded', () => {
         recalculateBudget();
       });
 
+      const prodInput = tr.querySelector('.computo-input-product');
+      if (prodInput) {
+        prodInput.addEventListener('change', (e) => {
+          p.suggestedProduct = e.target.value || p.suggestedProduct;
+          recalculateBudget();
+        });
+      }
+
       const qtyInput = tr.querySelector('.computo-input-qty');
       qtyInput.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         p.cantidadActual = Number.isFinite(val) && val >= 0 ? val : 0;
+        p.subtotalActualGs = Math.round(p.cantidadActual * p.precioUnitarioActualGs);
+        const totalInp = tr.querySelector('.computo-input-total');
+        if (totalInp && document.activeElement !== totalInp) {
+          totalInp.value = p.subtotalActualGs;
+        }
+        const subTxt = tr.querySelector('.computo-subtotal-text');
+        if (subTxt) subTxt.textContent = `Gs. ${formatGs(p.subtotalActualGs)}`;
         recalculateBudget();
       });
 
@@ -1141,8 +1240,40 @@ document.addEventListener('DOMContentLoaded', () => {
       priceInput.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         p.precioUnitarioActualGs = Number.isFinite(val) && val >= 0 ? val : 0;
+        p.subtotalActualGs = Math.round(p.cantidadActual * p.precioUnitarioActualGs);
+        const totalInp = tr.querySelector('.computo-input-total');
+        if (totalInp && document.activeElement !== totalInp) {
+          totalInp.value = p.subtotalActualGs;
+        }
+        const subTxt = tr.querySelector('.computo-subtotal-text');
+        if (subTxt) subTxt.textContent = `Gs. ${formatGs(p.subtotalActualGs)}`;
         recalculateBudget();
       });
+
+      const totalInput = tr.querySelector('.computo-input-total');
+      if (totalInput) {
+        totalInput.addEventListener('change', (e) => {
+          const val = parseFloat(e.target.value);
+          if (!Number.isFinite(val) || val < 0) return;
+          const customized = applyItemCustomization(
+            {
+              ...p,
+              cantidad: p.cantidadActual,
+              precioUnitarioGs: p.precioUnitarioActualGs,
+              subtotalGs: p.subtotalActualGs
+            },
+            { totalOverride: val }
+          );
+          p.cantidadActual = customized.cantidad;
+          p.precioUnitarioActualGs = customized.precioUnitarioGs;
+          p.subtotalActualGs = customized.subtotalGs;
+          if (qtyInput) qtyInput.value = p.cantidadActual;
+          if (priceInput) priceInput.value = p.precioUnitarioActualGs;
+          const subTxt = tr.querySelector('.computo-subtotal-text');
+          if (subTxt) subTxt.textContent = `Gs. ${formatGs(p.subtotalActualGs)}`;
+          recalculateBudget();
+        });
+      }
 
       budgetTbody.appendChild(tr);
     });
@@ -2125,10 +2256,19 @@ document.addEventListener('DOMContentLoaded', () => {
       subtotalGs: p.subtotalActualGs
     }));
 
+    const baseScen = ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300 || {};
+    const customTargetCap = Number(customSectionCaps[activeScenarioKey]);
+    const effectiveTargetCap =
+      Number.isFinite(customTargetCap) && customTargetCap > 0
+        ? customTargetCap
+        : Number(baseScen.montoCreditoGs ?? baseScen.totalEstimadoGs ?? 300000000);
+
     const customScenariosMap = {
       ...ESCENARIOS_INVERSION,
       [activeScenarioKey]: {
-        ...(ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300 || {}),
+        ...baseScen,
+        montoCreditoGs: activeScenarioKey === 'hoy_en_obra' ? 0 : effectiveTargetCap,
+        totalEstimadoGs: activeScenarioKey === 'hoy_en_obra' ? 0 : effectiveTargetCap,
         itemsIncluidos:
           activeScenarioKey === 'hoy_en_obra'
             ? []
@@ -2147,6 +2287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cdScenarioLabel = document.getElementById('cd-scenario-label');
     const cdTotalCredito = document.getElementById('cd-total-credito');
     const cdTargetCredito = document.getElementById('cd-target-credito');
+    const cdCustomTargetInput = document.getElementById('cd-custom-target-input');
     const cdDiffCredito = document.getElementById('cd-diff-credito');
     const cdTotalYaObra = document.getElementById('cd-total-ya-obra');
     const cdCountPrevistos = document.getElementById('cd-count-previstos');
@@ -2174,6 +2315,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cdScenarioLabel) cdScenarioLabel.textContent = scenarioShortName;
     if (cdTotalCredito) cdTotalCredito.textContent = `Gs. ${formatGs(breakdown.summary.totalCreditSelectedGs)}`;
     if (cdTargetCredito) cdTargetCredito.textContent = `Gs. ${formatGs(breakdown.summary.targetCreditGs)}`;
+    if (cdCustomTargetInput && document.activeElement !== cdCustomTargetInput) {
+      cdCustomTargetInput.value = breakdown.summary.targetCreditGs;
+    }
     if (cdDiffCredito) {
       const diff = breakdown.summary.differenceGs;
       cdDiffCredito.textContent = `Disponible: ${diff >= 0 ? '+' : '-'}Gs. ${formatGs(Math.abs(diff))}`;
@@ -2233,16 +2377,66 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `<input type="checkbox" class="drawer-item-chk" data-drawer-item-id="${r.id}" ${r.includedInScenario ? 'checked' : ''} title="Activar/Desactivar este rubro en el presupuesto" style="cursor:pointer; accent-color:#10b981; margin-right:5px;" />`
           : '';
 
+        const breakdownArr = Array.isArray(r.unitBreakdown) ? r.unitBreakdown : [];
+        const breakdownMiniHtml = breakdownArr.length
+          ? `<details style="margin-top:3px;">
+               <summary style="cursor:pointer; font-size:9.5px; color:#38bdf8; font-weight:700;">🔎 Desglose unitario (${breakdownArr.length} insumos)</summary>
+               <div style="margin-top:3px; padding:4px 6px; background:rgba(2,6,23,0.7); border-radius:4px; border:1px solid rgba(56,189,248,0.2);">
+                 ${breakdownArr
+                   .map((ins) => {
+                     const n = ins.insumo || ins.nombre || 'Insumo';
+                     const q = ins.qtyPerUnit ?? ins.cantidad ?? 1;
+                     const u = ins.unidad || 'un';
+                     const p = Number(ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
+                     return `<div style="display:flex; justify-content:space-between; font-size:9px; color:#cbd5e1;">
+                       <span>• ${n} (${q} ${u})</span>
+                       <span style="font-family:var(--font-mono); color:#fde68a;">Gs. ${formatGs(Math.round(Number(q) * p))}</span>
+                     </div>`;
+                   })
+                   .join('')}
+               </div>
+             </details>`
+          : '';
+
         return `
-          <tr class="${rowClass}">
+          <tr class="${rowClass}" data-cd-row-id="${r.id}">
             <td>
               <span class="cd-item-name">${r.item}</span>
               <span class="cd-item-cat">${r.categoria} • <span style="color:#64748b;">${r.code}</span></span>
+              ${
+                r.suggestedProduct
+                  ? `<div style="font-size:10px; color:#7dd3fc; margin-top:2px;">🏷️ <strong>${r.suggestedProduct}</strong> ${r.supplierRef ? `<span style="color:#6ee7b7;">(${r.supplierRef})</span>` : ''}</div>`
+                  : ''
+              }
+              ${breakdownMiniHtml}
             </td>
-            <td class="cd-num">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })} <small style="color:#94a3b8;">${r.unidad}</small></td>
-            <td class="cd-num">${r.precioUnitarioGs > 0 ? formatGs(r.precioUnitarioGs) : '<span style="color:#34d399;">Gs. 0</span>'}</td>
+            <td class="cd-num">
+              ${
+                isToggleable
+                  ? `<div style="display:flex; align-items:center; justify-content:flex-end; gap:3px;">
+                       <input type="number" step="0.1" min="0" class="cd-inline-qty" data-item-id="${r.id}" value="${r.cantidad}" style="width:58px; padding:2px 4px; border-radius:4px; border:1px solid rgba(148,163,184,0.3); background:rgba(15,23,42,0.85); color:#f8fafc; font-family:var(--font-mono); font-size:10.5px; text-align:right;" title="Personalizar cantidad" />
+                       <small style="color:#94a3b8;">${r.unidad}</small>
+                     </div>`
+                  : `${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })} <small style="color:#94a3b8;">${r.unidad}</small>`
+              }
+            </td>
+            <td class="cd-num">
+              ${
+                isToggleable
+                  ? `<input type="number" step="5000" min="0" class="cd-inline-price" data-item-id="${r.id}" value="${r.precioUnitarioGs}" style="width:86px; padding:2px 4px; border-radius:4px; border:1px solid rgba(56,189,248,0.3); background:rgba(15,23,42,0.85); color:#bae6fd; font-family:var(--font-mono); font-size:10.5px; text-align:right;" title="Personalizar precio unitario exacto (Gs.)" />`
+                  : r.precioUnitarioGs > 0
+                    ? formatGs(r.precioUnitarioGs)
+                    : '<span style="color:#34d399;">Gs. 0</span>'
+              }
+            </td>
             <td class="cd-total" style="color:${r.alreadyBuilt ? '#34d399' : r.includedInScenario ? '#fde68a' : '#64748b'};">
-              ${r.subtotalGs > 0 ? `Gs. ${formatGs(r.subtotalGs)}` : 'Gs. 0'}
+              ${
+                isToggleable
+                  ? `<input type="number" step="50000" min="0" class="cd-inline-total" data-item-id="${r.id}" value="${r.subtotalGs}" style="width:98px; padding:2px 5px; border-radius:4px; border:1px solid rgba(245,158,11,0.45); background:rgba(15,23,42,0.92); color:#fde68a; font-family:var(--font-mono); font-size:10.5px; font-weight:700; text-align:right;" title="Personalizar monto total directo (Gs.)" />`
+                  : r.subtotalGs > 0
+                    ? `Gs. ${formatGs(r.subtotalGs)}`
+                    : 'Gs. 0'
+              }
             </td>
             <td>
               <div style="display:flex; align-items:center; gap:4px;">
@@ -2265,6 +2459,55 @@ document.addEventListener('DOMContentLoaded', () => {
           selectedItemIds.delete(itemId);
         }
         recalculateBudget();
+      });
+    });
+
+    computoDrawerTbody.querySelectorAll('.cd-inline-qty').forEach((inp) => {
+      inp.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-item-id');
+        const p = editablePartidas.find((item) => item.id === id);
+        if (!p) return;
+        const val = parseFloat(e.target.value);
+        if (!Number.isFinite(val) || val < 0) return;
+        p.cantidadActual = val;
+        p.subtotalActualGs = Math.round(p.cantidadActual * p.precioUnitarioActualGs);
+        renderBudgetTable();
+      });
+    });
+
+    computoDrawerTbody.querySelectorAll('.cd-inline-price').forEach((inp) => {
+      inp.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-item-id');
+        const p = editablePartidas.find((item) => item.id === id);
+        if (!p) return;
+        const val = parseFloat(e.target.value);
+        if (!Number.isFinite(val) || val < 0) return;
+        p.precioUnitarioActualGs = val;
+        p.subtotalActualGs = Math.round(p.cantidadActual * p.precioUnitarioActualGs);
+        renderBudgetTable();
+      });
+    });
+
+    computoDrawerTbody.querySelectorAll('.cd-inline-total').forEach((inp) => {
+      inp.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-item-id');
+        const p = editablePartidas.find((item) => item.id === id);
+        if (!p) return;
+        const val = parseFloat(e.target.value);
+        if (!Number.isFinite(val) || val < 0) return;
+        const customized = applyItemCustomization(
+          {
+            ...p,
+            cantidad: p.cantidadActual,
+            precioUnitarioGs: p.precioUnitarioActualGs,
+            subtotalGs: p.subtotalActualGs
+          },
+          { totalOverride: val }
+        );
+        p.cantidadActual = customized.cantidad;
+        p.precioUnitarioActualGs = customized.precioUnitarioGs;
+        p.subtotalActualGs = customized.subtotalGs;
+        renderBudgetTable();
       });
     });
   };
@@ -4093,6 +4336,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ? '🎯 Previsto'
             : '⏸️ No inc.';
         const itemTotal = Number(r.precioTotalGs ?? r.subtotalGs ?? 0);
+        const pRef = editablePartidas.find((p) => p.id === r.id);
+        const prodBadge = pRef?.suggestedProduct
+          ? `<div style="font-size:9px; color:#7dd3fc; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">🏷️ ${pRef.suggestedProduct}</div>`
+          : '';
         return `
           <div class="role-bom-row">
             <div style="display:flex; align-items:flex-start; gap:5px; flex:1; min-width:0;">
@@ -4101,13 +4348,20 @@ document.addEventListener('DOMContentLoaded', () => {
                   ? `<input type="checkbox" class="role-bom-item-chk" data-role-item-id="${r.id}" ${isIncluded ? 'checked' : ''} style="margin-top:2px; accent-color:${accent}; cursor:pointer;" title="Activar/Desactivar en presupuesto" />`
                   : ''
               }
-              <div style="min-width:0;">
+              <div style="min-width:0; flex:1;">
                 <span class="r-name">${r.item || r.producto}</span>
+                ${prodBadge}
                 <span class="r-qty">${Number(r.cantidad).toLocaleString('es-PY', { maximumFractionDigits: 2 })} ${r.unidad} • <span style="color:${statusColor};">${statusTag}</span></span>
               </div>
             </div>
             <div class="r-val" style="color:${statusColor};">
-              ${itemTotal > 0 ? `Gs. ${formatGs(itemTotal)}` : 'Gs. 0'}
+              ${
+                isToggleable
+                  ? `<input type="number" step="50000" min="0" class="role-bom-inline-total" data-role-item-id="${r.id}" value="${itemTotal}" style="width:92px; padding:2px 4px; border-radius:4px; border:1px solid rgba(245,158,11,0.35); background:rgba(15,23,42,0.88); color:${statusColor}; font-family:var(--font-mono); font-size:10px; font-weight:700; text-align:right;" title="Personalizar monto directo (Gs.)" />`
+                  : itemTotal > 0
+                    ? `Gs. ${formatGs(itemTotal)}`
+                    : 'Gs. 0'
+              }
             </div>
           </div>
         `;
@@ -4166,12 +4420,15 @@ document.addEventListener('DOMContentLoaded', () => {
           ${itemsHtml}
         </div>
 
-        <div style="display:flex; gap:6px; margin-top:9px;">
+        <div style="display:flex; gap:6px; margin-top:9px; flex-wrap:wrap;">
           <button id="btn-export-role-csv" class="role-export-btn" style="flex:1;">
             📥 Orden de Trabajo ${role.shortName} (.CSV)
           </button>
           <button id="btn-role-open-drawer" class="role-action-btn" style="width:auto; padding:7px 9px;" title="Abrir lista completa de costos">
             🧮 Ver Todo
+          </button>
+          <button id="btn-role-save-json" class="role-action-btn" style="width:auto; padding:7px 9px; border-color:rgba(16,185,129,0.5); color:#6ee7b7;" title="Guardar ajustes en archivo .JSON">
+            💾 Guardar
           </button>
         </div>
       </div>
@@ -4192,6 +4449,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.checked) selectedItemIds.add(id);
         else selectedItemIds.delete(id);
         recalculateBudget();
+      });
+    });
+
+    host.querySelectorAll('.role-bom-inline-total').forEach((inp) => {
+      inp.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-role-item-id');
+        const p = editablePartidas.find((item) => item.id === id);
+        if (!p) return;
+        const val = parseFloat(e.target.value);
+        if (!Number.isFinite(val) || val < 0) return;
+        const customized = applyItemCustomization(
+          {
+            ...p,
+            cantidad: p.cantidadActual,
+            precioUnitarioGs: p.precioUnitarioActualGs,
+            subtotalGs: p.subtotalActualGs
+          },
+          { totalOverride: val }
+        );
+        p.cantidadActual = customized.cantidad;
+        p.precioUnitarioActualGs = customized.precioUnitarioGs;
+        p.subtotalActualGs = customized.subtotalGs;
+        renderBudgetTable();
       });
     });
 
@@ -4219,6 +4499,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRoleOpenDrawer) {
       btnRoleOpenDrawer.addEventListener('click', () => {
         setComputoDrawerOpen(true);
+      });
+    }
+
+    const btnRoleSaveJson = document.getElementById('btn-role-save-json');
+    if (btnRoleSaveJson) {
+      btnRoleSaveJson.addEventListener('click', () => {
+        const btnSimSave = document.getElementById('btn-sim-save-json');
+        if (btnSimSave) btnSimSave.click();
       });
     }
   };
@@ -4377,8 +4665,6 @@ document.addEventListener('DOMContentLoaded', () => {
       mepPanel.style.display = profile.openMepSim ? 'block' : 'none';
     }
 
-    // On mobile screens, if the role opens the Drawer or MEP Simulator, collapse the sidebar sheet so they don't overlap;
-    // otherwise expand the sidebar sheet when the user explicitly taps a role pill so they see its workbench.
     if (window.innerWidth <= 900 && fromUserClick) {
       if (profile.openDrawer || profile.openMepSim) {
         setMobileSidebarCollapsed(true);
@@ -4397,6 +4683,611 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rId) applyUserRole(rId, { fromUserClick: true });
     });
   });
+
+  // =========================================================================
+  // 14. PERSISTENCE ENGINE: SAVE / LOAD ADJUSTED DATA (.JSON + LOCALSTORAGE)
+  //     + CUSTOM SECTION CAPS + CUSTOM PRODUCT/ITEM CREATION
+  // =========================================================================
+  const updatePersistStatusBanner = (msg, isSaved = true) => {
+    const cdBanner = document.getElementById('cd-persist-status');
+    const simBanner = document.getElementById('sim-persist-status-badge');
+    const nowStr = new Date().toLocaleTimeString('es-PY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    if (cdBanner) {
+      cdBanner.textContent = msg || `Auto-guardado local activo (${nowStr})`;
+      cdBanner.style.color = isSaved ? '#a7f3d0' : '#fde68a';
+    }
+    if (simBanner) {
+      simBanner.textContent = msg || `🟢 Auto-guardado en navegador (${nowStr})`;
+    }
+  };
+
+  const buildCurrentCustomOverridesMap = () => {
+    const overrides = {};
+    editablePartidas.forEach((p) => {
+      const orig = PRESUPUESTO_PARTIDAS.find((op) => op.id === p.id);
+      const isChecked = selectedItemIds.has(p.id);
+      if (
+        !orig ||
+        p.cantidadActual !== orig.cantidad ||
+        p.precioUnitarioActualGs !== orig.precioUnitarioGs ||
+        p.subtotalActualGs !== orig.subtotalGs ||
+        p.suggestedProduct !== (orig.suggestedProduct || getSuggestedProductForPartida(orig).suggestedProduct)
+      ) {
+        overrides[p.id] = {
+          qty: p.cantidadActual,
+          unitPrice: p.precioUnitarioActualGs,
+          subtotal: p.subtotalActualGs,
+          included: isChecked,
+          suggestedProduct: p.suggestedProduct
+        };
+      }
+    });
+    return overrides;
+  };
+
+  persistCustomStateNow = () => {
+    try {
+      const customItemsList = editablePartidas
+        .filter((p) => Boolean(p.isCustom) || String(p.id).startsWith('custom_'))
+        .map((p) => ({
+          ...p,
+          cantidad: p.cantidadActual,
+          precioUnitarioGs: p.precioUnitarioActualGs,
+          subtotalGs: p.subtotalActualGs,
+          included: selectedItemIds.has(p.id)
+        }));
+
+      const rawSerialized = serializeProjectState({
+        scenarioKey: activeScenarioKey,
+        roleId: activeUserRoleId,
+        selectedItemIds: Array.from(selectedItemIds),
+        customOverrides: buildCurrentCustomOverridesMap(),
+        customItems: customItemsList,
+        customSectionCaps,
+        notes: 'Datos ajustados de presupuesto y cómputo — Residencia Itá Pytã Punta'
+      });
+      const jsonStr =
+        typeof rawSerialized === 'string'
+          ? rawSerialized
+          : JSON.stringify(rawSerialized, null, 2);
+
+      localStorage.setItem(CUSTOM_PROJECT_STORAGE_KEY, jsonStr);
+      updatePersistStatusBanner();
+      return jsonStr;
+    } catch (err) {
+      console.warn('No se pudo persistir en localStorage:', err);
+      return null;
+    }
+  };
+
+  const applyDeserializedState = (stateObj, statusMsg = '✅ Datos cargados correctamente') => {
+    if (!stateObj || !stateObj.valid) return false;
+
+    // 1. Rebuild base editablePartidas from official PRESUPUESTO_PARTIDAS
+    const baseItems = PRESUPUESTO_PARTIDAS.map((p, idx) => {
+      const prodMeta = getSuggestedProductForPartida(p);
+      return {
+        ...p,
+        codigo: p.codigo || `ITEM-${String(idx + 1).padStart(2, '0')}`,
+        suggestedProduct: p.suggestedProduct || prodMeta.suggestedProduct,
+        commercialUnit: p.commercialUnit || prodMeta.commercialUnit,
+        commercialUnitPrice: p.commercialUnitPrice || prodMeta.commercialUnitPrice,
+        supplierRef: p.supplierRef || prodMeta.supplierRef,
+        unitBreakdown:
+          Array.isArray(p.unitBreakdown) && p.unitBreakdown.length
+            ? p.unitBreakdown
+            : prodMeta.unitBreakdown,
+        cantidadActual: p.cantidad,
+        precioUnitarioActualGs: p.precioUnitarioGs,
+        subtotalActualGs: p.subtotalGs
+      };
+    });
+
+    // 2. Apply customOverrides
+    const overrides = stateObj.customOverrides || {};
+    baseItems.forEach((p) => {
+      const ov = overrides[p.id];
+      if (!ov) return;
+      if (ov.qty !== undefined && Number.isFinite(Number(ov.qty))) {
+        p.cantidadActual = Number(ov.qty);
+      }
+      if (ov.unitPrice !== undefined && Number.isFinite(Number(ov.unitPrice))) {
+        p.precioUnitarioActualGs = Number(ov.unitPrice);
+      }
+      if (ov.subtotal !== undefined && Number.isFinite(Number(ov.subtotal))) {
+        p.subtotalActualGs = Number(ov.subtotal);
+      } else {
+        p.subtotalActualGs = Math.round(p.cantidadActual * p.precioUnitarioActualGs);
+      }
+      if (ov.suggestedProduct) {
+        p.suggestedProduct = ov.suggestedProduct;
+      }
+    });
+
+    // 3. Append customItems
+    const extraCustom = (stateObj.customItems || []).map((ci) => ({
+      ...ci,
+      isCustom: true,
+      cantidadActual: Number(ci.cantidadActual ?? ci.cantidad ?? 1),
+      precioUnitarioActualGs: Number(ci.precioUnitarioActualGs ?? ci.precioUnitarioGs ?? 0),
+      subtotalActualGs: Number(
+        ci.subtotalActualGs ??
+          ci.subtotalGs ??
+          Math.round(Number(ci.cantidad ?? 1) * Number(ci.precioUnitarioGs ?? 0))
+      )
+    }));
+
+    editablePartidas.length = 0;
+    editablePartidas.push(...baseItems, ...extraCustom);
+
+    // 4. Restore customSectionCaps
+    customSectionCaps = { ...(stateObj.customSectionCaps || {}) };
+
+    // 5. Restore scenarioKey & selectedItemIds
+    if (stateObj.scenarioKey && ESCENARIOS_INVERSION[stateObj.scenarioKey]) {
+      activeScenarioKey = stateObj.scenarioKey;
+      document.querySelectorAll('.scenario-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-scenario') === activeScenarioKey);
+      });
+      scene.setScenario(activeScenarioKey);
+    }
+
+    if (Array.isArray(stateObj.selectedItemIds) && stateObj.selectedItemIds.length > 0) {
+      selectedItemIds = new Set(stateObj.selectedItemIds);
+    }
+
+    renderBudgetTable();
+    renderOmisionesCards();
+    if (typeof renderComputoDrawer === 'function') renderComputoDrawer();
+    if (typeof renderActiveRoleWorkbench === 'function') renderActiveRoleWorkbench();
+    updatePersistStatusBanner(statusMsg, true);
+    return true;
+  };
+
+  const downloadCustomStateJson = () => {
+    const jsonStr = persistCustomStateNow();
+    if (!jsonStr) return;
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `presupuesto_ajustado_itapytapunta_${activeScenarioKey}_${dateStamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    updatePersistStatusBanner('💾 Archivo .JSON descargado a tu dispositivo', true);
+  };
+
+  const handleUploadCustomStateJsonFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const content = String(ev.target?.result || '');
+      const parsed = deserializeProjectState(content);
+      if (!parsed.valid) {
+        updatePersistStatusBanner(`⚠️ Error al leer archivo JSON: ${parsed.error || 'Formato inválido'}`, false);
+        return;
+      }
+      applyDeserializedState(parsed, `📂 Archivo cargado: ${file.name}`);
+      persistCustomStateNow();
+    };
+    reader.readAsText(file);
+  };
+
+  const resetToOfficialDefaults = () => {
+    localStorage.removeItem(CUSTOM_PROJECT_STORAGE_KEY);
+    customSectionCaps = {};
+    const defaultScen = ESCENARIOS_INVERSION[activeScenarioKey] || ESCENARIOS_INVERSION.escenario300;
+    selectedItemIds = new Set(defaultScen.itemsIncluidos || []);
+
+    const freshItems = PRESUPUESTO_PARTIDAS.map((p, idx) => {
+      const prodMeta = getSuggestedProductForPartida(p);
+      return {
+        ...p,
+        codigo: p.codigo || `ITEM-${String(idx + 1).padStart(2, '0')}`,
+        suggestedProduct: p.suggestedProduct || prodMeta.suggestedProduct,
+        commercialUnit: p.commercialUnit || prodMeta.commercialUnit,
+        commercialUnitPrice: p.commercialUnitPrice || prodMeta.commercialUnitPrice,
+        supplierRef: p.supplierRef || prodMeta.supplierRef,
+        unitBreakdown:
+          Array.isArray(p.unitBreakdown) && p.unitBreakdown.length
+            ? p.unitBreakdown
+            : prodMeta.unitBreakdown,
+        cantidadActual: p.cantidad,
+        precioUnitarioActualGs: p.precioUnitarioGs,
+        subtotalActualGs: p.subtotalGs
+      };
+    });
+
+    editablePartidas.length = 0;
+    editablePartidas.push(...freshItems);
+
+    renderBudgetTable();
+    renderOmisionesCards();
+    if (typeof renderComputoDrawer === 'function') renderComputoDrawer();
+    if (typeof renderActiveRoleWorkbench === 'function') renderActiveRoleWorkbench();
+    updatePersistStatusBanner('↺ Valores oficiales de carpeta restaurados', true);
+  };
+
+  const renderSavedSnapshotsList = () => {
+    const listEl = document.getElementById('saved-snapshots-list');
+    if (!listEl) return;
+    try {
+      const raw = localStorage.getItem(CUSTOM_SNAPSHOTS_STORAGE_KEY);
+      const snaps = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(snaps) || snaps.length === 0) {
+        listEl.innerHTML = '';
+        return;
+      }
+      listEl.innerHTML = snaps
+        .map(
+          (s, idx) => `
+          <div style="display:flex; align-items:center; gap:5px; padding:3px 8px; border-radius:6px; background:rgba(15,23,42,0.9); border:1px solid rgba(56,189,248,0.35); font-size:10px; color:#e2e8f0;">
+            <button class="snap-load-btn" data-snap-idx="${idx}" style="background:transparent; border:none; color:#7dd3fc; font-weight:700; cursor:pointer; padding:0;" title="Cargar esta versión guardada">
+              📌 ${s.name} (${s.date})
+            </button>
+            <button class="snap-del-btn" data-snap-idx="${idx}" style="background:transparent; border:none; color:#fca5a5; cursor:pointer; padding:0 2px;" title="Eliminar versión">✕</button>
+          </div>
+        `
+        )
+        .join('');
+
+      listEl.querySelectorAll('.snap-load-btn').forEach((b) => {
+        b.addEventListener('click', () => {
+          const i = Number(b.getAttribute('data-snap-idx'));
+          const snap = snaps[i];
+          if (snap && snap.payload) {
+            const parsed = deserializeProjectState(snap.payload);
+            if (parsed.valid) {
+              applyDeserializedState(parsed, `📌 Versión cargada: ${snap.name}`);
+              persistCustomStateNow();
+            }
+          }
+        });
+      });
+
+      listEl.querySelectorAll('.snap-del-btn').forEach((b) => {
+        b.addEventListener('click', () => {
+          const i = Number(b.getAttribute('data-snap-idx'));
+          snaps.splice(i, 1);
+          localStorage.setItem(CUSTOM_SNAPSHOTS_STORAGE_KEY, JSON.stringify(snaps));
+          renderSavedSnapshotsList();
+        });
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const saveLocalSnapshot = () => {
+    const jsonStr = persistCustomStateNow();
+    if (!jsonStr) return;
+    try {
+      const raw = localStorage.getItem(CUSTOM_SNAPSHOTS_STORAGE_KEY);
+      const snaps = raw ? JSON.parse(raw) : [];
+      const totalEl = document.getElementById('sim-total-amount');
+      const totalLabel = totalEl ? totalEl.textContent : '';
+      const name = `Versión #${snaps.length + 1} (${activeScenarioKey} • Gs. ${totalLabel})`;
+      const date = new Date().toLocaleTimeString('es-PY', { hour: '2-digit', minute: '2-digit' });
+      snaps.unshift({ name, date, payload: jsonStr });
+      localStorage.setItem(CUSTOM_SNAPSHOTS_STORAGE_KEY, JSON.stringify(snaps.slice(0, 8)));
+      renderSavedSnapshotsList();
+      updatePersistStatusBanner(`📌 Guardado rápido: ${name}`, true);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  // Wire Save / Load / Reset buttons across Header, Drawer, and Simulador Modal
+  const btnHeaderSaveLoad = document.getElementById('btn-header-save-load');
+  if (btnHeaderSaveLoad) {
+    btnHeaderSaveLoad.addEventListener('click', () => {
+      openModal('modal-simulador');
+      const sec = document.getElementById('sim-persistence-section');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  ['cd-save-json-btn', 'btn-sim-save-json'].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', downloadCustomStateJson);
+  });
+
+  const cdLoadBtn = document.getElementById('cd-load-json-btn');
+  const cdFileInput = document.getElementById('cd-file-input-json');
+  if (cdLoadBtn && cdFileInput) {
+    cdLoadBtn.addEventListener('click', () => cdFileInput.click());
+    cdFileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) handleUploadCustomStateJsonFile(file);
+      e.target.value = '';
+    });
+  }
+
+  const simLoadBtn = document.getElementById('btn-sim-load-json');
+  const simFileInput = document.getElementById('sim-file-input-json');
+  if (simLoadBtn && simFileInput) {
+    simLoadBtn.addEventListener('click', () => simFileInput.click());
+    simFileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) handleUploadCustomStateJsonFile(file);
+      e.target.value = '';
+    });
+  }
+
+  const btnSimSnapshot = document.getElementById('btn-sim-save-snapshot');
+  if (btnSimSnapshot) {
+    btnSimSnapshot.addEventListener('click', saveLocalSnapshot);
+  }
+
+  ['cd-reset-defaults-btn', 'btn-sim-reset-defaults'].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', resetToOfficialDefaults);
+  });
+
+  // Wire Editable Target Credit Ceiling in Drawer & Simulador
+  ['cd-custom-target-input', 'sim-custom-target-input'].forEach((id) => {
+    const inp = document.getElementById(id);
+    if (!inp) return;
+    inp.addEventListener('change', (e) => {
+      const val = parseFloat(e.target.value);
+      if (Number.isFinite(val) && val > 0) {
+        customSectionCaps[activeScenarioKey] = Math.round(val);
+        recalculateBudget();
+      }
+    });
+  });
+
+  // Wire Custom Item / Product Creation in Drawer & Simulador
+  const handleAddCustomBudgetItem = ({ nameId, prodId, catId, qtyId, unitId, priceId }) => {
+    const nameEl = document.getElementById(nameId);
+    const prodEl = document.getElementById(prodId);
+    const catEl = document.getElementById(catId);
+    const qtyEl = document.getElementById(qtyId);
+    const unitEl = document.getElementById(unitId);
+    const priceEl = document.getElementById(priceId);
+
+    const itemTitle = (nameEl?.value || '').trim() || 'Rubro Personalizado de Obra';
+    const suggestedProd = (prodEl?.value || '').trim() || itemTitle;
+    const category = catEl?.value || 'Arquitectura';
+    const qty = parseFloat(qtyEl?.value || '1');
+    const unit = (unitEl?.value || 'gl').trim() || 'gl';
+    const unitPriceGs = parseFloat(priceEl?.value || '1500000');
+
+    const newItem = createCustomBudgetItem({
+      item: itemTitle,
+      categoria: category,
+      unidad: unit,
+      cantidad: Number.isFinite(qty) && qty > 0 ? qty : 1,
+      precioUnitarioGs: Number.isFinite(unitPriceGs) && unitPriceGs >= 0 ? unitPriceGs : 0,
+      suggestedProduct: suggestedProd,
+      supplierRef: 'Proveedor Personalizado (Asunción)'
+    });
+
+    editablePartidas.unshift({
+      ...newItem,
+      isCustom: true,
+      cantidadActual: newItem.cantidad,
+      precioUnitarioActualGs: newItem.precioUnitarioGs,
+      subtotalActualGs: newItem.subtotalGs
+    });
+
+    selectedItemIds.add(newItem.id);
+    if (nameEl) nameEl.value = '';
+    if (prodEl) prodEl.value = '';
+
+    renderBudgetTable();
+    if (typeof renderComputoDrawer === 'function') renderComputoDrawer();
+    if (typeof renderActiveRoleWorkbench === 'function') renderActiveRoleWorkbench();
+    updatePersistStatusBanner(`✨ Producto agregado: ${itemTitle}`, true);
+  };
+
+  const cdConfirmAddBtn = document.getElementById('cd-confirm-add-item-btn');
+  if (cdConfirmAddBtn) {
+    cdConfirmAddBtn.addEventListener('click', () => {
+      handleAddCustomBudgetItem({
+        nameId: 'cd-new-item-name',
+        prodId: 'cd-new-item-product',
+        catId: 'cd-new-item-cat',
+        qtyId: 'cd-new-item-qty',
+        unitId: 'cd-new-item-unit',
+        priceId: 'cd-new-item-price'
+      });
+    });
+  }
+
+  const simConfirmAddBtn = document.getElementById('sim-confirm-add-item-btn');
+  if (simConfirmAddBtn) {
+    simConfirmAddBtn.addEventListener('click', () => {
+      handleAddCustomBudgetItem({
+        nameId: 'sim-new-item-name',
+        prodId: 'sim-new-item-product',
+        catId: 'sim-new-item-cat',
+        qtyId: 'sim-new-item-qty',
+        unitId: 'sim-new-item-unit',
+        priceId: 'sim-new-item-price'
+      });
+    });
+  }
+
+  // Auto-load saved custom state from localStorage on startup if present
+  try {
+    const savedRaw = localStorage.getItem(CUSTOM_PROJECT_STORAGE_KEY);
+    if (savedRaw) {
+      const parsed = deserializeProjectState(savedRaw);
+      if (parsed.valid) {
+        applyDeserializedState(parsed, '🟢 Datos personalizados restaurados de tu sesión guardada');
+      }
+    }
+  } catch (e) {
+    console.warn('Error cargando sesión personalizada:', e);
+  }
+  renderSavedSnapshotsList();
+
+  // =========================================================================
+  // 15. ULTRA-REALISTIC 8-ZONE ARCHITECTURAL GALLERY (#modal-galeria-zonas)
+  // =========================================================================
+  const galeriaHeroHost = document.getElementById('galeria-zona-hero-host');
+  const galeriaGrid = document.getElementById('galeria-zonas-grid');
+  let activeGaleriaFilter = 'ALL';
+  let activeGaleriaHeroZone = GALLERY_ZONES_DATA[0] || null;
+
+  const matchesZoneFilter = (z, filterVal) => {
+    if (!filterVal || filterVal === 'ALL') return true;
+    const lvl = String(z.level || z.nivel || '').toLowerCase();
+    const lbl = String(z.levelLabel || z.nivel || '').toLowerCase();
+    if (filterVal === 'Frente y Cochera') return lvl.includes('frente') || lbl.includes('frente') || lbl.includes('cochera');
+    if (filterVal === 'Planta Baja') return lvl === 'planta_baja' || lbl.includes('planta baja');
+    if (filterVal === 'Planta Alta') return lvl === 'planta_alta' || lbl.includes('planta alta');
+    if (filterVal === 'Subsuelo y Patio') return lvl.includes('subsuelo') || lvl.includes('patio') || lbl.includes('subsuelo') || lbl.includes('patio');
+    return z.nivel === filterVal || z.level === filterVal;
+  };
+
+  const renderGaleriaZonasModal = () => {
+    if (!galeriaGrid || !galeriaHeroHost) return;
+
+    const filteredZones = GALLERY_ZONES_DATA.filter((z) => matchesZoneFilter(z, activeGaleriaFilter));
+
+    if (!activeGaleriaHeroZone || !filteredZones.some((z) => z.id === activeGaleriaHeroZone.id)) {
+      activeGaleriaHeroZone = filteredZones[0] || GALLERY_ZONES_DATA[0];
+    }
+
+    if (activeGaleriaHeroZone) {
+      const hz = activeGaleriaHeroZone;
+      const hzTitle = hz.title || hz.titulo || 'Zona Arquitectónica';
+      const hzLevel = hz.levelLabel || hz.nivel || '';
+      const hzDim = hz.dimensions || hz.dimensiones || '';
+      const hzDesc = hz.summary || hz.descripcion || '';
+      const hzFamily = hz.familyNotes || '';
+      const hzCam = hz.cameraViewKey || hz.cameraPreset || '';
+      const matsList = hz.materialsAndProducts || hz.materialesDestacados || [];
+      const matsHtml = matsList
+        .map(
+          (m) =>
+            `<span style="padding:3px 8px; border-radius:999px; background:rgba(15,23,42,0.85); border:1px solid rgba(56,189,248,0.35); color:#bae6fd; font-size:10.5px;">✓ ${m}</span>`
+        )
+        .join('');
+
+      galeriaHeroHost.innerHTML = `
+        <div class="zona-hero-box" style="display:grid; grid-template-columns: minmax(300px, 1.45fr) minmax(260px, 1fr); gap:16px; background:rgba(15,23,42,0.88); border:1px solid rgba(245,158,11,0.4); border-radius:12px; padding:14px; align-items:center;">
+          <div style="position:relative; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.14); aspect-ratio:16/9; background:#020617;">
+            <img src="${hz.image}" alt="${hzTitle}" style="width:100%; height:100%; object-fit:cover; display:block; cursor:zoom-in;" id="galeria-hero-img-zoom" />
+            <div style="position:absolute; top:10px; left:10px; padding:4px 10px; border-radius:999px; background:rgba(2,6,23,0.82); border:1px solid rgba(245,158,11,0.6); color:#fde68a; font-size:11px; font-weight:700;">
+              📍 ${hzLevel} • ${hz.cota}
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <div>
+              <span style="font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#38bdf8; font-weight:700;">Vista Arquitectónica Ultra-Realista • ${hzDim}</span>
+              <h3 style="margin:3px 0 0 0; font-size:17px; color:#f8fafc;">${hzTitle}</h3>
+            </div>
+            <p style="margin:0; font-size:12px; color:#cbd5e1; line-height:1.5;">${hzDesc}</p>
+            ${
+              hzFamily
+                ? `<div style="padding:7px 10px; border-radius:8px; background:rgba(244,63,94,0.1); border-left:3px solid #f43f5e; font-size:11px; color:#fecdd3;">
+                     💑🐾 <strong>Vivencia Ruth, Leo, Emma & Serafina:</strong> ${hzFamily}
+                   </div>`
+                : ''
+            }
+            <div>
+              <div style="font-size:10.5px; color:#94a3b8; font-weight:700; margin-bottom:5px;">🧱 Productos y Materiales Identificados en esta Zona:</div>
+              <div style="display:flex; flex-wrap:wrap; gap:5px;">
+                ${matsHtml}
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
+              <button id="btn-hero-focus-3d" class="action-btn-sm" style="background:rgba(56,189,248,0.2); border-color:rgba(56,189,248,0.55); color:#bae6fd; font-weight:700; padding:7px 12px;">
+                🎥 Ir a esta Zona en el Visor 3D Interactivo
+              </button>
+              <button id="btn-hero-open-lightbox" class="action-btn-sm" style="background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.5); color:#fde68a; padding:7px 12px;">
+                🔍 Ampliar Render a Pantalla Completa
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const btnHeroFocus3d = document.getElementById('btn-hero-focus-3d');
+      if (btnHeroFocus3d) {
+        btnHeroFocus3d.addEventListener('click', () => {
+          const modalGal = document.getElementById('modal-galeria-zonas');
+          if (modalGal) modalGal.classList.remove('open');
+          if (hzCam && typeof scene.focusRoom === 'function') {
+            scene.focusRoom(hzCam);
+          }
+        });
+      }
+
+      const openHeroLightbox = () => {
+        if (typeof window.openPhotoLightbox === 'function') {
+          window.openPhotoLightbox(hz.image, `${hzTitle} — ${hz.cota} (${hzDim})`);
+        } else {
+          window.open(hz.image, '_blank', 'noopener');
+        }
+      };
+      const btnHeroLightbox = document.getElementById('btn-hero-open-lightbox');
+      const heroImgZoom = document.getElementById('galeria-hero-img-zoom');
+      if (btnHeroLightbox) btnHeroLightbox.addEventListener('click', openHeroLightbox);
+      if (heroImgZoom) heroImgZoom.addEventListener('click', openHeroLightbox);
+    }
+
+    galeriaGrid.innerHTML = filteredZones
+      .map((z) => {
+        const isSelected = activeGaleriaHeroZone && activeGaleriaHeroZone.id === z.id;
+        const zTitle = z.title || z.titulo || '';
+        const zLevel = z.levelLabel || z.nivel || '';
+        const zDim = z.dimensions || z.dimensiones || '';
+        const zDesc = z.summary || z.descripcion || '';
+        return `
+          <div class="zona-gallery-card" data-zone-id="${z.id}" style="cursor:pointer; border-radius:10px; overflow:hidden; background:rgba(15,23,42,0.88); border:2px solid ${isSelected ? '#f59e0b' : 'rgba(148,163,184,0.22)'}; transition:all 0.18s ease; display:flex; flex-direction:column;">
+            <div style="position:relative; aspect-ratio:16/9; background:#020617; overflow:hidden;">
+              <img src="${z.image}" alt="${zTitle}" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block;" />
+              <span style="position:absolute; bottom:6px; left:6px; padding:2px 8px; border-radius:999px; background:rgba(2,6,23,0.82); color:#fde68a; font-size:9.5px; font-weight:700;">
+                ${zLevel}
+              </span>
+            </div>
+            <div style="padding:10px 12px; display:flex; flex-direction:column; gap:4px; flex:1;">
+              <strong style="font-size:12.5px; color:#f8fafc;">${zTitle}</strong>
+              <span style="font-size:10.5px; color:#38bdf8; font-family:var(--font-mono);">📐 ${zDim}</span>
+              <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8; line-height:1.4;">${zDesc}</p>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
+    galeriaGrid.querySelectorAll('.zona-gallery-card[data-zone-id]').forEach((card) => {
+      card.addEventListener('click', () => {
+        const zId = card.getAttribute('data-zone-id');
+        const found = GALLERY_ZONES_DATA.find((item) => item.id === zId);
+        if (found) {
+          activeGaleriaHeroZone = found;
+          renderGaleriaZonasModal();
+        }
+      });
+    });
+  };
+
+  document.querySelectorAll('#galeria-zonas-filters [data-zona-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#galeria-zonas-filters [data-zona-filter]').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeGaleriaFilter = btn.getAttribute('data-zona-filter') || 'ALL';
+      renderGaleriaZonasModal();
+    });
+  });
+
+  const btnHeaderGaleriaZonas = document.getElementById('btn-header-galeria-zonas');
+  if (btnHeaderGaleriaZonas) {
+    btnHeaderGaleriaZonas.addEventListener('click', () => {
+      renderGaleriaZonasModal();
+      openModal('modal-galeria-zonas');
+    });
+  }
+
+  renderGaleriaZonasModal();
 
   // Initialize default role workbench on startup without overriding default camera
   renderActiveRoleWorkbench();

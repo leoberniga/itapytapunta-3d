@@ -101,8 +101,14 @@
     </div>
 
     <div class="header-actions">
-      <button id="btn-toggle-computo-drawer" class="btn-header glass-panel" data-drawer-open="false" style="border-color:rgba(56,189,248,0.75); background:linear-gradient(135deg, rgba(14,165,233,0.26), rgba(3,105,161,0.42)); color:#f0f9ff; font-weight:800;" title="Desplegar Menú de Lista de Costos y Cálculo Métrico Producto por Producto (Unidad, Precio Total y Estado: Ya está vs. Previsto en Crédito BNF)">
+      <button id="btn-header-galeria-zonas" class="btn-header glass-panel" data-modal="modal-galeria-zonas" style="border-color:rgba(245,158,11,0.85); background:linear-gradient(135deg, rgba(245,158,11,0.28), rgba(180,83,9,0.45)); color:#fef3c7; font-weight:800;" title="Abrir Galería de Vistas Ultra-Realistas de cada zona de la casa (8 ambientes con materiales, productos sugeridos y acceso directo a cámara 3D)">
+        <span>🖼️ Galería Zonas (8)</span>
+      </button>
+      <button id="btn-toggle-computo-drawer" class="btn-header glass-panel" data-drawer-open="false" style="border-color:rgba(56,189,248,0.75); background:linear-gradient(135deg, rgba(14,165,233,0.26), rgba(3,105,161,0.42)); color:#f0f9ff; font-weight:800;" title="Desplegar Menú de Lista de Costos y Cálculo Métrico Producto por Producto (Unidad, Precio Unitario Exacto, Producto Sugerido y Monto Total Personalizable)">
         <span>📋 Lista de Costos (Cálculo Métrico)</span>
+      </button>
+      <button id="btn-header-save-load" class="btn-header glass-panel" style="border-color:rgba(168,85,247,0.75); background:linear-gradient(135deg, rgba(168,85,247,0.24), rgba(109,40,217,0.4)); color:#f3e8ff; font-weight:800;" title="Guardar tus montos ajustados en un archivo .JSON o cargar datos guardados previamente">
+        <span>💾 Guardar / Cargar</span>
       </button>
       <button id="btn-toggle-game-mode" class="btn-header glass-panel" data-game-active="off" style="border-color:rgba(16,185,129,0.75); background:linear-gradient(135deg, rgba(16,185,129,0.24), rgba(5,150,105,0.38)); color:#ecfdf5; font-weight:800;" title="Activar Modo Juego Hiperrealista en 1ra/3ra Persona con colisión de muros, radar minimapa e interacciones en vivo">
         <span>🎮 Modo Juego Realista</span>
@@ -646,13 +652,13 @@
   <aside id="computo-drawer" class="computo-drawer glass-panel" aria-label="Menú Desplegable de Cálculo Métrico y Lista de Costos BNF">
     <div class="computo-drawer-header">
       <div>
-        <div class="computo-drawer-kicker">CRÉDITO VIVIENDA BNF • CÁLCULO MÉTRICO ÍTEM POR ÍTEM</div>
-        <h3 id="computo-drawer-title" class="computo-drawer-title">Lista de Costos y Estado por Presupuesto</h3>
+        <div class="computo-drawer-kicker">CRÉDITO VIVIENDA BNF • DESGLOSE POR PRODUCTO, UNIDAD Y MONTO PERSONALIZABLE</div>
+        <h3 id="computo-drawer-title" class="computo-drawer-title">Lista de Costos y Productos Sugeridos por Presupuesto</h3>
       </div>
       <button id="btn-close-computo-drawer" class="modal-close-btn" title="Cerrar menú de costos">&times;</button>
     </div>
 
-    <!-- Tarjeta Resumen del Escalón Seleccionado (Solo lo previsto en este monto) -->
+    <!-- Tarjeta Resumen del Escalón Seleccionado + Tope de Presupuesto Personalizable -->
     <div class="computo-drawer-summary">
       <div class="cd-summary-main">
         <div>
@@ -660,8 +666,12 @@
           <div class="cd-summary-amount" id="cd-total-credito">Gs. 298.227.534</div>
         </div>
         <div style="text-align:right;">
-          <span class="cd-summary-label">Tope Crédito BNF</span>
-          <div class="cd-summary-target" id="cd-target-credito">Gs. 300.000.000</div>
+          <span class="cd-summary-label">Tope Crédito BNF (Personalizable)</span>
+          <div style="display:flex; align-items:center; justify-content:flex-end; gap:5px;">
+            <span class="cd-summary-target" id="cd-target-credito" style="display:none;">Gs. 300.000.000</span>
+            <span style="font-size:11px; color:#7dd3fc; font-weight:700;">Gs.</span>
+            <input type="number" id="cd-custom-target-input" class="cd-inline-input" step="1000000" min="0" value="300000000" style="width:128px; text-align:right; font-weight:800; color:#38bdf8; background:rgba(2,132,199,0.18); border:1px solid rgba(56,189,248,0.55); border-radius:6px; padding:3px 6px; font-size:12px;" title="Personaliza aquí el monto tope del presupuesto / crédito en Guaraníes">
+          </div>
           <span class="cd-summary-diff" id="cd-diff-credito">Disponible: +Gs. 1.772.466</span>
         </div>
       </div>
@@ -679,9 +689,26 @@
           <strong id="cd-cuota-bnf" style="color:#fbbf24;">Gs. 3.529.773/mes</strong>
         </div>
       </div>
+
+      <!-- Barra de Guardar / Cargar Datos Ajustados (.JSON + Memoria Local) -->
+      <div class="cd-persistence-bar" style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(148,163,184,0.2); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <button id="cd-save-json-btn" class="btn-header glass-panel" style="padding:4px 9px; font-size:10.5px; font-weight:800; border-color:rgba(16,185,129,0.65); background:rgba(5,150,105,0.25); color:#6ee7b7;" title="Descargar un archivo .JSON con todos tus montos, cantidades y productos ajustados">
+            💾 Guardar Datos (.JSON)
+          </button>
+          <button id="cd-load-json-btn" class="btn-header glass-panel" style="padding:4px 9px; font-size:10.5px; font-weight:800; border-color:rgba(56,189,248,0.65); background:rgba(2,132,199,0.25); color:#7dd3fc;" title="Cargar un archivo .JSON guardado previamente en tu computadora o celular">
+            📂 Cargar Datos (.JSON)
+          </button>
+          <input type="file" id="cd-file-input-json" accept=".json,application/json" style="display:none;">
+          <button id="cd-reset-defaults-btn" class="btn-header glass-panel" style="padding:4px 8px; font-size:10px; border-color:rgba(248,113,113,0.45); color:#fca5a5;" title="Restaurar todos los precios y cantidades a los valores oficiales de fábrica">
+            🔄 Restaurar Base
+          </button>
+        </div>
+        <span id="cd-persistence-status" style="font-size:10px; color:#a7f3d0; font-family:var(--font-mono);">✓ Auto-guardado local activo</span>
+      </div>
     </div>
 
-    <!-- Barra de Filtros Intuitivos y Buscador Producto por Producto -->
+    <!-- Barra de Filtros Intuitivos, Buscador y Botón para Agregar Nuevo Producto Personalizado -->
     <div class="computo-drawer-controls">
       <div class="cd-filter-pills" id="computo-drawer-filters">
         <button class="cd-filter-pill active" data-cd-filter="PREVISTOS">
@@ -697,21 +724,37 @@
           ⏸️ No incluidos (<span id="cd-badge-no-inc">10</span>)
         </button>
       </div>
-      <div class="cd-search-row">
-        <input type="search" id="computo-drawer-search" class="cd-search-input" placeholder="Buscar producto, rubro, código o unidad (ej. porcelanato, techo, piscina, ANDE)...">
+      <div class="cd-search-row" style="display:flex; gap:6px; align-items:center;">
+        <input type="search" id="computo-drawer-search" class="cd-search-input" style="flex:1;" placeholder="Buscar producto, marca sugerida, código o unidad (ej. Vallemí, Tigre, Tobatí, Sika, Blindex)...">
+        <button id="cd-toggle-add-item-btn" class="btn-header glass-panel" style="padding:6px 10px; font-size:10.5px; font-weight:800; border-color:rgba(245,158,11,0.65); background:rgba(217,119,6,0.22); color:#fde68a; white-space:nowrap;" title="Agregar un nuevo producto o rubro personalizado al presupuesto">
+          ➕ Nuevo Producto
+        </button>
+      </div>
+
+      <!-- Formulario Rápido para Agregar Producto / Rubro Personalizado -->
+      <div id="cd-add-custom-item-box" style="display:none; margin-top:8px; padding:9px; background:rgba(15,23,42,0.92); border:1px solid rgba(245,158,11,0.5); border-radius:8px;">
+        <div style="font-size:10.5px; font-weight:800; color:#fde68a; margin-bottom:6px;">➕ AGREGAR PRODUCTO / RUBRO PERSONALIZADO AL PRESUPUESTO</div>
+        <div style="display:grid; grid-template-columns:1.5fr 1.3fr 0.6fr 0.7fr 0.9fr auto; gap:5px; align-items:center;">
+          <input type="text" id="cd-new-item-name" placeholder="Nombre del rubro / ítem..." style="padding:5px 7px; font-size:11px; border-radius:5px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="text" id="cd-new-item-product" placeholder="Producto / Marca sugerida..." style="padding:5px 7px; font-size:11px; border-radius:5px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#fef08a;">
+          <input type="text" id="cd-new-item-unit" placeholder="Unid. (m², un, gl)" value="un" style="padding:5px 7px; font-size:11px; border-radius:5px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="number" id="cd-new-item-qty" placeholder="Cant." value="1" min="0.01" step="0.1" style="padding:5px 7px; font-size:11px; border-radius:5px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="number" id="cd-new-item-price" placeholder="P. Unit. (Gs.)" value="350000" min="0" step="10000" style="padding:5px 7px; font-size:11px; border-radius:5px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#34d399;">
+          <button id="cd-confirm-add-item-btn" class="btn-primary" style="padding:5px 10px; font-size:11px; font-weight:800; border-radius:5px; cursor:pointer;">Agregar</button>
+        </div>
       </div>
     </div>
 
-    <!-- Tabla Desplegable Producto por Producto, Unidad, Precio Total y Si Ya Está -->
+    <!-- Tabla Desplegable Producto por Producto, Marca Sugerida, Unidad, Precio Unitario Exacto y Monto Total Editable -->
     <div class="computo-drawer-table-wrap">
       <table class="computo-drawer-table">
         <thead>
           <tr>
-            <th>Producto / Rubro (Cálculo Métrico)</th>
-            <th style="width:82px; text-align:right;">Cant. / Unid.</th>
-            <th style="width:96px; text-align:right;">P. Unit. (Gs.)</th>
-            <th style="width:110px; text-align:right;">Precio Total</th>
-            <th style="width:132px;">¿Ya está? / Estado</th>
+            <th>Rubro / Producto Sugerido y Desglose Unitario</th>
+            <th style="width:86px; text-align:right;">Cant. / Unid.</th>
+            <th style="width:104px; text-align:right;">P. Unit. Exacto</th>
+            <th style="width:118px; text-align:right;">Monto Total (Gs.)</th>
+            <th style="width:128px;">¿Ya está? / Estado</th>
           </tr>
         </thead>
         <tbody id="computo-drawer-tbody">
@@ -723,7 +766,7 @@
     <!-- Pie del Menú con Acciones Rápidas -->
     <div class="computo-drawer-footer">
       <button id="btn-drawer-open-full-modal" class="btn-header glass-panel" style="flex:1; justify-content:center; font-size:11px; font-weight:700; border-color:rgba(168,85,247,0.55); color:#e9d5ff;">
-        <span>🏦 Abrir Carpeta BNF Completa y Auditoría</span>
+        <span>🏦 Abrir Carpeta BNF Completa y Guardar/Cargar</span>
       </button>
       <button id="btn-drawer-export-xlsx" class="btn-primary" style="padding:7px 12px; font-size:11px; font-weight:800; border-radius:7px; cursor:pointer; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399;">
         <span>📊 Excel BNF (.XLSX)</span>
@@ -765,6 +808,9 @@
 
   <!-- Bottom Floating Dock Navigation -->
   <nav class="bottom-dock glass-panel">
+    <button class="dock-item" data-modal="modal-galeria-zonas" style="background:linear-gradient(135deg, rgba(245,158,11,0.28), rgba(180,83,9,0.4)); border:1px solid rgba(251,191,36,0.75);">
+      <span style="color:#fef3c7; font-weight:800;">🖼️ Galería Zonas (8)</span>
+    </button>
     <button class="dock-item active" data-modal="modal-editor-2d" style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.55);">
       <span style="color:#6ee7b7; font-weight:800;">📐 Editor CAD 2D/3D</span>
     </button>
@@ -777,7 +823,7 @@
     </button>
     <button class="dock-item" data-modal="modal-simulador" style="background:rgba(168,85,247,0.18); border:1px solid rgba(168,85,247,0.5);">
       <i data-lucide="calculator"></i>
-      <span style="color:#e9d5ff; font-weight:700;">Cómputo 300M / 350M / 440M</span>
+      <span style="color:#e9d5ff; font-weight:700;">Cómputo &amp; Guardar Datos</span>
     </button>
     <button class="dock-item" data-modal="modal-planos" style="background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45);">
       <i data-lucide="file-text" style="color:#38bdf8;"></i>
@@ -1303,15 +1349,59 @@
         </div>
       </div>
 
-      <!-- 3. LIVE BUDGET SUMMARY BANNER -->
+      <!-- 2.5 SECCIÓN DEDICADA: GUARDAR Y CARGAR DATOS AJUSTADOS (.JSON PORTÁTIL + MEMORIA LOCAL) -->
+      <div id="sim-persistence-section" class="multi-budget-box" style="margin-bottom:14px; padding:14px 16px; background:linear-gradient(135deg, rgba(15,23,42,0.92), rgba(30,27,75,0.75)); border:1px solid rgba(168,85,247,0.55); border-radius:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:10px; font-weight:800; color:#c084fc; text-transform:uppercase; letter-spacing:0.8px;">
+              💾 PERSISTENCIA SIN BASE DE DATOS EN LÍNEA • ARCHIVO .JSON PORTÁTIL Y COPIAS LOCALES
+            </div>
+            <h3 style="font-size:15px; color:#f8fafc; margin-top:3px;">
+              Guardar y Cargar tus Montos, Productos, Cantidades y Presupuestos Ajustados
+            </h3>
+            <p style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">
+              Todos los cambios que hagas en montos por sección, precios unitarios, cantidades o productos sugeridos se guardan automáticamente en este navegador y pueden descargarse en un archivo <code>.JSON</code> para abrirlos en cualquier otra computadora o celular.
+            </p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <button id="btn-sim-save-json" class="btn-primary" style="padding:8px 14px; font-size:11.5px; font-weight:800; border-radius:7px; cursor:pointer; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399;">
+              💾 Descargar Datos Ajustados (.JSON)
+            </button>
+            <button id="btn-sim-load-json" class="btn-header glass-panel" style="padding:8px 14px; font-size:11.5px; font-weight:800; border-color:rgba(56,189,248,0.75); background:rgba(2,132,199,0.28); color:#e0f2fe; cursor:pointer;">
+              📂 Cargar Archivo Guardado (.JSON)
+            </button>
+            <input type="file" id="sim-file-input-json" accept=".json,application/json" style="display:none;">
+            <button id="btn-sim-save-snapshot" class="btn-header glass-panel" style="padding:8px 12px; font-size:11px; font-weight:700; border-color:rgba(245,158,11,0.65); background:rgba(217,119,6,0.22); color:#fef3c7; cursor:pointer;">
+              📌 Guardar Copia Local con Nombre
+            </button>
+            <button id="btn-sim-reset-defaults" class="btn-header glass-panel" style="padding:8px 12px; font-size:11px; border-color:rgba(248,113,113,0.5); color:#fca5a5; cursor:pointer;">
+              🔄 Restaurar Valores Oficiales
+            </button>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.08);">
+          <div id="persistence-status-badge" style="font-size:11px; color:#6ee7b7; font-family:var(--font-mono);">
+            ✅ Estado: Guardado automático activo en este dispositivo (<code>itapytapunta_custom_project_v1</code>)
+          </div>
+          <div id="saved-snapshots-list" style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+            <!-- Snapshots locales guardados -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. LIVE BUDGET SUMMARY BANNER (CON MONTO DE SECCIÓN / CRÉDITO PERSONALIZABLE) -->
       <div class="simulador-summary-banner">
         <div class="sim-stat">
           <span class="label">Inversión Previsto Activo:</span>
           <span class="value" id="sim-total-display">Gs. 298.227.534</span>
         </div>
         <div class="sim-stat">
-          <span class="label">Monto Crédito BNF:</span>
-          <span class="value" style="color:var(--accent-cyan);" id="sim-target-display">300.000.000 Gs.</span>
+          <span class="label">Monto Objetivo / Crédito BNF (Editable):</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="value" style="color:var(--accent-cyan); display:none;" id="sim-target-display">300.000.000 Gs.</span>
+            <input type="number" id="sim-custom-target-input" step="1000000" min="0" value="300000000" style="width:155px; padding:4px 8px; font-size:15px; font-weight:800; font-family:var(--font-mono); color:var(--accent-cyan); background:rgba(15,23,42,0.85); border:1px solid rgba(56,189,248,0.6); border-radius:6px;" title="Personaliza el monto objetivo de esta sección o crédito en Guaraníes">
+            <span style="font-size:11px; color:#7dd3fc; font-weight:700;">Gs.</span>
+          </div>
         </div>
         <div class="sim-stat">
           <span class="label">Saldo Disponible:</span>
@@ -1332,8 +1422,11 @@
           <button class="tool-btn" id="btn-preset-440" style="flex:initial;">💳 Crédito BNF 440M (Gs. 439,7M)</button>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-header glass-panel" id="btn-sim-toggle-add-item" style="font-size:11px; padding:7px 12px; border-color:rgba(245,158,11,0.75); background:rgba(217,119,6,0.25); color:#fef3c7; font-weight:800;">
+            <span>➕ Agregar Producto / Rubro</span>
+          </button>
           <button class="btn-header btn-primary" id="btn-export-computo-xlsx" style="font-size:11px; padding:7px 14px; background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; font-weight:700;">
-            <span>📊 Descargar Planilla Excel (.XLSX — 6 Hojas c/ Fórmulas + Formato LG-RB)</span>
+            <span>📊 Descargar Planilla Excel (.XLSX — 6 Hojas c/ Productos y Fórmulas)</span>
           </button>
           <button class="btn-header glass-panel" id="btn-modal-live-cad-sheets" style="font-size:11px; padding:7px 12px; border-color:rgba(56,189,248,0.65); background:rgba(2,132,199,0.22); color:#e0f2fe; font-weight:700;">
             <span>📐 Regenerar Planos CAD Vivo</span>
@@ -1342,11 +1435,27 @@
             <span>🗂️ Repositorio de Archivos</span>
           </button>
           <button class="btn-header glass-panel" id="btn-export-computo-csv" style="font-size:11px; padding:7px 12px;">
-            <span>📥 Exportar Planilla Bancaria CSV (Colores + Mat./M.O.)</span>
+            <span>📥 Exportar Planilla Bancaria CSV (Productos + Mat./M.O.)</span>
           </button>
           <button class="btn-header glass-panel" id="btn-print-computo" style="font-size:11px; padding:7px 12px;">
             <span>🖨️ Imprimir Carpeta para el Banco</span>
           </button>
+        </div>
+      </div>
+
+      <!-- FORMULARIO PARA AGREGAR NUEVO PRODUCTO / RUBRO PERSONALIZADO EN MODAL SIMULADOR -->
+      <div id="sim-add-custom-item-box" style="display:none; margin-bottom:12px; padding:12px 14px; background:rgba(15,23,42,0.92); border:1px solid rgba(245,158,11,0.55); border-radius:9px;">
+        <div style="font-size:11.5px; font-weight:800; color:#fde68a; margin-bottom:8px;">
+          ➕ AGREGAR NUEVO PRODUCTO O RUBRO PERSONALIZADO A LA HOJA DE PRESUPUESTO
+        </div>
+        <div style="display:grid; grid-template-columns:1.1fr 1.6fr 1.6fr 0.6fr 0.7fr 1fr auto; gap:8px; align-items:center;">
+          <input type="text" id="sim-new-item-cat" placeholder="Categoría (ej. Terminaciones)" value="Personalizado / Adicional" style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#cbd5e1;">
+          <input type="text" id="sim-new-item-name" placeholder="Descripción del rubro o trabajo..." style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="text" id="sim-new-item-product" placeholder="Producto / Marca sugerida (ej. Sika, Tigre, Vallemí)..." style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#fef08a;">
+          <input type="text" id="sim-new-item-unit" placeholder="Unidad" value="un" style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="number" id="sim-new-item-qty" placeholder="Cantidad" value="1" min="0.01" step="0.1" style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#f8fafc;">
+          <input type="number" id="sim-new-item-price" placeholder="Precio Unit. (Gs.)" value="450000" min="0" step="10000" style="padding:7px 9px; font-size:11.5px; border-radius:6px; border:1px solid rgba(148,163,184,0.35); background:#0f172a; color:#34d399;">
+          <button id="sim-confirm-add-item-btn" class="btn-primary" style="padding:7px 14px; font-size:11.5px; font-weight:800; border-radius:6px; cursor:pointer;">+ Añadir al Presupuesto</button>
         </div>
       </div>
 
@@ -1371,19 +1480,19 @@
         </div>
       </div>
 
-      <!-- 6. INTERACTIVE CHECKBOX & QUANTITY EDITABLE TABLE WITH BANK COLORS & MATERIALES VS MANO DE OBRA -->
+      <!-- 6. INTERACTIVE PRODUCT-LEVEL BUDGET TABLE WITH EDITABLE QTY, UNIT PRICE, SUGGESTED PRODUCT & TOTAL OVERRIDE -->
       <div class="computo-table-wrapper">
         <table class="budget-table">
           <thead>
             <tr>
               <th style="width:38px;">Activo</th>
-              <th style="width:110px;">Color Banco</th>
-              <th>Partida / Rubro Técnico y Fórmula Dimensional</th>
-              <th style="width:230px;">Fuente / Detalle de Obra</th>
+              <th style="width:105px;">Color Banco</th>
+              <th>Rubro Técnico, Producto Sugerido Identificado y Desglose de Insumos por Unidad</th>
+              <th style="width:210px;">Proveedor / Detalle de Obra</th>
               <th style="width:105px;">Cantidad</th>
-              <th style="width:120px;">P. Unitario (Gs.)</th>
-              <th style="text-align:right; width:135px;">Materiales / Mano Obra</th>
-              <th style="text-align:right; width:135px;">Subtotal (Gs.)</th>
+              <th style="width:125px;">P. Unitario Exacto (Gs.)</th>
+              <th style="text-align:right; width:130px;">Materiales / Mano Obra</th>
+              <th style="text-align:right; width:145px;">Monto Total Editable (Gs.)</th>
             </tr>
           </thead>
           <tbody id="budget-items-tbody">
@@ -1583,6 +1692,41 @@
           <strong style="color:var(--accent-cyan);">Conclusión Geotécnica y Estructural:</strong> Terreno sumamente firme y libre de nivel freático hasta 10.05m. Las 14 zapatas (aisladas y combinadas) arriostradas con vigas centradoras <code>VC.T-1 (40×50cm)</code> trabajan con holgura sobre el estrato compacto.
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal 3.5: GALERÍA DE VISTAS ULTRA-REALISTAS DE CADA ZONA DE LA CASA (#modal-galeria-zonas) -->
+  <div id="modal-galeria-zonas" class="modal-overlay">
+    <div class="modal-content glass-panel" style="max-width:1240px;">
+      <div class="modal-header">
+        <div>
+          <div style="font-size:10px; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:0.8px;">
+            🖼️ ARCHVIZ FOTORREALISTA 8K • RECORRIDO POR LOS 8 AMBIENTES DE RUTH, LEO, EMMA Y SERAFINA
+          </div>
+          <h2 style="font-family:var(--font-display); font-size:21px; display:flex; align-items:center; gap:8px; margin-top:2px;">
+            <span>Galería de Vistas Ultra-Realistas de Cada Zona de la Casa (3 Niveles + Patio y Piscina)</span>
+          </h2>
+          <p style="font-size:11.5px; color:var(--text-muted);">
+            Visualizaciones hiperrealistas generadas a partir de la geometría exacta de los planos, el inventario real de muebles de Ruth y Leo y los productos comerciales sugeridos para cada ambiente.
+          </p>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <!-- Filtros por Nivel / Sector de la Casa -->
+      <div class="computo-filters" id="galeria-zonas-filters" style="margin-bottom:14px;">
+        <button class="computo-filter-btn active" data-zone-filter="ALL">🏠 Todas las Zonas (8)</button>
+        <button class="computo-filter-btn" data-zone-filter="frente_exterior">🚗 Frente, Portones y Cochera (+100.00m)</button>
+        <button class="computo-filter-btn" data-zone-filter="planta_baja">🛋️ Planta Baja: Estar, Cocina y Galería al Río (+100.00m)</button>
+        <button class="computo-filter-btn" data-zone-filter="planta_alta">🛏️ Planta Alta: Escritorio Extendido y Suite (+102.88m)</button>
+        <button class="computo-filter-btn" data-zone-filter="subsuelo">🔥 Subsuelo, Jardín y Piscina Transversal (+97.66m / +96.20m)</button>
+      </div>
+
+      <!-- Vista Destacada Hero + Ficha de Materiales y Productos de la Zona Seleccionada -->
+      <div id="galeria-zona-hero-host" style="margin-bottom:16px;"></div>
+
+      <!-- Grilla de las 8 Zonas Ultra-Realistas -->
+      <div id="galeria-zonas-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(275px, 1fr)); gap:14px;"></div>
     </div>
   </div>
 

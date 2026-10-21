@@ -1161,33 +1161,47 @@ export class ProjectScene {
     buildExistingStaircase3D(THREE, this.groups.structure, this.groups.losaFase2, mats, this.currentScenario);
 
     // 5. PRIMERA LOSA EN NIVEL CALLE (`this.groups.losaFase1`):
-    //    Tal como muestra la foto de obra `media_1792502324664.jpg` mirando desde el estacionamiento hacia el río:
-    //    - A la derecha (`-X`, `x = -4.87m..-0.74m, z = 3.00m..9.94m`): Losa L4 MACIZA 100% HORMIGONADA (28.66 m²).
+    //    Tal como muestran los planos oficiales (`estructural_e3_planta_baja.png`, `subsuelo_ejecutivo_1-1.png`)
+    //    y la foto real de obra (`media_1792502324664.jpg`):
+    //    - Del lado de la Escalera 1 (`+X`, `x = -0.74m..+3.84m, z = 3.00m..9.94m` + desembarco de servicio `x = +3.84m..+4.87m, z = 3.00m..5.26m`):
+    //      LOSA L4 MACIZA 100% HORMIGONADA HOY EN OBRA (rodeando la Escalera 1 existente en `x = +3.84m..+4.87m, z = 5.26m..9.94m` y cubriendo su encofrado inferior).
     //    - Al fondo (`z = 9.94m..13.34m, x = -4.87m..+4.87m`): Losa Galería L1–L3 MACIZA 100% HORMIGONADA en Y = -0.45m (33.12 m²).
-    //    - A la izquierda (`+X`, `x = -0.74m..+4.87m, z = 3.00m..9.94m`): HUECO ABIERTO DE 38,00 m² entre las vigas de H°A°
-    //      y la Escalera 1 ya construida (`x = +3.84m..+4.87m, z = 5.26m..9.94m`), que se tapa con Loza Rap (`this.losaRap38m2Fill`).
+    //    - Del lado de la medianera alta del vecino (`-X`, `x = -4.87m..-0.74m, z = 3.00m..9.94m`):
+    //      SECTOR SIN LOSA / HUECO ABIERTO EN OBRA DE 38,00 m² donde solo están hormigonadas las vigas de H°A°
+    //      (Eje G, Eje E, Eje C, Eje B, Eje 9, Eje 6, Eje 5) con vacío entre ellas, que se cierra con Loza Rap (`this.losaRap38m2Fill`).
     const l4Meta = {
       type: 'losa_existente',
       bankCategory: 'hormigon_verde',
-      name: '1ra Losa H°A° Maciza Ejecutada — Sector L4 (x = -4.87m a -0.74m, z = 3.00m a 9.94m)',
-      dimensions: '4.13m × 6.94m (28.66 m²) • Espesor 18cm • Cota +100.00m (Y = 0.00m)',
-      area: 28.66,
-      status: 'Ejecutado 100% en Obra (Paño Macizo junto a Medianera de 2 Plantas) 🔒',
+      name: '1ra Losa H°A° Maciza Ejecutada — Sector L4 junto a Escalera 1 (x = -0.74m a +4.87m, z = 3.00m a 9.94m)',
+      dimensions: '4.58m × 6.94m + Desembarco 1.03m × 2.26m (34.11 m²) • Espesor 18cm • Cota +100.00m (Y = 0.00m)',
+      area: 34.11,
+      status: 'Ejecutado 100% en Obra (Paño Macizo junto a Escalera 1 de Subsuelo) 🔒',
       costo: 'Patrimonio ejecutado Fase 1',
-      desc: 'Paño de losa maciza L4 ya hormigonado entre Eje 9 (x=-4.87m) y Eje 5 (x=-0.74m), desde Eje G (z=3.00m) hasta Eje B (z=9.94m), verificado en la foto real de obra.'
+      desc: 'Paño de losa maciza L4 ya hormigonado entre Eje 5 (x=-0.74m) y Eje 1 (x=+4.87m), desde Eje G (z=3.00m) hasta Eje B (z=9.94m), rodeando la Escalera 1 hacia el Subsuelo tal como consta en la documentación estructural y fotos de obra.'
     };
 
     const l4MainMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(4.87 - 0.74, 0.18, 9.94 - 3.00),
+      new THREE.BoxGeometry(3.84 - (-0.74), 0.18, 9.94 - 3.00),
       slabFase1Mat
     );
-    l4MainMesh.position.set((-4.87 + -0.74) / 2, -0.09, (3.00 + 9.94) / 2);
+    l4MainMesh.position.set((-0.74 + 3.84) / 2, -0.09, (3.00 + 9.94) / 2);
     l4MainMesh.castShadow = true;
     l4MainMesh.receiveShadow = true;
     l4MainMesh.userData = l4Meta;
     this.groups.losaFase1.add(l4MainMesh);
 
-    // VIGAS DE H°A° YA HORMIGONADAS SOBRE LA CUADRÍCULA DEL HUECO DE 38,00 m² (x = -0.74m..+4.87m, z = 3.00m..9.94m)
+    // Desembarco macizo delante de la Escalera 1 (x = +3.84m a +4.87m, z = 3.00m a 5.26m) ya hormigonado con L4
+    const l4ServiceLanding = new THREE.Mesh(
+      new THREE.BoxGeometry(4.87 - 3.84, 0.18, 5.26 - 3.00),
+      slabFase1Mat
+    );
+    l4ServiceLanding.position.set((3.84 + 4.87) / 2, -0.09, (3.00 + 5.26) / 2);
+    l4ServiceLanding.castShadow = true;
+    l4ServiceLanding.receiveShadow = true;
+    l4ServiceLanding.userData = l4Meta;
+    this.groups.losaFase1.add(l4ServiceLanding);
+
+    // VIGAS DE H°A° YA HORMIGONADAS SOBRE LA CUADRÍCULA DEL SECTOR SIN LOSA (-X: x = -4.87m..-0.74m, z = 3.00m..9.94m)
     const addLosa1Beam = (x1, z1, x2, z2, w, h, name, desc) => {
       const len = Math.hypot(x2 - x1, z2 - z1);
       const bm = new THREE.Mesh(new THREE.BoxGeometry(len, h, w), concreteColMat);
@@ -1207,62 +1221,51 @@ export class ProjectScene {
     };
 
     addLosa1Beam(-4.87, 3.00, 4.87, 3.00, 0.22, 0.40, 'Viga Principal Eje G Nivel Calle (z=3.00m)', 'Viga frontal de H°A° ejecutada sobre Eje G.');
-    addLosa1Beam(-0.74, 5.00, 3.84, 5.00, 0.20, 0.35, 'Viga Intermedia Eje F sobre Hueco 38 m² (z=5.00m)', 'Viga transversal de H°A° ejecutada sobre Eje F.');
-    addLosa1Beam(-0.74, 5.26, 4.87, 5.26, 0.20, 0.35, 'Viga Intermedia Eje D sobre Hueco 38 m² y Arranque Escalera 1 (z=5.26m)', 'Viga transversal de H°A° ejecutada en z=5.26m.');
-    addLosa1Beam(-0.74, 3.00, -0.74, 9.94, 0.22, 0.38, 'Viga Longitudinal Eje 5 — Borde del Hueco de 38 m² (x=-0.74m)', 'Viga portante sobre Eje 5 que divide la losa maciza L4 del paño abierto de 38 m².');
-    addLosa1Beam(1.69, 3.00, 1.69, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 4 sobre Hueco de 38 m² (x=+1.69m)', 'Viga central expuesta en el hueco de 38 m², lista para recibir viguetas Loza Rap.');
+    addLosa1Beam(-4.87, 4.77, -0.74, 4.77, 0.20, 0.35, 'Viga Transversal Eje E sobre Sector sin Losa (z=4.77m)', 'Viga transversal de H°A° ejecutada sobre Eje E entre P19 y P13.');
+    addLosa1Beam(-4.87, 7.37, -0.74, 7.37, 0.20, 0.35, 'Viga Transversal Eje C sobre Sector sin Losa (z=7.37m)', 'Viga transversal de H°A° ejecutada sobre Eje C pasando por P15 y P12.');
+    addLosa1Beam(-4.87, 9.94, 4.87, 9.94, 0.22, 0.40, 'Viga Principal Eje B — Transición a Galería Rebajada (z=9.94m)', 'Viga principal sobre Eje B.');
+    addLosa1Beam(-4.87, 3.00, -4.87, 9.94, 0.22, 0.38, 'Viga Longitudinal Medianera Eje 9 (x=-4.87m)', 'Viga perimetral sobre Eje 9 junto a la medianera alta del vecino.');
+    addLosa1Beam(-1.64, 3.00, -1.64, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 6 sobre Sector sin Losa (x=-1.64m)', 'Viga interior expuesta en el sector sin losa (Eje 6: P14, P12, P11), lista para recibir viguetas Loza Rap.');
+    addLosa1Beam(-0.74, 3.00, -0.74, 9.94, 0.22, 0.38, 'Viga Longitudinal Eje 5 — Borde entre Losa L4 y Sector sin Losa (x=-0.74m)', 'Viga portante sobre Eje 5 que divide la losa maciza L4 (+X) del sector abierto sin losa (-X).');
     addLosa1Beam(3.84, 3.00, 3.84, 9.94, 0.20, 0.36, 'Viga Longitudinal Eje 2 junto a Escalera 1 de Subsuelo (x=+3.84m)', 'Viga portante sobre Eje 2 que bordea la Escalera 1 hacia el Subsuelo.');
     addLosa1Beam(4.87, 3.00, 4.87, 9.94, 0.22, 0.38, 'Viga Longitudinal Medianera Eje 1 (x=+4.87m)', 'Viga perimetral sobre Eje 1 junto a Escalera 1.');
 
-    // PAÑO DE CIERRE LOZA RAP DE 38,00 m² (`this.losaRap38m2Fill`):
-    // - En `hoy_en_obra`: `visible = false` (se ve el HUECO ABIERTO de 38,00 m² hacia el Subsuelo y la Escalera 1 ya construida)
-    // - En `escenario300` en adelante: `visible = true` (cierra x=-0.74..+3.84m, z=3.00..9.94m + desembarco de Puerta de Servicio x=+3.84..+4.87m, z=3.00..5.26m, dejando libre el hueco de Escalera 1 en x=+3.84..+4.87m, z=5.26..9.94m)
+    // PAÑO DE CIERRE LOZA RAP DE 38,00 m² (`this.losaRap38m2Fill`) EN EL SECTOR SIN LOSA (-X: x = -4.87m..-0.74m, z = 3.00m..9.94m):
+    // - En `hoy_en_obra`: `visible = false` (se ve el SECTOR SIN LOSA / HUECO ABIERTO entre vigas hacia el Subsuelo del lado de la medianera alta Eje 9)
+    // - En `escenario300` en adelante: `visible = true` (cierra x=-4.87..-0.74m, z=3.00..9.94m con sistema pretensado Loza Rap)
     this.losaRap38m2Fill = new THREE.Group();
     const losaRapMeta = {
       type: 'losa_rap_38m2',
       bankCategory: 'hormigon_verde',
-      name: 'Cierre de Hueco de 38,00 m² en 1ra Losa con Sistema Pretensado Loza Rap',
-      dimensions: '38.00 m² netos (x = -0.74m..+3.84m, z = 3.00m..9.94m + Desembarco Servicio x = +3.84..+4.87m, z = 3.00..5.26m)',
+      name: 'Cierre de Sector sin Losa (38,00 m² en Ejes 5–9 / B–G) con Sistema Pretensado Loza Rap',
+      dimensions: '38.00 m² cómputo (x = -4.87m..-0.74m, z = 3.00m..9.94m • Cuadrante Ejes 5–9 × Ejes B–G)',
       area: 38.0,
       costo: 'Gs. 13.300.000 (38,00 m² × Gs. 350.000/m² — Viguetas Pretensadas + Bovedillas + Capa Compresión HA-25)',
       status: 'Cierre Estructural Prioritario de Planta Baja 🎯',
-      desc: 'Cierre definitivo del hueco abierto de 38,00 m² en Planta Baja con viguetas pretensadas Loza Rap, dejando libre el vano de la Escalera 1 hacia el Subsuelo (x=+3.84..+4.87m, z=5.26..9.94m) y formando el hall de doble acceso (puerta exterior de servicio + puerta interior a la casa).'
+      desc: 'Cierre definitivo del sector sin losa (38,00 m² en el cuadrante Ejes 5–9 × Ejes B–G junto a la medianera alta del vecino) con viguetas pretensadas Loza Rap, bovedillas cerámicas y capa de compresión HA-25.'
     };
 
     const rapMainMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(3.84 - (-0.74), 0.18, 9.94 - 3.00),
+      new THREE.BoxGeometry(4.87 - 0.74, 0.18, 9.94 - 3.00),
       slabFase1Mat
     );
-    rapMainMesh.position.set((-0.74 + 3.84) / 2, -0.09, (3.00 + 9.94) / 2);
+    rapMainMesh.position.set((-4.87 + -0.74) / 2, -0.09, (3.00 + 9.94) / 2);
     rapMainMesh.castShadow = true;
     rapMainMesh.receiveShadow = true;
     rapMainMesh.userData = losaRapMeta;
     this.losaRap38m2Fill.add(rapMainMesh);
 
-    // Desembarco de la Puerta de Servicio delante de la Escalera 1 (x = +3.84m a +4.87m, z = 3.00m a 5.26m)
-    const rapServiceLanding = new THREE.Mesh(
-      new THREE.BoxGeometry(4.87 - 3.84, 0.18, 5.26 - 3.00),
-      slabFase1Mat
-    );
-    rapServiceLanding.position.set((3.84 + 4.87) / 2, -0.09, (3.00 + 5.26) / 2);
-    rapServiceLanding.castShadow = true;
-    rapServiceLanding.receiveShadow = true;
-    rapServiceLanding.userData = losaRapMeta;
-    this.losaRap38m2Fill.add(rapServiceLanding);
-
     this.losaRap38m2Fill.visible = !isHoyEnObra;
     this.groups.losaFase1.add(this.losaRap38m2Fill);
 
-    // Indicador 3D del HUECO ABIERTO DE 38,00 m² (visible exclusivamente en "Hoy en Obra")
+    // Indicador 3D del SECTOR SIN LOSA / HUECO ABIERTO DE 38,00 m² en -X (visible exclusivamente en "Hoy en Obra")
     this.hueco38m2Badge = new THREE.Group();
     const voidBorderPts = [
+      new THREE.Vector3(-4.87, 0.04, 3.00),
       new THREE.Vector3(-0.74, 0.04, 3.00),
-      new THREE.Vector3(4.87, 0.04, 3.00),
-      new THREE.Vector3(4.87, 0.04, 5.26),
-      new THREE.Vector3(3.84, 0.04, 5.26),
-      new THREE.Vector3(3.84, 0.04, 9.94),
       new THREE.Vector3(-0.74, 0.04, 9.94),
-      new THREE.Vector3(-0.74, 0.04, 3.00)
+      new THREE.Vector3(-4.87, 0.04, 9.94),
+      new THREE.Vector3(-4.87, 0.04, 3.00)
     ];
     const voidBorderLine = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints(voidBorderPts),
@@ -1282,7 +1285,7 @@ export class ProjectScene {
     bCtx.fillStyle = '#fde047';
     bCtx.font = 'bold 26px Inter, sans-serif';
     bCtx.textAlign = 'center';
-    bCtx.fillText('⚠️ HUECO ABIERTO EN OBRA: 38,00 m²', 256, 52);
+    bCtx.fillText('⚠️ SECTOR SIN LOSA: 38,00 m² (Ejes 5–9)', 256, 52);
     bCtx.fillStyle = '#f8fafc';
     bCtx.font = '20px Inter, sans-serif';
     bCtx.fillText('Solo Vigas H°A° • A cerrar con Loza Rap (Gs. 13,3M)', 256, 92);
@@ -1292,16 +1295,16 @@ export class ProjectScene {
     const badgeSprite = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: badgeTex, transparent: true, depthTest: false })
     );
-    badgeSprite.position.set(1.60, 0.55, 6.47);
+    badgeSprite.position.set(-2.80, 0.55, 6.47);
     badgeSprite.scale.set(4.2, 1.05, 1);
     badgeSprite.userData = losaRapMeta;
     this.hueco38m2Badge.add(badgeSprite);
     this.hueco38m2Badge.visible = isHoyEnObra;
     this.groups.losaFase1.add(this.hueco38m2Badge);
 
-    // Membrana / Capa de Tratamiento Previo de Losa 1 Expuesta al Sol e Intemperie (Amarillo en Modo Carpeta Bancaria)
+    // Membrana / Capa de Tratamiento Previo de Losa 1 Expuesta al Sol e Intemperie (sobre L4 en +X)
     const sunTreatmentLayer = new THREE.Mesh(
-      new THREE.BoxGeometry(4.00, 0.008, 6.80),
+      new THREE.BoxGeometry(4.40, 0.008, 6.80),
       new THREE.MeshStandardMaterial({
         color: 0xf59e0b,
         roughness: 0.4,
@@ -1309,12 +1312,12 @@ export class ProjectScene {
         opacity: isHoyEnObra ? 0.38 : 0.15
       })
     );
-    sunTreatmentLayer.position.set(-2.80, 0.003, (3.00 + 9.94) / 2);
+    sunTreatmentLayer.position.set(1.55, 0.003, (3.00 + 9.94) / 2);
     sunTreatmentLayer.userData = {
       type: 'tratamiento_losa_intemperie',
       bankCategory: 'refaccion_amarillo',
       name: 'Tratamiento Previo de 1ra Losa Expuesta al Sol e Intemperie (Hidrolavado + Sellado Microfisuras + SikaLatex + Sikadur-32)',
-      dimensions: 'Losa 1 Existente (L4 + Galería L1–L3) + Arranques de Pilares',
+      dimensions: 'Losa 1 Existente (L4 junto a Escalera 1 + Galería L1–L3) + Arranques de Pilares',
       costo: 'Gs. 3.450.000 (SikaTop-107 Seal + SikaLatex + Sikadur-32 + Mano de Obra)',
       status: 'A Tratar / Refaccionar Antes de Levantar Paredes y Pisos (Amarillo en Banco) 🟡☀️',
       desc: 'Como la primera losa estuvo expuesta al sol directo y lluvias desde su hormigonado, se ejecuta hidrolavado industrial 2500 PSI, sellado de microfisuras térmicas por dilatación solar con SikaTop-107, imprimación SikaLatex para la carpeta y epóxico Sikadur-32 en los pelos de espera.'

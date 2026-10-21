@@ -93,16 +93,16 @@ export const FIXED_STRUCTURAL_GRID = {
   },
   voidLosa1HoyEnObra: {
     id: 'VACIO_LOSA1_38M2',
-    name: 'VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap • Eje B a Eje G z=3.00..9.94m y Eje 1 a Eje 5 x=-0.74..+4.87m)',
-    minX: -0.74,
-    maxX: 4.87,
+    name: 'SECTOR SIN LOSA EN OBRA: 38,00 m² (A cerrar con Loza Rap • Eje B a Eje G z=3.00..9.94m y Eje 5 a Eje 9 x=-4.87..-0.74m)',
+    minX: -4.87,
+    maxX: -0.74,
     minZ: 3.00,
     maxZ: 9.94,
     areaM2: 38.00
   },
   slabs: {
     subsueloBase: {
-      name: 'Subsuelo (+97.66m / Ejes 9–1 y G–A) + Parrillita hacia el Patio + Lavadero + Depósito + Arranque Escalera 1 (Eje 8–9) 🔒',
+      name: 'Subsuelo (+97.66m / Ejes 9–1 y G–A) + Parrillita hacia el Patio + Lavadero + Depósito + Arranque Escalera 1 (Eje 1–2) 🔒',
       minX: -4.87,
       maxX: 4.87,
       minZ: 3.00,
@@ -113,7 +113,7 @@ export const FIXED_STRUCTURAL_GRID = {
       status: 'Subsuelo + Parrilla al Patio + Cámara Oxigenación 1.50m 🔒'
     },
     losaPlantaBajaExistente: {
-      name: 'Losa 1 (+100.00m): Losas L1/L2/L3 (z=9.94..13.34m) y L4 (x=-4.87..-0.74m, z=3.00..9.94m) Macizas + Vacío 38.00 m² (Eje 1–5 / B–G a cerrar con Loza Rap) 🔒',
+      name: 'Losa 1 (+100.00m): Losas L1/L2/L3 (z=9.94..13.34m) y L4 (x=-0.74..+4.87m junto a Escalera 1) Macizas + Sector sin Losa 38.00 m² (Eje 5–9 / B–G a cerrar con Loza Rap) 🔒',
       minX: -4.87,
       maxX: 4.87,
       minZ: 3.00,
@@ -121,7 +121,7 @@ export const FIXED_STRUCTURAL_GRID = {
       galeriaMinZ: 9.94,
       galeriaMaxZ: 13.34,
       cota: '+100.00m (Galería L1 -0.45m)',
-      status: 'Losas L1–L4 Hormigonadas + Hueco 38.00 m² (A cerrar con Loza Rap) + 17 Pilares PB hasta +2.88m 🔒'
+      status: 'Losas L1–L4 Hormigonadas + Sector sin Losa 38.00 m² (Ejes 5–9 a cerrar con Loza Rap) + 17 Pilares PB hasta +2.88m 🔒'
     },
     losaPlantaAltaNueva: {
       name: 'Losa 2do Piso (+102.88m • 2 Dormitorios + Escritorio/Desk al subir Escalera 2 + 2 Baños + Vestidor en Eje F–G • SIN balcón ni Blindex frontal)',
@@ -1043,7 +1043,9 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_cocina_comedor`,
-      name: 'Cocina / Comedor (6.20m × 2.75m • Sector Eje 5 a Eje 9 c/ Bacha sobre Eje F–G + Escalera 2 a PA en Eje 8–9)',
+      name: isZeroWallsState
+        ? 'SECTOR SIN LOSA EN OBRA: 38,00 m² (A cerrar con Loza Rap • Cuadrante Eje 5 a Eje 9 / Eje B a Eje G)'
+        : 'Cocina / Comedor (6.20m × 2.75m • Sector Eje 5 a Eje 9 sobre Loza Rap 38.00 m² + Escalera 2 a PA en Eje 8–9)',
       codeType: 'cocina',
       x: -4.87,
       z: 3.00,
@@ -1056,9 +1058,7 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_estar_social`,
-      name: isZeroWallsState
-        ? 'VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap • Cuadrante Eje 1 a Eje 5 / Eje B a Eje G)'
-        : 'Estar Social (4.95m × 4.80m • Sector Eje 2 a Eje 5 sobre Loza Rap 38.00 m²)',
+      name: 'Estar Social (4.95m × 4.80m • Sector Eje 2 a Eje 5 sobre Losa L4 Maciza junto a Escalera 1)',
       codeType: 'habitable',
       x: -0.74,
       z: 3.00,
@@ -3100,9 +3100,9 @@ export class FloorplanEditor {
       ctx.strokeRect(paTL.px, paTL.py, paBR.px - paTL.px, paBR.py - paTL.py);
     } else {
       if (this.planData.presetId === 'hoy_en_obra') {
-        // En Hoy en Obra: L1/L2/L3 (z=9.94..13.34m) y L4 (x=-4.87..-0.74m, z=3.00..9.94m) como losa maciza ya hormigonada
-        const l4TL = this.worldToScreen(-4.87, 3.00);
-        const l4BR = this.worldToScreen(-0.74, 9.94);
+        // En Hoy en Obra: L1/L2/L3 (z=9.94..13.34m) y L4 (x=-0.74..+4.87m junto a Escalera 1, z=3.00..9.94m) como losa maciza ya hormigonada
+        const l4TL = this.worldToScreen(-0.74, 3.00);
+        const l4BR = this.worldToScreen(4.87, 9.94);
         const l123TL = this.worldToScreen(-4.87, 9.94);
         const l123BR = this.worldToScreen(4.87, 13.34);
 
@@ -3117,12 +3117,12 @@ export class FloorplanEditor {
         ctx.fillStyle = '#a5f3fc';
         ctx.font = 'bold 9px IBM Plex Mono, monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('LOSA L4 MACIZA HORMIGONADA 🔒', (l4TL.px + l4BR.px) / 2, (l4TL.py + l4BR.py) / 2 - 14);
+        ctx.fillText('LOSA L4 MACIZA HORMIGONADA (JUNTO A ESCALERA 1) 🔒', (l4TL.px + l4BR.px) / 2, (l4TL.py + l4BR.py) / 2 - 14);
         ctx.fillText('LOSAS L1/L2/L3 MACIZAS HORMIGONADAS 🔒', (l123TL.px + l123BR.px) / 2, (l123TL.py + l123BR.py) / 2 + 18);
 
-        // HUECO ABIERTO ENTRE VIGAS DE 38.00 m² en Eje B a Eje G (z=3.00..9.94m) y Eje 1 a Eje 5 (x=-0.74..+4.87m)
-        const voidTL = this.worldToScreen(-0.74, 3.00);
-        const voidBR = this.worldToScreen(4.87, 9.94);
+        // SECTOR SIN LOSA / HUECO ABIERTO ENTRE VIGAS DE 38.00 m² en Eje B a Eje G (z=3.00..9.94m) y Eje 5 a Eje 9 (x=-4.87..-0.74m)
+        const voidTL = this.worldToScreen(-4.87, 3.00);
+        const voidBR = this.worldToScreen(-0.74, 9.94);
         ctx.fillStyle = 'rgba(239, 68, 68, 0.14)';
         ctx.fillRect(voidTL.px, voidTL.py, voidBR.px - voidTL.px, voidBR.py - voidTL.py);
         ctx.strokeStyle = '#ef4444';
@@ -3148,10 +3148,10 @@ export class FloorplanEditor {
         ctx.strokeRect(vcx - 148, vcy - 22, 296, 40);
         ctx.fillStyle = '#fde047';
         ctx.font = 'bold 9.5px IBM Plex Mono, monospace';
-        ctx.fillText('VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap)', vcx, vcy - 5);
+        ctx.fillText('SECTOR SIN LOSA: 38,00 m² (A cerrar con Loza Rap)', vcx, vcy - 5);
         ctx.fillStyle = '#fca5a5';
         ctx.font = 'bold 8.5px IBM Plex Mono, monospace';
-        ctx.fillText('Cuadrante Eje B–G (z=3.00..9.94m) × Eje 1–5 (x=-0.74..+4.87m)', vcx, vcy + 10);
+        ctx.fillText('Cuadrante Eje B–G (z=3.00..9.94m) × Eje 5–9 (x=-4.87..-0.74m)', vcx, vcy + 10);
       } else {
         const pbTL = this.worldToScreen(-4.87, 3.00);
         const pbBR = this.worldToScreen(4.87, 13.34);
@@ -3161,9 +3161,9 @@ export class FloorplanEditor {
         ctx.lineWidth = 1.6;
         ctx.strokeRect(pbTL.px, pbTL.py, pbBR.px - pbTL.px, pbBR.py - pbTL.py);
 
-        // Indicador de Paño Loza Rap 38,00 m² (Eje 1–5 × Eje B–G) que cierra el vacío de Losa 1 en Etapa 1
-        const lrTL = this.worldToScreen(-0.74, 3.00);
-        const lrBR = this.worldToScreen(4.87, 9.94);
+        // Indicador de Paño Loza Rap 38,00 m² (Eje 5–9 × Eje B–G) que cierra el sector sin losa de Losa 1 en Etapa 1
+        const lrTL = this.worldToScreen(-4.87, 3.00);
+        const lrBR = this.worldToScreen(-0.74, 9.94);
         ctx.save();
         ctx.strokeStyle = this.bankColorMode ? '#22c55e' : 'rgba(245, 158, 11, 0.65)';
         ctx.lineWidth = 1.4;
@@ -3171,8 +3171,8 @@ export class FloorplanEditor {
         ctx.strokeRect(lrTL.px, lrTL.py, lrBR.px - lrTL.px, lrBR.py - lrTL.py);
         ctx.fillStyle = this.bankColorMode ? '#86efac' : '#fde68a';
         ctx.font = 'bold 8px IBM Plex Mono, monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText('PAÑO LOZA RAP 38,00 m² (Cierre Vacío Losa 1 Eje 1–5 × B–G)', lrBR.px - 6, lrTL.py + 12);
+        ctx.textAlign = 'left';
+        ctx.fillText('PAÑO LOZA RAP 38,00 m² (Cierre Sector sin Losa Eje 5–9 × B–G)', lrTL.px + 6, lrTL.py + 12);
         ctx.restore();
       }
     }
@@ -3309,8 +3309,8 @@ export class FloorplanEditor {
 
     // 7. Ambientes Propuestos (Diferenciando Cerrar Ahora vs Etapa Futura y Modo Colores Banco)
     lvl.rooms.forEach((room) => {
-      if (this.planData.presetId === 'hoy_en_obra' && this.currentLevel === 'planta_baja' && room.id.endsWith('_estar_social')) {
-        // El vacío de 38.00 m² ya se dibuja con sus diagonales estructurales X en Hoy en Obra
+      if (this.planData.presetId === 'hoy_en_obra' && this.currentLevel === 'planta_baja' && room.id.endsWith('_cocina_comedor')) {
+        // El sector sin losa de 38.00 m² (Ejes 5–9) ya se dibuja con sus diagonales estructurales X en Hoy en Obra
         return;
       }
       const tl = this.worldToScreen(room.x, room.z);
@@ -3872,17 +3872,17 @@ export class FloorplanEditor {
       lines.push(`  <text x="${x1 - 34}" y="${yPx + 3}" fill="#94a3b8" font-size="8" text-anchor="end">z=${az.z.toFixed(2)}m (${az.planCoordM.toFixed(2)}m)</text>`);
     });
 
-    // En Hoy en Obra + Planta Baja: dibujar Losas L1/L2/L3 y L4 macizas + HUECO ABIERTO 38.00 m² con diagonales X
+    // En Hoy en Obra + Planta Baja: dibujar Losas L1/L2/L3 y L4 macizas (+X junto a Escalera 1) + SECTOR SIN LOSA 38.00 m² en -X (Eje 5–9) con diagonales X
     if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja') {
-      const vx = toX(-0.74);
+      const vx = toX(-4.87);
       const vy = toY(3.00);
-      const vw = Number(((4.87 - -0.74) * scale).toFixed(2));
+      const vw = Number(((-0.74 - -4.87) * scale).toFixed(2));
       const vd = Number(((9.94 - 3.00) * scale).toFixed(2));
       lines.push(`  <rect x="${vx}" y="${vy}" width="${vw}" height="${vd}" fill="rgba(239,68,68,0.16)" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>`);
       lines.push(`  <line x1="${vx}" y1="${vy}" x2="${vx + vw}" y2="${vy + vd}" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="6,4"/>`);
       lines.push(`  <line x1="${vx + vw}" y1="${vy}" x2="${vx}" y2="${vy + vd}" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="6,4"/>`);
-      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 - 4}" fill="#fde047" font-size="10" font-weight="bold" text-anchor="middle">VACÍO EN LOSA 1: 38,00 m² (A cerrar con Loza Rap)</text>`);
-      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 + 10}" fill="#fca5a5" font-size="8.5" text-anchor="middle">Cuadrante Eje B a Eje G (z=3.00..9.94m) × Eje 1 a Eje 5 (x=-0.74..+4.87m)</text>`);
+      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 - 4}" fill="#fde047" font-size="10" font-weight="bold" text-anchor="middle">SECTOR SIN LOSA: 38,00 m² (A cerrar con Loza Rap)</text>`);
+      lines.push(`  <text x="${vx + vw / 2}" y="${vy + vd / 2 + 10}" fill="#fca5a5" font-size="8.5" text-anchor="middle">Cuadrante Eje B a Eje G (z=3.00..9.94m) × Eje 5 a Eje 9 (x=-4.87..-0.74m)</text>`);
     }
 
     // Elementos de Cochera Frontal en Planta Baja (Muro 100% Ciego, Portón Balancín 2.30m, Portoncito 0.95m, Pérgola y Rejilla Electroforjada)
@@ -3909,7 +3909,7 @@ export class FloorplanEditor {
 
     // Ambientes acotados
     lvl.rooms.forEach((r) => {
-      if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja' && r.id.endsWith('_estar_social')) {
+      if (this.planData.presetId === 'hoy_en_obra' && levelKey === 'planta_baja' && r.id.endsWith('_cocina_comedor')) {
         return;
       }
       const rx = toX(r.x);

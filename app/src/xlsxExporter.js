@@ -13,8 +13,10 @@ import {
   DUCTOS_PASES_ENCHUFES_DATOS,
   PREVISION_CREDITO_NUEVO,
   REQUISITOS_BANCO_Y_CUOTAS,
-  ESCENARIOS_INVERSION
+  ESCENARIOS_INVERSION,
+  CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY
 } from './data/projectData.js';
+import { getSuggestedProductForPartida } from './domain/budgetAndSceneService.js';
 
 // Compatibilidad con alias opcionales si existen o se agregan en projectData.js
 const CREDITO_CAJA_MUTUAL =
@@ -164,7 +166,7 @@ function buildWorksheetXml({ rows, colWidths = [], merges = [] }) {
 
 // ============================================================================
 // HOJA 1: 1_CARPETA_BANCO_COLORES
-// Planilla Oficial de Cómputo Métrico por Colores Bancarios + Materiales vs. Mano de Obra
+// Planilla Oficial de Cómputo Métrico por Colores Bancarios + Producto Comercial Sugerido (Paraguay)
 // ============================================================================
 
 function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
@@ -180,10 +182,37 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         ? ITEMS_CREDITO_440M
         : ITEMS_CREDITO_350M;
 
+  const hasObjectItems =
+    Array.isArray(items) &&
+    items.length > 0 &&
+    items.some((it) => it && typeof it === 'object' && it.id);
+
+  const customOverridesById = new Map();
+  const customExtraPartidas = [];
+  const basePartidaIds = new Set(PRESUPUESTO_PARTIDAS.map((p) => p.id));
+
+  if (hasObjectItems) {
+    items.forEach((it) => {
+      if (!it || typeof it !== 'object' || !it.id) return;
+      customOverridesById.set(it.id, it);
+      if (!basePartidaIds.has(it.id) && !String(it.id).startsWith('EXIST-') && !String(it.id).startsWith('PROPIO-')) {
+        customExtraPartidas.push(it);
+      }
+    });
+  }
+
   const activeSet = new Set(
     Array.isArray(items) && items.length > 0
       ? items
-          .filter((it) => it && (it.included !== false && it.activo !== false))
+          .filter(
+            (it) =>
+              it &&
+              (typeof it === 'string' ||
+                (it.included !== false &&
+                  it.activo !== false &&
+                  it.includedInActive !== false &&
+                  it.incluidoEnCredito !== false))
+          )
           .map((it) => (typeof it === 'string' ? it : it.id))
       : activeScenario?.itemsIncluidos?.length
         ? activeScenario.itemsIncluidos
@@ -208,7 +237,7 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
     activeScenario?.nombre ||
     `Escenario ${scenarioKey || 'Crédito 350 Millones Gs.'}`;
 
-  // Fila 1: Título Principal
+  // Fila 1: Título Principal (15 columnas: A..O)
   rows.push({
     rowIdx: 1,
     height: 28,
@@ -219,7 +248,7 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'RESIDENCIA ITÁ PYTÃ PUNTA — RUTH Y LEO (2 Personas + Emma y Serafina) | PLANILLA OFICIAL DE CÓMPUTO MÉTRICO POR COLORES BANCARIOS',
         STYLE.TITLE_BANNER
       ),
-      ...Array.from({ length: 13 }, (_, i) =>
+      ...Array.from({ length: 14 }, (_, i) =>
         makeStringCell(i + 2, 1, '', STYLE.TITLE_BANNER)
       )
     ]
@@ -236,7 +265,7 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         `Escenario Activo: ${scenarioTitle} | Monto Crédito Referencia: Gs. ${Number(loanAmount || activeScenario?.montoObjetivoGs || 350000000).toLocaleString('es-PY')} | Fecha de Emisión: ${fechaIso}`,
         STYLE.SUBTITLE_BANNER
       ),
-      ...Array.from({ length: 13 }, (_, i) =>
+      ...Array.from({ length: 14 }, (_, i) =>
         makeStringCell(i + 2, 2, '', STYLE.SUBTITLE_BANNER)
       )
     ]
@@ -253,18 +282,19 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'Código Normativo Carpeta Bancaria: ⚫ NEGRO = Ya Construido (Gs. 163,8M ejecutados) | 🟢 VERDE = Hormigón Armado | 🔴 ROJO = Obra Nueva a Construir | 🟡 AMARILLO = Adecuación / Rehabilitación Preexistencias',
         STYLE.SECTION_ROW
       ),
-      ...Array.from({ length: 13 }, (_, i) =>
+      ...Array.from({ length: 14 }, (_, i) =>
         makeStringCell(i + 2, 3, '', STYLE.SECTION_ROW)
       )
     ]
   });
 
-  // Fila 4: Encabezados de las 14 Columnas
+  // Fila 4: Encabezados de las 15 Columnas (A..O, con Columna E = Producto Comercial / Marca Sugerida (Paraguay))
   const headers = [
     'Código',
     'Color Carpeta Banco (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo)',
     'Categoría / Nivel',
     'Descripción Técnica del Rubro',
+    'Producto Comercial / Marca Sugerida (Paraguay)',
     'Unidad',
     'Cantidad',
     'Precio Unitario (Gs.)',
@@ -272,7 +302,7 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
     'Costo Materiales (Gs. Fórmula)',
     '% Mano de Obra',
     'Costo Mano de Obra (Gs. Fórmula)',
-    'Subtotal Rubro (Gs. Fórmula =F*G)',
+    'Subtotal Rubro (Gs. Fórmula =G*H)',
     'Incluido en Escenario Activo (SÍ/NO)',
     'Monto Computado en Escenario (Gs. Fórmula)'
   ];
@@ -287,15 +317,26 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
   const firstNegroRow = 5;
   let currentRow = firstNegroRow;
 
-  existentesNegro.forEach((rubro) => {
+  existentesNegro.forEach((rubro, idx) => {
     const r = currentRow++;
-    const cant = Number(rubro.cantidad) || 1;
-    const subtotal = Number(rubro.montoGs) || 0;
+    const override = customOverridesById.get(`EXIST-${rubro.codigo}`) || customOverridesById.get(rubro.codigo);
+    const cant = Number(override?.cantidad ?? override?.qty ?? rubro.cantidad) || 1;
+    const subtotal =
+      override?.subtotalGs !== undefined
+        ? Number(override.subtotalGs)
+        : override?.precioUnitarioGs !== undefined || override?.unitPrice !== undefined
+          ? Math.round(cant * Number(override.precioUnitarioGs ?? override.unitPrice))
+          : Number(rubro.montoGs) || 0;
     const pu = cant > 0 ? Math.round(subtotal / cant) : 0;
     const pctMat = 0.62;
     const pctMo = 0.38;
     const matGs = Math.round(subtotal * pctMat);
     const moGs = subtotal - matGs;
+    const suggestedProd =
+      override?.suggestedProduct ||
+      rubro.suggestedProduct ||
+      CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY[idx + 1]?.suggestedProduct ||
+      getSuggestedProductForPartida(idx + 1).suggestedProduct;
 
     rows.push({
       rowIdx: r,
@@ -304,31 +345,37 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         makeStringCell(1, r, rubro.codigo, STYLE.TEXT_CENTER),
         makeStringCell(2, r, '⚫ NEGRO (Ya Construido)', STYLE.BANCO_NEGRO),
         makeStringCell(3, r, 'Fase 1 Ejecutada (Acta 29/12/2025)', STYLE.TEXT),
-        makeStringCell(4, r, rubro.item, STYLE.TEXT),
-        makeStringCell(5, r, rubro.unidad, STYLE.TEXT_CENTER),
-        makeNumberCell(6, r, cant, STYLE.DEC_QTY),
-        makeNumberCell(7, r, pu, STYLE.GS_INT),
-        makeNumberCell(8, r, pctMat, STYLE.PERCENT),
-        makeFormulaCell(9, r, `ROUND(L${r}*H${r},0)`, matGs, STYLE.GS_INT),
-        makeNumberCell(10, r, pctMo, STYLE.PERCENT),
-        makeFormulaCell(11, r, `L${r}-I${r}`, moGs, STYLE.GS_INT),
-        makeFormulaCell(12, r, `ROUND(F${r}*G${r},0)`, subtotal, STYLE.GS_INT),
-        makeStringCell(13, r, 'YA CONSTRUIDO', STYLE.TEXT_CENTER),
-        makeFormulaCell(14, r, `IF(M${r}="SÍ",L${r},0)`, 0, STYLE.GS_INT)
+        makeStringCell(4, r, override?.item || override?.name || rubro.item, STYLE.TEXT),
+        makeStringCell(5, r, suggestedProd, STYLE.TEXT),
+        makeStringCell(6, r, override?.unidad || override?.unit || rubro.unidad, STYLE.TEXT_CENTER),
+        makeNumberCell(7, r, cant, STYLE.DEC_QTY),
+        makeNumberCell(8, r, pu, STYLE.GS_INT),
+        makeNumberCell(9, r, pctMat, STYLE.PERCENT),
+        makeFormulaCell(10, r, `ROUND(M${r}*I${r},0)`, matGs, STYLE.GS_INT),
+        makeNumberCell(11, r, pctMo, STYLE.PERCENT),
+        makeFormulaCell(12, r, `M${r}-J${r}`, moGs, STYLE.GS_INT),
+        makeFormulaCell(13, r, `ROUND(G${r}*H${r},0)`, subtotal, STYLE.GS_INT),
+        makeStringCell(14, r, 'YA CONSTRUIDO', STYLE.TEXT_CENTER),
+        makeFormulaCell(15, r, `IF(N${r}="SÍ",M${r},0)`, 0, STYLE.GS_INT)
       ]
     });
   });
   const lastNegroRow = currentRow - 1;
 
-  // Sección B: Partidas de Obra Nueva / Hormigón / Rehabilitación (PRESUPUESTO_PARTIDAS)
+  // Sección B: Partidas de Obra Nueva / Hormigón / Rehabilitación (PRESUPUESTO_PARTIDAS + Custom Items)
   const firstNewRow = currentRow;
   let sumNuevoEscenarioGs = 0;
   let sumTotalCatGs = 0;
   let sumMatAllGs = 0;
   let sumMoAllGs = 0;
 
-  PRESUPUESTO_PARTIDAS.forEach((p, idx) => {
+  const allPartidasToExport = [...PRESUPUESTO_PARTIDAS, ...customExtraPartidas];
+
+  allPartidasToExport.forEach((basePartida, idx) => {
     const r = currentRow++;
+    const ov = customOverridesById.get(basePartida.id);
+    const p = ov ? { ...basePartida, ...ov } : basePartida;
+
     const infoBanco = clasifMap[p.id] || {
       colorBanco: 'ROJO',
       pctMateriales: 62,
@@ -348,18 +395,26 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
           ? STYLE.BANCO_AMARILLO
           : STYLE.BANCO_ROJO;
 
-    const codeMatch = String(p.item).match(/^([0-9]+(?:\.[0-9a-zA-Z]+)?)/);
+    const itemName = p.item || p.name || p.producto || `Rubro #${idx + 1}`;
+    const codeMatch = String(itemName).match(/^([0-9]+(?:\.[0-9a-zA-Z]+)?)/);
     const codigo = codeMatch ? `R-${codeMatch[1]}` : `R-${idx + 1}`;
-    const cant = Number(p.cantidad) || 1;
-    const pu = Number(p.precioUnitarioGs) || 0;
+    const cant = Number(p.cantidad ?? p.qty) || 1;
+    const pu = Number(p.precioUnitarioGs ?? p.unitPrice) || 0;
     const subtotal = Math.round(cant * pu);
     const pctMat = Number(infoBanco.pctMateriales || 62) / 100;
     const pctMo = Number(infoBanco.pctManoObra || 38) / 100;
     const matGs = Math.round(subtotal * pctMat);
     const moGs = subtotal - matGs;
-    const isIncluded = activeSet.has(p.id);
+    const isIncluded =
+      ov && (ov.includedInActive !== undefined || ov.included !== undefined || ov.incluidoEnCredito !== undefined)
+        ? Boolean(ov.includedInActive ?? ov.included ?? ov.incluidoEnCredito)
+        : activeSet.has(p.id);
     const incText = isIncluded ? 'SÍ' : 'NO';
     const escGs = isIncluded ? subtotal : 0;
+
+    const suggestedProductText =
+      p.suggestedProduct ||
+      getSuggestedProductForPartida(p).suggestedProduct;
 
     sumTotalCatGs += subtotal;
     sumMatAllGs += matGs;
@@ -372,18 +427,19 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
       cells: [
         makeStringCell(1, r, codigo, STYLE.TEXT_CENTER),
         makeStringCell(2, r, colorLabel, colorStyle),
-        makeStringCell(3, r, p.categoria, STYLE.TEXT),
-        makeStringCell(4, r, p.item, STYLE.TEXT),
-        makeStringCell(5, r, p.unidad, STYLE.TEXT_CENTER),
-        makeNumberCell(6, r, cant, STYLE.DEC_QTY),
-        makeNumberCell(7, r, pu, STYLE.GS_INT),
-        makeNumberCell(8, r, pctMat, STYLE.PERCENT),
-        makeFormulaCell(9, r, `ROUND(L${r}*H${r},0)`, matGs, STYLE.GS_INT),
-        makeNumberCell(10, r, pctMo, STYLE.PERCENT),
-        makeFormulaCell(11, r, `L${r}-I${r}`, moGs, STYLE.GS_INT),
-        makeFormulaCell(12, r, `ROUND(F${r}*G${r},0)`, subtotal, STYLE.GS_INT),
-        makeStringCell(13, r, incText, STYLE.TEXT_CENTER),
-        makeFormulaCell(14, r, `IF(M${r}="SÍ",L${r},0)`, escGs, isIncluded ? STYLE.HIGHLIGHT_GREEN_GS : STYLE.GS_INT)
+        makeStringCell(3, r, p.categoria || p.category || 'General', STYLE.TEXT),
+        makeStringCell(4, r, itemName, STYLE.TEXT),
+        makeStringCell(5, r, suggestedProductText, STYLE.TEXT),
+        makeStringCell(6, r, p.unidad || p.unit || 'un', STYLE.TEXT_CENTER),
+        makeNumberCell(7, r, cant, STYLE.DEC_QTY),
+        makeNumberCell(8, r, pu, STYLE.GS_INT),
+        makeNumberCell(9, r, pctMat, STYLE.PERCENT),
+        makeFormulaCell(10, r, `ROUND(M${r}*I${r},0)`, matGs, STYLE.GS_INT),
+        makeNumberCell(11, r, pctMo, STYLE.PERCENT),
+        makeFormulaCell(12, r, `M${r}-J${r}`, moGs, STYLE.GS_INT),
+        makeFormulaCell(13, r, `ROUND(G${r}*H${r},0)`, subtotal, STYLE.GS_INT),
+        makeStringCell(14, r, incText, STYLE.TEXT_CENTER),
+        makeFormulaCell(15, r, `IF(N${r}="SÍ",M${r},0)`, escGs, isIncluded ? STYLE.HIGHLIGHT_GREEN_GS : STYLE.GS_INT)
       ]
     });
   });
@@ -405,37 +461,38 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'TOTAL CONSTRUCCIONES EXISTENTES (⚫ NEGRO — Ya Construido s/ Acta 29/12/2025: Gs. 163,8M)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowTotalNegro, 'gl', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowTotalNegro, 1, STYLE.TOTAL_LABEL),
-      makeStringCell(7, rowTotalNegro, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(8, rowTotalNegro, 0.62, STYLE.PERCENT),
+      makeStringCell(5, rowTotalNegro, 'INC Vallemí / Votorantim / PROBETI H25 Certificado', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowTotalNegro, 'gl', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowTotalNegro, 1, STYLE.TOTAL_LABEL),
+      makeStringCell(8, rowTotalNegro, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(9, rowTotalNegro, 0.62, STYLE.PERCENT),
       makeFormulaCell(
-        9,
+        10,
         rowTotalNegro,
-        `SUM(I${firstNegroRow}:I${lastNegroRow})`,
+        `SUM(J${firstNegroRow}:J${lastNegroRow})`,
         Math.round(totalNegroCached * 0.62),
         STYLE.TOTAL_GS
       ),
-      makeNumberCell(10, rowTotalNegro, 0.38, STYLE.PERCENT),
-      makeFormulaCell(
-        11,
-        rowTotalNegro,
-        `SUM(K${firstNegroRow}:K${lastNegroRow})`,
-        Math.round(totalNegroCached * 0.38),
-        STYLE.TOTAL_GS
-      ),
+      makeNumberCell(11, rowTotalNegro, 0.38, STYLE.PERCENT),
       makeFormulaCell(
         12,
         rowTotalNegro,
         `SUM(L${firstNegroRow}:L${lastNegroRow})`,
+        Math.round(totalNegroCached * 0.38),
+        STYLE.TOTAL_GS
+      ),
+      makeFormulaCell(
+        13,
+        rowTotalNegro,
+        `SUM(M${firstNegroRow}:M${lastNegroRow})`,
         totalNegroCached,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowTotalNegro, 'EJECUTADO', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowTotalNegro, 'EJECUTADO', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowTotalNegro,
-        `SUM(L${firstNegroRow}:L${lastNegroRow})`,
+        `SUM(M${firstNegroRow}:M${lastNegroRow})`,
         totalNegroCached,
         STYLE.TOTAL_GS
       )
@@ -456,37 +513,38 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'TOTAL ROJO / VERDE / AMARILLO — COSTO DIRECTO NUEVO A FINANCIAR EN ESCENARIO ACTIVO',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowTotalNuevo, 'gl', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowTotalNuevo, 1, STYLE.TOTAL_LABEL),
-      makeStringCell(7, rowTotalNuevo, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(8, rowTotalNuevo, 1, STYLE.PERCENT),
+      makeStringCell(5, rowTotalNuevo, 'Catálogo Comercial Paraguay (Asunción / Tobatí)', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowTotalNuevo, 'gl', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowTotalNuevo, 1, STYLE.TOTAL_LABEL),
+      makeStringCell(8, rowTotalNuevo, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(9, rowTotalNuevo, 1, STYLE.PERCENT),
       makeFormulaCell(
-        9,
+        10,
         rowTotalNuevo,
-        `SUM(I${firstNewRow}:I${lastNewRow})`,
+        `SUM(J${firstNewRow}:J${lastNewRow})`,
         sumMatAllGs,
         STYLE.TOTAL_GS
       ),
-      makeNumberCell(10, rowTotalNuevo, 1, STYLE.PERCENT),
-      makeFormulaCell(
-        11,
-        rowTotalNuevo,
-        `SUM(K${firstNewRow}:K${lastNewRow})`,
-        sumMoAllGs,
-        STYLE.TOTAL_GS
-      ),
+      makeNumberCell(11, rowTotalNuevo, 1, STYLE.PERCENT),
       makeFormulaCell(
         12,
         rowTotalNuevo,
         `SUM(L${firstNewRow}:L${lastNewRow})`,
+        sumMoAllGs,
+        STYLE.TOTAL_GS
+      ),
+      makeFormulaCell(
+        13,
+        rowTotalNuevo,
+        `SUM(M${firstNewRow}:M${lastNewRow})`,
         sumTotalCatGs,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowTotalNuevo, 'ACTIVO', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowTotalNuevo, 'ACTIVO', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowTotalNuevo,
-        `SUM(N${firstNewRow}:N${lastNewRow})`,
+        `SUM(O${firstNewRow}:O${lastNewRow})`,
         sumNuevoEscenarioGs,
         STYLE.HIGHLIGHT_GREEN_GS
       )
@@ -508,31 +566,32 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'TOTAL MATERIALES ESTIMADO (62% s/ Costo Directo — Compra Directa de Leo sin sobreprecio)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowMat62, '%', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowMat62, 0.62, STYLE.PERCENT),
-      makeStringCell(7, rowMat62, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(8, rowMat62, 0.62, STYLE.PERCENT),
+      makeStringCell(5, rowMat62, 'Compra Directa Proveedores Asunción / Olerías Tobatí', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowMat62, '%', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowMat62, 0.62, STYLE.PERCENT),
+      makeStringCell(8, rowMat62, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(9, rowMat62, 0.62, STYLE.PERCENT),
       makeFormulaCell(
-        9,
+        10,
         rowMat62,
-        `SUM(I${firstNewRow}:I${lastNewRow})`,
+        `SUM(J${firstNewRow}:J${lastNewRow})`,
         sumMatAllGs,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(10, rowMat62, '', STYLE.TOTAL_LABEL),
       makeStringCell(11, rowMat62, '', STYLE.TOTAL_LABEL),
+      makeStringCell(12, rowMat62, '', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        12,
+        13,
         rowMat62,
-        `ROUND(L${rowTotalNuevo}*0.62,0)`,
+        `ROUND(M${rowTotalNuevo}*0.62,0)`,
         Math.round(sumTotalCatGs * 0.62),
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowMat62, '62%', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowMat62, '62%', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowMat62,
-        `ROUND(N${rowTotalNuevo}*0.62,0)`,
+        `ROUND(O${rowTotalNuevo}*0.62,0)`,
         mat62Esc,
         STYLE.TOTAL_GS
       )
@@ -554,31 +613,32 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'TOTAL MANO DE OBRA ESTIMADO (38% s/ Costo Directo — Pagos por Avance Medido los Viernes)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowMo38, '%', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowMo38, 0.38, STYLE.PERCENT),
-      makeStringCell(7, rowMo38, '', STYLE.TOTAL_LABEL),
+      makeStringCell(5, rowMo38, 'Cuadrillas por Especialidad (Albañil / Plomero / Electricista / Herrero)', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowMo38, '%', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowMo38, 0.38, STYLE.PERCENT),
       makeStringCell(8, rowMo38, '', STYLE.TOTAL_LABEL),
       makeStringCell(9, rowMo38, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(10, rowMo38, 0.38, STYLE.PERCENT),
+      makeStringCell(10, rowMo38, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(11, rowMo38, 0.38, STYLE.PERCENT),
       makeFormulaCell(
-        11,
+        12,
         rowMo38,
-        `SUM(K${firstNewRow}:K${lastNewRow})`,
+        `SUM(L${firstNewRow}:L${lastNewRow})`,
         sumMoAllGs,
         STYLE.TOTAL_GS
       ),
       makeFormulaCell(
-        12,
+        13,
         rowMo38,
-        `ROUND(L${rowTotalNuevo}*0.38,0)`,
+        `ROUND(M${rowTotalNuevo}*0.38,0)`,
         Math.round(sumTotalCatGs * 0.38),
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowMo38, '38%', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowMo38, '38%', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowMo38,
-        `ROUND(N${rowTotalNuevo}*0.38,0)`,
+        `ROUND(O${rowTotalNuevo}*0.38,0)`,
         mo38Esc,
         STYLE.TOTAL_GS
       )
@@ -600,31 +660,32 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'HONORARIOS SUPERVISIÓN TÉCNICA ARQUITECTO (6% — Visitas Semanales + Firma Carpeta Bancaria)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowSup6, '%', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowSup6, 0.06, STYLE.PERCENT),
-      makeStringCell(7, rowSup6, '', STYLE.TOTAL_LABEL),
+      makeStringCell(5, rowSup6, 'Dirección Técnica Arquitecto (5 Hitos Quincenales)', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowSup6, '%', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowSup6, 0.06, STYLE.PERCENT),
       makeStringCell(8, rowSup6, '', STYLE.TOTAL_LABEL),
       makeStringCell(9, rowSup6, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(10, rowSup6, 0.06, STYLE.PERCENT),
-      makeFormulaCell(
-        11,
-        rowSup6,
-        `ROUND(L${rowTotalNuevo}*0.06,0)`,
-        Math.round(sumTotalCatGs * 0.06),
-        STYLE.TOTAL_GS
-      ),
+      makeStringCell(10, rowSup6, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(11, rowSup6, 0.06, STYLE.PERCENT),
       makeFormulaCell(
         12,
         rowSup6,
-        `ROUND(L${rowTotalNuevo}*0.06,0)`,
+        `ROUND(M${rowTotalNuevo}*0.06,0)`,
         Math.round(sumTotalCatGs * 0.06),
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowSup6, '6%', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        13,
         rowSup6,
-        `ROUND(N${rowTotalNuevo}*0.06,0)`,
+        `ROUND(M${rowTotalNuevo}*0.06,0)`,
+        Math.round(sumTotalCatGs * 0.06),
+        STYLE.TOTAL_GS
+      ),
+      makeStringCell(14, rowSup6, '6%', STYLE.TOTAL_LABEL),
+      makeFormulaCell(
+        15,
+        rowSup6,
+        `ROUND(O${rowTotalNuevo}*0.06,0)`,
         sup6Esc,
         STYLE.TOTAL_GS
       )
@@ -646,31 +707,32 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'RESERVA DE IMPREVISTOS (3% — Bajo llave exclusiva del Propietario Leo)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowImp3, '%', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowImp3, 0.03, STYLE.PERCENT),
-      makeStringCell(7, rowImp3, '', STYLE.TOTAL_LABEL),
+      makeStringCell(5, rowImp3, 'Fondo de Reserva Control Propietario', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowImp3, '%', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowImp3, 0.03, STYLE.PERCENT),
       makeStringCell(8, rowImp3, '', STYLE.TOTAL_LABEL),
       makeStringCell(9, rowImp3, '', STYLE.TOTAL_LABEL),
-      makeNumberCell(10, rowImp3, 0.03, STYLE.PERCENT),
-      makeFormulaCell(
-        11,
-        rowImp3,
-        `ROUND(L${rowTotalNuevo}*0.03,0)`,
-        Math.round(sumTotalCatGs * 0.03),
-        STYLE.TOTAL_GS
-      ),
+      makeStringCell(10, rowImp3, '', STYLE.TOTAL_LABEL),
+      makeNumberCell(11, rowImp3, 0.03, STYLE.PERCENT),
       makeFormulaCell(
         12,
         rowImp3,
-        `ROUND(L${rowTotalNuevo}*0.03,0)`,
+        `ROUND(M${rowTotalNuevo}*0.03,0)`,
         Math.round(sumTotalCatGs * 0.03),
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowImp3, '3%', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        13,
         rowImp3,
-        `ROUND(N${rowTotalNuevo}*0.03,0)`,
+        `ROUND(M${rowTotalNuevo}*0.03,0)`,
+        Math.round(sumTotalCatGs * 0.03),
+        STYLE.TOTAL_GS
+      ),
+      makeStringCell(14, rowImp3, '3%', STYLE.TOTAL_LABEL),
+      makeFormulaCell(
+        15,
+        rowImp3,
+        `ROUND(O${rowTotalNuevo}*0.03,0)`,
         imp3Esc,
         STYLE.TOTAL_GS
       )
@@ -694,37 +756,38 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'TOTAL GENERAL OBRA NUEVA + SUPERVISIÓN (6%) + IMPREVISTOS (3%) EN ESCENARIO ACTIVO',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowGranTotal, 'Gs.', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowGranTotal, 1, STYLE.TOTAL_LABEL),
-      makeStringCell(7, rowGranTotal, '', STYLE.TOTAL_LABEL),
+      makeStringCell(5, rowGranTotal, 'Cierre Carpeta Crédito BNF', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowGranTotal, 'Gs.', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowGranTotal, 1, STYLE.TOTAL_LABEL),
       makeStringCell(8, rowGranTotal, '', STYLE.TOTAL_LABEL),
+      makeStringCell(9, rowGranTotal, '', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        9,
+        10,
         rowGranTotal,
-        `I${rowMat62}`,
+        `J${rowMat62}`,
         sumMatAllGs,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(10, rowGranTotal, '', STYLE.TOTAL_LABEL),
+      makeStringCell(11, rowGranTotal, '', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        11,
+        12,
         rowGranTotal,
-        `SUM(K${rowMo38}:K${rowImp3})`,
+        `SUM(L${rowMo38}:L${rowImp3})`,
         sumMoAllGs + Math.round(sumTotalCatGs * 0.09),
         STYLE.TOTAL_GS
       ),
       makeFormulaCell(
-        12,
+        13,
         rowGranTotal,
-        `SUM(L${rowTotalNuevo},L${rowSup6},L${rowImp3})`,
+        `SUM(M${rowTotalNuevo},M${rowSup6},M${rowImp3})`,
         granTotalCat,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowGranTotal, 'TOTAL', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowGranTotal, 'TOTAL', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowGranTotal,
-        `SUM(N${rowTotalNuevo},N${rowSup6},N${rowImp3})`,
+        `SUM(O${rowTotalNuevo},O${rowSup6},O${rowImp3})`,
         granTotalEsc,
         STYLE.HIGHLIGHT_GREEN_GS
       )
@@ -745,25 +808,26 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
         'VALOR PATRIMONIAL ACUMULADO DE LA RESIDENCIA (⚫ Negro Construido Gs. 163,8M + 🔴🟢🟡 Obra Nueva)',
         STYLE.TOTAL_LABEL
       ),
-      makeStringCell(5, rowPatrimonioTotal, 'Gs.', STYLE.TOTAL_LABEL),
-      makeNumberCell(6, rowPatrimonioTotal, 1, STYLE.TOTAL_LABEL),
-      makeStringCell(7, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
+      makeStringCell(5, rowPatrimonioTotal, 'Valor Patrimonial Total Residencia', STYLE.TOTAL_LABEL),
+      makeStringCell(6, rowPatrimonioTotal, 'Gs.', STYLE.TOTAL_LABEL),
+      makeNumberCell(7, rowPatrimonioTotal, 1, STYLE.TOTAL_LABEL),
       makeStringCell(8, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
       makeStringCell(9, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
       makeStringCell(10, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
       makeStringCell(11, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
+      makeStringCell(12, rowPatrimonioTotal, '', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        12,
+        13,
         rowPatrimonioTotal,
-        `SUM(L${rowTotalNegro},L${rowGranTotal})`,
+        `SUM(M${rowTotalNegro},M${rowGranTotal})`,
         totalNegroCached + granTotalCat,
         STYLE.TOTAL_GS
       ),
-      makeStringCell(13, rowPatrimonioTotal, 'NEGRO+NUEVO', STYLE.TOTAL_LABEL),
+      makeStringCell(14, rowPatrimonioTotal, 'NEGRO+NUEVO', STYLE.TOTAL_LABEL),
       makeFormulaCell(
-        14,
+        15,
         rowPatrimonioTotal,
-        `SUM(N${rowTotalNegro},N${rowGranTotal})`,
+        `SUM(O${rowTotalNegro},O${rowGranTotal})`,
         totalNegroCached + granTotalEsc,
         STYLE.TOTAL_GS
       )
@@ -772,8 +836,8 @@ function buildSheet1CarpetaBanco({ scenarioKey, items, loanAmount }) {
 
   return buildWorksheetXml({
     rows,
-    colWidths: [11, 28, 28, 56, 10, 12, 18, 13, 20, 13, 20, 22, 16, 24],
-    merges: ['A1:N1', 'A2:N2', 'A3:N3']
+    colWidths: [11, 28, 28, 52, 54, 10, 12, 18, 13, 20, 13, 20, 22, 16, 24],
+    merges: ['A1:O1', 'A2:O2', 'A3:O3']
   });
 }
 

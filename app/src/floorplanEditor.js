@@ -19,7 +19,7 @@
 
 import { DUCTOS_PASES_ENCHUFES_DATOS } from './data/projectData.js';
 
-const STORAGE_KEY = 'itapytapunta_bim_floorplan_v8';
+const STORAGE_KEY = 'itapytapunta_bim_floorplan_v9';
 
 /**
  * Grilla Estructural Exacta según planos de encofrado y fundación (`CALCULO ESTRUCTURAL L.G. FUSIONADO.pdf`
@@ -1133,11 +1133,11 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       id: `${prefix}_bano_suite`,
       shortTitle: 'BAÑO EN SUITE',
       subTitle: 'Arriba de Baño Social PB',
-      name: 'Baño en Suite Privado (2.80m × 1.85m • Núcleo Húmedo Eje F–G arriba de Baño Social PB • x=-1.65..+1.15m, z=3.00..4.85m)',
+      name: 'Baño en Suite Privado (3.15m × 1.85m • Núcleo Húmedo Eje F–G arriba de Baño Social PB • x=-1.65..+1.50m, z=3.00..4.85m)',
       codeType: 'bano',
       x: -1.65,
       z: 3.00,
-      w: 2.80,
+      w: 3.15,
       d: 1.85,
       floorCostPerM2Gs: 195000,
       equipCostGs: 6800000,
@@ -1146,28 +1146,28 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_vestidor_suite`,
-      shortTitle: 'VESTIDOR SUITE',
-      subTitle: 'Placares en U (+X)',
-      name: 'Vestidor en Suite Independiente en U (3.72m × 1.85m • Eje F–G • x=+1.15..+4.87m, z=3.00..4.85m)',
+      shortTitle: 'VESTIDOR EN SUITE',
+      subTitle: 'Acceso Directo Suite (+X)',
+      name: 'Vestidor en Suite Independiente en U (3.37m × 1.85m • Eje F–G • Acceso Directo desde Suite x=+1.50..+4.87m, z=3.00..4.85m)',
       codeType: 'bano',
-      x: 1.15,
+      x: 1.50,
       z: 3.00,
-      w: 3.72,
+      w: 3.37,
       d: 1.85,
       floorCostPerM2Gs: 185000,
       equipCostGs: 3600000,
       activeStage: activeFlag,
-      color: 'rgba(56, 189, 248, 0.20)'
+      color: 'rgba(56, 189, 248, 0.24)'
     },
     {
       id: `${prefix}_pasillo_distribuidor`,
       shortTitle: 'PASILLO PA',
       subTitle: 'Circulación 1.15m',
-      name: 'Pasillo Distribuidor de Planta Alta (Ancho libre 1.15m • Conecta Escalera 2, Desk, SSHH 2, Dormitorio 2 y Suite)',
+      name: 'Pasillo Distribuidor de Planta Alta (Ancho libre 1.15m • Conecta Escalera 2, Escritorio, SSHH 2, Dormitorio 1 Sencillo y Suite)',
       codeType: 'habitable',
       x: -3.84,
       z: 4.85,
-      w: 4.14,
+      w: 4.49,
       d: 1.15,
       floorCostPerM2Gs: 180000,
       equipCostGs: 0,
@@ -1187,37 +1187,37 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
       floorCostPerM2Gs: 180000,
       equipCostGs: 4800000,
       activeStage: activeFlag,
-      color: 'rgba(56, 189, 248, 0.20)'
+      color: 'rgba(56, 189, 248, 0.22)'
     },
     {
       id: `${prefix}_dorm_2`,
-      shortTitle: 'DORMITORIO 2',
-      subTitle: 'Centro PA',
-      name: 'Dormitorio 2 (2.10m × 3.94m • Centro x=-1.80..+0.30m, z=6.00..9.94m)',
+      shortTitle: 'DORMITORIO 1 (SENCILLO)',
+      subTitle: 'Cama 1½ Plaza + Placar',
+      name: 'Dormitorio 1 — Sencillo (2.45m × 3.94m = 9.65 m² • Centro x=-1.80..+0.65m, z=6.00..9.94m • Cama 1½ Plaza + Mesa de Luz + Placar + Tocador)',
       codeType: 'habitable',
       x: -1.80,
       z: 6.00,
-      w: 2.10,
+      w: 2.45,
       d: 3.94,
       floorCostPerM2Gs: 185000,
       equipCostGs: 6400000,
       activeStage: activeFlag,
-      color: 'rgba(245, 158, 11, 0.20)'
+      color: 'rgba(245, 158, 11, 0.26)'
     },
     {
       id: `${prefix}_master_suite`,
-      shortTitle: 'SUITE PRINCIPAL',
-      subTitle: 'Ruth & Leo (+X)',
-      name: 'Dormitorio Principal en Suite Armado (4.57m × 5.09m • x=+0.30..+4.87m, z=4.85..9.94m + Baño en Suite + Vestidor)',
+      shortTitle: 'DORMITORIO 2 (EN SUITE)',
+      subTitle: 'Con Acceso a Vestidor y Baño (+X)',
+      name: 'Dormitorio 2 — Principal en Suite Armado (4.22m × 5.09m = 21.48 m² • x=+0.65..+4.87m, z=4.85..9.94m + Acceso Directo a Vestidor y Baño en Suite)',
       codeType: 'habitable',
-      x: 0.30,
+      x: 0.65,
       z: 4.85,
-      w: 4.57,
+      w: 4.22,
       d: 5.09,
       floorCostPerM2Gs: 190000,
       equipCostGs: 9800000,
       activeStage: activeFlag,
-      color: 'rgba(168, 85, 247, 0.22)'
+      color: 'rgba(168, 85, 247, 0.25)'
     },
     {
       id: `${prefix}_terraza_rio`,
@@ -1241,14 +1241,14 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 13.34, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 Extendido hasta Eje A (Escalera 2 y Escritorio/Desk)' },
     { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (Vestidor y Dormitorio Principal en Suite)' },
     { id: `${wPrefix}_pasillo_sur`, type: 'ladrillo_15', x1: -3.84, z1: 4.85, x2: 4.87, z2: 4.85, activeStage: activeFlag, label: 'Muro Continuo z=4.85m (Cierra SSHH 2 hacia Pasillo y cierra Baño en Suite + Vestidor hacia la Suite)' },
-    { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.30, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 2)' },
+    { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.65, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 1 Sencillo)' },
     { id: `${wPrefix}_sshh2_o`, type: 'ladrillo_15', x1: -3.84, z1: 3.00, x2: -3.84, z2: 4.85, activeStage: activeFlag, label: 'Cierre Oeste SSHH 2 junto a Escalera 2 (x=-3.84m)' },
     { id: `${wPrefix}_sshh2_suite`, type: 'ladrillo_15', x1: -1.65, z1: 3.00, x2: -1.65, z2: 4.85, activeStage: activeFlag, label: 'Divisorio SSHH 2 / Baño en Suite (x=-1.65m)' },
-    { id: `${wPrefix}_bano_vestidor`, type: 'ladrillo_15', x1: 1.15, z1: 3.00, x2: 1.15, z2: 4.85, activeStage: activeFlag, label: 'Divisorio Baño en Suite / Vestidor en Suite (x=+1.15m)' },
-    { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Muro Este Escritorio-Desk Extendido hasta Eje A (x=-1.80m • Separa Dormitorio 2 y Deck 2)' },
-    { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.30, z1: 4.85, x2: 0.30, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 y Pasillo / Dormitorio Principal en Suite (x=+0.30m)' },
+    { id: `${wPrefix}_bano_vestidor`, type: 'ladrillo_15', x1: 1.50, z1: 3.00, x2: 1.50, z2: 4.85, activeStage: activeFlag, label: 'Divisorio Baño en Suite / Vestidor en Suite (x=+1.50m)' },
+    { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Muro Este Escritorio-Desk Extendido hasta Eje A (x=-1.80m • Separa Dormitorio 1 Sencillo y Deck 2)' },
+    { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.65, z1: 4.85, x2: 0.65, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 1 Sencillo y Pasillo / Dormitorio 2 Principal en Suite (x=+0.65m)' },
     { id: `${wPrefix}_blindex_desk_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Ventanal Blindex Extremo Norte Escritorio / Desk sobre Eje A (z=13.34m)' },
-    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -1.80, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B (Dormitorio 2 y Suite) hacia Deck 2 / Terraza al Río' },
+    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -1.80, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B (Dormitorio 1 Sencillo y Suite) hacia Deck 2 / Terraza al Río' },
     { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -1.80, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Deck 2 sobre Eje A (x=-1.80..+4.87m)' }
   ];
 
@@ -3463,6 +3463,66 @@ export class FloorplanEditor {
       ctx.setLineDash([]);
       ctx.fillStyle = '#fdba74';
       ctx.fillText('⬇️ Colector Cloacal PVC Ø100mm (Pendiente >=2%)', (colMid1.px + colMid2.px) / 2, colMid1.py - 6);
+      ctx.restore();
+    }
+
+    // 7a-ter. Siluetas CAD 2D de Mobiliario y Puertas de Acceso en Planta Alta (2 Dormitorios + Vestidor + Escritorio)
+    if (this.currentLevel === 'planta_alta' && this.planData.presetId !== 'hoy_en_obra') {
+      ctx.save();
+      const drawCadBox = (wx, wz, ww, wd, strokeHex, fillRgba, labelTxt = '') => {
+        const p1 = this.worldToScreen(wx, wz);
+        const p2 = this.worldToScreen(wx + ww, wz + wd);
+        const bw = p2.px - p1.px;
+        const bh = p2.py - p1.py;
+        ctx.fillStyle = fillRgba;
+        ctx.strokeStyle = strokeHex;
+        ctx.lineWidth = 1.3;
+        ctx.fillRect(p1.px, p1.py, bw, bh);
+        ctx.strokeRect(p1.px, p1.py, bw, bh);
+        if (labelTxt && bw > 26 && bh > 14) {
+          ctx.fillStyle = '#f8fafc';
+          ctx.font = 'bold 7.5px IBM Plex Mono, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(labelTxt, p1.px + bw / 2, p1.py + bh / 2 + 3);
+        }
+      };
+
+      // 1) Dormitorio 1 (Sencillo, x=-1.80..+0.65m, z=6.00..9.94m): Cama 1½ Plaza + Placar + Mesa de Luz
+      drawCadBox(-1.15, 7.18, 1.06, 1.95, '#fbbf24', 'rgba(245, 158, 11, 0.28)', '🛏️ Cama 1½P');
+      drawCadBox(-1.72, 6.08, 0.68, 0.52, '#fde68a', 'rgba(251, 191, 36, 0.22)', 'Placar');
+      drawCadBox(0.18, 7.50, 0.38, 0.88, '#fde68a', 'rgba(251, 191, 36, 0.20)', 'Tocador');
+
+      // 2) Dormitorio 2 (En Suite, x=+0.65..+4.87m, z=4.85..9.94m): Sommier 1.40m + 2 Mesas Luz + Tocador #1
+      drawCadBox(2.80, 6.75, 1.90, 1.40, '#c084fc', 'rgba(168, 85, 247, 0.28)', '👑 Sommier 1.40m');
+      drawCadBox(4.32, 6.22, 0.40, 0.45, '#e9d5ff', 'rgba(168, 85, 247, 0.20)', '');
+      drawCadBox(4.32, 8.22, 0.40, 0.45, '#e9d5ff', 'rgba(168, 85, 247, 0.20)', '');
+      drawCadBox(0.73, 6.92, 0.42, 1.05, '#e9d5ff', 'rgba(168, 85, 247, 0.22)', 'Tocador');
+
+      // 3) Placares en U dentro del Vestidor en Suite (x=+1.50..+4.87m, z=3.00..4.85m) + Flechas de Puertas Directas Suite->Vestidor y Suite->Baño
+      drawCadBox(1.58, 3.08, 0.52, 1.68, '#38bdf8', 'rgba(56, 189, 248, 0.24)', 'Placar O');
+      drawCadBox(4.22, 3.08, 0.52, 1.68, '#38bdf8', 'rgba(56, 189, 248, 0.24)', 'Placar E');
+      drawCadBox(2.20, 3.08, 1.92, 0.48, '#38bdf8', 'rgba(56, 189, 248, 0.24)', 'Placar Fondo');
+
+      const doorVest = this.worldToScreen(2.85, 4.85);
+      const doorBano = this.worldToScreen(1.12, 4.85);
+      const doorDorm1 = this.worldToScreen(-0.63, 6.00);
+      const doorSuite = this.worldToScreen(0.65, 5.45);
+      [
+        { pt: doorVest, txt: '🚪 Acceso Vestidor' },
+        { pt: doorBano, txt: '🚪 Acceso Baño Suite' },
+        { pt: doorDorm1, txt: '🚪 Dorm. 1' },
+        { pt: doorSuite, txt: '🚪 Suite' }
+      ].forEach(({ pt, txt }) => {
+        ctx.fillStyle = '#fef08a';
+        ctx.font = 'bold 7.5px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(txt, pt.px, pt.py - 3);
+      });
+
+      // 4) Sector Escritorio (x=-4.87..-1.80m, z=6.00..13.34m): 2 Escritorios + Máquina de Coser + Biblioteca #2
+      drawCadBox(-4.12, 12.08, 0.95, 0.52, '#34d399', 'rgba(16, 185, 129, 0.26)', 'Desk 1');
+      drawCadBox(-2.98, 12.08, 0.95, 0.52, '#34d399', 'rgba(16, 185, 129, 0.26)', 'Desk 2');
+      drawCadBox(-4.72, 10.76, 0.46, 0.78, '#34d399', 'rgba(16, 185, 129, 0.22)', 'Costura');
       ctx.restore();
     }
 

@@ -691,12 +691,30 @@ export const ARCHITECTURAL_ROOMS = [
   },
   {
     id: "suite",
-    name: "Planta Alta Completa: 2 Dormitorios + Escritorio/Desk + 2 Baños + Vestidor (Sin Balcón Frontal)",
+    name: "Dormitorio 2 (Principal en Suite con Acceso Directo al Vestidor y Baño en Suite)",
     level: "Planta Alta (+102.88m / +5.22m est.)",
-    dimensions: "9.74m x 6.94m interior + Terraza al Río Eje A–B",
-    area: 67.59,
-    desc: "Al desembarcar de la Escalera 2 (Eje 1–2) se ubica el Escritorio / Desk (x=+1.80..+4.87m, z=7.37..9.94m), seguido del Dormitorio 2 (x=-0.74..+1.80m, z=5.26..9.94m) y el Dormitorio Principal en Suite (x=-4.87..-0.74m, z=5.00..9.94m). Sobre el frente Eje F–G (z=3.00..5.00m) se alinean el Vestidor, el Baño en Suite y el Baño 2 PA, con muro frontal cerrado en Eje G (sin balcón ni Blindex frontal) y Terraza al Río en Eje A–B.",
-    highlights: ["2 Dormitorios + Escritorio/Desk al subir Escalera 2", "Vestidor + Baño Suite + Baño 2 alineados en Eje F–G", "Frente Eje G cerrado sin balcón ni Blindex frontal"]
+    dimensions: "4.22m x 5.09m (21.48 m²) + Vestidor (6.23 m²) + Baño en Suite (5.83 m²)",
+    area: 33.54,
+    desc: "Dormitorio 2 Principal en Suite sobre el ala Este (+X: x=+0.65m a +4.87m, z=4.85m a 9.94m) con sommier de 1,40m, mesas de luz, tocador con espejo y puertas privadas de acceso directo al Vestidor en Suite en U (x=+1.50..+4.87m, z=3.00..4.85m) y al Baño en Suite (x=-1.65..+1.50m, z=3.00..4.85m), más salida corrediza Blindex hacia la Terraza al Río.",
+    highlights: ["Acceso privado directo a Vestidor en Suite y Baño en Suite", "Sommier 1.40m + 2 Mesas de Luz + Tocador", "Ventanal Blindex hacia Terraza al Río (Eje B)"]
+  },
+  {
+    id: "dormitorio_sencillo",
+    name: "Dormitorio 1 (Sencillo Independiente en Planta Alta)",
+    level: "Planta Alta (+102.88m / +5.22m est.)",
+    dimensions: "2.45m x 3.94m (9.65 m² • Centro x=-1.80..+0.65m, z=6.00..9.94m)",
+    area: 9.65,
+    desc: "Dormitorio 1 Sencillo ubicado en el módulo central de Planta Alta (x = -1.80m a +0.65m, z = 6.00m a 9.94m), equipado con cama de 1½ plaza (1.05×1.95m), mesa de luz con velador, placar empotrado piso-techo, tocador/escritorio de apoyo, acceso desde el pasillo distribuidor y puerta-ventana Blindex hacia la Terraza al Río.",
+    highlights: ["Cama 1½ Plaza + Mesa de Luz + Placar + Tocador", "Vinculado al Baño 2 de Planta Alta (SSHH 2)", "Salida directa a Terraza Panorámica (Eje B)"]
+  },
+  {
+    id: "escritorio_estudio",
+    name: "Sector Escritorio Extendido (Home-Office Doble, Costura y Biblioteca hasta Eje A)",
+    level: "Planta Alta (+102.88m / +5.22m est.)",
+    dimensions: "3.07m x 7.34m (22.53 m² • Ala Oeste x=-4.87..-1.80m, z=6.00..13.34m)",
+    area: 22.53,
+    desc: "Sector importante de trabajo y estudio de Ruth y Leo al desembarcar de la Escalera 2 sobre el ala Oeste (-X: x=-4.87m a -1.80m), extendido hasta el borde de la Galería Eje A (z=13.34m) con 2 escritorios profesionales, sillas ergonómicas, biblioteca de 4 estantes de 2m, máquina de coser antigua y ventanal frontal al Río Paraguay.",
+    highlights: ["Home-Office Doble para Ruth y Leo", "Extendido hasta Eje A (z=13.34m) con vista al Río", "Biblioteca 4 estantes × 2m + Rincón de Costura"]
   },
   {
     id: "cochera_muro",
@@ -2099,9 +2117,10 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 62000,
     supplierRef: 'GEO-STAN S.R.L. / Emporio de la Construcción (Asunción)',
     insumosUnitarios: [
-      { product: 'Cemento Compuesto Tipo CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 25 },
-      { product: 'Piedra Bruta de Cantera Emboscada', brand: 'Cantera Emboscada', unit: 'm³', unitPrice: 135000, qtyPerUnit: 12 },
-      { product: 'Ensayo SPT Sondeos S1-S3 y Movimiento de Suelo', brand: 'GEO-STAN S.R.L.', unit: 'gl', unitPrice: 11680000, qtyPerUnit: 1 }
+      { product: 'Cemento Compuesto Tipo CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 25 },
+      { product: 'Piedra Bruta de Cantera Emboscada Seleccionada', brand: 'Cantera Emboscada', unit: 'Camionada 6m³', unitPrice: 810000, qtyPerUnit: 2 },
+      { product: 'Arena Lavada de Río puesta en obra', brand: 'Arenera Villa Hayes', unit: 'Camionada 5m³', unitPrice: 475000, qtyPerUnit: 2 },
+      { product: 'Ensayo SPT Sondeos S1-S3 (GEO-STAN #2956) y Excavación de Zapatas', brand: 'GEO-STAN S.R.L.', unit: 'servicio', unitPrice: 10730000, qtyPerUnit: 1 }
     ]
   },
   2: {
@@ -2110,14 +2129,16 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'EXIST-E-02',
     suggestedProduct: 'Hormigón Elaborado H25 PROBETI / Pretec + Varilla Acero Conformado ADN 420 Votorantim / Acepar Ø12mm (Barra 12m)',
     brand: 'PROBETI / Pretec / Votorantim / Acepar',
-    commercialUnit: 'm³ / Barra 12m',
+    commercialUnit: 'Bolsa 50kg / Barra 12m / Tonelada Piedra',
     commercialUnitPrice: 890000,
     supplierRef: 'PROBETI S.R.L. / Aceros Asunción / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Hormigón Elaborado H25 (fck 250 kg/cm²)', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 24 },
-      { product: 'Varilla Acero Conformado ADN 420 Ø12mm barra 12m', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 145 },
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 65 },
-      { product: 'Piedra Bruta de Cantera Emboscada', brand: 'Cantera Emboscada', unit: 'm³', unitPrice: 135000, qtyPerUnit: 18 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Dosificación H25: 7.5 bolsas/m³)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 180 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø12mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 145 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø8mm Estribos (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 44500, qtyPerUnit: 68 },
+      { product: 'Piedra Triturada Basáltica 4ta Lavada (Cantera Ñemby)', brand: 'Cantera Ñemby', unit: 'tonelada', unitPrice: 145000, qtyPerUnit: 28 },
+      { product: 'Arena Lavada de Río + Alambre Recocido N°18 (Rollo 20kg)', brand: 'Arenera Villa Hayes / Votorantim', unit: 'kit áridos+alambre', unitPrice: 3850000, qtyPerUnit: 1 },
+      { product: 'Piedra Bruta de Cantera Emboscada p/ Calce de Zapatas (-4.64m)', brand: 'Cantera Emboscada', unit: 'Camionada 6m³', unitPrice: 810000, qtyPerUnit: 3 }
     ]
   },
   3: {
@@ -2126,13 +2147,15 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'EXIST-E-03',
     suggestedProduct: 'Acero Conformado ADN 420 Votorantim / Acepar Ø12mm + Hormigón Elaborado H25 PROBETI (20 Pilares Subsuelo + 17 Pilares PB)',
     brand: 'Votorantim / Acepar / PROBETI',
-    commercialUnit: 'Barra 12m / m³',
+    commercialUnit: 'Barra 12m / Bolsa 50kg / Placa Fenólico',
     commercialUnitPrice: 89000,
     supplierRef: 'Aceros Asunción / PROBETI S.R.L.',
     insumosUnitarios: [
-      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm barra 12m', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 190 },
-      { product: 'Hormigón Elaborado H25 Certificado', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 22 },
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 80 }
+      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 190 },
+      { product: 'Varilla de Acero Conformado ADN 420 Ø6mm Estribos (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 26500, qtyPerUnit: 95 },
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 165 },
+      { product: 'Placa Fenólico Plastificado 18mm 1.22×2.44m p/ Encofrado Visto', brand: 'Maderera Asunción', unit: 'placa 18mm', unitPrice: 235000, qtyPerUnit: 24 },
+      { product: 'Piedra Triturada 4ta + Arena Lavada + Alambre Recocido N°18 (kg)', brand: 'Cantera Ñemby / Votorantim', unit: 'tonelada', unitPrice: 145000, qtyPerUnit: 26 }
     ]
   },
   4: {
@@ -2141,13 +2164,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'EXIST-E-04',
     suggestedProduct: 'Hormigón Elaborado H25 Visto PROBETI (315 kg/cm²) + Fenólico Plastificado 18mm + Acero ADN 420 Votorantim',
     brand: 'PROBETI / Votorantim / INC Vallemí',
-    commercialUnit: 'm³ / Placa',
+    commercialUnit: 'Bolsa 50kg / Barra 12m / Placa 18mm',
     commercialUnitPrice: 890000,
     supplierRef: 'PROBETI S.R.L. / Construshop Asunción',
     insumosUnitarios: [
-      { product: 'Hormigón Elaborado H25 Visto (315 kg/cm²)', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 26 },
-      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm/Ø10mm', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 135 },
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 60 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (fck 315 kg/cm² PROBETI)', brand: 'INC Vallemí / PROBETI', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 195 },
+      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm y Ø10mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 135 },
+      { product: 'Placa Fenólico Film Negro 18mm 1.22×2.44m + Puntales Eucalipto', brand: 'Construshop / Maderera', unit: 'placa 18mm', unitPrice: 235000, qtyPerUnit: 32 },
+      { product: 'Piedra Triturada 4ta + Arena Lavada + Bombeo en Obra', brand: 'PROBETI S.R.L.', unit: 'tonelada', unitPrice: 145000, qtyPerUnit: 34 }
     ]
   },
   5: {
@@ -2156,13 +2180,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'EXIST-E-05',
     suggestedProduct: 'Hormigón Armado H25 PROBETI + Varilla ADN 420 Votorantim Ø12mm + Piedra Bruta Cantera Emboscada (Escalera 1 Eje 8–9)',
     brand: 'PROBETI / Votorantim / Cantera Emboscada',
-    commercialUnit: 'm³ / Barra 12m',
+    commercialUnit: 'Bolsa 50kg / Barra 12m / Placa',
     commercialUnitPrice: 890000,
     supplierRef: 'PROBETI S.R.L. / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Hormigón Elaborado H25', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 5.5 },
-      { product: 'Varilla Acero Conformado ADN 420 Ø12mm', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 38 },
-      { product: 'Piedra Bruta de Cantera Emboscada', brand: 'Cantera Emboscada', unit: 'm³', unitPrice: 135000, qtyPerUnit: 6 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 42 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø12mm y Ø10mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 38 },
+      { product: 'Placa Fenólico 18mm + Tirantes Pino p/ Escalera 1 (15 Peldaños)', brand: 'Maderera Asunción', unit: 'placa 18mm', unitPrice: 235000, qtyPerUnit: 8 },
+      { product: 'Piedra Bruta de Cantera Emboscada + Triturada 4ta', brand: 'Cantera Emboscada', unit: 'tonelada', unitPrice: 145000, qtyPerUnit: 7 }
     ]
   },
   6: {
@@ -2171,14 +2196,15 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'contencion_cochera',
     suggestedProduct: 'Piedra Bruta de Cantera Emboscada + Ladrillo Macizo Tobatí 1ra + Cemento INC Vallemí CP II-F 32 + Varilla ADN 420 Ø12mm',
     brand: 'Cantera Emboscada / INC Vallemí / Votorantim',
-    commercialUnit: 'Bolsa 50kg / m³ / Barra 12m',
+    commercialUnit: 'Bolsa 50kg / Millar Ladrillos / Barra 12m',
     commercialUnitPrice: 62000,
     supplierRef: 'Emporio de la Construcción / Olerías Tobatí Directo',
     insumosUnitarios: [
+      { product: 'Ladrillo Común Macizo 1ra Calidad Tobatí (5.5×12×25cm)', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 110 },
       { product: 'Cemento Compuesto Tipo CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.85 },
-      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm barra 12m', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.45 },
-      { product: 'Piedra Bruta de Cantera Emboscada', brand: 'Cantera Emboscada', unit: 'm³', unitPrice: 135000, qtyPerUnit: 0.35 },
-      { product: 'Ladrillo Común Macizo 1ra Calidad Tobatí', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 110 }
+      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.45 },
+      { product: 'Piedra Bruta de Cantera Emboscada Seleccionada', brand: 'Cantera Emboscada', unit: 'tonelada', unitPrice: 135000, qtyPerUnit: 0.35 },
+      { product: 'Caño PVC Ø50mm p/ Barbacanas de Alivio + Mano de Obra Albañil', brand: 'Tigre / Cuadrilla Civil', unit: 'jornal', unitPrice: 72916, qtyPerUnit: 1.0 }
     ]
   },
   7: {
@@ -2187,15 +2213,16 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'forense_omision_fila9_lozarrap',
     suggestedProduct: 'Vigueta Pretensada Loza Rap Serie 12 + Ladrillo Sapo Cerámico 12×25×40 + Malla SIMA Ø4.2mm 15×15cm + Hormigón Compresión 5cm',
     brand: 'Loza Rap / Cerámica Itaipú / Acindar-Votorantim / PROBETI',
-    commercialUnit: 'm² instalado (Vigueta ml + Sapo un + Malla paño)',
+    commercialUnit: 'm² instalado (Vigueta ml + Sapo un + Malla paño + Bolsa Cemento)',
     commercialUnitPrice: 350000,
     supplierRef: 'Loza Rap Paraguay / Emporio de la Construcción (Asunción)',
     insumosUnitarios: [
-      { product: 'Vigueta pretensada Serie 12', brand: 'Loza Rap', unit: 'ml', unitPrice: 42000, qtyPerUnit: 2.0 },
-      { product: 'Bovedilla cerámica / Ladrillo Sapo 12×25×40', brand: 'Cerámica Itaipú / Tobatí', unit: 'un', unitPrice: 6800, qtyPerUnit: 8.0 },
-      { product: 'Malla electrosoldada SIMA Ø4.2mm 15×15cm', brand: 'Votorantim / Acindar', unit: 'paño', unitPrice: 185000, qtyPerUnit: 0.12 },
-      { product: 'Hormigón H25 capa compresión 5cm', brand: 'PROBETI / Pretec', unit: 'm²', unitPrice: 95000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra montaje, apuntalamiento y colado', brand: 'Cuadrilla Especializada', unit: 'm²', unitPrice: 115000, qtyPerUnit: 1.0 }
+      { product: 'Vigueta Pretensada Hormigón Serie 12 (Largo a medida 4.20m)', brand: 'Loza Rap Paraguay', unit: 'ml vigueta', unitPrice: 42000, qtyPerUnit: 2.0 },
+      { product: 'Bovedilla Cerámica / Ladrillo Sapo 12×25×40cm', brand: 'Cerámica Itaipú / Tobatí', unit: 'un', unitPrice: 6800, qtyPerUnit: 8.0 },
+      { product: 'Malla Electrosoldada SIMA Ø4.2mm 15×15cm (Paño 2.40×6.00m)', brand: 'Votorantim / Acindar', unit: 'paño 14.4m²', unitPrice: 185000, qtyPerUnit: 0.12 },
+      { product: 'Cemento Portland CP II-F 32 p/ Capa de Compresión 5cm', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.85 },
+      { product: 'Piedra Triturada 4ta + Arena Lavada p/ Capa Compresión', brand: 'Cantera Ñemby / Villa Hayes', unit: 'bolsón áridos', unitPrice: 42300, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra montaje, apuntalamiento y hormigonado', brand: 'Cuadrilla Especializada', unit: 'jornal/m²', unitPrice: 115000, qtyPerUnit: 1.0 }
     ]
   },
   8: {
@@ -2204,14 +2231,16 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'losa_segunda_parte',
     suggestedProduct: 'Sistema Loza Rap Pretensado c/ Viga Encadenado Perimetral HA-25 + Acero ADN 420 Ø12mm/Ø8mm',
     brand: 'Loza Rap / Votorantim / INC Vallemí',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Vigueta ml + Sapo un + Barra 12m + Bolsa 50kg)',
     commercialUnitPrice: 324873,
     supplierRef: 'Loza Rap Paraguay / Aceros Asunción / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Vigueta pretensada Loza Rap + Bovedilla cerámica', brand: 'Loza Rap', unit: 'm²', unitPrice: 112000, qtyPerUnit: 1.0 },
-      { product: 'Varilla Acero ADN 420 Ø12mm y Ø8mm p/ vigas encadenado', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.65 },
-      { product: 'Hormigón HA-25 capa compresión y vigas', brand: 'PROBETI / INC Vallemí', unit: 'm²', unitPrice: 98000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra encofrado, apuntalamiento y hormigonado (+102.88m)', brand: 'Cuadrilla Estructura', unit: 'm²', unitPrice: 114873, qtyPerUnit: 1.0 }
+      { product: 'Vigueta Pretensada Loza Rap Serie 12', brand: 'Loza Rap Paraguay', unit: 'ml vigueta', unitPrice: 42000, qtyPerUnit: 1.6 },
+      { product: 'Ladrillo Sapo Cerámico 12×25×40cm (8 unidades por m²)', brand: 'Cerámica Itaipú / Tobatí', unit: 'un', unitPrice: 5600, qtyPerUnit: 8.0 },
+      { product: 'Varilla Acero ADN 420 Ø12mm y Ø8mm p/ Vigas y Nervios', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.65 },
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Capa Compresión + Vigas)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.95 },
+      { product: 'Piedra Triturada 4ta + Arena Lavada + Alambre Recocido N°18', brand: 'Cantera Ñemby', unit: 'bolsón áridos', unitPrice: 39100, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra apuntalamiento, encofrado y colado en 2do Piso (+102.88m)', brand: 'Cuadrilla Estructura', unit: 'jornal/m²', unitPrice: 95023, qtyPerUnit: 1.0 }
     ]
   },
   9: {
@@ -2220,12 +2249,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'forense_barandas_seguridad',
     suggestedProduct: 'Rejilla Electroforjada Galvanizada 30×3mm + Escalera H°A° 14 Peldaños c/ Baranda Tubo 40×40mm',
     brand: 'Aceros Asunción / PROBETI / Herrería Industrial',
-    commercialUnit: 'gl / m²',
+    commercialUnit: 'Paño Rejilla / Barra 6m / Bolsa 50kg',
     commercialUnitPrice: 5900000,
     supplierRef: 'Aceros Asunción / Chacomer Industrial / Emporio',
     insumosUnitarios: [
-      { product: 'Rejilla grating electroforjada galvanizada 30×3mm transitable', brand: 'Aceros Asunción', unit: 'm²', unitPrice: 420000, qtyPerUnit: 6.0 },
-      { product: 'Hormigón y acero escalera 2 (14 peldaños Eje 1–2) y barandas tubo 40×40mm', brand: 'PROBETI / Votorantim', unit: 'gl', unitPrice: 3400000, qtyPerUnit: 1.0 }
+      { product: 'Paño Rejilla Grating Electroforjada Galvanizada 30×3mm (1.00×1.00m)', brand: 'Aceros Asunción', unit: 'paño 1m²', unitPrice: 420000, qtyPerUnit: 6.0 },
+      { product: 'Tubo Estructural 40×40×2mm + Ángulo 1½"×3/16" (Barra 6m)', brand: 'Aceros Asunción', unit: 'barra 6m', unitPrice: 135000, qtyPerUnit: 12.0 },
+      { product: 'Cemento Vallemí (18 bolsas) + Varilla ADN 420 Ø12mm (10 barras) p/ Escalera 2', brand: 'INC Vallemí / Votorantim', unit: 'kit H°A°', unitPrice: 1760000, qtyPerUnit: 1.0 }
     ]
   },
   10: {
@@ -2234,14 +2264,15 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'cubierta_metalica',
     suggestedProduct: 'Panel Sándwich Termoacústico Isopanel PIR/EPS 50mm Cal. 26 Prepintado Gris Grafito (Chacomer / Aceros Asunción) + Correas Perfil C Galvanizado 100×50×2mm + Canaleta Oculta Chapa N°24',
     brand: 'Chacomer / Aceros Asunción / Ternium',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Panel Isopanel + Barra 6m Perfil C + Tornillos)',
     commercialUnitPrice: 311607,
     supplierRef: 'Chacomer S.A.E. / Aceros Asunción',
     insumosUnitarios: [
-      { product: 'Panel Sándwich Termoacústico Isopanel PIR/EPS 50mm Cal. 26 Gris Grafito', brand: 'Chacomer / Aceros Asunción', unit: 'm²', unitPrice: 185000, qtyPerUnit: 1.0 },
-      { product: 'Correas Perfil C Galvanizado 100×50×15×2mm', brand: 'Aceros Asunción', unit: 'barra 6m', unitPrice: 145000, qtyPerUnit: 0.25 },
-      { product: 'Canaleta oculta Chapa Galvanizada N°24 y Zinguería babetas', brand: 'Zinguería Asunción', unit: 'ml', unitPrice: 85000, qtyPerUnit: 0.22 },
-      { product: 'Montaje en altura (+105.64m) con tornillos autoperforantes y sellador PU', brand: 'Montajes Metálicos PY', unit: 'm²', unitPrice: 78000, qtyPerUnit: 1.0 }
+      { product: 'Panel Sándwich Termoacústico Isopanel PIR/EPS 50mm Cal. 26 Gris Grafito', brand: 'Chacomer / Aceros Asunción', unit: 'm² panel', unitPrice: 185000, qtyPerUnit: 1.0 },
+      { product: 'Correa Perfil C Galvanizado 100×50×15×2mm (Barra 6m)', brand: 'Aceros Asunción', unit: 'barra 6m', unitPrice: 145000, qtyPerUnit: 0.25 },
+      { product: 'Canaleta Oculta Chapa Galvanizada N°24 + Babetas y Cumbrera', brand: 'Zinguería Asunción', unit: 'ml chapa', unitPrice: 85000, qtyPerUnit: 0.22 },
+      { product: 'Tornillo Autoperforante Hexagonal 5" c/ Arandela EPDM (Caja 100 un)', brand: 'Tel / Fischer', unit: 'caja 100un', unitPrice: 95000, qtyPerUnit: 0.06 },
+      { product: 'Mano de obra montaje en altura (+105.64m) y sellado PU Sikaflex-1A', brand: 'Montajes Metálicos PY', unit: 'jornal/m²', unitPrice: 65957, qtyPerUnit: 1.0 }
     ]
   },
   11: {
@@ -2250,14 +2281,15 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'mamposteria_exterior',
     suggestedProduct: 'Ladrillo Común Macizo de Tobatí 1ra Calidad (5,5×12×25cm) + Mortero con Hidrófugo Sika-1 / Ceresita + Envarillado Ø6mm c/ 5 hiladas',
     brand: 'Olería Tobatí 1ra / INC Vallemí / Sika-1 / Ceresita',
-    commercialUnit: 'm² (Millar Ladrillo + Bolsa Cemento + Bidón 20L)',
+    commercialUnit: 'm² (58 Ladrillos + Bolsa Cemento + Varilla Ø6mm)',
     commercialUnitPrice: 151282,
     supplierRef: 'Materiales Tobatí (@materialesdec_tobati) / Construshop Paraguay',
     insumosUnitarios: [
-      { product: 'Ladrillo Común Macizo de Tobatí 1ra Calidad (5,5×12×25cm)', brand: 'Olerías Tobatí Directo', unit: 'un', unitPrice: 1150, qtyPerUnit: 55 },
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.35 },
-      { product: 'Hidrófugo Inorgánico Sika-1 / Ceresita', brand: 'Sika / Weber Ceresita', unit: 'bidón 20L', unitPrice: 145000, qtyPerUnit: 0.04 },
-      { product: 'Arena lavada de río puesta en obra', brand: 'Arenera Villa Hayes', unit: 'm³', unitPrice: 95000, qtyPerUnit: 0.05 }
+      { product: 'Ladrillo Común Macizo de Tobatí 1ra Calidad (5,5×12×25cm)', brand: 'Olerías Tobatí Directo', unit: 'un', unitPrice: 1150, qtyPerUnit: 58 },
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.35 },
+      { product: 'Cal Hidratada de Obra (Bolsa 20kg) + Arena Lavada', brand: 'Calera Vallemí', unit: 'Bolsa 20kg', unitPrice: 28000, qtyPerUnit: 0.45 },
+      { product: 'Varilla Acero Ø6mm p/ Traba de Hiladas + Hidrófugo Sika-1', brand: 'Votorantim / Sika', unit: 'barra 12m', unitPrice: 26500, qtyPerUnit: 0.22 },
+      { product: 'Mano de obra oficial albañil (Levantamiento a plomo y nivel)', brand: 'Cuadrilla Albañilería', unit: 'jornal/m²', unitPrice: 44452, qtyPerUnit: 1.0 }
     ]
   },
   12: {
@@ -2266,13 +2298,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'forense_tabiqueria_liviana_apeo',
     suggestedProduct: 'Ladrillo Hueco Cerámico 6 Tubos Tobatí / Itaipú (12×18×25cm) revocado a 2 caras',
     brand: 'Cerámica Itaipú / Tobatí / INC Vallemí',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (20 Ladrillos Huecos + Bolsa Cemento + Cal)',
     commercialUnitPrice: 122034,
     supplierRef: 'Materiales de Construcción Tobatí / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Ladrillo hueco cerámico 6 tubos (12×18×25cm)', brand: 'Cerámica Itaipú / Tobatí', unit: 'un', unitPrice: 2100, qtyPerUnit: 20 },
-      { product: 'Mortero de asiento y revoque 2 caras c/ Cemento Vallemí', brand: 'INC Vallemí', unit: 'm²', unitPrice: 35000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra tabiquería interior y revocado 2 caras', brand: 'Cuadrilla Albañilería', unit: 'm²', unitPrice: 45034, qtyPerUnit: 1.0 }
+      { product: 'Ladrillo Hueco Cerámico 6 Tubos 12×18×25cm (Liviano s/ P12-P13-P15)', brand: 'Cerámica Itaipú / Tobatí', unit: 'un', unitPrice: 2100, qtyPerUnit: 20 },
+      { product: 'Cemento Compuesto CP II-F 32 (Asiento y Revoque 2 Caras)', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.35 },
+      { product: 'Cal Hidratada (Bolsa 20kg) + Arena Lavada Tamizada', brand: 'Calera Vallemí', unit: 'Bolsa 20kg', unitPrice: 28000, qtyPerUnit: 0.48 },
+      { product: 'Mano de obra tabiquería liviana y revocado a 2 caras', brand: 'Cuadrilla Albañilería', unit: 'jornal/m²', unitPrice: 44894, qtyPerUnit: 1.0 }
     ]
   },
   13: {
@@ -2285,9 +2318,10 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 70952,
     supplierRef: 'Construshop Paraguay / Centro Sika Asunción',
     insumosUnitarios: [
-      { product: 'Membrana Cementicia Flexible SikaTop-107 Seal', brand: 'Sika', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 0.14 },
-      { product: 'Puente de Adherencia Epóxico Estructural Sikadur-32 Gel', brand: 'Sika', unit: 'kit 1kg', unitPrice: 195000, qtyPerUnit: 0.08 },
-      { product: 'Emulsión Acrílica Puente Adherencia SikaLatex', brand: 'Sika', unit: 'bidón 4L', unitPrice: 165000, qtyPerUnit: 0.06 }
+      { product: 'Membrana Cementicia Flexible SikaTop-107 Seal (Caja 25kg Bicomponente)', brand: 'Sika Paraguay', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 0.14 },
+      { product: 'Puente de Adherencia Epóxico Estructural Sikadur-32 Gel (Kit 1kg)', brand: 'Sika Paraguay', unit: 'kit 1kg', unitPrice: 195000, qtyPerUnit: 0.08 },
+      { product: 'Desoxidante Pasivador Sika Rustoff + Emulsión SikaLatex (Bidón 4L)', brand: 'Sika Paraguay', unit: 'bidón 4L', unitPrice: 165000, qtyPerUnit: 0.06 },
+      { product: 'Mano de obra cepillado de acero e imprimación epóxica en 17 pilares', brand: 'Especialista Sika', unit: 'jornal/m²', unitPrice: 11152, qtyPerUnit: 1.0 }
     ]
   },
   14: {
@@ -2296,13 +2330,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'vidrios_templados_galeria',
     suggestedProduct: 'Vidrio Templado Blindex 10mm Incoloro/Gris Control Solar + Perfilería Aluminio Negro Línea Pesada Módena/Aluar c/ Rodamientos Dobles',
     brand: 'Blindex / VASA / Aluar Línea Módena Negra',
-    commercialUnit: 'm² instalado',
+    commercialUnit: 'm² instalado (Hoja Blindex + Barra Aluminio 6m + Kit Ruedas)',
     commercialUnitPrice: 573913,
     supplierRef: 'Cristalería Asunción / Glasstec Paraguay / Vilux',
     insumosUnitarios: [
-      { product: 'Vidrio Templado Blindex 10mm certificado INTN', brand: 'Blindex / VASA', unit: 'm²', unitPrice: 365000, qtyPerUnit: 1.0 },
-      { product: 'Perfilería Aluminio Negro Anodizado Línea Pesada Módena/Aluar + Rodamientos Dobles', brand: 'Aluar / Módena', unit: 'm²', unitPrice: 128913, qtyPerUnit: 1.0 },
-      { product: 'Instalación, sellado silicona neutra y herrajes', brand: 'Cristalería Especializada', unit: 'm²', unitPrice: 80000, qtyPerUnit: 1.0 }
+      { product: 'Paño Vidrio Templado Blindex 10mm Certificado INTN c/ Cantos Pulidos', brand: 'Blindex / VASA', unit: 'm² vidrio', unitPrice: 365000, qtyPerUnit: 1.0 },
+      { product: 'Perfil Riel y Jamba Aluminio Negro Anodizado Línea Pesada (Barra 6m)', brand: 'Aluar / Módena', unit: 'barra 6m', unitPrice: 257826, qtyPerUnit: 0.5 },
+      { product: 'Carros Dobles a Rulemán Blindado + Cerradura Pico de Loro + Burlete Felpa', brand: 'Udinese / Fermax', unit: 'kit herraje', unitPrice: 45000, qtyPerUnit: 1.0 },
+      { product: 'Instalación nivelada y sellado con Silicona Neutra Dow Corning', brand: 'Cristalería Especializada', unit: 'jornal/m²', unitPrice: 35000, qtyPerUnit: 1.0 }
     ]
   },
   15: {
@@ -2311,12 +2346,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_aberturas_madera',
     suggestedProduct: 'Kit Motor Basculante Rápido PPA JetFlex 1/2 HP (<6 seg) + Traba Electromagnética + Puertas Placa Enchapadas en Cedro/Paraíso c/ Marco Ybyraró y Cerradura Papaiz',
     brand: 'PPA JetFlex / Carpintería Ybyraró-Cedro / Papaiz',
-    commercialUnit: 'un / kit',
+    commercialUnit: 'un (Puerta Completa c/ Marco + Cerradura + Bisagras)',
     commercialUnitPrice: 1088889,
     supplierRef: 'PPA Paraguay / Maderera Asunción / Ferretería Americana',
     insumosUnitarios: [
-      { product: 'Kit Motor Basculante Rápido PPA JetFlex 1/2 HP (<6 seg) + 2 Controles + Traba Dog Steel', brand: 'PPA Brasil', unit: 'kit', unitPrice: 2150000, qtyPerUnit: 1.0 },
-      { product: 'Puerta interior placa enchapada en Cedro/Paraíso 0.80×2.10m c/ Marco Ybyraró y Cerradura Papaiz', brand: 'Carpintería Nacional / Papaiz', unit: 'un', unitPrice: 920000, qtyPerUnit: 1.0 }
+      { product: 'Hoja Puerta Placa Enchapada Cedro/Paraíso 0.80×2.10m + Marco Ybyraró 15cm', brand: 'Carpintería Nacional', unit: 'un', unitPrice: 685000, qtyPerUnit: 1.0 },
+      { product: 'Cerradura Cilíndrica Acero Inoxidable + 3 Bisagras Munición 3½"', brand: 'Papaiz / Stam', unit: 'juego', unitPrice: 158889, qtyPerUnit: 1.0 },
+      { product: 'Colocación con espuma poliuretano, contramarcos y barniz poliuretánico', brand: 'Carpintero Instalador', unit: 'un', unitPrice: 245000, qtyPerUnit: 1.0 }
     ]
   },
   16: {
@@ -2325,14 +2361,16 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'instalaciones_sanitarias_desagues',
     suggestedProduct: 'Tubería Termofusión PPR PN20 Tigre/Saladillo Ø25mm y Ø20mm + Desagüe PVC Reforzado Tigre Ø100mm + Termocalefón Tokyo/James 80L + Cámara Séptica 1.500L + Pozo Absorbente Ladrillo Tobatí Ø1.80×3.50m c/ Acople Camión Cisterna',
     brand: 'Tigre / Saladillo / Tokyo-James / Olería Tobatí',
-    commercialUnit: 'gl',
+    commercialUnit: 'gl (Tiras 6m PPR + Tiras 4m PVC + Termocalefón 80L)',
     commercialUnitPrice: 12600000,
     supplierRef: 'Construshop Paraguay / Corporación Mercantil / NGO (Tokyo)',
     insumosUnitarios: [
-      { product: 'Tubería y accesorios Termofusión PPR PN20 Ø25mm y Ø20mm (Agua Directa ESSAP Sin Tanque)', brand: 'Tigre / Saladillo', unit: 'lote', unitPrice: 2850000, qtyPerUnit: 1.0 },
-      { product: 'Tubería Desagüe Cloacal PVC Serie Reforzada Ø100mm, Ø50mm y Ø40mm', brand: 'Tigre', unit: 'lote', unitPrice: 2450000, qtyPerUnit: 1.0 },
-      { product: 'Termocalefón 80 Litros Tanque Esmaltado / Inox', brand: 'Tokyo / James', unit: 'un', unitPrice: 1650000, qtyPerUnit: 1.0 },
-      { product: 'Cámara Séptica 1.500L + Pozo Absorbente Ø1.80×3.50m en Ladrillo Tobatí c/ Acople Cisterna', brand: 'Tigre / Tobatí', unit: 'gl', unitPrice: 5650000, qtyPerUnit: 1.0 }
+      { product: 'Tubo Termofusión PPR PN20 Ø25mm y Ø20mm Agua Fría/Caliente (Tira 6m)', brand: 'Tigre / Saladillo', unit: 'tira 6m', unitPrice: 58000, qtyPerUnit: 32 },
+      { product: 'Llaves de Paso Bronce Esféricas + Codos/Tees Termofusión c/ Inserto Metálico', brand: 'Tigre / FV', unit: 'un', unitPrice: 39800, qtyPerUnit: 25 },
+      { product: 'Caño PVC Cloacal Serie Reforzada Ø100mm (Tira 4m) + Ramales Ø50/40mm', brand: 'Tigre Paraguay', unit: 'tira 4m', unitPrice: 92000, qtyPerUnit: 22 },
+      { product: 'Cajas Sifonadas 15×15cm c/ Rejilla Acero Inox + Caño Ventilación Ø75mm', brand: 'Tigre', unit: 'un', unitPrice: 85200, qtyPerUnit: 5 },
+      { product: 'Termocalefón 80 Litros Tanque Esmaltado c/ Válvula Seguridad (En Suite PA)', brand: 'Tokyo / James', unit: 'un', unitPrice: 1650000, qtyPerUnit: 1 },
+      { product: 'Perforación Sacabocado Diamantado PASE #3/#3B/#4 en Losa L4 + Mano de Obra Plomero ESSAP', brand: 'Maestro Plomero Matriculado', unit: 'gl', unitPrice: 5649000, qtyPerUnit: 1 }
     ]
   },
   17: {
@@ -2341,14 +2379,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'bano_suite_sanitarios',
     suggestedProduct: 'Inodoro One-Piece Doble Descarga Deca/Incepa + Bacha c/ Grifería Monocomando FV/Docol + Mesada Granito Negro San Gabriel + Campana Extractora Inox 60cm',
     brand: 'Deca / Incepa / FV / Docol / Marmolería San Gabriel',
-    commercialUnit: 'jgo',
+    commercialUnit: 'jgo (3 Baños Completos: Suite PA, Baño 2 PA y Toilette PB)',
     commercialUnitPrice: 5600000,
     supplierRef: 'Corporación Mercantil S.A. / Marmolería Asunción / Tienda Naranja',
     insumosUnitarios: [
-      { product: 'Inodoro One-Piece Doble Descarga + Lavatorio c/ Pedestal/Vanitory', brand: 'Deca / Incepa', unit: 'jgo', unitPrice: 1850000, qtyPerUnit: 1.0 },
-      { product: 'Grifería Monocomando Ducha, Lavatorio y Cocina Cromo', brand: 'FV / Docol', unit: 'jgo', unitPrice: 1450000, qtyPerUnit: 1.0 },
-      { product: 'Mesada Granito Natural Negro San Gabriel c/ Bacha Doble Inox Tramontina', brand: 'San Gabriel / Tramontina', unit: 'ml', unitPrice: 1550000, qtyPerUnit: 1.0 },
-      { product: 'Campana Extractora Acero Inoxidable 60cm c/ Filtro Carbón y Ducto Exterior', brand: 'Tokyo / Tramontina', unit: 'un', unitPrice: 750000, qtyPerUnit: 1.0 }
+      { product: 'Inodoro One-Piece Doble Descarga Ecológico (3L/6L) + Asiento Cierre Suave', brand: 'Deca / Incepa', unit: 'un', unitPrice: 1350000, qtyPerUnit: 1.0 },
+      { product: 'Vanitory / Bacha Loza Sobremesada + Espejo Biselado 80×60cm', brand: 'Deca / Incepa', unit: 'juego', unitPrice: 1150000, qtyPerUnit: 1.0 },
+      { product: 'Grifería Monocomando Ducha Mezcladora + Monocomando Lavatorio Cromo', brand: 'FV / Docol', unit: 'juego', unitPrice: 1450000, qtyPerUnit: 1.0 },
+      { product: 'Mampara Templada Fija 8mm Ducha + Kit Accesorios Acero Inox + Instalación', brand: 'Blindex / FV', unit: 'juego', unitPrice: 1650000, qtyPerUnit: 1.0 }
     ]
   },
   18: {
@@ -2357,14 +2395,16 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'instalaciones_electricas_embutidas',
     suggestedProduct: 'Cable Unipolar Antillama Inpaco 6mm² / 4mm² / 2.5mm² (Norma INTN) + Tablero Embutir 36-48 DIN Puerta Fumée + Disyuntores Schneider/Steck + Protector Sobretensión DPS Clase II + Jabalina Copperweld Ø5/8"×2.40m',
     brand: 'Inpaco / Schneider Electric / Steck / Copperweld',
-    commercialUnit: 'gl (Rollos 100m + Tablero DIN)',
+    commercialUnit: 'gl (Rollos 100m Cable Inpaco + Disyuntores DIN + Tomas)',
     commercialUnitPrice: 13800000,
     supplierRef: 'Electropar S.A. / Luminotecnia / Record Electric (Asunción)',
     insumosUnitarios: [
-      { product: 'Cable Unipolar Antillama Inpaco 6mm², 4mm² (Tomas 20A) y 2.5mm² Norma INTN', brand: 'Inpaco Paraguay', unit: 'rollo 100m', unitPrice: 410000, qtyPerUnit: 12 },
-      { product: 'Tablero Embutir 36-48 DIN Puerta Fumée + Disyuntores TM y Diferenciales 30mA', brand: 'Schneider Electric / Steck', unit: 'cjto', unitPrice: 3450000, qtyPerUnit: 1 },
-      { product: 'Protector Sobretensión Atmosférica DPS Tetrapolar Clase II 40kA + 2 Jabalinas Copperweld Ø5/8"×2.40m', brand: 'Schneider / Copperweld', unit: 'cjto', unitPrice: 1450000, qtyPerUnit: 1 },
-      { product: 'Mano de obra electricista matriculado ANDE Cat. A (3 niveles + acometida x=-3.85m)', brand: 'Técnico ANDE', unit: 'gl', unitPrice: 3980000, qtyPerUnit: 1 }
+      { product: 'Cable Unipolar Antillama Inpaco 4mm² (Tomas 20A) y 2.5mm² (Rollo 100m Norma INTN)', brand: 'Inpaco Paraguay', unit: 'rollo 100m', unitPrice: 365000, qtyPerUnit: 10 },
+      { product: 'Cable Unipolar Antillama Inpaco 6mm² (Acometida Trifásica) y 1.5mm² Neutro Celeste', brand: 'Inpaco Paraguay', unit: 'rollo 100m', unitPrice: 485000, qtyPerUnit: 3 },
+      { product: 'Caño Corrugado Ignífugo Naranja/Gris Ø3/4" (Rollo 50m) + 35 Cajas Profundas 5×10×5.5cm', brand: 'Tigre Paraguay', unit: 'kit ductos', unitPrice: 985000, qtyPerUnit: 1 },
+      { product: 'Tablero Principal TP-PB 48 DIN + Subtableros TS-PA 24 DIN y TS-SUB 12 DIN + Disyuntores TM y Dif. 30mA', brand: 'Schneider Electric / Steck', unit: 'conjunto DIN', unitPrice: 2850000, qtyPerUnit: 1 },
+      { product: '26 Módulos Tomacorrientes 20A/16A + 9 Plafones LED 18W 3000K + DPS Clase II 40kA + 2 Jabalinas Copperweld', brand: 'Schneider / Macroled / Copperweld', unit: 'lote artefactos', unitPrice: 2150000, qtyPerUnit: 1 },
+      { product: 'Mano de obra electricista matriculado ANDE Cat. A (3 niveles + Pilar x=-3.85m + Pase #1)', brand: 'Técnico ANDE Cat. A', unit: 'gl', unitPrice: 2710000, qtyPerUnit: 1 }
     ]
   },
   19: {
@@ -2373,13 +2413,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_pintura_integral',
     suggestedProduct: 'Pintura Acrílica Exterior Impermeabilizante Suvinil / Amanecer Frente Total (Balde 18L: Gs. 395.000) + Enduido Interior + Sellador Acrílico',
     brand: 'Suvinil / Pinturas Amanecer (Frente Total)',
-    commercialUnit: 'm² (Balde 18L Gs. 395.000)',
+    commercialUnit: 'm² (Balde 18L Pintura + Balde 18L Enduido + Lija)',
     commercialUnitPrice: 20000,
     supplierRef: 'Construshop Paraguay / Amanecer Pinturas / Suvinil Center',
     insumosUnitarios: [
-      { product: 'Pintura Acrílica Exterior Impermeabilizante Frente Total (Balde 18L)', brand: 'Suvinil / Amanecer', unit: 'balde 18L', unitPrice: 395000, qtyPerUnit: 0.025 },
-      { product: 'Enduido Plástico Interior + Sellador Fijador Acrílico Concentrado', brand: 'Amanecer / Suvinil', unit: 'balde 18L', unitPrice: 245000, qtyPerUnit: 0.015 },
-      { product: 'Mano de obra lijado, imprimación y 2 manos de pintura', brand: 'Pintor de Obra', unit: 'm²', unitPrice: 6450, qtyPerUnit: 1.0 }
+      { product: 'Pintura Acrílica Exterior/Interior Suvinil / Amanecer Frente Total (Balde 18L)', brand: 'Suvinil / Amanecer', unit: 'balde 18L', unitPrice: 395000, qtyPerUnit: 0.025 },
+      { product: 'Enduido Plástico + Sellador Fijador Acrílico Concentrado (Balde 18L)', brand: 'Amanecer / Suvinil', unit: 'balde 18L', unitPrice: 245000, qtyPerUnit: 0.015 },
+      { product: 'Mano de obra lijado, imprimación y 2 manos de pintura', brand: 'Pintor de Obra', unit: 'jornal/m²', unitPrice: 6450, qtyPerUnit: 1.0 }
     ]
   },
   20: {
@@ -2392,9 +2432,9 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 5400000,
     supplierRef: 'Maderera Asunción / Construshop / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Vigas Madera Dura Lapacho / Ybyraró cepillado 3"×6" impregnado Cetol', brand: 'Maderera Nacional', unit: 'ml', unitPrice: 95000, qtyPerUnit: 22 },
-      { product: 'Placas Policarbonato Alveolar Antigranizo 10mm c/ Perfil H y Cinta Aluminio', brand: 'Makrolon / DVP', unit: 'm²', unitPrice: 135000, qtyPerUnit: 12 },
-      { product: 'Piso Canto Rodado Desactivado / Loseta Colonial Antideslizante en Vereda 9.89×2.00m + Canasto Basurero', brand: 'Pretec / Colonial', unit: 'm²', unitPrice: 85000, qtyPerUnit: 19.8 }
+      { product: 'Vigas Madera Dura Lapacho / Ybyraró cepillado 3"×6" impregnado Cetol', brand: 'Maderera Nacional', unit: 'ml viga', unitPrice: 95000, qtyPerUnit: 22 },
+      { product: 'Placa Policarbonato Alveolar Antigranizo 10mm (2.10×5.80m) c/ Perfil H', brand: 'Makrolon / DVP', unit: 'placa 12m²', unitPrice: 1620000, qtyPerUnit: 1 },
+      { product: 'Baldosón Canto Rodado / Loseta Colonial Antideslizante 40×40cm en Vereda 19.8m² + Basurero', brand: 'Pretec / Colonial', unit: 'caja m²', unitPrice: 85000, qtyPerUnit: 19.8 }
     ]
   },
   21: {
@@ -2403,13 +2443,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'pisos_porcelanato',
     suggestedProduct: 'Porcelanato Satinado Rectificado 60×60cm Eliane/Portobello (Gs. 95.000/m² material + Gs. 55.000/m² colocación c/ argamasa AC-III Votorantim)',
     brand: 'Eliane / Portobello / Argamasa Votorantim AC-III',
-    commercialUnit: 'm² (Cajas 1.44 m² + Bolsa AC-III 20kg)',
+    commercialUnit: 'm² (Caja 1.44 m² + Bolsa AC-III 20kg + Bolsa Pastina)',
     commercialUnitPrice: 180000,
     supplierRef: 'Corporación Mercantil S.A. / Construshop Paraguay',
     insumosUnitarios: [
-      { product: 'Porcelanato Satinado Rectificado 60×60cm Antideslizante R9 (Apto Mascotas Emma)', brand: 'Eliane / Portobello', unit: 'm²', unitPrice: 95000, qtyPerUnit: 1.08 },
-      { product: 'Pegamento Flexible Porcelanato Argamasa AC-III + Pastina Antihongos', brand: 'Votorantim / Weber', unit: 'bolsa 20kg', unitPrice: 48000, qtyPerUnit: 0.35 },
-      { product: 'Mano de obra colocación nivelada con clips autonivelantes y zócalos', brand: 'Colocador Especializado', unit: 'm²', unitPrice: 55000, qtyPerUnit: 1.0 }
+      { product: 'Caja Porcelanato Satinado Rectificado 60×60cm Antideslizante R9 (Caja = 1.44 m² / 4 placas)', brand: 'Eliane / Portobello', unit: 'caja 1.44m²', unitPrice: 136800, qtyPerUnit: 0.75 },
+      { product: 'Pegamento Flexible Porcelanato Argamasa AC-III (Bolsa 20kg)', brand: 'Votorantim / Weber', unit: 'bolsa 20kg', unitPrice: 48000, qtyPerUnit: 0.35 },
+      { product: 'Pastina Flexible Antihongos (Bolsa 2kg) + Clips Niveladores (Bolsa 100un)', brand: 'Weber / Cortag', unit: 'kit junta+clips', unitPrice: 25600, qtyPerUnit: 0.22 },
+      { product: 'Mano de obra colocación nivelada con láser y corte de zócalos', brand: 'Colocador Especializado', unit: 'jornal/m²', unitPrice: 55000, qtyPerUnit: 1.0 }
     ]
   },
   22: {
@@ -2418,13 +2459,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_equipamiento_cocina',
     suggestedProduct: 'Muebles de Cocina Bajo-Mesada, Alacena e Isla en MDF Melamina 18mm Masisa/Faplac Hidrófugo c/ Herrajes Cierre Suave',
     brand: 'Masisa / Faplac Hidrófugo 18mm / Blum-Hafele',
-    commercialUnit: 'gl / ml',
+    commercialUnit: 'gl (Placas MDF 18mm + Bisagras Soft-Close + Correderas)',
     commercialUnitPrice: 17543750,
     supplierRef: 'Tienda Naranja (#235614) / Achon / Carpintería Industrial Asunción',
     insumosUnitarios: [
-      { product: 'Placas MDF Melamina Texturada 18mm Hidrófuga Verde en Bajo-Mesada y Alacena', brand: 'Masisa / Faplac', unit: 'placa', unitPrice: 440000, qtyPerUnit: 16 },
-      { product: 'Bisagras Cierre Suave (Soft-Close), Correderas Telescópicas Pesadas y Pistones a Gas', brand: 'Hafele / Ducasse', unit: 'lote', unitPrice: 2850000, qtyPerUnit: 1 },
-      { product: 'Fabricación a medida e instalación de Bajo-Mesada, Alacenas Superiores e Isla', brand: 'Carpintería Amoblamientos', unit: 'gl', unitPrice: 7653750, qtyPerUnit: 1 }
+      { product: 'Placa MDF Melamina Texturada 18mm Hidrófuga (1.83×2.75m) p/ Bajo-Mesada y Alacena', brand: 'Masisa / Faplac', unit: 'placa 5.03m²', unitPrice: 440000, qtyPerUnit: 16 },
+      { product: 'Bisagra Cazoleta 35mm Cierre Suave (Soft-Close) Acero Inox', brand: 'Hafele / Blum', unit: 'par', unitPrice: 45000, qtyPerUnit: 24 },
+      { product: 'Corredera Telescópica Pesada 50cm Extracción Total + Perfiles Tirador Gola Aluminio', brand: 'Ducasse / Hafele', unit: 'juego cajón', unitPrice: 177000, qtyPerUnit: 10 },
+      { product: 'Fabricación a medida en taller CNC e instalación nivelada de Cocina e Isla', brand: 'Carpintería Amoblamientos', unit: 'gl', unitPrice: 7653750, qtyPerUnit: 1 }
     ]
   },
   23: {
@@ -2433,13 +2475,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'placares_dormitorios_adicional',
     suggestedProduct: 'Placares Piso-Techo en MDF Melamina 18mm Masisa/Faplac c/ Rieles Aluminio, Cajoneras Telescópicas y Herrajes Cierre Suave',
     brand: 'Masisa / Faplac 18mm / Ducasse',
-    commercialUnit: 'un (2 Placares Dormitorios 2do Piso)',
+    commercialUnit: 'un (2 Placares Dormitorios 2do Piso: Vestidor Suite + Dormitorio Sencillo)',
     commercialUnitPrice: 4800000,
     supplierRef: 'Tienda Naranja (Seller #235614) / Carpintería a Medida Asunción',
     insumosUnitarios: [
-      { product: 'Placas MDF Melamina 18mm Roble/Lino + Cantos ABS 2mm', brand: 'Masisa / Faplac', unit: 'placa', unitPrice: 410000, qtyPerUnit: 6.5 },
-      { product: 'Kit Rieles Aluminio Corredizos, Barrales Cromados y Correderas Cierre Suave', brand: 'Ducasse / Hafele', unit: 'kit', unitPrice: 890000, qtyPerUnit: 1 },
-      { product: 'Armado y montaje empotrado en Suite Ruth & Leo y Dormitorio 2', brand: 'Carpintería', unit: 'un', unitPrice: 1245000, qtyPerUnit: 1 }
+      { product: 'Placa MDF Melamina 18mm Roble Dakar / Lino (1.83×2.75m) + Tapacantos ABS 2mm', brand: 'Masisa / Faplac', unit: 'placa 5.03m²', unitPrice: 410000, qtyPerUnit: 6.5 },
+      { product: 'Kit Rieles Aluminio Corredizos Ducasse + Barrales Ovalados Cromados + 4 Cajoneras Telescópicas', brand: 'Ducasse / Hafele', unit: 'kit herrajes', unitPrice: 890000, qtyPerUnit: 1 },
+      { product: 'Armado y montaje piso-techo en Vestidor Suite y Dormitorio 2 (Sencillo)', brand: 'Carpintería a Medida', unit: 'un', unitPrice: 1245000, qtyPerUnit: 1 }
     ]
   },
   24: {
@@ -2448,13 +2490,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'galeria_voladizo_deck',
     suggestedProduct: 'Deck WPC Ecológico Libre Mantenimiento / Madera Dura Lapacho Cepillado Impregnado Cetol Deck + Alfajías PVC/Ybyraró',
     brand: 'Deck WPC / Lapacho Paraguayo / Cetol',
-    commercialUnit: 'm² (33.42 m² en Galería L1 al Río)',
+    commercialUnit: 'm² (Tablas 1"×4" + Lata Cetol 4L + Clips Inox)',
     commercialUnitPrice: 650000,
     supplierRef: 'Maderera Asunción / Construshop / Shopping Británico',
     insumosUnitarios: [
-      { product: 'Tablas Deck WPC / Lapacho Cepillado 1"×4" secado en horno', brand: 'Lapacho / WPC', unit: 'm²', unitPrice: 385000, qtyPerUnit: 1.0 },
-      { product: 'Protector Impregnante Cetol Deck Balance + Fijaciones Inoxidables Ocultas', brand: 'Cetol AkzoNobel', unit: 'lata 4L', unitPrice: 320000, qtyPerUnit: 0.25 },
-      { product: 'Bastidor de alfajías niveladas sobre membrana Losa L1 y mano de obra', brand: 'Carpintería Deck', unit: 'm²', unitPrice: 185000, qtyPerUnit: 1.0 }
+      { product: 'Tabla Deck WPC / Lapacho Cepillado 1"×4" Secado en Horno (Largo 3.00m)', brand: 'Lapacho / WPC', unit: 'tabla 3m', unitPrice: 96250, qtyPerUnit: 4.0 },
+      { product: 'Protector Impregnante Cetol Deck Balance UV (Lata 4 Litros) + Clips Acero Inox', brand: 'Cetol AkzoNobel', unit: 'lata 4L', unitPrice: 320000, qtyPerUnit: 0.25 },
+      { product: 'Alfajías de apoyo Ybyraró 2"×2" + Mano de obra colocación sobre Galería L1', brand: 'Carpintería Deck', unit: 'jornal/m²', unitPrice: 185000, qtyPerUnit: 1.0 }
     ]
   },
   25: {
@@ -2467,24 +2509,25 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 5450000,
     supplierRef: 'Importación Directa Shenzhen (AliExpress/Alibaba) + Protek / Electropar Asunción',
     insumosUnitarios: [
-      { product: 'Central Alarma Híbrida App + 5 Sensores PIR Doble Tecnología Pet-Immune 25kg (Emma y Serafina) + Barrera IR', brand: 'Hikvision AX PRO / Paradox', unit: 'kit', unitPrice: 3800000, qtyPerUnit: 1.0 },
-      { product: 'Kit Domótica China Riel DIN (Medidor Trifásico CT MatSee Plus + Disyuntores Tongou Zigbee 3.0 + Llaves Cristal c/ Neutro)', brand: 'Tongou / MatSee Plus / Sonoff', unit: 'kit', unitPrice: 2365000, qtyPerUnit: 1.0 },
-      { product: 'Sistema 6 Cámaras IP PoE 4MP Visión Nocturna ColorVu + NVR 2TB', brand: 'Hikvision / Dahua', unit: 'kit', unitPrice: 5800000, qtyPerUnit: 1.0 }
+      { product: 'Central Alarma Híbrida App + 5 Sensores PIR Doble Tecnología Pet-Immune 25kg (Emma y Serafina) + Sirena Exterior', brand: 'Hikvision AX PRO / Paradox', unit: 'kit central', unitPrice: 2850000, qtyPerUnit: 1.0 },
+      { product: 'Barrera Infrarroja Perimetral Doble Haz + Batería Gel 12V 7Ah + Comunicador 4G Dual-SIM', brand: 'Paradox / JFL', unit: 'conjunto', unitPrice: 1450000, qtyPerUnit: 1.0 },
+      { product: 'Instalación, programación de zonas Pet-Immune y vinculación con celulares de Ruth y Leo', brand: 'Técnico Seguridad Electrónica', unit: 'gl', unitPrice: 1150000, qtyPerUnit: 1.0 }
     ]
   },
   26: {
     id: 26,
     code: '15.7',
     partidaId: 'cielorraso_acustico_2dopiso',
-    suggestedProduct: 'Aire Acondicionado Split Inverter 12.000/18.000 BTU Carrier/Midea/Goodweather + Cielorraso Acústico Durlock c/ Lana de Vidrio Isover 50mm',
-    brand: 'Carrier / Midea / Goodweather / Durlock / Isover',
-    commercialUnit: 'm² / un',
+    suggestedProduct: 'Placa Roca de Yeso Durlock 12.5mm + Perfilería Galvanizada Barbieri + Lana de Vidrio Isover 50mm c/ Barrera Aluminio en 2do Piso (+102.88m)',
+    brand: 'Durlock / Barbieri / Isover Saint-Gobain',
+    commercialUnit: 'm² (Placa 1.20×2.40m + Rollo Lana Isover + Perfiles)',
     commercialUnitPrice: 155000,
-    supplierRef: 'NGO S.A. / Bristol / González Giménez / Construshop',
+    supplierRef: 'Construshop Paraguay / Seco Center Asunción',
     insumosUnitarios: [
-      { product: 'Aire Acondicionado Split Inverter 12.000 / 18.000 BTU Frío/Calor R410A c/ Kit Cañería Cobre', brand: 'Carrier / Midea / Goodweather', unit: 'un', unitPrice: 3450000, qtyPerUnit: 1.0 },
-      { product: 'Placa Roca de Yeso Durlock 12.5mm + Perfilería Solera/Montante Galvanizada + Lana de Vidrio Isover 50mm', brand: 'Durlock / Isover Saint-Gobain', unit: 'm²', unitPrice: 95000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra montaje acústico con junta tomada en 2do Piso', brand: 'Instalador Seco', unit: 'm²', unitPrice: 60000, qtyPerUnit: 1.0 }
+      { product: 'Placa Roca de Yeso Durlock Estándar 12.5mm (1.20×2.40m = 2.88 m²)', brand: 'Durlock', unit: 'placa 2.88m²', unitPrice: 92000, qtyPerUnit: 0.38 },
+      { product: 'Rollo Aislante Termoacústico Lana de Vidrio Isover 50mm c/ Foil Aluminio (Rollo 14.4 m²)', brand: 'Isover Saint-Gobain', unit: 'rollo 14.4m²', unitPrice: 360000, qtyPerUnit: 0.08 },
+      { product: 'Perfiles Solera 35mm y Montante 34mm Galvanizados Barbieri (Tira 2.60m) + Masilla y Tornillos T1/T2', brand: 'Barbieri / Durlock', unit: 'perfil 2.60m', unitPrice: 23500, qtyPerUnit: 1.33 },
+      { product: 'Mano de obra montaje termoacústico y junta tomada en 2do Piso', brand: 'Instalador Durlock', unit: 'jornal/m²', unitPrice: 60000, qtyPerUnit: 1.0 }
     ]
   },
   27: {
@@ -2493,13 +2536,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'piscina_patio_oficial',
     suggestedProduct: 'Piscina de Hormigón Armado 5.80×2.40m c/ Revestimiento Venecita/Pintura Epoxi + Filtro y Bomba Vulcano 3/4 HP + Solárium Atérmico Travertino',
     brand: 'PROBETI HA-25 / Vulcano / Cerámica Travertino Atérmico',
-    commercialUnit: 'm² (Espejo de agua 5.80×2.40m transversal en fondo)',
+    commercialUnit: 'm² (Bolsas Cemento + Barras ADN 420 + Bomba Vulcano)',
     commercialUnitPrice: 2850000,
     supplierRef: 'Syopar / Piscinas Paraguay / Construshop Asunción',
     insumosUnitarios: [
-      { product: 'Vaso Monolítico Hormigón Armado H25 Impermeable c/ Sika-1 y Doble Malla Acero ADN 420', brand: 'PROBETI / Votorantim / Sika', unit: 'gl', unitPrice: 18500000, qtyPerUnit: 1.0 },
-      { product: 'Filtro Rotomoldeado Vulcano VC-30 + Bomba Autocebante Vulcano 3/4 HP + 2 Luces LED RGB Subacuáticas', brand: 'Vulcano', unit: 'kit', unitPrice: 5400000, qtyPerUnit: 1.0 },
-      { product: 'Revestimiento Interior Venecita / Epoxi + Borde Solárium Atérmico Travertino Antideslizante', brand: 'Eliane / Syopar', unit: 'lote', unitPrice: 8590000, qtyPerUnit: 1.0 }
+      { product: 'Cemento Compuesto CP II-F 32 (95 bolsas) + Hidrófugo Sika-1 + Áridos p/ Vaso H°A° 5.80×2.40m', brand: 'INC Vallemí / Sika', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 95.0 },
+      { product: 'Varilla Acero ADN 420 Ø10mm y Ø8mm Doble Malla (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 68000, qtyPerUnit: 85.0 },
+      { product: 'Filtro Rotomoldeado Vulcano VC-30 + Bomba Autocebante 3/4 HP + Skimmer + 2 Luces LED RGB', brand: 'Vulcano', unit: 'kit filtrado', unitPrice: 5400000, qtyPerUnit: 1.0 },
+      { product: 'Revestimiento Venecita Azul / Pintura Epoxi + Borde Atérmico Travertino + Excavación y Mano de Obra', brand: 'Eliane / Syopar', unit: 'gl', unitPrice: 15420000, qtyPerUnit: 1.0 }
     ]
   },
   28: {
@@ -2508,13 +2552,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'parrilla_ducto',
     suggestedProduct: 'Parrilla de Ladrillo Refractario c/ Campana y Herraje Inox (Emparrillado Levadizo Acero Inoxidable AISI 304 + Ladrillo Refractario 22×11×3cm)',
     brand: 'Refractarios Tobatí/Brasil + Herraje Inox AISI 304',
-    commercialUnit: 'un (Quincho Subsuelo hacia Patio)',
+    commercialUnit: 'un (120 Ladrillos Refractarios + 380 Ladrillos Tobatí + Herraje Inox)',
     commercialUnitPrice: 7500000,
     supplierRef: 'Parrillas Inox Asunción / Materiales Tobatí / Construshop',
     insumosUnitarios: [
-      { product: 'Ladrillo Refractario Alta Temperatura (120 un) + Mortero Refractario', brand: 'Refractarios Mercosur', unit: 'lote', unitPrice: 1950000, qtyPerUnit: 1.0 },
-      { product: 'Herraje Emparrillado en V Acero Inoxidable AISI 304 c/ Manivela Criolla, Grasera y Luz Interior', brand: 'Herrajes Inox PY', unit: 'kit', unitPrice: 2850000, qtyPerUnit: 1.0 },
-      { product: 'Mampostería base Ladrillo Visto Tobatí, Losa de apoyo, Campana y Sombrerete Spiro', brand: 'Maestro Parrillero', unit: 'un', unitPrice: 2700000, qtyPerUnit: 1.0 }
+      { product: 'Ladrillo Refractario Alta Temperatura 22×11×3cm + Bolsa Tierra Refractaria 25kg', brand: 'Refractarios Mercosur', unit: 'un', unitPrice: 16250, qtyPerUnit: 120.0 },
+      { product: 'Herraje Emparrillado en V Acero Inoxidable AISI 304 c/ Manivela Criolla, Grasera y Luz Interior', brand: 'Herrajes Inox PY', unit: 'kit inox', unitPrice: 2850000, qtyPerUnit: 1.0 },
+      { product: 'Ladrillo Visto Tobatí 1ra (380 un) + Cemento Vallemí (6 bolsas) + Ducto Spiro y Mano de Obra', brand: 'Olería Tobatí / Maestro Parrillero', unit: 'gl', unitPrice: 2700000, qtyPerUnit: 1.0 }
     ]
   },
 
@@ -2524,55 +2568,63 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'contencion_cochera',
     suggestedProduct: 'Piedra Bruta de Cantera Emboscada + Ladrillo Macizo Tobatí 1ra + Cemento INC Vallemí CP II-F 32 (Bolsa 50kg: Gs. 62.000) + Varilla ADN 420 Ø12mm',
     brand: 'Cantera Emboscada / INC Vallemí / Votorantim',
-    commercialUnit: 'm² (Bolsa 50kg / Millar Ladrillos)',
+    commercialUnit: 'm² (110 Ladrillos Tobatí + 0.85 Bolsa Cemento + 0.45 Barra Ø12mm)',
     commercialUnitPrice: 273366,
     supplierRef: 'Olería Tobatí Directo (@materialesdec_tobati) / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Ladrillo Común Macizo 1ra Tobatí (5.5×12×25cm)', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 110 },
-      { product: 'Cemento Compuesto Tipo CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.65 },
-      { product: 'Varilla Acero Conformado ADN 420 Ø12mm / Ø6mm', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.35 }
+      { product: 'Ladrillo Común Macizo 1ra Tobatí (5.5×12×25cm, muro 30cm portante)', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 110 },
+      { product: 'Cemento Portland Compuesto Tipo CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.85 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø12mm / Ø8mm p/ Pilaretes', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 0.45 },
+      { product: 'Piedra Bruta de Cantera Emboscada + Arena Lavada', brand: 'Cantera Emboscada', unit: 'tonelada', unitPrice: 135000, qtyPerUnit: 0.35 },
+      { product: 'Mano de obra mampostería de contención y barbacanas Ø50mm', brand: 'Cuadrilla Civil', unit: 'jornal/m²', unitPrice: 72866, qtyPerUnit: 1.0 }
     ]
   },
   viga_fundacion_muro: {
     id: 2,
     partidaId: 'viga_fundacion_muro',
-    suggestedProduct: 'Hormigón Elaborado H25 PROBETI / Pretec (Gs. 890.000/m³) + Varilla Acero Conformado ADN 420 Votorantim / Acepar Ø12mm (Gs. 89.000/barra)',
+    suggestedProduct: 'Cemento INC Vallemí CP II-F 32 (Bolsa 50kg) + Varilla Acero Conformado ADN 420 Votorantim Ø12mm (Barra 12m) + Estribos Ø6mm + Piedra Triturada 4ta',
     brand: 'PROBETI / Votorantim / INC Vallemí',
-    commercialUnit: 'ml (m³ H25 / Barra 12m)',
+    commercialUnit: 'ml (1.35 Bolsa 50kg + 1.15 Barra 12m Ø12mm + Estribos Ø6mm)',
     commercialUnitPrice: 415457,
     supplierRef: 'PROBETI S.R.L. / Aceros Asunción / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Hormigón Elaborado H25', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 0.18 },
-      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm barra 12m', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 1.15 },
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.9 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Viga 25×40cm H25)', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 1.35 },
+      { product: 'Varilla de Acero Conformado ADN 420 Ø12mm (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 1.15 },
+      { product: 'Varilla Acero ADN 420 Ø6mm p/ Estribos c/15cm + Alambre Recocido N°18', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 26500, qtyPerUnit: 0.85 },
+      { product: 'Piedra Triturada Basáltica 4ta + Arena Lavada de Río', brand: 'Cantera Ñemby / Villa Hayes', unit: 'bolsón áridos', unitPrice: 68500, qtyPerUnit: 1.0 },
+      { product: 'Tablas Encofrado + Mano de obra excavación, armado y colado por ml', brand: 'Cuadrilla H°A°', unit: 'jornal/ml', unitPrice: 138382, qtyPerUnit: 1.0 }
     ]
   },
   aislacion_relleno_cochera: {
     id: 1,
     partidaId: 'aislacion_relleno_cochera',
-    suggestedProduct: 'Tierra Roja Seleccionada Compactada por Capas + Hidrófugo Sika-1 / Ceresita + Emulsión Asfáltica Sika Igol Denso + Piedra Bruta Emboscada',
+    suggestedProduct: 'Tierra Roja Seleccionada Compactada (16 Camionadas 6m³) + Piedra Bruta Emboscada + Emulsión Asfáltica Sika Igol Denso (Balde 18L) + Hidrófugo Sika-1',
     brand: 'Sika Paraguay / Cantera Emboscada / Movimiento de Suelo PY',
-    commercialUnit: 'gl (Camionadas 6m³ + Tambor 200L)',
+    commercialUnit: 'gl (16 Camionadas 6m³ Tierra + 6 Baldes 18L Sika Igol)',
     commercialUnitPrice: 14500000,
     supplierRef: 'Construshop Paraguay / Transporte de Áridos Gran Asunción',
     insumosUnitarios: [
-      { product: 'Tierra roja seleccionada compactada con vibroapisonador', brand: 'Cantera Limpio / Emboscada', unit: 'm³', unitPrice: 85000, qtyPerUnit: 95 },
-      { product: 'Piedra Bruta de Cantera Emboscada p/ base drenante', brand: 'Cantera Emboscada', unit: 'm³', unitPrice: 135000, qtyPerUnit: 14 },
-      { product: 'Pintura Asfáltica Sika Igol Denso + Hidrófugo Sika-1', brand: 'Sika', unit: 'balde 18L', unitPrice: 285000, qtyPerUnit: 6 }
+      { product: 'Tierra Roja Seleccionada p/ Relleno Compactado (Camionada Volquete 6m³)', brand: 'Cantera Limpio / Emboscada', unit: 'camionada 6m³', unitPrice: 510000, qtyPerUnit: 16 },
+      { product: 'Piedra Bruta de Cantera Emboscada p/ Base Drenante (Camionada 6m³)', brand: 'Cantera Emboscada', unit: 'camionada 6m³', unitPrice: 810000, qtyPerUnit: 2.5 },
+      { product: 'Pintura Asfáltica Impermeabilizante Sika Igol Denso (Balde 18L)', brand: 'Sika Paraguay', unit: 'balde 18L', unitPrice: 285000, qtyPerUnit: 6 },
+      { product: 'Alquiler Vibroapisonador («Sapito») y Mano de Obra Compactación c/20cm', brand: 'Cuadrilla Movimiento Suelo', unit: 'gl', unitPrice: 2605000, qtyPerUnit: 1 }
     ]
   },
   hormigon_vigas_losa: {
     id: 8,
     partidaId: 'hormigon_vigas_losa',
-    suggestedProduct: 'Hormigón Elaborado H25 PROBETI / Pretec (Gs. 890.000/m³) + Varilla Acero ADN 420 Votorantim / Acepar Ø12mm (Gs. 89.000/barra) + Cemento INC Vallemí',
+    suggestedProduct: 'Cemento INC Vallemí CP II-F 32 (7.5 Bolsas 50kg/m³) + Varilla Acero ADN 420 Votorantim Ø12mm y Ø8mm (Barra 12m) + Fenólico 18mm + Piedra Triturada 4ta',
     brand: 'PROBETI / Pretec / Votorantim / INC Vallemí',
-    commercialUnit: 'm³',
+    commercialUnit: 'm³ (7.5 Bolsas Cemento + 6.5 Barras Ø12mm + 2.2 Barras Ø8mm + Fenólico)',
     commercialUnitPrice: 2200000,
     supplierRef: 'PROBETI S.R.L. / Aceros Asunción / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Hormigón Elaborado H25 bombeado', brand: 'PROBETI / Pretec', unit: 'm³', unitPrice: 890000, qtyPerUnit: 1.0 },
-      { product: 'Varilla Acero Conformado ADN 420 Ø12mm y Estribos Ø6mm', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 6.5 },
-      { product: 'Encofrado fenólico y mano de obra especializada en altura', brand: 'Cuadrilla H°A°', unit: 'm³', unitPrice: 731500, qtyPerUnit: 1.0 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Dosificación HA-25: 7.5 bolsas/m³)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 7.5 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø12mm Longitudinal (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 89000, qtyPerUnit: 6.5 },
+      { product: 'Varilla Acero Conformado ADN 420 Ø8mm / Ø6mm Estribos (Barra 12m)', brand: 'Votorantim / Acepar', unit: 'barra 12m', unitPrice: 44500, qtyPerUnit: 2.2 },
+      { product: 'Piedra Triturada Basáltica 4ta (1.1 tn) + Arena Lavada (0.6 m³) + Alambre Recocido N°18 (2.5 kg)', brand: 'Cantera Ñemby / Votorantim', unit: 'kit áridos/m³', unitPrice: 258600, qtyPerUnit: 1.0 },
+      { product: 'Placa Fenólico 18mm 1.22×2.44m + Puntales y Clavos 2½"', brand: 'Maderera Asunción', unit: 'placa 18mm', unitPrice: 235000, qtyPerUnit: 0.85 },
+      { product: 'Mano de obra carpintería de encofrado, armadura y hormigonado en altura', brand: 'Cuadrilla H°A°', unit: 'jornal/m³', unitPrice: 600250, qtyPerUnit: 1.0 }
     ]
   },
   estructura_metalica_techo: {
@@ -2580,13 +2632,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'estructura_metalica_techo',
     suggestedProduct: 'Correas Perfil C Galvanizado 100×50×15×2mm (Gs. 145.000/barra 6m) + Anclajes Químicos / Mecánicos sobre 14 Pilares (+5.64m)',
     brand: 'Aceros Asunción / Chacomer / Sika AnchorFix',
-    commercialUnit: 'gl (Barras 6m Perfil C Galvanizado)',
+    commercialUnit: 'gl (58 Barras 6m Perfil C Galvanizado + Electrodos + Pintura Epoxi)',
     commercialUnitPrice: 18500000,
     supplierRef: 'Aceros Asunción / Chacomer / Emporio de la Construcción',
     insumosUnitarios: [
       { product: 'Perfil C Galvanizado Estructural 100×50×15×2mm (Barra 6m)', brand: 'Aceros Asunción', unit: 'barra 6m', unitPrice: 145000, qtyPerUnit: 58 },
-      { product: 'Planchuelas de anclaje, electrodos 6013/7018 y pintura epoxi anticorrosiva', brand: 'Conarco / Amanecer', unit: 'lote', unitPrice: 2850000, qtyPerUnit: 1 },
-      { product: 'Mano de obra herrería pesada e izaje a cota +105.64m', brand: 'Taller Herrería', unit: 'gl', unitPrice: 7240000, qtyPerUnit: 1 }
+      { product: 'Planchuelas de Anclaje 1/4" + Electrodos Conarco 6013/7018 (Caja 5kg) + Epoxi Anticorrosivo', brand: 'Conarco / Amanecer', unit: 'kit soldadura', unitPrice: 2850000, qtyPerUnit: 1 },
+      { product: 'Mano de obra herrería pesada, izaje y nivelación a cota +105.64m', brand: 'Taller Herrería', unit: 'gl', unitPrice: 7240000, qtyPerUnit: 1 }
     ]
   },
   desagues_canaletas: {
@@ -2594,13 +2646,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'desagues_canaletas',
     suggestedProduct: 'Canaleta Oculta Chapa Galvanizada N°24 Prepintada + Caños Pluviales PVC Tigre Ø100mm Reforzado hacia Calle Tte. Guillermo Arias',
     brand: 'Ternium Chapa N°24 / Tigre PVC Ø100mm',
-    commercialUnit: 'gl (19.50 ml Canaleta + 4 Bajadas Ø100mm)',
+    commercialUnit: 'gl (20 ml Canaleta N°24 + 18 Tiras 4m PVC Ø100mm)',
     commercialUnitPrice: 7800000,
     supplierRef: 'Zinguería Asunción / Construshop Paraguay (Tigre)',
     insumosUnitarios: [
-      { product: 'Canaleta Oculta Chapa Galvanizada N°24 c/ Babetas y Embaparaguas', brand: 'Ternium / Zinguería', unit: 'ml', unitPrice: 85000, qtyPerUnit: 20 },
-      { product: 'Caño PVC Pluvial Reforzado Ø100mm + Codos y Registros', brand: 'Tigre', unit: 'tira 4m', unitPrice: 92000, qtyPerUnit: 18 },
-      { product: 'Mano de obra zinguería, sellado PU Sikaflex y encauzado a vereda frontal', brand: 'Plomero / Zinguería', unit: 'gl', unitPrice: 4444000, qtyPerUnit: 1 }
+      { product: 'Canaleta Oculta Chapa Galvanizada N°24 Prepintada c/ Babetas y Embudos', brand: 'Ternium / Zinguería', unit: 'ml chapa', unitPrice: 85000, qtyPerUnit: 20 },
+      { product: 'Caño PVC Pluvial Reforzado Ø100mm (Tira 4m) + Codos 90°/45° y Grampas', brand: 'Tigre Paraguay', unit: 'tira 4m', unitPrice: 92000, qtyPerUnit: 18 },
+      { product: 'Sellador Poliuretánico Sikaflex-1A (6 Cartuchos) + 4 Cajas Registro Pluvial 30×30cm', brand: 'Sika / Tigre', unit: 'kit sellado', unitPrice: 890000, qtyPerUnit: 1 },
+      { product: 'Mano de obra zinguería y encauzado pluvial hacia Calle Tte. Guillermo Arias', brand: 'Plomero / Zinguería', unit: 'gl', unitPrice: 3554000, qtyPerUnit: 1 }
     ]
   },
   revoque_exterior_impermeable: {
@@ -2608,13 +2661,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'revoque_exterior_impermeable',
     suggestedProduct: 'Mortero Cemento INC Vallemí CP II-F 32 (Gs. 62.000/bolsa) + Hidrófugo Inorgánico Sika-1 / Ceresita (Gs. 145.000/bidón 20L) + Arena Lavada',
     brand: 'INC Vallemí / Sika-1 / Weber Ceresita',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (0.25 Bolsa Cemento + 0.30 Bolsa Cal + Sika-1)',
     commercialUnitPrice: 65000,
     supplierRef: 'Construshop Paraguay / Emporio de la Construcción',
     insumosUnitarios: [
-      { product: 'Cemento Compuesto CP II-F 32', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.25 },
-      { product: 'Hidrófugo Sika-1 / Ceresita para azotado impermeable', brand: 'Sika / Weber', unit: 'bidón 20L', unitPrice: 145000, qtyPerUnit: 0.05 },
-      { product: 'Arena lavada tamizada + Mano de obra revocado fratasado al fieltro', brand: 'Cuadrilla Albañilería', unit: 'm²', unitPrice: 42250, qtyPerUnit: 1.0 }
+      { product: 'Cemento Portland Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí / Yguazú', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.25 },
+      { product: 'Cal Hidratada de Obra (Bolsa 20kg)', brand: 'Calera Vallemí', unit: 'Bolsa 20kg', unitPrice: 28000, qtyPerUnit: 0.30 },
+      { product: 'Hidrófugo Inorgánico Sika-1 / Ceresita p/ Azotado Impermeable (Bidón 20L)', brand: 'Sika / Weber', unit: 'bidón 20L', unitPrice: 145000, qtyPerUnit: 0.05 },
+      { product: 'Arena Lavada Tamizada + Mano de obra revocado 3 capas al fieltro', brand: 'Cuadrilla Albañilería', unit: 'jornal/m²', unitPrice: 33850, qtyPerUnit: 1.0 }
     ]
   },
   puertas_seguridad_provisoria: {
@@ -2622,13 +2676,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'puertas_seguridad_provisoria',
     suggestedProduct: 'Puerta Exterior Metálica / Madera Maciza Ybyraró + Puerta-Reja Seguridad Escalera Subsuelo Eje 8–9 c/ Cerradura Multianclaje Papaiz/Stam',
     brand: 'Papaiz / Stam / Herrería Seguridad Asunción',
-    commercialUnit: 'gl (3 Accesos Exteriores + Puerta-Reja Subsuelo)',
+    commercialUnit: 'gl (2 Puertas Exteriores + 1 Puerta-Reja Subsuelo)',
     commercialUnitPrice: 8500000,
     supplierRef: 'Ferretería Americana / Taller Herrería Asunción',
     insumosUnitarios: [
-      { product: 'Puerta exterior reforzada + Marco chapa N°16 / Ybyraró c/ Cerradura Multianclaje', brand: 'Papaiz / Stam', unit: 'un', unitPrice: 2450000, qtyPerUnit: 2 },
-      { product: 'Puerta-Reja Seguridad Hierro Macizo en Pie de Escalera 1 Subsuelo (Eje 8–9)', brand: 'Herrería Seguridad', unit: 'un', unitPrice: 2200000, qtyPerUnit: 1 },
-      { product: 'Amurado con concreto, bisagras munición y colocación', brand: 'Herrero / Albañil', unit: 'gl', unitPrice: 1400000, qtyPerUnit: 1 }
+      { product: 'Puerta Exterior Reforzada c/ Marco Chapa N°16 / Ybyraró + Cerradura Multianclaje', brand: 'Papaiz / Stam', unit: 'un', unitPrice: 2450000, qtyPerUnit: 2 },
+      { product: 'Puerta-Reja Seguridad Hierro Macizo Ø16mm en Arranque Escalera 1 Subsuelo (Eje 8–9)', brand: 'Herrería Seguridad', unit: 'un', unitPrice: 2200000, qtyPerUnit: 1 },
+      { product: 'Amurado con concreto, bisagras munición pesadas y pintura anticorrosiva', brand: 'Herrero / Albañil', unit: 'gl', unitPrice: 1400000, qtyPerUnit: 1 }
     ]
   },
   porton_cochera_automatizado: {
@@ -2640,8 +2694,8 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 2650000,
     supplierRef: 'PPA Paraguay / Electropar / Protek',
     insumosUnitarios: [
-      { product: 'Kit Motor Basculante Rápido PPA JetFlex 1/2 HP + Central Triflex + 2 Controles', brand: 'PPA Brasil', unit: 'kit', unitPrice: 2150000, qtyPerUnit: 1.0 },
-      { product: 'Traba Electromagnética PPA Dog Steel + Fotocélula anti-aplastamiento + Instalación', brand: 'PPA', unit: 'cjto', unitPrice: 500000, qtyPerUnit: 1.0 }
+      { product: 'Kit Motor Basculante Rápido PPA JetFlex 1/2 HP + Central Triflex + 2 Controles Remotos', brand: 'PPA Brasil', unit: 'kit motor', unitPrice: 2150000, qtyPerUnit: 1.0 },
+      { product: 'Traba Electromagnética PPA Dog Steel + Fotocélula Anti-Aplastamiento + Instalación', brand: 'PPA Brasil', unit: 'conjunto', unitPrice: 500000, qtyPerUnit: 1.0 }
     ]
   },
   cocina_mesada_bacha_esencial: {
@@ -2653,22 +2707,22 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 4850000,
     supplierRef: 'Marmolería Asunción / Corporación Mercantil / Tienda Naranja',
     insumosUnitarios: [
-      { product: 'Mesada Granito Natural Negro San Gabriel 2.40×0.62m c/ zócalo y trasfaro', brand: 'Marmolería San Gabriel', unit: 'gl', unitPrice: 2450000, qtyPerUnit: 1.0 },
-      { product: 'Bacha Doble Acero Inox AISI 304 + Grifería Monocomando Alta Cocina', brand: 'Tramontina / FV-Docol', unit: 'cjto', unitPrice: 1450000, qtyPerUnit: 1.0 },
-      { product: 'Nicho exterior ventilado GLP + Cañería Cobre/Sigas y conexión sifónica', brand: 'Sigas / Tigre', unit: 'gl', unitPrice: 950000, qtyPerUnit: 1.0 }
+      { product: 'Mesada Granito Natural Negro San Gabriel 2.40×0.62m c/ Zócalo y Trasfaro perforado', brand: 'Marmolería San Gabriel', unit: 'pieza 2.40m', unitPrice: 2450000, qtyPerUnit: 1.0 },
+      { product: 'Bacha Doble Acero Inoxidable AISI 304 Profunda + Sopapas Cesto + Grifería Monocomando Alta', brand: 'Tramontina / FV-Docol', unit: 'juego bacha+grifo', unitPrice: 1450000, qtyPerUnit: 1.0 },
+      { product: 'Nicho Exterior Ventilado GLP + Cañería Cobre/Sigas Termofusión + Sifón Doble Tigre', brand: 'Sigas / Tigre', unit: 'kit conexión', unitPrice: 950000, qtyPerUnit: 1.0 }
     ]
   },
   lavadero_habitable: {
     id: 16,
     partidaId: 'lavadero_habitable',
-    suggestedProduct: 'Pileta de Lavar Loza/Granito Deca/Tramontina + Grifería Pared FV + Conexiones PPR/PVC Tigre p/ Lavarropas en Pared Izquierda Subsuelo',
+    suggestedProduct: 'Pileta de Lavar Loza/Granito Deca/Tramontina + Grifería Pared FV + Conexiones PPR/PVC Tigre p/ Lavarropas en Pared Este Subsuelo',
     brand: 'Deca / Tramontina / FV / Tigre',
     commercialUnit: 'gl',
     commercialUnitPrice: 2837500,
     supplierRef: 'Corporación Mercantil / Construshop Paraguay',
     insumosUnitarios: [
-      { product: 'Pileta de Lavar Fregadero Profundo + Sifón y Grifería Metálica', brand: 'Deca / FV', unit: 'cjto', unitPrice: 1250000, qtyPerUnit: 1.0 },
-      { product: 'Conexión Agua Fría PPR Ø20mm + Desagüe PVC Ø50mm + Toma 20A IP55 p/ Lavarropas', brand: 'Tigre / Schneider', unit: 'gl', unitPrice: 1587500, qtyPerUnit: 1.0 }
+      { product: 'Pileta de Lavar Fregadero Profundo c/ Fregadero + Sifón y Grifería Metálica FV', brand: 'Deca / FV', unit: 'juego pileta', unitPrice: 1250000, qtyPerUnit: 1.0 },
+      { product: 'Tubo PPR Ø20mm Agua Fría + Desagüe PVC Ø50mm + Llave Lavarropas + Toma 20A IP55', brand: 'Tigre / Schneider', unit: 'kit instalación', unitPrice: 1587500, qtyPerUnit: 1.0 }
     ]
   },
   hidro_muro_vertical: {
@@ -2676,13 +2730,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'hidro_muro_vertical',
     suggestedProduct: 'Hidrófugo Inorgánico Sika-1 / Ceresita (Bidón 20L: Gs. 145.000) + Emulsión Asfáltica Sika Igol Denso / Megafalto en Trasdós Muro Contención',
     brand: 'Sika Paraguay (Sika-1 + Igol Denso) / Weber Ceresita',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Bidón 20L Sika-1 + Balde 18L Sika Igol Denso)',
     commercialUnitPrice: 48000,
     supplierRef: 'Construshop Paraguay / Centro Sika Asunción',
     insumosUnitarios: [
-      { product: 'Hidrófugo Sika-1 / Ceresita en mortero 1:3', brand: 'Sika / Weber', unit: 'bidón 20L', unitPrice: 145000, qtyPerUnit: 0.08 },
-      { product: 'Pintura Asfáltica Impermeabilizante Sika Igol Denso (Balde 18L)', brand: 'Sika', unit: 'balde 18L', unitPrice: 285000, qtyPerUnit: 0.06 },
-      { product: 'Mano de obra azotado hidrófugo y 2 manos cruzadas de betún asfáltico', brand: 'Albañil Impermeabilizador', unit: 'm²', unitPrice: 19300, qtyPerUnit: 1.0 }
+      { product: 'Hidrófugo Inorgánico Sika-1 / Ceresita en Mortero 1:3 (Bidón 20L)', brand: 'Sika / Weber', unit: 'bidón 20L', unitPrice: 145000, qtyPerUnit: 0.08 },
+      { product: 'Pintura Asfáltica Impermeabilizante Sika Igol Denso (Balde 18L)', brand: 'Sika Paraguay', unit: 'balde 18L', unitPrice: 285000, qtyPerUnit: 0.06 },
+      { product: 'Mano de obra azotado hidrófugo y 2 manos cruzadas de betún asfáltico', brand: 'Albañil Impermeabilizador', unit: 'jornal/m²', unitPrice: 19300, qtyPerUnit: 1.0 }
     ]
   },
   hidro_drenaje_frances: {
@@ -2690,13 +2744,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'hidro_drenaje_frances',
     suggestedProduct: 'Tubo Corrugado Perforado PVC Drenaje Ø100mm Tigre + Manta Geotextil NT 200g/m² Bidim + Grava Lavada Piedra Triturada 4ta',
     brand: 'Tigre / Mexichem Bidim / Cantera Ñemby',
-    commercialUnit: 'ml',
+    commercialUnit: 'ml (Tubo Ø100mm + Manta Geotextil Bidim + Piedra 4ta)',
     commercialUnitPrice: 165000,
     supplierRef: 'Construshop Paraguay / Geosistemas Asunción',
     insumosUnitarios: [
-      { product: 'Tubo Corrugado Ranurado Drenaje Ø100mm', brand: 'Tigre', unit: 'ml', unitPrice: 48000, qtyPerUnit: 1.0 },
-      { product: 'Manta Geotextil No Tejida Bidim 200 g/m² + Grava filtrante', brand: 'Bidim / Cantera', unit: 'ml', unitPrice: 62000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra zanjeo, pendiente y empalme pluvial', brand: 'Cuadrilla Sanitaria', unit: 'ml', unitPrice: 55000, qtyPerUnit: 1.0 }
+      { product: 'Tubo Corrugado Ranurado Drenaje PVC Ø100mm (Rollo / Tira)', brand: 'Tigre Paraguay', unit: 'ml tubo', unitPrice: 48000, qtyPerUnit: 1.0 },
+      { product: 'Manta Geotextil No Tejida Bidim NT 200 g/m² + Piedra Triturada 4ta Lavada', brand: 'Bidim / Cantera Ñemby', unit: 'kit filtro/ml', unitPrice: 62000, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra zanjeo con pendiente 2%, envuelta geotextil y conexión pluvial', brand: 'Cuadrilla Sanitaria', unit: 'jornal/ml', unitPrice: 55000, qtyPerUnit: 1.0 }
     ]
   },
   hidro_capa_horizontal: {
@@ -2704,12 +2758,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'hidro_capa_horizontal',
     suggestedProduct: 'Doble Cajón Hidrófugo con Sika-1 / Ceresita + Pintura Asfáltica Sika Igol + Film Polietileno en Arranque de Mampostería Tobatí',
     brand: 'Sika Paraguay / INC Vallemí',
-    commercialUnit: 'ml',
+    commercialUnit: 'ml (Cemento + Sika-1 + Pintura Asfáltica Igol)',
     commercialUnitPrice: 55000,
     supplierRef: 'Construshop Paraguay',
     insumosUnitarios: [
-      { product: 'Mortero impermeable 1:3 c/ Sika-1 + Pintura Asfáltica Igol', brand: 'Sika / INC Vallemí', unit: 'ml', unitPrice: 31000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra nivelación láser de cajón hidrófugo doble', brand: 'Albañil', unit: 'ml', unitPrice: 24000, qtyPerUnit: 1.0 }
+      { product: 'Cemento Compuesto CP II-F 32 + Hidrófugo Sika-1 + Pintura Asfáltica Igol', brand: 'Sika / INC Vallemí', unit: 'kit cajón/ml', unitPrice: 31000, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra nivelación láser de cajón hidrófugo doble en arranque de muros', brand: 'Albañil', unit: 'jornal/ml', unitPrice: 24000, qtyPerUnit: 1.0 }
     ]
   },
   hidro_membrana_terraza: {
@@ -2717,13 +2771,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'hidro_membrana_terraza',
     suggestedProduct: 'Membrana Cementicia Flexible SikaTop-107 Seal + Membrana Líquida Poliuretánica SikaFill / Suvinil + Sellador PU Sikaflex-1A en Galería L1',
     brand: 'Sika Paraguay (SikaTop-107 / SikaFill / Sikaflex-1A)',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Caja 25kg SikaTop-107 + Cartucho 300ml Sikaflex)',
     commercialUnitPrice: 110000,
     supplierRef: 'Construshop Paraguay / Centro Sika Asunción',
     insumosUnitarios: [
-      { product: 'Membrana Cementicia SikaTop-107 Seal (Caja 25kg)', brand: 'Sika', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 0.22 },
-      { product: 'Sellador Poliuretánico Sikaflex-1A en babetas y juntas', brand: 'Sika', unit: 'cartucho 300ml', unitPrice: 78000, qtyPerUnit: 0.25 },
-      { product: 'Mano de obra aplicación en 3 manos cruzadas con velo geotextil', brand: 'Impermeabilizador', unit: 'm²', unitPrice: 36600, qtyPerUnit: 1.0 }
+      { product: 'Membrana Cementicia SikaTop-107 Seal (Caja 25kg)', brand: 'Sika Paraguay', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 0.22 },
+      { product: 'Sellador Poliuretánico Sikaflex-1A en babetas y juntas (Cartucho 300ml)', brand: 'Sika Paraguay', unit: 'cartucho 300ml', unitPrice: 78000, qtyPerUnit: 0.25 },
+      { product: 'Mano de obra aplicación en 3 manos cruzadas con velo geotextil', brand: 'Impermeabilizador', unit: 'jornal/m²', unitPrice: 36600, qtyPerUnit: 1.0 }
     ]
   },
   hidro_barrera_vapor: {
@@ -2731,12 +2785,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'hidro_barrera_vapor',
     suggestedProduct: 'Film Polietileno Negro Virgen 200 Micrones + Cinta Asfáltica Sika MultiSeal + Lecherada de Cemento INC Vallemí en Subsuelo',
     brand: 'Plásticos Paraguay 200μ / Sika / INC Vallemí',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Rollo Film 200μ + Bolsa Cemento Vallemí)',
     commercialUnitPrice: 12500,
     supplierRef: 'Construshop / Ferretería Americana',
     insumosUnitarios: [
-      { product: 'Film Polietileno Negro 200 Micrones c/ solape 20cm', brand: 'Plásticos PY', unit: 'm²', unitPrice: 7500, qtyPerUnit: 1.15 },
-      { product: 'Tendido y sellado de solapes bajo contrapiso/lecherada Subsuelo', brand: 'Albañil', unit: 'm²', unitPrice: 3875, qtyPerUnit: 1.0 }
+      { product: 'Film Polietileno Negro Virgen 200 Micrones c/ solape 20cm (Rollo 4×50m)', brand: 'Plásticos PY', unit: 'm² film', unitPrice: 7500, qtyPerUnit: 1.15 },
+      { product: 'Tendido y sellado de solapes bajo contrapiso/lecherada Subsuelo', brand: 'Albañil', unit: 'jornal/m²', unitPrice: 3875, qtyPerUnit: 1.0 }
     ]
   },
   debil_cableado_cat6: {
@@ -2748,9 +2802,9 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 185000,
     supplierRef: 'Electropar S.A. / PS Line / Compulandia (Asunción)',
     insumosUnitarios: [
-      { product: 'Cable UTP Cat6 100% Cobre Puro (Bobina 305m)', brand: 'Furukawa / Hikvision', unit: 'ml', unitPrice: 6500, qtyPerUnit: 14 },
-      { product: 'Bastidor + Módulo Jack RJ45 Cat6 + Caño Corrugado', brand: 'Schneider / Tigre', unit: 'un', unitPrice: 48000, qtyPerUnit: 1 },
-      { product: 'Tendido, grimpeado y certificación de boca de red', brand: 'Técnico Redes', unit: 'boca', unitPrice: 46000, qtyPerUnit: 1 }
+      { product: 'Cable UTP Cat6 100% Cobre Puro (Bobina 305m)', brand: 'Furukawa / Hikvision', unit: 'ml cable', unitPrice: 6500, qtyPerUnit: 14 },
+      { product: 'Bastidor + Módulo Jack RJ45 Cat6 + Caño Corrugado Ø3/4"', brand: 'Schneider / Tigre', unit: 'juego boca', unitPrice: 48000, qtyPerUnit: 1 },
+      { product: 'Tendido por PASE #2, grimpeado y certificación Gigabit de boca de red', brand: 'Técnico Redes', unit: 'boca', unitPrice: 46000, qtyPerUnit: 1 }
     ]
   },
   debil_cctv_ip: {
@@ -2758,13 +2812,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'debil_cctv_ip',
     suggestedProduct: 'Kit 6 Cámaras IP PoE Hikvision/Dahua 4MP ColorVu Metálicas IP67 + NVR 8 Canales PoE + Disco WD Purple 2TB Surveillance',
     brand: 'Hikvision / Dahua / Western Digital Purple',
-    commercialUnit: 'kit instalado',
+    commercialUnit: 'kit instalado (6 Cámaras IP PoE + NVR 8ch + Disco 2TB)',
     commercialUnitPrice: 5800000,
     supplierRef: 'Electropar / Microcom / Tecnoga (Asunción)',
     insumosUnitarios: [
       { product: 'Cámara Bullet/Domo IP PoE 4MP ColorVu Audio Integrado IP67', brand: 'Hikvision / Dahua', unit: 'un', unitPrice: 485000, qtyPerUnit: 6 },
-      { product: 'Grabador NVR 8 Canales PoE Integrado + Disco Duro WD Purple 2TB', brand: 'Hikvision / WD Purple', unit: 'cjto', unitPrice: 1890000, qtyPerUnit: 1 },
-      { product: 'Instalación, conectores RJ45 blindados y configuración App', brand: 'Instalador CCTV', unit: 'gl', unitPrice: 1000000, qtyPerUnit: 1 }
+      { product: 'Grabador NVR 8 Canales PoE Integrado + Disco Duro WD Purple 2TB', brand: 'Hikvision / WD Purple', unit: 'conjunto NVR', unitPrice: 1890000, qtyPerUnit: 1 },
+      { product: 'Instalación, fichas RJ45 blindadas, cajas estancas y configuración App', brand: 'Instalador CCTV', unit: 'gl', unitPrice: 1000000, qtyPerUnit: 1 }
     ]
   },
   debil_portero_visor: {
@@ -2789,7 +2843,7 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 1850000,
     supplierRef: 'Nissei Asunción / Compulandia / Tienda Naranja',
     insumosUnitarios: [
-      { product: 'Sistema Mesh Wi-Fi 6 AX3000 Dual-Band Gigabit (Pack × 3 unidades)', brand: 'TP-Link Deco / Xiaomi', unit: 'pack 3', unitPrice: 1650000, qtyPerUnit: 1 },
+      { product: 'Sistema Mesh Wi-Fi 6 AX3000 Dual-Band Gigabit (Pack × 3 unidades)', brand: 'TP-Link Deco / Xiaomi', unit: 'pack 3 nodos', unitPrice: 1650000, qtyPerUnit: 1 },
       { product: 'Configuración de Roaming Continuo y VLAN IoT Domótica', brand: 'Técnico Redes', unit: 'gl', unitPrice: 200000, qtyPerUnit: 1 }
     ]
   },
@@ -2811,12 +2865,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'forense_aislacion_medianera_eje9',
     suggestedProduct: 'Mortero Cristalizante SikaTop-107 Seal / Xypex + Revoque Hidrófugo Sika-1 + Pintura Poliuretánica en Medianera Izquierda Eje 9 (41.21 m²)',
     brand: 'Sika Paraguay (SikaTop-107 + Sika-1) / INC Vallemí',
-    commercialUnit: 'gl (41.21 m² Submuración Hidrófuga Eje 9)',
+    commercialUnit: 'gl (8 Cajas 25kg SikaTop-107 + 15 Bolsas Cemento + Sika-1)',
     commercialUnitPrice: 6850000,
     supplierRef: 'Construshop Paraguay / Centro Sika Asunción',
     insumosUnitarios: [
-      { product: 'Membrana Cementicia SikaTop-107 Seal (Caja 25kg)', brand: 'Sika', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 8 },
-      { product: 'Cemento Compuesto CP II-F 32 + Hidrófugo Sika-1', brand: 'INC Vallemí / Sika', unit: 'lote', unitPrice: 1465000, qtyPerUnit: 1 },
+      { product: 'Membrana Cementicia SikaTop-107 Seal (Caja 25kg)', brand: 'Sika Paraguay', unit: 'caja 25kg', unitPrice: 245000, qtyPerUnit: 8 },
+      { product: 'Cemento Compuesto CP II-F 32 (15 bolsas 50kg) + Hidrófugo Sika-1 (3 bidones 20L)', brand: 'INC Vallemí / Sika', unit: 'Bolsa 50kg + Sika', unitPrice: 97667, qtyPerUnit: 15 },
       { product: 'Mano de obra sellado de filtraciones, azotado y canaleta de pie en Eje 9', brand: 'Albañil Especializado', unit: 'gl', unitPrice: 3425000, qtyPerUnit: 1 }
     ]
   },
@@ -2825,13 +2879,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'forense_cloaca_subsuelo_bombeo',
     suggestedProduct: 'Cámara Séptica Prefabricada/Mampostería 1.500L + Pozo Absorbente Calzado en Ladrillo Común Tobatí Ø1.80×3.50m + Caño Camisa PVC Tigre Ø100mm p/ Camión Cisterna',
     brand: 'Olería Tobatí 1ra / Tigre PVC / INC Vallemí',
-    commercialUnit: 'gl (Sin Motor Eléctrico — Autónomo por Gravedad)',
+    commercialUnit: 'gl (1.200 Ladrillos Tobatí + Cámara 1.500L + Tubos Ø100mm)',
     commercialUnitPrice: 6800000,
     supplierRef: 'Materiales Tobatí (@materialesdec_tobati) / Construshop Paraguay',
     insumosUnitarios: [
       { product: 'Ladrillo Común Macizo 1ra Calidad Tobatí p/ bóveda cribada de pozo ciego', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 1200 },
-      { product: 'Cámara Séptica Impermeable 1.500L + Tubos PVC Reforzado Ø100mm y Acople Camión Cisterna', brand: 'Tigre / Sika', unit: 'lote', unitPrice: 3240000, qtyPerUnit: 1 },
-      { product: 'Mano de obra excavación manual Ø1.80×3.50m, calzado y tapa H°A° en Ejes 8–9', brand: 'Cuadrilla Pocero/Albañil', unit: 'gl', unitPrice: 2900000, qtyPerUnit: 1 }
+      { product: 'Cámara Séptica Impermeable 1.500L + Cámara Desengrasadora + 8 Tiras PVC Ø100mm y Acople Cisterna', brand: 'Tigre / Sika', unit: 'conjunto sanitario', unitPrice: 3240000, qtyPerUnit: 1 },
+      { product: 'Mano de obra excavación manual Ø1.80×3.50m, calzado y tapa H°A° en Patio Trasero', brand: 'Cuadrilla Pocero/Albañil', unit: 'gl', unitPrice: 2900000, qtyPerUnit: 1 }
     ]
   },
   edifica_caminero_vehicular: {
@@ -2839,12 +2893,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_caminero_vehicular',
     suggestedProduct: 'Hormigón Armado H25 c/ Malla SIMA Ø6mm 15×15cm + Terminación Canto Rodado / Piedra Laja Antideslizante en Huellas Cochera (21 m²)',
     brand: 'PROBETI / Votorantim / Cantera Emboscada',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (0.90 Bolsa Cemento + Malla SIMA Ø6mm + Canto Rodado)',
     commercialUnitPrice: 200714,
     supplierRef: 'Emporio de la Construcción / Construshop Paraguay',
     insumosUnitarios: [
-      { product: 'Cemento Compuesto CP II-F 32 + Malla SIMA Ø6mm + Canto Rodado', brand: 'INC Vallemí / Votorantim', unit: 'm²', unitPrice: 120428, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra nivelación de huellas para SUV Chery Tiggo 2 Pro', brand: 'Cuadrilla Albañilería', unit: 'm²', unitPrice: 80286, qtyPerUnit: 1.0 }
+      { product: 'Cemento Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.90 },
+      { product: 'Malla Electrosoldada SIMA Ø6mm 15×15cm + Piedra Laja / Canto Rodado', brand: 'Votorantim / Cantera', unit: 'm² malla+piedra', unitPrice: 64628, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra nivelación de huellas para SUV Chery Tiggo 2 Pro', brand: 'Cuadrilla Albañilería', unit: 'jornal/m²', unitPrice: 80286, qtyPerUnit: 1.0 }
     ]
   },
   edifica_caminero_peatonal: {
@@ -2852,12 +2907,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_caminero_peatonal',
     suggestedProduct: 'Loseta atérmica / Piedra Laja Paraguaya sobre Contrapiso de Hormigón c/ Junta Tomada (7.50 m²)',
     brand: 'Cantera Paraguaya / INC Vallemí',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Piedra Laja + 0.45 Bolsa Cemento)',
     commercialUnitPrice: 175000,
     supplierRef: 'Emporio de la Construcción / Piedras Paraguay',
     insumosUnitarios: [
-      { product: 'Piedra Laja / Loseta Colonial Antideslizante + Mortero de asiento', brand: 'Cantera Nacional / INC Vallemí', unit: 'm²', unitPrice: 98000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra colocación en caminero peatonal hacia Eje G', brand: 'Albañil', unit: 'm²', unitPrice: 77000, qtyPerUnit: 1.0 }
+      { product: 'Piedra Laja / Loseta Colonial Antideslizante Seleccionada', brand: 'Cantera Nacional', unit: 'm² piedra', unitPrice: 70100, qtyPerUnit: 1.0 },
+      { product: 'Cemento Compuesto CP II-F 32 (Bolsa 50kg) + Arena Lavada', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.45 },
+      { product: 'Mano de obra colocación en caminero peatonal hacia Eje G', brand: 'Albañil', unit: 'jornal/m²', unitPrice: 77000, qtyPerUnit: 1.0 }
     ]
   },
   sobreelevacion_muralla_lateral_3x2: {
@@ -2865,13 +2921,14 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'sobreelevacion_muralla_lateral_3x2',
     suggestedProduct: 'Ladrillo Común Macizo Tobatí 1ra (350 un) + Cemento INC Vallemí CP II-F 32 + Varilla Acero ADN 420 Votorantim Ø8mm en Pilarete y Viga Cadena (6.00 m²)',
     brand: 'Olería Tobatí / INC Vallemí / Votorantim',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (58 Ladrillos Tobatí + 0.65 Bolsa Cemento + 0.85 Barra Ø8mm)',
     commercialUnitPrice: 225000,
     supplierRef: 'Materiales Tobatí / Emporio de la Construcción',
     insumosUnitarios: [
       { product: 'Ladrillo Común Macizo 1ra Calidad Tobatí', brand: 'Olería Tobatí', unit: 'un', unitPrice: 550, qtyPerUnit: 58 },
-      { product: 'Cemento Vallemí CP II-F 32 + Varilla ADN 420 Ø8mm + Arena', brand: 'INC Vallemí / Votorantim', unit: 'm²', unitPrice: 98100, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra elevación de muralla lateral antirrobo y revocado', brand: 'Albañil', unit: 'm²', unitPrice: 95000, qtyPerUnit: 1.0 }
+      { product: 'Cemento Compuesto CP II-F 32 (Bolsa 50kg)', brand: 'INC Vallemí', unit: 'Bolsa 50kg', unitPrice: 62000, qtyPerUnit: 0.65 },
+      { product: 'Varilla Acero ADN 420 Ø8mm (Barra 12m) + Arena Lavada', brand: 'Votorantim', unit: 'barra 12m', unitPrice: 57800, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra elevación de muralla lateral antirrobo y revocado', brand: 'Albañil', unit: 'jornal/m²', unitPrice: 95000, qtyPerUnit: 1.0 }
     ]
   },
   edifica_muralla_frontal: {
@@ -2883,7 +2940,8 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 556117,
     supplierRef: 'Preexistente en Lote (Verificado en Obra)',
     insumosUnitarios: [
-      { product: 'Mampostería y cimiento muralla frontal (Preexistente en obra)', brand: 'Obra Existente', unit: 'ml', unitPrice: 556117, qtyPerUnit: 1.0 }
+      { product: 'Ladrillo Macizo Tobatí 1ra + Cemento Vallemí en muralla frontal (Preexistente)', brand: 'Olería Tobatí / INC Vallemí', unit: 'ml materiales', unitPrice: 344793, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra de mampostería y pilaretes H°A° (Preexistente)', brand: 'Obra Existente', unit: 'jornal/ml', unitPrice: 211324, qtyPerUnit: 1.0 }
     ]
   },
   edifica_cielorraso_estar: {
@@ -2891,12 +2949,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'edifica_cielorraso_estar',
     suggestedProduct: 'Cielorraso Junta Tomada Placa Roca de Yeso Durlock 12.5mm + Perfilería Galvanizada Barbieri + Garganta Perimetral LED Cálida 3000K',
     brand: 'Durlock / Barbieri / Iluminación LED Philips-Macroled',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Placa Durlock 2.88m² + Perfiles 2.60m + Masilla)',
     commercialUnitPrice: 156250,
     supplierRef: 'Construshop Paraguay / Luminotecnia',
     insumosUnitarios: [
-      { product: 'Placa Durlock 12.5mm + Perfiles Solera/Montante Galvanizados + Masilla y Cinta', brand: 'Durlock / Barbieri', unit: 'm²', unitPrice: 90625, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra montaje nivelado y garganta difusora en Estar-Comedor', brand: 'Instalador Durlock', unit: 'm²', unitPrice: 65625, qtyPerUnit: 1.0 }
+      { product: 'Placa Roca de Yeso Durlock 12.5mm (1.20×2.40m = 2.88 m²)', brand: 'Durlock', unit: 'placa 2.88m²', unitPrice: 92000, qtyPerUnit: 0.38 },
+      { product: 'Perfiles Solera y Montante Galvanizados Barbieri (Tira 2.60m) + Masilla y Cinta', brand: 'Barbieri / Durlock', unit: 'perfil 2.60m', unitPrice: 27832, qtyPerUnit: 2.0 },
+      { product: 'Mano de obra montaje nivelado y garganta difusora en Estar-Comedor', brand: 'Instalador Durlock', unit: 'jornal/m²', unitPrice: 65625, qtyPerUnit: 1.0 }
     ]
   },
   puertas_acceso_principal_servicio: {
@@ -2917,13 +2976,13 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'blindex_habitaciones',
     suggestedProduct: 'Vidrio Templado Blindex 10mm Incoloro/Gris Control Solar + Perfilería Aluminio Negro Línea Pesada Módena/Aluar c/ Rodamientos Dobles (Suite, Dorm. 2 y Escritorio al Río)',
     brand: 'Blindex / VASA / Aluar Línea Módena Negra',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Paño Blindex 10mm + Perfil Aluminio 6m + Rodamientos)',
     commercialUnitPrice: 690000,
     supplierRef: 'Cristalería Asunción / Glasstec Paraguay / Vilux',
     insumosUnitarios: [
-      { product: 'Puerta-Ventana Corrediza Vidrio Templado Blindex 10mm Certificado', brand: 'Blindex / VASA', unit: 'm²', unitPrice: 420000, qtyPerUnit: 1.0 },
-      { product: 'Perfilería Aluminio Negro Línea Pesada + Rieles + Cierres Bate-Fecha', brand: 'Aluar / Módena', unit: 'm²', unitPrice: 165000, qtyPerUnit: 1.0 },
-      { product: 'Montaje en 2do Piso (+102.88m) sobre Eje B y Eje A (Escritorio)', brand: 'Cristalería', unit: 'm²', unitPrice: 105000, qtyPerUnit: 1.0 }
+      { product: 'Puerta-Ventana Corrediza Vidrio Templado Blindex 10mm Certificado', brand: 'Blindex / VASA', unit: 'm² vidrio', unitPrice: 420000, qtyPerUnit: 1.0 },
+      { product: 'Perfilería Aluminio Negro Línea Pesada (Barra 6m) + Rieles + Cierres Bate-Fecha', brand: 'Aluar / Módena', unit: 'barra 6m', unitPrice: 330000, qtyPerUnit: 0.5 },
+      { product: 'Montaje en 2do Piso (+102.88m) sobre Eje B y Eje A (Escritorio)', brand: 'Cristalería', unit: 'jornal/m²', unitPrice: 105000, qtyPerUnit: 1.0 }
     ]
   },
   rejas_balcones_seguridad: {
@@ -2931,12 +2990,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'rejas_balcones_seguridad',
     suggestedProduct: 'Barandas Metálicas Tubo Estructural 40×40×2mm y Planchuela Maciza Galvanizada Pintada al Horno Negro Mate + Rejas Laterales Foso Frontal',
     brand: 'Aceros Asunción / Pintura Epoxi Electrostática',
-    commercialUnit: 'ml (19.50 ml en Terraza PA y Foso Frontal)',
+    commercialUnit: 'ml (Barra 6m Tubo 40×40mm + Planchuela + Pintura Epoxi)',
     commercialUnitPrice: 620000,
     supplierRef: 'Aceros Asunción / Taller Herrería Arquitectónica',
     insumosUnitarios: [
-      { product: 'Tubo estructural 40×40×2mm + Planchuelas verticales c/ separación <=10cm (Seguridad Mascotas)', brand: 'Aceros Asunción', unit: 'ml', unitPrice: 409200, qtyPerUnit: 1.0 },
-      { product: 'Soldadura MIG, tratamiento anticorrosivo y amurado químico en borde de losa', brand: 'Maestro Herrero', unit: 'ml', unitPrice: 210800, qtyPerUnit: 1.0 }
+      { product: 'Tubo Estructural 40×40×2mm (Barra 6m) + Planchuelas Verticales c/ separación <=10cm (Mascotas)', brand: 'Aceros Asunción', unit: 'barra 6m', unitPrice: 204600, qtyPerUnit: 2.0 },
+      { product: 'Soldadura MIG, tratamiento anticorrosivo y amurado químico en borde de losa', brand: 'Maestro Herrero', unit: 'jornal/ml', unitPrice: 210800, qtyPerUnit: 1.0 }
     ]
   },
   jardin_cesped_patio: {
@@ -2944,12 +3003,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'jardin_cesped_patio',
     suggestedProduct: 'Panes de Césped Esmeralda Seleccionado + Tierra Negra Abonada Vegetal (Espesor 10cm) en Patio Inferior (+96.20m, 115 m²)',
     brand: 'Vivero Asunción / Césped Esmeralda Premium',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Panes Césped Esmeralda + Tierra Negra Abonada)',
     commercialUnitPrice: 58000,
     supplierRef: 'Viveros Ruta Luque-San Bernardino / Agroshopping Asunción',
     insumosUnitarios: [
-      { product: 'Césped Esmeralda en panes tupidos + Tierra negra abonada', brand: 'Vivero Nacional', unit: 'm²', unitPrice: 34000, qtyPerUnit: 1.0 },
-      { product: 'Nivelación de talud, compactación suave y plantación', brand: 'Paisajista / Jardinero', unit: 'm²', unitPrice: 24000, qtyPerUnit: 1.0 }
+      { product: 'Césped Esmeralda en Panes Tupidos (1 m² = 4 panes de 50×50cm) + Tierra Negra Abonada', brand: 'Vivero Nacional', unit: 'm² panes', unitPrice: 34000, qtyPerUnit: 1.0 },
+      { product: 'Nivelación de talud, compactación suave y plantación', brand: 'Paisajista / Jardinero', unit: 'jornal/m²', unitPrice: 24000, qtyPerUnit: 1.0 }
     ]
   },
   quincho_patio_subsuelo: {
@@ -2957,12 +3016,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'quincho_patio_subsuelo',
     suggestedProduct: 'Solado Porcelanato Rústico Antideslizante 60×60 + Mesada Granito c/ Bacha Inox Tramontina y Grifería FV en Expansión Subsuelo al Patio (24 m²)',
     brand: 'Eliane Exterior / Tramontina / FV / INC Vallemí',
-    commercialUnit: 'm²',
+    commercialUnit: 'm² (Caja Porcelanato Rústico + Bolsa Cemento + Mesada)',
     commercialUnitPrice: 680000,
     supplierRef: 'Corporación Mercantil / Marmolería Asunción',
     insumosUnitarios: [
-      { product: 'Piso Cerámico/Porcelanato Antideslizante Exterior + Contrapiso H° y Mesada de Apoyo', brand: 'Eliane / Tramontina / FV', unit: 'm²', unitPrice: 408000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra albañilería, plomería e iluminación cálida de quincho inferior', brand: 'Cuadrilla Integral', unit: 'm²', unitPrice: 272000, qtyPerUnit: 1.0 }
+      { product: 'Caja Porcelanato Antideslizante Exterior R11 (1.44 m²) + Argamasa AC-III + Parte proporcional Mesada', brand: 'Eliane / Tramontina / FV', unit: 'caja+insumos/m²', unitPrice: 408000, qtyPerUnit: 1.0 },
+      { product: 'Mano de obra albañilería, plomería e iluminación cálida de quincho inferior', brand: 'Cuadrilla Integral', unit: 'jornal/m²', unitPrice: 272000, qtyPerUnit: 1.0 }
     ]
   },
   biblioteca_4_estantes_2m: {
@@ -2970,12 +3029,12 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     partidaId: 'biblioteca_4_estantes_2m',
     suggestedProduct: 'Tablas Madera Dura Lapacho Cepillado / MDF Melamina 25mm Masisa (4 Estantes × 2.00m = 8.00 ml) + Ménsulas Invisibles Acero Macizo',
     brand: 'Maderera Lapacho / Masisa 25mm / Hafele',
-    commercialUnit: 'un (8.00 ml instalados)',
+    commercialUnit: 'un (4 Tablones 2.00m + 12 Ménsulas Invisibles Acero)',
     commercialUnitPrice: 3200000,
     supplierRef: 'Tienda Naranja (#235614) / Maderera Asunción',
     insumosUnitarios: [
-      { product: '4 Tablones de 2.00m × 0.30m en Madera Lapacho / Melamina 25mm', brand: 'Masisa / Maderera Nacional', unit: 'estante 2m', unitPrice: 575000, qtyPerUnit: 4.0 },
-      { product: 'Soportes ocultos de acero macizo + Fijación química e instalación nivelada', brand: 'Hafele / Carpintero', unit: 'gl', unitPrice: 900000, qtyPerUnit: 1.0 }
+      { product: 'Tablón de 2.00m × 0.30m en Madera Lapacho Cepillado / Melamina 25mm', brand: 'Masisa / Maderera Nacional', unit: 'estante 2m', unitPrice: 575000, qtyPerUnit: 4.0 },
+      { product: 'Soportes Ocultos de Acero Macizo (12 un) + Fijación Química e Instalación Nivelada', brand: 'Hafele / Carpintero', unit: 'kit 12 soportes', unitPrice: 900000, qtyPerUnit: 1.0 }
     ]
   },
   supervision_direccion_tecnica_banco: {
@@ -2987,7 +3046,8 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 18500000,
     supplierRef: 'Gestión Supervisada Directa con Arquitecto Director de Obra',
     insumosUnitarios: [
-      { product: 'Visitas técnicas semanales de control de plomo, dosificación H°A° e impermeabilización', brand: 'Dirección de Obra', unit: 'hito', unitPrice: 3700000, qtyPerUnit: 5.0 }
+      { product: 'Visitas técnicas semanales de control de plomo, dosificación H°A° e impermeabilización', brand: 'Dirección de Obra CAP/MOPC', unit: 'hito certificado', unitPrice: 2900000, qtyPerUnit: 5.0 },
+      { product: 'Elaboración de 5 Certificados de Avance de Obra para Desembolso Bancario BNF', brand: 'Arquitecto Matriculado', unit: 'certificado BNF', unitPrice: 800000, qtyPerUnit: 5.0 }
     ]
   },
   limpieza_volquetes_contingencia_obra: {
@@ -2999,8 +3059,8 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     commercialUnitPrice: 4500000,
     supplierRef: 'Volquetes Asunción / Servicios Logísticos Gran Asunción',
     insumosUnitarios: [
-      { product: 'Alquiler y retiro de contenedor volquete de 5m³ para escombros', brand: 'Volquetes Asunción', unit: 'servicio', unitPrice: 420000, qtyPerUnit: 6.0 },
-      { product: 'Limpieza final fina de obra (vidrios Blindex, porcelanato y sanitarios) p/ mudanza', brand: 'Cuadrilla Limpieza', unit: 'gl', unitPrice: 1980000, qtyPerUnit: 1.0 }
+      { product: 'Alquiler y retiro de contenedor volquete de 5m³ para escombros', brand: 'Volquetes Asunción', unit: 'volquete 5m³', unitPrice: 420000, qtyPerUnit: 6.0 },
+      { product: 'Limpieza final fina de obra (vidrios Blindex, porcelanato y sanitarios) p/ mudanza', brand: 'Cuadrilla Limpieza', unit: 'servicio final', unitPrice: 1980000, qtyPerUnit: 1.0 }
     ]
   },
   DEFAULT_FALLBACK: {
@@ -3014,10 +3074,45 @@ export const CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY = {
     supplierRef: 'Construshop Paraguay / Corporación Mercantil / Emporio de la Construcción (Asunción)',
     insumosUnitarios: [
       { product: 'Insumo principal de obra (Calidad 1ra Norma INTN)', brand: 'Vallemí / Sika / Tigre', unit: 'un', unitPrice: 93000, qtyPerUnit: 1.0 },
-      { product: 'Mano de obra calificada certificada en Asunción', brand: 'Cuadrilla Especializada', unit: 'un', unitPrice: 57000, qtyPerUnit: 1.0 }
+      { product: 'Mano de obra calificada certificada en Asunción', brand: 'Cuadrilla Especializada', unit: 'jornal', unitPrice: 57000, qtyPerUnit: 1.0 }
     ]
   }
 };
+
+// Normalizador de cada insumo unitario para que todas las vistas (Simulador, Drawer, Exportador)
+// dispongan siempre de product/insumo/nombre, brand/marca, unit/unidad, unitPrice/unitPriceGs/precioUnitarioGs (> 0) y qtyPerUnit/cantidad
+const normalizeUnitBreakdownItem = (ins) => {
+  const prodName = ins.product || ins.insumo || ins.nombre || ins.item || 'Producto Comercial';
+  const brandName = ins.brand || ins.marca || 'Marca Certificada INTN';
+  const unitName = ins.unit || ins.unidad || 'un';
+  const uPrice = Number(ins.unitPrice ?? ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
+  const qPerUnit = Number(ins.qtyPerUnit ?? ins.cantidad ?? 1);
+  const subUnitGs = Math.round(qPerUnit * uPrice);
+  return {
+    ...ins,
+    product: prodName,
+    insumo: prodName,
+    nombre: prodName,
+    item: prodName,
+    brand: brandName,
+    marca: brandName,
+    unit: unitName,
+    unidad: unitName,
+    unitPrice: uPrice,
+    unitPriceGs: uPrice,
+    precioUnitarioGs: uPrice,
+    qtyPerUnit: qPerUnit,
+    cantidad: qPerUnit,
+    subtotalUnitarioGs: subUnitGs
+  };
+};
+
+Object.values(CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY).forEach((entry) => {
+  if (entry && Array.isArray(entry.insumosUnitarios)) {
+    entry.insumosUnitarios = entry.insumosUnitarios.map(normalizeUnitBreakdownItem);
+    entry.unitBreakdown = entry.insumosUnitarios;
+  }
+});
 
 // Enriquecer cada partida de PRESUPUESTO_PARTIDAS con suggestedProduct, commercialUnit, commercialUnitPrice, supplierRef y unitBreakdown
 const PARTIDA_ID_TO_CATALOG_NUM = {
@@ -3094,9 +3189,10 @@ PRESUPUESTO_PARTIDAS.forEach((partida) => {
   partida.commercialUnit = specificEntry.commercialUnit || partida.unidad || 'un';
   partida.commercialUnitPrice = Number(specificEntry.commercialUnitPrice || partida.precioUnitarioGs || 0);
   partida.supplierRef = specificEntry.supplierRef || primaryNumericEntry.supplierRef;
-  partida.insumosUnitarios = Array.isArray(specificEntry.insumosUnitarios)
+  const rawInsumos = Array.isArray(specificEntry.insumosUnitarios)
     ? specificEntry.insumosUnitarios
     : primaryNumericEntry.insumosUnitarios;
+  partida.insumosUnitarios = (rawInsumos || []).map(normalizeUnitBreakdownItem);
   partida.unitBreakdown = partida.insumosUnitarios;
 });
 

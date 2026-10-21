@@ -11,13 +11,15 @@ import {
   ITEMS_CREDITO_350M,
   ITEMS_CREDITO_440M,
   CATALOGO_PRODUCTOS_SUGERIDOS_PARAGUAY,
-  GALLERY_ZONES_DATA
+  GALLERY_ZONES_DATA,
+  ARCHITECTURAL_ROOMS
 } from '../src/data/projectData.js';
 
 import {
   ITEM_STATUS,
   USER_ROLES_CATALOG,
   buildMetricCalculationBreakdown,
+  computeCommercialProductBreakdownForPartida,
   filterMetricRows,
   cycleRoofStyle,
   normalizePluvialSimulationMode,
@@ -406,6 +408,99 @@ test('13. Inverted Losa 1 Fix: Losa Maciza L4 is on +X (Ejes 1-5 around Escalera
   assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.minZ, 3.00);
   assert.equal(FIXED_STRUCTURAL_GRID.voidLosa1HoyEnObra.maxZ, 9.94);
 });
+
+test('14. Product-by-Product Desglose Unitario: Every partida has non-zero unitPriceGs, per-unit cost, and commercial shopping quantities (bolsas, barras, unidades, cajas)', () => {
+  const breakdown = buildMetricCalculationBreakdown('escenario350');
+  assert.ok(breakdown.allRows.length >= 45, 'Must have all budget rows');
+
+  for (const row of breakdown.allRows) {
+    if (row.id.startsWith('PROPIO-')) continue;
+    const products = computeCommercialProductBreakdownForPartida(row);
+    assert.ok(products.length >= 2, `Row ${row.id} (${row.item}) must have at least 2 commercial breakdown components`);
+
+    for (const prod of products) {
+      assert.ok(prod.product && prod.product.length > 2, `Component in ${row.id} must have a product name`);
+      assert.ok(Number(prod.unitPriceGs) > 0, `Component "${prod.product}" in ${row.id} must have unitPriceGs > 0 (got ${prod.unitPriceGs})`);
+      assert.ok(Number(prod.qtyPerUnit) > 0, `Component "${prod.product}" in ${row.id} must have qtyPerUnit > 0`);
+      assert.ok(Number(prod.costPerUnitGs) > 0, `Component "${prod.product}" in ${row.id} must have costPerUnitGs > 0`);
+      assert.ok(Number(prod.commercialUnitsToBuy) > 0, `Component "${prod.product}" in ${row.id} must have commercialUnitsToBuy > 0`);
+      assert.ok(Number(prod.totalCommercialCostGs) > 0, `Component "${prod.product}" in ${row.id} must have totalCommercialCostGs > 0`);
+    }
+  }
+
+  // Specifically verify contencion_cochera breaks down into bags of cement (Bolsa 50kg), 12m steel rebars (barra 12m), and Tobatí bricks (un)
+  const muroContencion = PRESUPUESTO_PARTIDAS.find((p) => p.id === 'contencion_cochera');
+  const muroBreakdown = computeCommercialProductBreakdownForPartida(muroContencion);
+  assert.ok(
+    muroBreakdown.some((b) => /Bolsa 50kg/i.test(b.unit) && b.commercialUnitsToBuy >= 20),
+    'Muro de contención must break down into commercial 50kg cement bags to buy'
+  );
+  assert.ok(
+    muroBreakdown.some((b) => /barra 12m/i.test(b.unit) && b.commercialUnitsToBuy >= 10),
+    'Muro de contención must break down into commercial 12m steel rebar bars to buy'
+  );
+  assert.ok(
+    muroBreakdown.some((b) => /Tobatí/i.test(b.product) && b.commercialUnitsToBuy >= 2000),
+    'Muro de contención must break down into commercial Tobatí brick units to buy'
+  );
+});
+
+test('15. Second Floor (Planta Alta +2.88m): Explicitly models 2 Bedrooms (Dormitorio 1 Sencillo + Dormitorio 2 En Suite with Vestidor & Baño) and Sector Escritorio', async () => {
+  const { ROOM_CAMERA_PRESETS } = await import('../src/archVizInterior.js');
+  const { PLAN_PRESETS } = await import('../src/floorplanEditor.js');
+
+  assert.ok(ROOM_CAMERA_PRESETS.dormitorio_sencillo, 'ROOM_CAMERA_PRESETS must include dormitorio_sencillo');
+  assert.ok(ROOM_CAMERA_PRESETS.dormitorio_suite, 'ROOM_CAMERA_PRESETS must include dormitorio_suite');
+  assert.ok(ROOM_CAMERA_PRESETS.planta_alta, 'ROOM_CAMERA_PRESETS must include planta_alta (Sector Escritorio)');
+
+  const paRooms2D = PLAN_PRESETS.cierre_300m.levels.planta_alta.rooms;
+  const fullRoomLabel = (r) => `${r.shortTitle || ''} ${r.subTitle || ''} ${r.name || ''}`;
+  const hasDorm1Sencillo = paRooms2D.some((r) => /DORMITORIO 1 \(SENCILLO\)|Dormitorio 1 — Sencillo/i.test(fullRoomLabel(r)));
+  const hasDorm2Suite = paRooms2D.some((r) => /DORMITORIO 2 \(EN SUITE\)|Dormitorio 2 — Principal en Suite/i.test(fullRoomLabel(r)));
+  const hasVestidor = paRooms2D.some((r) => /VESTIDOR EN SUITE/i.test(fullRoomLabel(r)));
+  const hasEscritorio = paRooms2D.some((r) => /ESCRITORIO/i.test(fullRoomLabel(r)));
+
+  assert.equal(hasDorm1Sencillo, true, '2D Planta Alta must include DORMITORIO 1 (SENCILLO)');
+  assert.equal(hasDorm2Suite, true, '2D Planta Alta must include DORMITORIO 2 (EN SUITE)');
+  assert.equal(hasVestidor, true, '2D Planta Alta must include VESTIDOR EN SUITE');
+  assert.equal(hasEscritorio, true, '2D Planta Alta must include SECTOR ESCRITORIO');
+
+  const paArchRooms = ARCHITECTURAL_ROOMS.filter((r) => r.level.includes('Planta Alta'));
+  assert.ok(paArchRooms.some((r) => /Dormitorio 1/i.test(r.name)), 'ARCHITECTURAL_ROOMS must list Dormitorio 1 (Sencillo)');
+  assert.ok(paArchRooms.some((r) => /Dormitorio 2/i.test(r.name)), 'ARCHITECTURAL_ROOMS must list Dormitorio 2 (En Suite)');
+});
+
+test('16. Layer Isolation Selector (Only Pipes / No House) & Hide Underground Elements Toggle', async () => {
+  const fs = await import('node:fs');
+  const sceneCode = fs.readFileSync(new URL('../src/scene.js', import.meta.url), 'utf8');
+  const htmlCode = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+
+  assert.ok(sceneCode.includes('setLayerIsolationPreset('), 'scene.js must implement setLayerIsolationPreset');
+  assert.ok(sceneCode.includes("mode === 'only_pipes'"), 'scene.js must support only_pipes isolation mode');
+  assert.ok(sceneCode.includes("mode === 'only_electric'"), 'scene.js must support only_electric isolation mode');
+  assert.ok(sceneCode.includes("mode === 'only_all_mep'"), 'scene.js must support only_all_mep isolation mode');
+  assert.ok(sceneCode.includes('setHideUnderground('), 'scene.js must implement setHideUnderground');
+  assert.ok(sceneCode.includes('this.undergroundGroup'), 'scene.js must group underground foundations in this.undergroundGroup');
+
+  assert.ok(htmlCode.includes('id="select-layer-isolation"'), 'index.html must include #select-layer-isolation');
+  assert.ok(htmlCode.includes('id="btn-hide-underground"'), 'index.html must include #btn-hide-underground');
+  assert.ok(htmlCode.includes('id="layer-hide-underground"'), 'index.html must include #layer-hide-underground');
+});
+
+test('17. Authentic 3D Climbing Vine Geometry & Universal Window Maximize/Minimize Controls', async () => {
+  const fs = await import('node:fs');
+  const archCode = fs.readFileSync(new URL('../src/archVizInterior.js', import.meta.url), 'utf8');
+  const htmlCode = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+
+  assert.ok(
+    archCode.includes('CatmullRomCurve3') && archCode.includes('TubeGeometry') && archCode.includes('leafShape'),
+    'archVizInterior.js must build organic 3D climbing vine stems with CatmullRomCurve3 + TubeGeometry and pointed leaf blades'
+  );
+  assert.ok(htmlCode.includes('data-win-maximize="computo-drawer"'), 'index.html must include maximize control for computo-drawer');
+  assert.ok(htmlCode.includes('data-win-maximize="modal-editor-2d"'), 'index.html must include maximize control for modal-editor-2d');
+  assert.ok(htmlCode.includes('id="minimized-windows-bar"'), 'index.html must include #minimized-windows-bar');
+});
+
 
 
 

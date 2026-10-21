@@ -856,6 +856,13 @@ export class ProjectScene {
       roughness: 0.4
     });
 
+    // Subgrupo exclusivo para todo lo que está BAJO TIERRA (debajo del piso del Subsuelo Y = -2.34m):
+    // 14 Zapatas Z1..Z20, 5 Vigas de Fundación VC.T-1 y fustes enterrados de pilares (-4.09m a -2.34m)
+    this.undergroundGroup = new THREE.Group();
+    this.undergroundGroup.name = 'UndergroundFoundationsGroup';
+    this.undergroundGroup.visible = !this.hideUnderground;
+    this.groups.structure.add(this.undergroundGroup);
+
     // 1. 14 Zapatas de H°A° (Aisladas y Combinadas) en Cota Y = -4.64m
     const footingBaseY = -4.64;
     const footingH = 0.55;
@@ -881,13 +888,14 @@ export class ProjectScene {
 
       const metaFoot = {
         type: 'structure',
+        isUnderground: true,
         name: isCombined
           ? `Zapata Combinada ${col.zapataId} — Pilares ${memberLabels}`
           : `Zapata Aislada ${col.zapataId} — Pilar ${col.pilarId} (Eje ${col.axisLabel})`,
-        dimensions: `${col.zapW.toFixed(2)}m × ${col.zapD.toFixed(2)}m × ${footingH.toFixed(2)}m (Cota -4.64m)`,
-        status: 'Ejecutado 100% (H°A° HA-25)',
+        dimensions: `${col.zapW.toFixed(2)}m × ${col.zapD.toFixed(2)}m × ${footingH.toFixed(2)}m (Cota -4.64m • Bajo Tierra)`,
+        status: 'Ejecutado 100% Bajo Tierra (H°A° HA-25) ⛏️',
         costo: isCombined ? 'Gs. 6.850.000 (Ejecutado)' : 'Gs. 3.450.000 (Ejecutado)',
-        desc: `Fundación directa sobre arenisca densa (GEO-STAN #2956). Soporta ${memberLabels}.`
+        desc: `Fundación directa bajo tierra sobre arenisca densa (GEO-STAN #2956). Soporta ${memberLabels}.`
       };
       baseMesh.userData = metaFoot;
       fGroup.add(baseMesh);
@@ -898,10 +906,10 @@ export class ProjectScene {
       trunkMesh.userData = metaFoot;
       fGroup.add(trunkMesh);
 
-      this.groups.structure.add(fGroup);
+      this.undergroundGroup.add(fGroup);
     });
 
-    // 2. Vigas de Fundación VC.T-1 (40×50cm) y Vigas Pórticos de Subsuelo (Y = -2.34m)
+    // 2. Vigas de Fundación VC.T-1 (40×50cm) bajo tierra (-3.95m)
     const addTieBeam = (x1, z1, x2, z2, yLevel, w, h, name, desc) => {
       const len = Math.hypot(x2 - x1, z2 - z1);
       if (len < 0.1) return;
@@ -913,12 +921,13 @@ export class ProjectScene {
       mesh.receiveShadow = true;
       mesh.userData = {
         type: 'structure',
+        isUnderground: true,
         name,
-        dimensions: `Sección ${(w * 100).toFixed(0)}×${(h * 100).toFixed(0)}cm • L=${len.toFixed(2)}m`,
-        status: 'Ejecutado 100% 🔒',
+        dimensions: `Sección ${(w * 100).toFixed(0)}×${(h * 100).toFixed(0)}cm • L=${len.toFixed(2)}m (Bajo Tierra)`,
+        status: 'Ejecutado 100% Bajo Tierra 🔒',
         desc
       };
-      this.groups.structure.add(mesh);
+      this.undergroundGroup.add(mesh);
     };
 
     addTieBeam(-4.87, 3.00, 4.87, 3.00, -3.95, 0.40, 0.50, 'Viga de Fundación VC.T-1 (Eje G • z=3.00m)', 'Viga de equilibrio y arriostramiento de zapatas frontales (40×50cm).');
@@ -1003,7 +1012,7 @@ export class ProjectScene {
 
     this.groups.structure.add(encofradoGroup);
 
-    // 3. 20 Pilares Reales (`P1..P20`) con coordenadas exactas
+    // 3. 20 Pilares Reales (`P1..P20`) con coordenadas exactas (divididos en Fuste Enterrado <-2.34m y Fuste Visible en Subsuelo >=-2.34m)
     const rebarOffsets = [
       [-0.045, -0.08],
       [0.045, -0.08],
@@ -1014,12 +1023,31 @@ export class ProjectScene {
     FIXED_COLUMNS_AND_FOOTINGS.forEach((col) => {
       const isEjeA = Math.abs(col.z - 13.34) < 0.08;
       const topFase1Y = isEjeA ? -0.45 : 0.00;
-      const shaftBottomY = footingBaseY + footingH;
-      const shaftH1 = topFase1Y - shaftBottomY;
+      const shaftBottomY = footingBaseY + footingH; // -4.09m
 
-      const colGeo1 = new THREE.BoxGeometry(col.colW, shaftH1, col.colD);
+      // 3a) Tramo enterrado bajo el suelo del Subsuelo (de -4.09m a -2.34m) -> va a this.undergroundGroup
+      const buriedH = Math.max(0.1, subsueloY - shaftBottomY);
+      const colBuriedMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(col.colW, buriedH, col.colD),
+        concreteFootMat
+      );
+      colBuriedMesh.position.set(col.x, shaftBottomY + buriedH / 2, col.z);
+      colBuriedMesh.userData = {
+        type: 'structure',
+        isUnderground: true,
+        name: `Fuste de Fundación Enterrado — Pilar ${col.pilarId} (Eje ${col.axisLabel})`,
+        dimensions: `Sección ${(col.colW * 100).toFixed(0)}×${(col.colD * 100).toFixed(0)}cm • De -4.09m a -2.34m (Bajo Tierra)`,
+        status: 'Enterrado Bajo Nivel Subsuelo ⛏️',
+        costo: 'Ejecutado en Obra',
+        desc: `Fuste enterrado del pilar ${col.pilarId} entre la zapata ${col.zapataId} (-4.09m) y el nivel de piso del subsuelo (-2.34m).`
+      };
+      this.undergroundGroup.add(colBuriedMesh);
+
+      // 3b) Tramo visible en Subsuelo (de -2.34m a 0.00m / -0.45m) -> va a this.groups.structure
+      const subShaftH = Math.max(0.1, topFase1Y - subsueloY);
+      const colGeo1 = new THREE.BoxGeometry(col.colW, subShaftH, col.colD);
       const colMesh1 = new THREE.Mesh(colGeo1, concreteColMat);
-      colMesh1.position.set(col.x, shaftBottomY + shaftH1 / 2, col.z);
+      colMesh1.position.set(col.x, subsueloY + subShaftH / 2, col.z);
       colMesh1.castShadow = true;
       colMesh1.receiveShadow = true;
       colMesh1.userData = {
@@ -2034,6 +2062,10 @@ export class ProjectScene {
 
     this.renderer.clippingPlanes = [];
 
+    if (this.layerIsolationPreset && this.layerIsolationPreset !== 'all' && this.layerIsolationPreset !== 'pipes_ghost') {
+      return;
+    }
+
     this.groups.roof.visible = this.layers.techo && this.roofStyle !== 'off' && this.currentScenario !== 'hoy_en_obra';
     this.groups.losaFase2.visible = this.layers.losaFase2 && this.currentScenario !== 'hoy_en_obra';
     this.groups.losaFase1.visible = this.layers.structure;
@@ -2042,10 +2074,56 @@ export class ProjectScene {
 
     this.groups.archMain.traverse((ch) => {
       if (ch !== this.groups.archMain) ch.visible = true;
+      if (ch.isMesh && ch.userData && ch.userData._origPosY !== undefined) {
+        ch.scale.y = 1.0;
+        ch.position.y = ch.userData._origPosY;
+      }
     });
 
     if (cleanMode === 'cut_roof') {
       this.groups.roof.visible = false;
+      // En vista Planta Alta sin techo (cut_roof), rebajamos los tabiques divisorios interiores
+      // del 2do piso a media altura (Dollhouse 36%) y ocultamos dinteles superiores para que
+      // ambos dormitorios (Dormitorio 1 Sencillo y Dormitorio 2 en Suite + Vestidor) y el
+      // Sector Escritorio se vean 100% despejados sin oclusión.
+      this.groups.archMain.traverse((ch) => {
+        if (!ch.isMesh || !ch.position) return;
+        let isPA = ch.position.y >= 2.80;
+        let p = ch.parent;
+        while (p && p !== this.groups.archMain) {
+          if (p.position && p.position.y >= 2.80) {
+            isPA = true;
+            break;
+          }
+          p = p.parent;
+        }
+        if (!isPA) return;
+
+        const nm = String(ch.userData?.name || ch.name || '');
+        if (nm.includes('Dintel')) {
+          ch.visible = false;
+          return;
+        }
+        const isInteriorPartition =
+          nm.includes('Tabique') ||
+          nm.includes('Muro Interior') ||
+          nm.includes('Muro Norte Pasillo') ||
+          nm.includes('Muro Sur Pasillo') ||
+          nm.includes('Mocheta') ||
+          nm.includes('Muro Oeste de SSHH 2') ||
+          nm.includes('Muro Lateral Este del Cuadrado de Escritorio') ||
+          nm.includes('Divisor Baños');
+        if (isInteriorPartition && ch.geometry && ch.geometry.parameters && ch.geometry.parameters.height) {
+          if (ch.userData._origPosY === undefined) {
+            ch.userData._origPosY = ch.position.y;
+            ch.userData._origHeight = ch.geometry.parameters.height;
+          }
+          const cutScale = 0.36;
+          const baseOffset = ch.userData._origPosY - ch.userData._origHeight / 2;
+          ch.scale.y = cutScale;
+          ch.position.y = baseOffset + (ch.userData._origHeight * cutScale) / 2;
+        }
+      });
     } else if (cleanMode === 'cut_pa') {
       this.groups.roof.visible = false;
       this.groups.losaFase2.visible = false;
@@ -2070,6 +2148,147 @@ export class ProjectScene {
     this.setFloorCutaway(mode);
   }
 
+  /**
+   * Oculta o muestra todo lo que está bajo tierra (Zapatas Z1..Z20, Vigas de Fundación VC.T-1,
+   * fustes enterrados bajo el nivel de Subsuelo -2.34m y sondeos geotécnicos SPT).
+   */
+  setHideUnderground(hide = true) {
+    this.hideUnderground = Boolean(hide);
+    if (this.undergroundGroup) {
+      this.undergroundGroup.visible = !this.hideUnderground;
+    }
+    if (this.groups.geotech) {
+      this.groups.geotech.visible = this.hideUnderground ? false : Boolean(this.layers.geotech);
+    }
+    const chk = document.getElementById('layer-hide-underground');
+    if (chk) chk.checked = this.hideUnderground;
+    const btn = document.getElementById('btn-hide-underground');
+    if (btn) {
+      btn.classList.toggle('active', this.hideUnderground);
+      btn.setAttribute('aria-pressed', String(this.hideUnderground));
+    }
+    return this.hideUnderground;
+  }
+
+  /**
+   * Selector Maestro de Aislamiento de Capas (Permite ver SOLO las cañerías sin la casa,
+   * SOLO la red eléctrica sin la casa, todas las instalaciones sin la casa, o la casa completa).
+   */
+  setLayerIsolationPreset(preset = 'all') {
+    const mode = String(preset || 'all').trim();
+    this.layerIsolationPreset = mode;
+
+    const isHabitable = this.currentScenario !== 'hoy_en_obra';
+
+    if (mode === 'only_pipes') {
+      this.setArchitectureGhostMode(false);
+      this.groups.structure.visible = false;
+      this.groups.losaFase1.visible = false;
+      this.groups.losaFase2.visible = false;
+      this.groups.muroEstacionamiento.visible = false;
+      this.groups.archMain.visible = false;
+      this.groups.archSubsuelo.visible = false;
+      this.groups.roof.visible = false;
+      this.groups.urbanContext.visible = false;
+      this.groups.topography.visible = false;
+      this.groups.geotech.visible = false;
+      this.groups.weakSignals.visible = false;
+      this.groups.ductosYEnchufes.visible = true;
+      this.groups.pluvialHydro.visible = true;
+      this.setMepDisciplineFilter('plomero');
+    } else if (mode === 'only_electric') {
+      this.setArchitectureGhostMode(false);
+      this.groups.structure.visible = false;
+      this.groups.losaFase1.visible = false;
+      this.groups.losaFase2.visible = false;
+      this.groups.muroEstacionamiento.visible = false;
+      this.groups.archMain.visible = false;
+      this.groups.archSubsuelo.visible = false;
+      this.groups.roof.visible = false;
+      this.groups.urbanContext.visible = false;
+      this.groups.topography.visible = false;
+      this.groups.geotech.visible = false;
+      this.groups.pluvialHydro.visible = false;
+      this.groups.ductosYEnchufes.visible = true;
+      this.groups.weakSignals.visible = true;
+      this.setMepDisciplineFilter('electricista');
+    } else if (mode === 'only_all_mep') {
+      this.setArchitectureGhostMode(false);
+      this.groups.structure.visible = false;
+      this.groups.losaFase1.visible = false;
+      this.groups.losaFase2.visible = false;
+      this.groups.muroEstacionamiento.visible = false;
+      this.groups.archMain.visible = false;
+      this.groups.archSubsuelo.visible = false;
+      this.groups.roof.visible = false;
+      this.groups.urbanContext.visible = false;
+      this.groups.topography.visible = false;
+      this.groups.geotech.visible = false;
+      this.groups.ductosYEnchufes.visible = true;
+      this.groups.pluvialHydro.visible = true;
+      this.groups.weakSignals.visible = true;
+      this.setMepDisciplineFilter('all');
+    } else if (mode === 'pipes_ghost') {
+      this.groups.structure.visible = true;
+      this.groups.losaFase1.visible = true;
+      this.groups.losaFase2.visible = isHabitable;
+      this.groups.muroEstacionamiento.visible = false;
+      this.groups.archMain.visible = isHabitable;
+      this.groups.archSubsuelo.visible = isHabitable;
+      this.groups.roof.visible = false;
+      this.groups.urbanContext.visible = false;
+      this.groups.topography.visible = false;
+      this.groups.geotech.visible = false;
+      this.groups.weakSignals.visible = false;
+      this.groups.ductosYEnchufes.visible = true;
+      this.groups.pluvialHydro.visible = true;
+      this.setMepDisciplineFilter('plomero');
+      this.setArchitectureGhostMode(true, 0.18);
+    } else if (mode === 'structure_only') {
+      this.setArchitectureGhostMode(false);
+      this.groups.structure.visible = true;
+      this.groups.losaFase1.visible = true;
+      this.groups.losaFase2.visible = isHabitable;
+      this.groups.muroEstacionamiento.visible = Boolean(this.layers.muroEstacionamiento && isHabitable);
+      this.groups.archMain.visible = false;
+      this.groups.archSubsuelo.visible = false;
+      this.groups.roof.visible = false;
+      this.groups.ductosYEnchufes.visible = false;
+      this.groups.pluvialHydro.visible = false;
+      this.groups.weakSignals.visible = false;
+      this.groups.urbanContext.visible = Boolean(this.layers.entornoUrbano);
+      this.groups.topography.visible = Boolean(this.layers.topography);
+      this.groups.geotech.visible = this.hideUnderground ? false : Boolean(this.layers.geotech);
+    } else {
+      // 'all' - Casa Completa Normal
+      this.layerIsolationPreset = 'all';
+      this.setArchitectureGhostMode(false);
+      this.groups.structure.visible = Boolean(this.layers.structure);
+      this.groups.losaFase1.visible = Boolean(this.layers.structure);
+      this.groups.losaFase2.visible = Boolean(this.layers.losaFase2 && isHabitable);
+      this.groups.muroEstacionamiento.visible = Boolean(this.layers.muroEstacionamiento && isHabitable);
+      this.groups.archMain.visible = Boolean(this.layers.architecture && isHabitable);
+      this.groups.archSubsuelo.visible = Boolean(this.layers.subsuelo && isHabitable);
+      this.groups.roof.visible = Boolean(this.layers.techo && this.roofStyle !== 'off' && isHabitable);
+      this.groups.urbanContext.visible = Boolean(this.layers.entornoUrbano);
+      this.groups.topography.visible = Boolean(this.layers.topography);
+      this.groups.geotech.visible = this.hideUnderground ? false : Boolean(this.layers.geotech);
+      this.groups.pluvialHydro.visible = Boolean(this.layers.pluvial);
+      this.groups.weakSignals.visible = Boolean(this.layers.senalesDebiles);
+      this.groups.ductosYEnchufes.visible = Boolean(this.layers.ductos);
+      this.setMepDisciplineFilter('all');
+      this.setFloorCutaway(this.currentCutawayMode);
+    }
+
+    if (this.undergroundGroup) {
+      this.undergroundGroup.visible = !this.hideUnderground && this.groups.structure.visible;
+    }
+
+    const sel = document.getElementById('select-layer-isolation');
+    if (sel && sel.value !== mode) sel.value = mode;
+    return mode;
+  }
+
   focusRoom(roomKey) {
     const preset = ROOM_CAMERA_PRESETS[roomKey];
     if (!preset) return;
@@ -2088,17 +2307,21 @@ export class ProjectScene {
     const startTarget = this.controls.target.clone();
     const endTarget = new THREE.Vector3(...preset.target);
 
-    let progress = 0;
+    const startTime = performance.now();
+    const durationMs = 360;
     const animateFocus = () => {
-      progress += 0.055;
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / durationMs);
       if (progress < 1) {
         const ease = 1 - Math.pow(1 - progress, 3);
         this.camera.position.lerpVectors(startPos, endPos, ease);
         this.controls.target.lerpVectors(startTarget, endTarget, ease);
+        this.controls.update();
         requestAnimationFrame(animateFocus);
       } else {
         this.camera.position.copy(endPos);
         this.controls.target.copy(endTarget);
+        this.controls.update();
       }
     };
     animateFocus();
@@ -2131,9 +2354,12 @@ export class ProjectScene {
       case 'structure':
         this.groups.structure.visible = visible;
         this.groups.losaFase1.visible = visible;
+        if (this.undergroundGroup) {
+          this.undergroundGroup.visible = visible && !this.hideUnderground;
+        }
         break;
       case 'geotech':
-        this.groups.geotech.visible = visible;
+        this.groups.geotech.visible = this.hideUnderground ? false : visible;
         break;
       case 'topography':
         this.groups.topography.visible = visible;
@@ -2155,6 +2381,9 @@ export class ProjectScene {
         break;
       case 'photos':
         this.groups.photos.visible = visible;
+        break;
+      case 'bajoTierra':
+        this.setHideUnderground(!visible);
         break;
     }
   }

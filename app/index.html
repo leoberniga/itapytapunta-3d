@@ -101,6 +101,20 @@
     </div>
 
     <div class="header-actions">
+      <div class="header-layer-selector glass-panel" style="display:flex; align-items:center; gap:5px; padding:4px 8px; border-radius:8px; border:1px solid rgba(56,189,248,0.65); background:rgba(15,23,42,0.9);" title="Selector Maestro de Capas: permite ver SOLO las cañerías o la red eléctrica sin toda la casa">
+        <span style="font-size:10px; font-weight:800; color:#7dd3fc; white-space:nowrap;">🗂️ Capas:</span>
+        <select id="select-layer-isolation" aria-label="Selector de aislamiento de capas 3D" style="background:transparent; color:#f8fafc; border:none; font-size:11px; font-weight:700; cursor:pointer; outline:none;">
+          <option value="all" style="background:#0f172a; color:#f8fafc;">🏠 Casa Completa (Normal)</option>
+          <option value="only_pipes" style="background:#0f172a; color:#38bdf8;">🚰 Solo Cañerías (Sin Casa)</option>
+          <option value="only_electric" style="background:#0f172a; color:#fde68a;">⚡ Solo Electricidad (Sin Casa)</option>
+          <option value="only_all_mep" style="background:#0f172a; color:#a7f3d0;">🔌🚰 Todas Instalaciones (Sin Casa)</option>
+          <option value="pipes_ghost" style="background:#0f172a; color:#c084fc;">👻🚰 Cañerías + Casa Translúcida</option>
+          <option value="structure_only" style="background:#0f172a; color:#cbd5e1;">🏗️ Solo Esqueleto H°A°</option>
+        </select>
+      </div>
+      <button id="btn-hide-underground" class="btn-header glass-panel" aria-pressed="false" style="border-color:rgba(132,204,22,0.65); background:rgba(63,98,18,0.28); color:#d9f99d; font-weight:800;" title="Ocultar o mostrar todo lo que está bajo tierra (Zapatas Z1..Z20, Vigas de Fundación VC.T-1, fustes enterrados y sondeos geotécnicos)">
+        <span>⛏️ Ocultar Bajo Tierra</span>
+      </button>
       <button id="btn-header-galeria-zonas" class="btn-header glass-panel" data-modal="modal-galeria-zonas" style="border-color:rgba(245,158,11,0.85); background:linear-gradient(135deg, rgba(245,158,11,0.28), rgba(180,83,9,0.45)); color:#fef3c7; font-weight:800;" title="Abrir Galería de Vistas Ultra-Realistas de cada zona de la casa (8 ambientes con materiales, productos sugeridos y acceso directo a cámara 3D)">
         <span>🖼️ Galería Zonas (8)</span>
       </button>
@@ -264,17 +278,19 @@
   <!-- SIMULADOR INTERACTIVO POR CAPAS MEP (#mep-interactive-simulator)       -->
   <!-- ===================================================================== -->
   <div id="mep-interactive-simulator" class="mep-sim-floating">
-    <div id="mep-sim-panel" class="mep-sim-panel glass-panel" style="display:none;">
+    <div id="mep-sim-panel" class="mep-sim-panel glass-panel" style="display:none;" data-window-title="⚡💧 Simulador MEP">
       <div class="mep-sim-header">
         <div>
           <span class="mep-sim-tag">SIMULADOR INTERACTIVO EN VIVO 3D</span>
           <h3 class="mep-sim-title">⚡💧 Instalaciones por Capas (Eléctrica ANDE + Pluvial/ESSAP Directo)</h3>
         </div>
-        <div style="display:flex; gap:6px; align-items:center;">
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
           <button id="btn-stop-all-sims" class="btn-header" style="padding:5px 10px; font-size:10.5px; font-weight:800; background:rgba(220,38,38,0.28); border:1px solid #ef4444; color:#fecaca; border-radius:6px; cursor:pointer;" title="Apagar lluvia, flujo de agua y alertas eléctricas en 3D">
             ⏹️ Detener Todo
           </button>
-          <button id="btn-close-mep-sim" class="modal-close-btn" title="Minimizar panel">&times;</button>
+          <button type="button" class="win-ctrl-btn" data-win-minimize="mep-sim-panel" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="mep-sim-panel" title="Maximizar / Restaurar ventana">🗖</button>
+          <button id="btn-close-mep-sim" class="modal-close-btn" title="Cerrar panel">&times;</button>
         </div>
       </div>
 
@@ -356,7 +372,7 @@
   </div>
 
   <!-- Left Sidebar Command Center (Tabbed UX 2026 + Mobile Bottom Sheet) -->
-  <aside id="left-sidebar" class="left-sidebar glass-panel">
+  <aside id="left-sidebar" class="left-sidebar glass-panel" data-window-title="🧭 Panel Control BIM">
     <!-- Barra tirador exclusiva para pantallas móviles (Bottom-Sheet Handle) -->
     <button type="button" id="mobile-sidebar-handle" class="mobile-sidebar-handle" aria-label="Expandir o minimizar panel de herramientas en móvil">
       <span class="msh-pill-bar"></span>
@@ -366,6 +382,15 @@
         <span id="mobile-sheet-toggle-badge" class="msh-toggle-badge">▲ Panel</span>
       </div>
     </button>
+
+    <!-- Controles de Ventana (Minimizar / Maximizar Panel Izquierdo) -->
+    <div class="sidebar-window-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid rgba(148,163,184,0.16);">
+      <span style="font-size:9.5px; font-weight:800; color:#94a3b8; letter-spacing:0.6px; text-transform:uppercase;">🧭 Centro de Control 3D</span>
+      <div class="window-controls-group" style="display:flex; gap:4px;">
+        <button type="button" class="win-ctrl-btn" data-win-minimize="left-sidebar" title="Minimizar Panel Izquierdo">—</button>
+        <button type="button" class="win-ctrl-btn" data-win-maximize="left-sidebar" title="Maximizar / Restaurar Panel Izquierdo">🗖</button>
+      </div>
+    </div>
     
     <!-- KPI Summary Card -->
     <div class="kpi-panel">
@@ -385,7 +410,7 @@
         <strong id="kpi-costo-m2" style="color:var(--accent-cyan);">Cuota BNF: Gs. 3.529.773/mes</strong>
       </div>
       <p id="kpi-objective-desc" class="kpi-desc">
-        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Suite, 2do Dormitorio, Desk y 2 Baños arriba (+102.88m), Estar-Comedor-Cocina y Baño Social en Nivel Calle (+100.00m) y Salón + Lavadero en Subsuelo (+97.66m).
+        3 Niveles Funcionales desde el Día 1 para Ruth y Leo: Dormitorio 1 (Sencillo), Dormitorio 2 (en Suite + Vestidor), Sector Escritorio y 2 Baños arriba (+102.88m), Estar-Comedor-Cocina y Baño Social en Nivel Calle (+100.00m) y Salón + Lavadero en Subsuelo (+97.66m).
       </p>
       <div style="display:flex; gap:6px; margin-top:8px;">
         <button id="btn-kpi-open-drawer" class="btn-primary" style="flex:1; padding:7px 9px; font-size:10.5px; font-weight:800; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; background:linear-gradient(135deg, rgba(14,165,233,0.32), rgba(2,132,199,0.52)); border:1px solid rgba(56,189,248,0.65); color:#f0f9ff;">
@@ -406,7 +431,7 @@
         <span>🏠 Vistas &amp; Cortes</span>
       </button>
       <button class="sw-tab-btn" data-sidebar-tab="tab-cad-layers">
-        <span>🗂️ 12 Capas CAD</span>
+        <span>🗂️ Capas &amp; Filtro</span>
       </button>
     </div>
 
@@ -429,8 +454,8 @@
           <button class="cutaway-btn active" data-cutaway-mode="full" title="Mostrar todos los niveles y techos completos">
             Completa
           </button>
-          <button class="cutaway-btn" data-cutaway-mode="cut_roof" title="Ocultar el techo (+105.64m) para ver 2 Dormitorios, Desk y 2 Baños del 2do Piso (+102.88m)">
-            2do Piso (Suite/Desk)
+          <button class="cutaway-btn" data-cutaway-mode="cut_roof" title="Ocultar el techo (+105.64m) para ver los 2 Dormitorios (1 Sencillo + 2 en Suite c/ Vestidor), Sector Escritorio y 2 Baños del 2do Piso (+102.88m)">
+            2do Piso (2 Dorm.+Desk)
           </button>
           <button class="cutaway-btn" data-cutaway-mode="cut_pa" title="Abrir techo y 2do piso para inspeccionar Nivel Calle (+100.00m: Estar, Comedor, Cocina y Baño Social)">
             Nivel Calle (PB)
@@ -444,19 +469,23 @@
       <!-- Recorrido por Habitación y Detalle -->
       <div class="panel-section" style="margin-bottom:12px;">
         <div class="panel-section-title">
-          <span>10 Puntos de Inspección 3D</span>
+          <span>11 Puntos de Inspección 3D</span>
           <button id="btn-sidebar-game-mode" class="badge-pill" style="cursor:pointer; margin:0; border-color:#10b981; color:#6ee7b7; background:rgba(16,185,129,0.18);">
             🎮 Modo Juego GTA
           </button>
         </div>
         <div class="room-tour-grid" id="room-tour-buttons">
-          <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio en Suite de Ruth y Leo + Vestidor + Balcón al Río">
-            <span class="rt-icon">🛏️</span>
-            <span class="rt-text">2do Piso: Suite + Vestidor</span>
+          <button class="room-tour-btn" data-room-focus="dormitorio_suite" title="2do Piso (+102.88m): Dormitorio 2 Principal en Suite con acceso al Vestidor y Baño en Suite">
+            <span class="rt-icon">👑</span>
+            <span class="rt-text">Piso 2: Dorm. 2 (Suite + Vestidor)</span>
           </button>
-          <button class="room-tour-btn" data-room-focus="planta_alta" title="2do Piso (+102.88m): Desk / Escritorio al subir la escalera + 2do Dormitorio">
+          <button class="room-tour-btn" data-room-focus="dormitorio_sencillo" title="2do Piso (+102.88m): Dormitorio 1 (Sencillo) con cama de 1½ plaza, placar y tocador">
+            <span class="rt-icon">🛏️</span>
+            <span class="rt-text">Piso 2: Dorm. 1 (Sencillo)</span>
+          </button>
+          <button class="room-tour-btn" data-room-focus="planta_alta" title="2do Piso (+102.88m): Sector Escritorio Extendido (Home-Office Doble + Costura + Biblioteca)">
             <span class="rt-icon">💻</span>
-            <span class="rt-text">2do Piso: Desk y Dorm. 2</span>
+            <span class="rt-text">Piso 2: Sector Escritorio</span>
           </button>
           <button class="room-tour-btn" data-room-focus="estar_comedor" title="Planta Nivel Calle (+100.00m): Estar-Comedor y Cierre Lozarrap 38 m²">
             <span class="rt-icon">🛋️</span>
@@ -478,9 +507,9 @@
             <span class="rt-icon">🔥</span>
             <span class="rt-text">Subsuelo: Salón, Lavadero y Parrilla</span>
           </button>
-          <button class="room-tour-btn" data-room-focus="fachada_porton" title="Frente sobre Calle Tte. Guillermo Arias: Portón Balancín 2.30m (+X), Peatonal 0.95m (-X) y Bajada ANDE/ESSAP en muralla (-3.85m)">
+          <button class="room-tour-btn" data-room-focus="fachada_porton" title="Frente sobre Calle Tte. Guillermo Arias: Portón Balancín 2.30m (+X), Peatonal 0.95m (-X) y Pérgola con Enredadera Real">
             <span class="rt-icon">🚪</span>
-            <span class="rt-text">Frente: Portones y Bajada ANDE/ESSAP</span>
+            <span class="rt-text">Frente: Portones y Enredadera</span>
           </button>
           <button class="room-tour-btn" data-room-focus="escalera_subsuelo" title="Puerta de Servicio Lateral, Rejilla Metálica en Hueco de Oxigenación y Escalera 1 al Subsuelo">
             <span class="rt-icon">🪜</span>
@@ -539,11 +568,28 @@
       </div>
     </div>
 
-    <!-- TAB 3: 12 CAPAS CAD / BIM 3D & HERRAMIENTAS DE MEDICIÓN -->
+    <!-- TAB 3: 12 CAPAS CAD / BIM 3D, AISLAMIENTO DE CAÑERÍAS & OCULTAR BAJO TIERRA -->
     <div id="tab-cad-layers" class="sidebar-tab-pane" style="display:none;">
+      <!-- Selector Rápido de Aislamiento de Capas (Ver Solo Cañerías / Sin Casa) -->
+      <div class="panel-section" style="margin-bottom:10px; background:rgba(2,132,199,0.12); border:1px solid rgba(56,189,248,0.35); border-radius:8px; padding:8px;">
+        <div class="panel-section-title" style="margin-bottom:6px;">
+          <span style="color:#7dd3fc; font-weight:800;">🔎 Aislamiento de Capas (Ver sin Casa)</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:8px;" id="sidebar-isolation-pills">
+          <button type="button" class="cutaway-btn active" data-isolate-preset="all" style="font-size:10px; padding:5px 6px;">🏠 Casa Completa</button>
+          <button type="button" class="cutaway-btn" data-isolate-preset="only_pipes" style="font-size:10px; padding:5px 6px; border-color:rgba(56,189,248,0.5); color:#7dd3fc;">🚰 Solo Cañerías</button>
+          <button type="button" class="cutaway-btn" data-isolate-preset="only_electric" style="font-size:10px; padding:5px 6px; border-color:rgba(250,204,21,0.5); color:#fde68a;">⚡ Solo Eléctrica</button>
+          <button type="button" class="cutaway-btn" data-isolate-preset="only_all_mep" style="font-size:10px; padding:5px 6px; border-color:rgba(16,185,129,0.5); color:#6ee7b7;">🔌🚰 Todo MEP s/Casa</button>
+        </div>
+        <label class="layer-toggle" style="display:flex; align-items:center; gap:7px; padding:6px 8px; background:rgba(63,98,18,0.28); border:1px solid rgba(132,204,22,0.55); border-radius:6px; cursor:pointer; font-size:11px; color:#ecfccb; font-weight:700;">
+          <input type="checkbox" id="layer-hide-underground">
+          <span>⛏️ Ocultar lo que está Bajo Tierra (Zapatas, Cimientos y Sondeos)</span>
+        </label>
+      </div>
+
       <div class="panel-section" style="margin-bottom:12px;">
         <div class="panel-section-title">
-          <span>12 Capas CAD / BIM 3D</span>
+          <span>12 Capas CAD / BIM 3D Individuales</span>
           <i data-lucide="sliders" style="width:14px;height:14px;"></i>
         </div>
         <div class="layers-grid">
@@ -649,13 +695,17 @@
   <!-- ===================================================================== -->
   <!-- MENÚ DESPLEGABLE DE LISTA DE COSTOS Y CÁLCULO MÉTRICO (#computo-drawer) -->
   <!-- ===================================================================== -->
-  <aside id="computo-drawer" class="computo-drawer glass-panel" aria-label="Menú Desplegable de Cálculo Métrico y Lista de Costos BNF">
+  <aside id="computo-drawer" class="computo-drawer glass-panel" aria-label="Menú Desplegable de Cálculo Métrico y Lista de Costos BNF" data-window-title="📋 Lista de Costos BNF">
     <div class="computo-drawer-header">
       <div>
-        <div class="computo-drawer-kicker">CRÉDITO VIVIENDA BNF • DESGLOSE POR PRODUCTO, UNIDAD Y MONTO PERSONALIZABLE</div>
-        <h3 id="computo-drawer-title" class="computo-drawer-title">Lista de Costos y Productos Sugeridos por Presupuesto</h3>
+        <div class="computo-drawer-kicker">CRÉDITO VIVIENDA BNF • DESGLOSE PRODUCTO POR PRODUCTO, UNIDAD COMERCIAL Y COMPRA TOTAL OBRA</div>
+        <h3 id="computo-drawer-title" class="computo-drawer-title">Lista de Costos y Desglose Unitario Producto por Producto</h3>
       </div>
-      <button id="btn-close-computo-drawer" class="modal-close-btn" title="Cerrar menú de costos">&times;</button>
+      <div class="window-controls-group" style="display:flex; gap:5px; align-items:center;">
+        <button type="button" class="win-ctrl-btn" data-win-minimize="computo-drawer" title="Minimizar Lista de Costos">—</button>
+        <button type="button" class="win-ctrl-btn" data-win-maximize="computo-drawer" title="Maximizar / Restaurar Lista de Costos a pantalla completa">🗖</button>
+        <button id="btn-close-computo-drawer" class="modal-close-btn" title="Cerrar menú de costos">&times;</button>
+      </div>
     </div>
 
     <!-- Tarjeta Resumen del Escalón Seleccionado + Tope de Presupuesto Personalizable -->
@@ -729,6 +779,19 @@
         <button id="cd-toggle-add-item-btn" class="btn-header glass-panel" style="padding:6px 10px; font-size:10.5px; font-weight:800; border-color:rgba(245,158,11,0.65); background:rgba(217,119,6,0.22); color:#fde68a; white-space:nowrap;" title="Agregar un nuevo producto o rubro personalizado al presupuesto">
           ➕ Nuevo Producto
         </button>
+      </div>
+
+      <!-- Barra de Maximizar / Minimizar Desglose Unitario Producto por Producto -->
+      <div class="cd-breakdown-toolbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:5px; margin-top:6px; padding:5px 8px; background:rgba(2,132,199,0.14); border:1px solid rgba(56,189,248,0.35); border-radius:7px;">
+        <span style="font-size:10px; font-weight:800; color:#7dd3fc;">🛒 Desglose Unitario (Producto×Producto y Compra Obra):</span>
+        <div style="display:flex; gap:5px; flex-wrap:wrap;">
+          <button type="button" id="cd-expand-all-breakdowns" class="btn-header glass-panel" style="padding:3px 8px; font-size:10px; font-weight:700; border-color:rgba(56,189,248,0.55); color:#e0f2fe;" title="Expandir todos los desgloses unitarios producto por producto">
+            📂 Maximizar Desgloses
+          </button>
+          <button type="button" id="cd-collapse-all-breakdowns" class="btn-header glass-panel" style="padding:3px 8px; font-size:10px; font-weight:700; border-color:rgba(148,163,184,0.4); color:#cbd5e1;" title="Minimizar todos los desgloses unitarios">
+            📁 Minimizar Desgloses
+          </button>
+        </div>
       </div>
 
       <!-- Formulario Rápido para Agregar Producto / Rubro Personalizado -->
@@ -844,7 +907,7 @@
   <!-- ===================================================================== -->
 
   <!-- Modal 00: EDITOR INTERACTIVO CAD 2D/3D DE PLANOS (#modal-editor-2d) -->
-  <div id="modal-editor-2d" class="modal-overlay">
+  <div id="modal-editor-2d" class="modal-overlay" data-window-title="📐 Editor CAD 2D/3D">
     <div class="modal-content glass-panel modal-editor-2d-content">
       <div class="modal-header" style="margin-bottom:10px; padding-bottom:10px;">
         <div>
@@ -856,14 +919,18 @@
             Edita muros, aberturas y etapas constructivas por nivel sobre los 20 pilares reales (P1..P20). Cada cambio actualiza el modelo 3D en vivo y permite exportar planos a escala 1:50 en SVG, PNG y JSON.
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-editor-2d" title="Minimizar Editor 2D/3D">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-editor-2d" title="Maximizar / Restaurar Editor 2D/3D a pantalla completa">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
       <div id="floorplan-editor-container" class="floorplan-editor-host"></div>
     </div>
   </div>
 
   <!-- Modal 0A: ENTORNO SATELITAL REAL, ESQUEMAS MEP Y AUDITORÍA FORENSE (#modal-renders) -->
-  <div id="modal-renders" class="modal-overlay">
+  <div id="modal-renders" class="modal-overlay" data-window-title="🛰️ Satélite & MEP">
     <div class="modal-content glass-panel" style="max-width:1160px;">
       <div class="modal-header">
         <div>
@@ -875,7 +942,11 @@
             Relevamiento satelital georreferenciado (UTM 21S 433024E, 7203554N), cálculo pluvial/hidrófugo, red de señales débiles/CCTV PoE y Acta de Recepción JIVESA/PROBETI.
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-renders" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-renders" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <!-- 5 Pestañas Interactivas del Centro Técnico -->
@@ -1078,7 +1149,7 @@
   </div>
 
   <!-- Modal 0B: GESTOR DE INSUMOS TÉCNICOS Y AJUSTES MÉTRICOS (PARA NO ARQUITECTOS) -->
-  <div id="modal-insumos" class="modal-overlay">
+  <div id="modal-insumos" class="modal-overlay" data-window-title="🔧 Insumos & Tobatí">
     <div class="modal-content glass-panel" style="max-width:1040px;">
       <div class="modal-header">
         <div>
@@ -1090,7 +1161,11 @@
             Herramienta intuitiva para ajustar dimensiones de obra y calcular bolsas de cemento, kilos de hierro, arena y costo en Guaraníes en tiempo real.
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-insumos" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-insumos" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <div class="calc-container">
@@ -1298,7 +1373,7 @@
   </div>
 
   <!-- Modal 1: SIMULADOR DE CÓMPUTO MÉTRICO, CRÉDITO VIVIENDA BNF, COLORES DEL BANCO Y AUDITORÍA (#modal-simulador) -->
-  <div id="modal-simulador" class="modal-overlay">
+  <div id="modal-simulador" class="modal-overlay" data-window-title="🧮 Planilla BNF & Cómputo">
     <div class="modal-content glass-panel" style="max-width:1240px;">
       <div class="modal-header">
         <div>
@@ -1307,10 +1382,14 @@
             Planilla Bancaria BNF (⚫ Negro / 🟢 Verde / 🔴 Rojo / 🟡 Amarillo), Crédito Vivienda BNF y Cómputo Métrico
           </h2>
           <p style="font-size:11.5px; color:var(--text-muted);">
-            Cumple 100% los requisitos técnicos del <strong>BNF (Banco Nacional de Fomento)</strong>: Código de Colores Normativo + Desglose Materiales vs. Mano de Obra + Simulación de Cuotas a 15 años (180 meses) + Ajustes Reales de Obra de Ruth y Leo.
+            Cumple 100% los requisitos técnicos del <strong>BNF (Banco Nacional de Fomento)</strong>: Código de Colores Normativo + Desglose Producto por Producto (Materiales vs. Mano de Obra) + Simulación de Cuotas a 15 años (180 meses).
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-simulador" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-simulador" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <!-- 0. PANEL PRINCIPAL: PRESUPUESTO VIVO CRÉDITO BNF (250M / 300M / 350M / 440M) + CÓDIGO DE COLORES BANCO -->
@@ -1480,15 +1559,34 @@
         </div>
       </div>
 
+      <!-- Barra de Maximizar / Minimizar Sección de Desglose Unitario Producto por Producto -->
+      <div class="sim-breakdown-toolbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; padding:8px 12px; background:linear-gradient(90deg, rgba(2,132,199,0.18), rgba(15,23,42,0.88)); border:1px solid rgba(56,189,248,0.45); border-radius:8px;">
+        <div>
+          <strong style="font-size:11.5px; color:#7dd3fc;">🛒 Desglose Unitario Detallado Producto por Producto (Por Unidad Técnica y Total Compra Obra)</strong>
+          <span style="font-size:10.5px; color:#cbd5e1; margin-left:6px;">Incluye bolsas de cemento, varillas 12m, ladrillos Tobatí, cajas porcelanato, caños PPR/PVC, rollos de cable y mano de obra.</span>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button type="button" id="sim-expand-all-breakdowns" class="btn-header glass-panel" style="padding:5px 10px; font-size:10.5px; font-weight:800; border-color:rgba(56,189,248,0.65); background:rgba(2,132,199,0.26); color:#f0f9ff;">
+            📂 Maximizar Todos los Desgloses
+          </button>
+          <button type="button" id="sim-collapse-all-breakdowns" class="btn-header glass-panel" style="padding:5px 10px; font-size:10.5px; font-weight:700; border-color:rgba(148,163,184,0.45); color:#cbd5e1;">
+            📁 Minimizar Todos los Desgloses
+          </button>
+          <button type="button" id="sim-toggle-maximize-table" class="btn-header glass-panel" style="padding:5px 10px; font-size:10.5px; font-weight:800; border-color:rgba(245,158,11,0.65); color:#fde68a;">
+            🗖 Maximizar Tabla de Costos
+          </button>
+        </div>
+      </div>
+
       <!-- 6. INTERACTIVE PRODUCT-LEVEL BUDGET TABLE WITH EDITABLE QTY, UNIT PRICE, SUGGESTED PRODUCT & TOTAL OVERRIDE -->
-      <div class="computo-table-wrapper">
+      <div id="sim-computo-table-wrapper" class="computo-table-wrapper">
         <table class="budget-table">
           <thead>
             <tr>
               <th style="width:38px;">Activo</th>
               <th style="width:105px;">Color Banco</th>
               <th>Rubro Técnico, Producto Sugerido Identificado y Desglose de Insumos por Unidad</th>
-              <th style="width:210px;">Proveedor / Detalle de Obra</th>
+              <th style="width:270px;">Proveedor / Desglose Producto×Producto</th>
               <th style="width:105px;">Cantidad</th>
               <th style="width:125px;">P. Unitario Exacto (Gs.)</th>
               <th style="text-align:right; width:130px;">Materiales / Mano Obra</th>
@@ -1504,7 +1602,7 @@
   </div>
 
   <!-- Modal 2: GENERADOR DE PLANOS OFICIALES VIVOS + VÍNCULO AL REPOSITORIO (#modal-planos) -->
-  <div id="modal-planos" class="modal-overlay">
+  <div id="modal-planos" class="modal-overlay" data-window-title="📐 Planos CAD Vivos">
     <div class="modal-content glass-panel" style="max-width:1180px;">
       <div class="modal-header">
         <div>
@@ -1516,7 +1614,11 @@
             Las 4 láminas ejecutivas se dibujan en tiempo real a partir de los ajustes vigentes del modelo BIM/CAD 2D/3D (Hueco 38m² Losa Rap, Núcleo Húmedo Eje F-G, 2 Dormitorios + Vestidor + Desk en PA, Subsuelo con Parrilla y Rejilla de Oxigenación).
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-planos" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-planos" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <!-- SECCIÓN PRINCIPAL: GENERADOR DE LAS 4 LÁMINAS OFICIALES EN VIVO (SVG/PNG) -->
@@ -1630,14 +1732,18 @@
   </div>
 
   <!-- Modal 3: Estudio Geotécnico GEO-STAN -->
-  <div id="modal-geotech" class="modal-overlay">
+  <div id="modal-geotech" class="modal-overlay" data-window-title="🪨 Estudio Suelo SPT">
     <div class="modal-content glass-panel" style="max-width:940px;">
       <div class="modal-header">
         <div>
           <h2 style="font-family:var(--font-display); font-size:20px;">Estudio Geotécnico Nº 2956 • GEO-STAN S.R.L.</h2>
           <p style="font-size:11px; color:var(--text-muted);">Coordenadas UTM Zona 21S (RN: 433024E, 7203554N) • Profundización de Zapatas Verificada en Acta 29/12/2025</p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-geotech" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-geotech" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
       <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
         <p style="margin-bottom:14px;">
@@ -1696,7 +1802,7 @@
   </div>
 
   <!-- Modal 3.5: GALERÍA DE VISTAS ULTRA-REALISTAS DE CADA ZONA DE LA CASA (#modal-galeria-zonas) -->
-  <div id="modal-galeria-zonas" class="modal-overlay">
+  <div id="modal-galeria-zonas" class="modal-overlay" data-window-title="🖼️ Galería Zonas (8)">
     <div class="modal-content glass-panel" style="max-width:1240px;">
       <div class="modal-header">
         <div>
@@ -1710,7 +1816,11 @@
             Visualizaciones hiperrealistas generadas a partir de la geometría exacta de los planos, el inventario real de muebles de Ruth y Leo y los productos comerciales sugeridos para cada ambiente.
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-galeria-zonas" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-galeria-zonas" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <!-- Filtros por Nivel / Sector de la Casa -->
@@ -1718,7 +1828,7 @@
         <button class="computo-filter-btn active" data-zone-filter="ALL">🏠 Todas las Zonas (8)</button>
         <button class="computo-filter-btn" data-zone-filter="frente_exterior">🚗 Frente, Portones y Cochera (+100.00m)</button>
         <button class="computo-filter-btn" data-zone-filter="planta_baja">🛋️ Planta Baja: Estar, Cocina y Galería al Río (+100.00m)</button>
-        <button class="computo-filter-btn" data-zone-filter="planta_alta">🛏️ Planta Alta: Escritorio Extendido y Suite (+102.88m)</button>
+        <button class="computo-filter-btn" data-zone-filter="planta_alta">🛏️ Planta Alta: 2 Dormitorios + Vestidor y Escritorio (+102.88m)</button>
         <button class="computo-filter-btn" data-zone-filter="subsuelo">🔥 Subsuelo, Jardín y Piscina Transversal (+97.66m / +96.20m)</button>
       </div>
 
@@ -1731,7 +1841,7 @@
   </div>
 
   <!-- Modal 4: GALERÍA COMPLETA DE LAS 118 FOTOS DE OBRA (#modal-photos) -->
-  <div id="modal-photos" class="modal-overlay">
+  <div id="modal-photos" class="modal-overlay" data-window-title="📸 Fotos Obra (118)">
     <div class="modal-content glass-panel" style="max-width:1120px;">
       <div class="modal-header">
         <div>
@@ -1743,7 +1853,11 @@
             Archivo cronológico de las 5 etapas ejecutadas hasta el Acta de Recepción (29/12/2025). Haz clic en cualquier foto para abrir el visor Lightbox de alta resolución.
           </p>
         </div>
-        <button class="modal-close-btn">&times;</button>
+        <div class="window-controls-group" style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="win-ctrl-btn" data-win-minimize="modal-photos" title="Minimizar ventana">—</button>
+          <button type="button" class="win-ctrl-btn" data-win-maximize="modal-photos" title="Maximizar / Restaurar ventana">🗖</button>
+          <button class="modal-close-btn">&times;</button>
+        </div>
       </div>
 
       <!-- Filtros por las 5 Etapas Constructivas -->
@@ -1786,6 +1900,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Barra Flotante de Ventanas Minimizadas (#minimized-windows-bar) -->
+  <div id="minimized-windows-bar" class="minimized-windows-bar" style="display:none;" aria-label="Ventanas minimizadas"></div>
 
   <script type="module" src="./src/main.js"></script>
 </body>

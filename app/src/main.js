@@ -47,6 +47,7 @@ import {
   getRoleBillOfMaterials,
   generateRoleWorkOrderCsv,
   getSuggestedProductForPartida,
+  computeCommercialProductBreakdownForPartida,
   createCustomBudgetItem,
   applyItemCustomization,
   applyCustomOverridesToItems,
@@ -1127,23 +1128,49 @@ document.addEventListener('DOMContentLoaded', () => {
       tr.setAttribute('data-item-id', p.id);
 
       const iaNotes = Array.isArray(p.camposEstimadosIA) ? p.camposEstimadosIA.join(' • ') : '';
-      const breakdownItems = Array.isArray(p.unitBreakdown) ? p.unitBreakdown : [];
+      const breakdownItems = computeCommercialProductBreakdownForPartida({
+        ...p,
+        cantidad: p.cantidadActual ?? p.cantidad
+      });
       const breakdownRowsHtml = breakdownItems.length
-        ? `<details class="unit-breakdown-details" style="margin-top:4px; background:rgba(2,6,23,0.65); border:1px solid rgba(56,189,248,0.22); border-radius:6px; padding:4px 7px;">
-             <summary style="cursor:pointer; font-size:10px; color:#38bdf8; font-weight:700; user-select:none;">
-               🔎 Desglose por Insumo / Unidad Exacta (${breakdownItems.length} componentes por 1 ${p.unidad})
+        ? `<details class="unit-breakdown-details" style="margin-top:5px; background:rgba(2,6,23,0.78); border:1px solid rgba(56,189,248,0.28); border-radius:6px; padding:5px 8px;">
+             <summary style="cursor:pointer; font-size:10px; color:#38bdf8; font-weight:700; user-select:none; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+               <span>🔎 Desglose Unitario Producto×Producto (${breakdownItems.length} productos • por 1 ${p.unidad} y Total Obra ${p.cantidadActual ?? p.cantidad} ${p.unidad})</span>
+               <span style="display:inline-flex; gap:4px;">
+                 <button type="button" class="btn-toggle-max-breakdown" title="Maximizar / Minimizar este Desglose Unitario" style="padding:1px 6px; font-size:9px; border-radius:4px; background:rgba(56,189,248,0.18); border:1px solid rgba(56,189,248,0.45); color:#bae6fd; cursor:pointer;">🗖 Max</button>
+               </span>
              </summary>
-             <div style="margin-top:5px; display:flex; flex-direction:column; gap:3px;">
+             <div class="unit-breakdown-body" style="margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+               <div style="display:grid; grid-template-columns: 1.8fr 0.9fr 1fr 1.15fr; gap:6px; font-size:8.8px; color:#94a3b8; font-weight:700; border-bottom:1px solid rgba(148,163,184,0.22); padding-bottom:3px;">
+                 <span>PRODUCTO COMERCIAL / MARCA</span>
+                 <span style="text-align:right;">PRECIO COMERCIAL</span>
+                 <span style="text-align:right;">POR 1 ${(p.unidad || 'un').toUpperCase()}</span>
+                 <span style="text-align:right; color:#6ee7b7;">🛒 TOTAL COMPRA OBRA</span>
+               </div>
                ${breakdownItems
                  .map((ins) => {
-                   const insName = ins.insumo || ins.nombre || ins.item || 'Insumo';
+                   const insName = ins.product || ins.insumo || ins.nombre || 'Producto';
+                   const insBrand = ins.brand || ins.marca || '';
                    const insQty = ins.qtyPerUnit ?? ins.cantidad ?? 1;
-                   const insUnit = ins.unidad || 'un';
-                   const insPrice = Number(ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
-                   const insSub = Math.round(Number(insQty) * insPrice);
-                   return `<div style="display:flex; justify-content:space-between; gap:6px; font-size:9.5px; color:#cbd5e1; border-bottom:1px dashed rgba(148,163,184,0.14); padding-bottom:2px;">
-                     <span>• <strong>${insName}</strong> <span style="color:#94a3b8;">(${insQty} ${insUnit} × Gs. ${formatGs(insPrice)})</span></span>
-                     <span style="font-family:var(--font-mono); color:#fde68a; white-space:nowrap;">Gs. ${formatGs(insSub)}</span>
+                   const insUnit = ins.unit || ins.unidad || 'un';
+                   const insPrice = Number(ins.unitPriceGs ?? ins.unitPrice ?? ins.precioUnitarioGs ?? 0);
+                   const insSub = Number(ins.costPerUnitGs ?? Math.round(Number(insQty) * insPrice));
+                   const totalBuyQty = ins.commercialUnitsToBuy ?? ins.exactTotalCommercialQty ?? insQty;
+                   const totalBuyGs = Number(ins.totalCommercialCostGs ?? insSub);
+                   return `<div style="display:grid; grid-template-columns: 1.8fr 0.9fr 1fr 1.15fr; gap:6px; align-items:center; font-size:9.5px; color:#cbd5e1; border-bottom:1px dashed rgba(148,163,184,0.14); padding-bottom:3px;">
+                     <div>
+                       <strong style="color:#f8fafc;">• ${insName}</strong>
+                       ${insBrand ? `<div style="font-size:8.5px; color:#7dd3fc;">🏷️ ${insBrand}</div>` : ''}
+                     </div>
+                     <div style="text-align:right; font-family:var(--font-mono); color:#cbd5e1;">
+                       Gs. ${formatGs(insPrice)}<div style="font-size:8px; color:#94a3b8;">por ${insUnit}</div>
+                     </div>
+                     <div style="text-align:right; font-family:var(--font-mono); color:#fde68a;">
+                       ${insQty} ${insUnit}<div style="font-size:8.5px; color:#fbbf24;">Gs. ${formatGs(insSub)}</div>
+                     </div>
+                     <div style="text-align:right; font-family:var(--font-mono); color:#6ee7b7; background:rgba(16,185,129,0.08); padding:2px 4px; border-radius:4px;">
+                       <strong>${totalBuyQty} ${insUnit}</strong><div style="font-size:8.5px; color:#34d399;">Gs. ${formatGs(totalBuyGs)}</div>
+                     </div>
                    </div>`;
                  })
                  .join('')}
@@ -2378,20 +2405,40 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `<input type="checkbox" class="drawer-item-chk" data-drawer-item-id="${r.id}" ${r.includedInScenario ? 'checked' : ''} title="Activar/Desactivar este rubro en el presupuesto" style="cursor:pointer; accent-color:#10b981; margin-right:5px;" />`
           : '';
 
-        const breakdownArr = Array.isArray(r.unitBreakdown) ? r.unitBreakdown : [];
+        const breakdownArr = computeCommercialProductBreakdownForPartida(r);
         const breakdownMiniHtml = breakdownArr.length
-          ? `<details style="margin-top:3px;">
-               <summary style="cursor:pointer; font-size:9.5px; color:#38bdf8; font-weight:700;">🔎 Desglose unitario (${breakdownArr.length} insumos)</summary>
-               <div style="margin-top:3px; padding:4px 6px; background:rgba(2,6,23,0.7); border-radius:4px; border:1px solid rgba(56,189,248,0.2);">
+          ? `<details class="unit-breakdown-details" style="margin-top:4px;">
+               <summary style="cursor:pointer; font-size:9.5px; color:#38bdf8; font-weight:700; display:flex; justify-content:space-between; align-items:center; gap:4px;">
+                 <span>🔎 Desglose unitario (${breakdownArr.length} productos • por 1 ${r.unidad} y Total ${r.cantidad} ${r.unidad})</span>
+                 <button type="button" class="btn-toggle-max-breakdown" title="Maximizar / Minimizar este Desglose Unitario" style="padding:1px 5px; font-size:8.5px; border-radius:4px; background:rgba(56,189,248,0.18); border:1px solid rgba(56,189,248,0.45); color:#bae6fd; cursor:pointer;">🗖 Max</button>
+               </summary>
+               <div class="unit-breakdown-body" style="margin-top:4px; padding:5px 7px; background:rgba(2,6,23,0.82); border-radius:5px; border:1px solid rgba(56,189,248,0.26); display:flex; flex-direction:column; gap:3px;">
+                 <div style="display:grid; grid-template-columns: 1.6fr 0.9fr 1.1fr; gap:4px; font-size:8px; color:#94a3b8; font-weight:700; border-bottom:1px solid rgba(148,163,184,0.2); padding-bottom:2px;">
+                   <span>PRODUCTO / MARCA</span>
+                   <span style="text-align:right;">POR 1 ${(r.unidad || 'UN').toUpperCase()}</span>
+                   <span style="text-align:right; color:#6ee7b7;">🛒 TOTAL OBRA</span>
+                 </div>
                  ${breakdownArr
                    .map((ins) => {
-                     const n = ins.insumo || ins.nombre || 'Insumo';
+                     const n = ins.product || ins.insumo || ins.nombre || 'Producto';
+                     const b = ins.brand || ins.marca || '';
                      const q = ins.qtyPerUnit ?? ins.cantidad ?? 1;
-                     const u = ins.unidad || 'un';
-                     const p = Number(ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
-                     return `<div style="display:flex; justify-content:space-between; font-size:9px; color:#cbd5e1;">
-                       <span>• ${n} (${q} ${u})</span>
-                       <span style="font-family:var(--font-mono); color:#fde68a;">Gs. ${formatGs(Math.round(Number(q) * p))}</span>
+                     const u = ins.unit || ins.unidad || 'un';
+                     const p = Number(ins.unitPriceGs ?? ins.unitPrice ?? ins.precioUnitarioGs ?? 0);
+                     const subUnit = Number(ins.costPerUnitGs ?? Math.round(Number(q) * p));
+                     const totalUnits = ins.commercialUnitsToBuy ?? ins.exactTotalCommercialQty ?? q;
+                     const totalGs = Number(ins.totalCommercialCostGs ?? subUnit);
+                     return `<div style="display:grid; grid-template-columns: 1.6fr 0.9fr 1.1fr; gap:4px; align-items:center; font-size:9px; color:#cbd5e1; border-bottom:1px dashed rgba(148,163,184,0.12); padding-bottom:2px;">
+                       <div>
+                         <strong style="color:#f8fafc;">• ${n}</strong>
+                         <div style="font-size:8px; color:#7dd3fc;">${b ? `${b} • ` : ''}Gs. ${formatGs(p)}/${u}</div>
+                       </div>
+                       <div style="text-align:right; font-family:var(--font-mono); color:#fde68a;">
+                         ${q} ${u}<div style="font-size:8px; color:#fbbf24;">Gs. ${formatGs(subUnit)}</div>
+                       </div>
+                       <div style="text-align:right; font-family:var(--font-mono); color:#6ee7b7; background:rgba(16,185,129,0.08); padding:1px 4px; border-radius:3px;">
+                         <strong>${totalUnits} ${u}</strong><div style="font-size:8px; color:#34d399;">Gs. ${formatGs(totalGs)}</div>
+                       </div>
                      </div>`;
                    })
                    .join('')}
@@ -2598,7 +2645,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'cut_pb');
         });
-      } else if (roomKey === 'planta_alta' || roomKey === 'dormitorio_suite' || roomKey === 'bano_suite') {
+      } else if (roomKey === 'planta_alta' || roomKey === 'dormitorio_suite' || roomKey === 'dormitorio_sencillo' || roomKey === 'bano_suite') {
         document.querySelectorAll('#cutaway-mode-buttons .cutaway-btn').forEach((b) => {
           b.classList.toggle('active', b.getAttribute('data-cutaway-mode') === 'cut_roof');
         });
@@ -5307,6 +5354,299 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   renderGaleriaZonasModal();
+
+  // =========================================================================
+  // 16. SELECTOR DE AISLAMIENTO DE CAPAS (SOLO CAÑERÍAS / SIN CASA) & OCULTAR BAJO TIERRA
+  // =========================================================================
+  const selectLayerIsolation = document.getElementById('select-layer-isolation');
+  const sidebarIsolationBtns = document.querySelectorAll('#sidebar-isolation-pills [data-isolate-preset]');
+  const btnHideUnderground = document.getElementById('btn-hide-underground');
+  const chkHideUnderground = document.getElementById('layer-hide-underground');
+
+  const syncLayerCheckboxesFromScene = () => {
+    const map = [
+      { id: 'layer-ductos', grp: scene.groups?.ductosYEnchufes },
+      { id: 'layer-pluvial', grp: scene.groups?.pluvialHydro },
+      { id: 'layer-senales', grp: scene.groups?.weakSignals },
+      { id: 'layer-arch', grp: scene.groups?.archMain },
+      { id: 'layer-subsuelo', grp: scene.groups?.archSubsuelo },
+      { id: 'layer-losa2', grp: scene.groups?.losaFase2 },
+      { id: 'layer-techo', grp: scene.groups?.roof },
+      { id: 'layer-muro-parking', grp: scene.groups?.parkingWall },
+      { id: 'layer-struct', grp: scene.groups?.structure },
+      { id: 'layer-entorno', grp: scene.groups?.urbanContext },
+      { id: 'layer-geotech', grp: scene.groups?.geotech },
+      { id: 'layer-topo', grp: scene.groups?.topography }
+    ];
+    map.forEach(({ id, grp }) => {
+      const el = document.getElementById(id);
+      if (el && grp) {
+        el.checked = Boolean(grp.visible);
+      }
+    });
+  };
+
+  const applyLayerIsolationUI = (preset) => {
+    const cleanPreset = preset || 'all';
+    if (typeof scene.setLayerIsolationPreset === 'function') {
+      scene.setLayerIsolationPreset(cleanPreset);
+    }
+    if (selectLayerIsolation && selectLayerIsolation.value !== cleanPreset) {
+      selectLayerIsolation.value = cleanPreset;
+    }
+    sidebarIsolationBtns.forEach((btn) => {
+      const isMatch = btn.getAttribute('data-isolate-preset') === cleanPreset;
+      btn.classList.toggle('active', isMatch);
+      btn.style.boxShadow = isMatch ? '0 0 0 2px #38bdf8' : 'none';
+    });
+    syncLayerCheckboxesFromScene();
+  };
+
+  if (selectLayerIsolation) {
+    selectLayerIsolation.addEventListener('change', (e) => {
+      applyLayerIsolationUI(e.target.value);
+    });
+  }
+
+  sidebarIsolationBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const preset = btn.getAttribute('data-isolate-preset') || 'all';
+      applyLayerIsolationUI(preset);
+    });
+  });
+
+  let undergroundHiddenState = false;
+  const applyHideUndergroundUI = (hide) => {
+    undergroundHiddenState = Boolean(hide);
+    if (typeof scene.setHideUnderground === 'function') {
+      scene.setHideUnderground(undergroundHiddenState);
+    }
+    if (chkHideUnderground) {
+      chkHideUnderground.checked = undergroundHiddenState;
+    }
+    if (btnHideUnderground) {
+      btnHideUnderground.classList.toggle('active', undergroundHiddenState);
+      btnHideUnderground.style.background = undergroundHiddenState
+        ? 'rgba(245,158,11,0.32)'
+        : 'rgba(245,158,11,0.14)';
+      btnHideUnderground.innerHTML = undergroundHiddenState
+        ? '🕳️ Bajo Tierra Oculto (Mostrar)'
+        : '🕳️ Ocultar Bajo Tierra';
+    }
+  };
+
+  if (btnHideUnderground) {
+    btnHideUnderground.addEventListener('click', () => {
+      applyHideUndergroundUI(!undergroundHiddenState);
+    });
+  }
+
+  if (chkHideUnderground) {
+    chkHideUnderground.addEventListener('change', (e) => {
+      applyHideUndergroundUI(Boolean(e.target.checked));
+    });
+  }
+
+  // =========================================================================
+  // 17. CONTROLES DE EXPANDIR / CONTRAER / MAXIMIZAR DESGLOSE UNITARIO
+  // =========================================================================
+  const toggleAllBreakdowns = (containerSelector, openState) => {
+    const host = document.querySelector(containerSelector);
+    if (!host) return;
+    host.querySelectorAll('details.unit-breakdown-details').forEach((det) => {
+      det.open = Boolean(openState);
+      if (!openState) {
+        det.classList.remove('breakdown-maximized');
+        const btn = det.querySelector('.btn-toggle-max-breakdown');
+        if (btn) btn.textContent = '🗖 Max';
+      }
+    });
+  };
+
+  const btnCdExpandAll = document.getElementById('cd-expand-all-breakdowns');
+  const btnCdCollapseAll = document.getElementById('cd-collapse-all-breakdowns');
+  if (btnCdExpandAll) {
+    btnCdExpandAll.addEventListener('click', () => toggleAllBreakdowns('#computo-drawer-tbody', true));
+  }
+  if (btnCdCollapseAll) {
+    btnCdCollapseAll.addEventListener('click', () => toggleAllBreakdowns('#computo-drawer-tbody', false));
+  }
+
+  const btnSimExpandAll = document.getElementById('sim-expand-all-breakdowns');
+  const btnSimCollapseAll = document.getElementById('sim-collapse-all-breakdowns');
+  const btnSimToggleMaxTable = document.getElementById('sim-toggle-maximize-table');
+  if (btnSimExpandAll) {
+    btnSimExpandAll.addEventListener('click', () => toggleAllBreakdowns('#budget-items-tbody', true));
+  }
+  if (btnSimCollapseAll) {
+    btnSimCollapseAll.addEventListener('click', () => toggleAllBreakdowns('#budget-items-tbody', false));
+  }
+  if (btnSimToggleMaxTable) {
+    btnSimToggleMaxTable.addEventListener('click', () => {
+      const wrapper = document.querySelector('#modal-simulador .budget-table-wrapper');
+      if (!wrapper) return;
+      const isMax = wrapper.classList.toggle('table-section-maximized');
+      btnSimToggleMaxTable.textContent = isMax
+        ? '— Restaurar Tamaño de Tabla'
+        : '🗖 Maximizar Tabla de Desglose';
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const maxBreakdownBtn = e.target.closest('.btn-toggle-max-breakdown');
+    if (!maxBreakdownBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const detailsEl = maxBreakdownBtn.closest('details.unit-breakdown-details');
+    if (!detailsEl) return;
+    const isNowMax = detailsEl.classList.toggle('breakdown-maximized');
+    if (isNowMax) {
+      detailsEl.open = true;
+      maxBreakdownBtn.textContent = '— Min';
+    } else {
+      maxBreakdownBtn.textContent = '🗖 Max';
+    }
+  });
+
+  // =========================================================================
+  // 18. SISTEMA UNIVERSAL DE MAXIMIZAR (🗖) Y MINIMIZAR (—) VENTANAS Y PANELES
+  // =========================================================================
+  const minimizedWindowsBar = document.getElementById('minimized-windows-bar');
+  const minimizedWindowsMap = new Map();
+
+  const getWindowReadableTitle = (winId, el) => {
+    const titleMap = {
+      'computo-drawer': '📋 Cómputo & Desglose Unitario',
+      'left-sidebar': '🎛️ Capas 3D & Escenarios',
+      'mep-sim-panel': '⚡🚰 Simulador MEP',
+      'modal-editor-2d': '📐 Editor CAD 2D/3D',
+      'modal-simulador': '💰 Presupuesto & Desglose Producto×Producto',
+      'modal-galeria-zonas': '🖼️ Renders 3D por Zona',
+      'modal-planos': '🗺️ Planos Oficiales Vivos',
+      'modal-renders': '🛰️ Satélite & MEP',
+      'modal-insumos': '🧱 Calculadora Tobatí & Techo',
+      'modal-geotech': '🪨 Estudio Geotécnico',
+      'modal-photos': '📸 118 Fotos de Obra'
+    };
+    if (titleMap[winId]) return titleMap[winId];
+    const h2 = el?.querySelector('h2, h3, strong');
+    return h2 ? h2.textContent.trim().slice(0, 34) : winId;
+  };
+
+  const renderMinimizedWindowsBar = () => {
+    if (!minimizedWindowsBar) return;
+    if (minimizedWindowsMap.size === 0) {
+      minimizedWindowsBar.style.display = 'none';
+      minimizedWindowsBar.innerHTML = '';
+      return;
+    }
+    minimizedWindowsBar.style.display = 'flex';
+    minimizedWindowsBar.innerHTML = Array.from(minimizedWindowsMap.entries())
+      .map(
+        ([winId, info]) => `
+        <button type="button" class="minimized-win-pill" data-restore-win="${winId}" title="Restaurar ventana ${info.title}">
+          <span>🗖 ${info.title}</span>
+          <span class="restore-tag">Restaurar</span>
+        </button>
+      `
+      )
+      .join('');
+
+    minimizedWindowsBar.querySelectorAll('[data-restore-win]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const winId = btn.getAttribute('data-restore-win');
+        restoreMinimizedWindow(winId);
+      });
+    });
+  };
+
+  const restoreMinimizedWindow = (winId) => {
+    const target = document.getElementById(winId);
+    if (!target) return;
+    target.classList.remove('window-minimized');
+    if (winId === 'computo-drawer') {
+      target.classList.remove('minimized');
+      target.classList.add('open');
+      const toggleIcon = document.getElementById('computo-drawer-toggle-icon');
+      if (toggleIcon) toggleIcon.textContent = '▼ Minimizar';
+    } else if (winId === 'mep-sim-panel') {
+      target.style.display = 'block';
+    } else if (target.classList.contains('modal-overlay')) {
+      openModal(winId);
+    }
+    minimizedWindowsMap.delete(winId);
+    renderMinimizedWindowsBar();
+    if (winId === 'modal-editor-2d' && floorplanEditor) {
+      setTimeout(() => floorplanEditor.handleResize(), 60);
+    }
+  };
+
+  document.querySelectorAll('[data-win-minimize]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const winId = btn.getAttribute('data-win-minimize');
+      const target = document.getElementById(winId);
+      if (!target) return;
+
+      const title = getWindowReadableTitle(winId, target);
+      target.classList.remove('window-maximized');
+      const card = target.querySelector('.modal-content, .modal-window, .modal-card');
+      if (card) card.classList.remove('window-maximized');
+
+      if (winId === 'computo-drawer') {
+        target.classList.add('minimized');
+        target.classList.remove('open');
+        const toggleIcon = document.getElementById('computo-drawer-toggle-icon');
+        if (toggleIcon) toggleIcon.textContent = '▲ Expandir';
+      } else if (target.classList.contains('modal-overlay')) {
+        target.classList.remove('open');
+      } else {
+        target.classList.add('window-minimized');
+      }
+
+      minimizedWindowsMap.set(winId, { title });
+      renderMinimizedWindowsBar();
+    });
+  });
+
+  document.querySelectorAll('[data-win-maximize]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const winId = btn.getAttribute('data-win-maximize');
+      const target = document.getElementById(winId);
+      if (!target) return;
+
+      target.classList.remove('window-minimized');
+      if (winId === 'computo-drawer') {
+        target.classList.remove('minimized');
+        target.classList.add('open');
+      }
+      minimizedWindowsMap.delete(winId);
+      renderMinimizedWindowsBar();
+
+      let isMax = false;
+      if (target.classList.contains('modal-overlay')) {
+        target.classList.add('open');
+        const card = target.querySelector('.modal-content, .modal-window, .modal-card');
+        isMax = target.classList.toggle('window-maximized');
+        if (card) card.classList.toggle('window-maximized', isMax);
+      } else {
+        isMax = target.classList.toggle('window-maximized');
+      }
+
+      btn.textContent = isMax ? '🗗' : '🗖';
+      btn.title = isMax ? 'Restaurar tamaño original' : 'Maximizar ventana a pantalla completa';
+
+      if (winId === 'modal-editor-2d' && floorplanEditor) {
+        requestAnimationFrame(() => {
+          floorplanEditor.handleResize();
+          setTimeout(() => floorplanEditor.handleResize(), 90);
+        });
+      }
+    });
+  });
 
   // Initialize default role workbench on startup without overriding default camera
   renderActiveRoleWorkbench();

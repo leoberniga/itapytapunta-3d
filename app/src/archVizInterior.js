@@ -20,7 +20,7 @@
 
 export const ROOM_CAMERA_PRESETS = {
   fachada_porton: {
-    label: 'Fachada Ciega, Portón Balancín 2.30m, Portón Peatonal 0.95m y Pérgola Antigranizo',
+    label: 'Fachada Ciega, Portón Balancín 2.30m, Portón Peatonal 0.95m y Pérgola c/ Enredadera 3D',
     pos: [4.8, 2.8, -10.5],
     target: [0.4, 0.8, 0.8],
     cutaway: 'full'
@@ -56,15 +56,21 @@ export const ROOM_CAMERA_PRESETS = {
     cutaway: 'cut_pa'
   },
   bano_suite: {
-    label: '2do Piso (+2.88m): Vestidor en U + Baño en Suite c/ Termocalefón 80L + Baño 2 PA (Eje F–G)',
-    pos: [0.2, 7.5, 8.4],
-    target: [1.6, 3.5, 3.8],
+    label: '2do Piso (+2.88m): Vestidor en U + Baño en Suite c/ Acceso Directo desde Suite + Baño 2 PA (Eje F–G)',
+    pos: [1.2, 10.6, 10.2],
+    target: [1.2, 3.4, 4.4],
     cutaway: 'cut_roof'
   },
   dormitorio_suite: {
-    label: '2do Piso (+2.88m): Dormitorio Principal en Suite Armado (+X), Sommier 1.40m, Tocador y Blindex a Deck 2',
-    pos: [3.4, 7.6, 13.8],
-    target: [2.3, 3.4, 6.8],
+    label: '2do Piso (+2.88m): 2 Dormitorios (1 Sencillo Centro + 1 En Suite c/ Acceso a Vestidor) + Sector Escritorio',
+    pos: [0.2, 11.4, 14.2],
+    target: [0.2, 3.3, 7.2],
+    cutaway: 'cut_roof'
+  },
+  dormitorio_sencillo: {
+    label: '2do Piso (+2.88m): Dormitorio 1 Sencillo (Centro) + Dormitorio 2 en Suite (+X) + Escritorio (-X)',
+    pos: [0.0, 11.4, 14.0],
+    target: [0.0, 3.3, 7.3],
     cutaway: 'cut_roof'
   },
   mep_electricista: {
@@ -106,9 +112,9 @@ export const ROOM_CAMERA_PRESETS = {
     cutaway: 'full'
   },
   planta_alta: {
-    label: '2do Piso (+2.88m): Escritorio / Home-Office Extendido (-X hasta Eje A), Biblioteca #2, Escalera 2 y Dormitorio 2',
-    pos: [-3.6, 7.6, 14.2],
-    target: [-2.2, 3.4, 7.5],
+    label: '2do Piso (+2.88m): Sector Escritorio Extendido (-X hasta Eje A) + Dormitorio 1 Sencillo + Dormitorio 2 en Suite c/ Vestidor',
+    pos: [-0.4, 11.4, 14.4],
+    target: [-0.2, 3.3, 7.6],
     cutaway: 'cut_roof'
   },
   corte_estructural: {
@@ -2079,8 +2085,8 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
   }
 
   // 1E. PÉRGOLA DE MADERA DURA CON ENREDADERA VERDE TUPIDA + CHAPA TRANSLÚCIDA ANTIGRANIZO
-  //     Visible a partir del Presupuesto BNF 350M y 440M (en BNF 300M se prioriza el cierre habitable esencial)
-  if (isUpgradedGate) {
+  //     Visible en todos los escenarios habitables (300M, 350M y 440M)
+  if (scenarioKey !== 'hoy_en_obra') {
     const pergolaGroup = new THREE.Group();
     const pMinX = -4.50;
     const pMaxX = 2.50;
@@ -2092,12 +2098,13 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     const pCenterZ = (pMinZ + pMaxZ) / 2; // -0.50m
     const pY = 2.55;
 
-    [
+    const postCoords = [
       [pMinX + 0.12, -3.65],
       [pMaxX - 0.12, -3.65],
       [pMinX + 0.12, 1.35],
       [pMaxX - 0.12, 1.35]
-    ].forEach(([cx, cz]) => {
+    ];
+    postCoords.forEach(([cx, cz]) => {
       const col = new THREE.Mesh(new THREE.BoxGeometry(0.14, pY, 0.14), mats.woodDoorPBR);
       col.position.set(cx, pY / 2, cz);
       col.castShadow = true;
@@ -2127,40 +2134,144 @@ export function buildFacadeAndGate3D(THREE, targetGroup, mats, scenarioKey = 'es
     polyRoof.position.set(pCenterX, pY + 0.22, pCenterZ);
     pergolaGroup.add(polyRoof);
 
-    const vineMat = mats.lushFoliagePBR || mats.grassPBR;
-    const flowerMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.55 });
-    for (let vx = 0; vx < 7; vx++) {
-      for (let vz = 0; vz < 8; vz++) {
-        if ((vx + vz) % 2 === 0 || vx === 0 || vz < 2) {
-          const fx = pMinX + 0.55 + vx * 0.95;
-          const fz = pMinZ + 0.45 + vz * 0.80;
-          const foliageCluster = new THREE.Mesh(
-            new THREE.SphereGeometry(0.46 + ((vx * 3 + vz) % 3) * 0.08, 10, 8),
-            vineMat
-          );
-          foliageCluster.scale.set(1.25, 0.32, 1.25);
-          foliageCluster.position.set(fx, pY + 0.27, fz);
-          foliageCluster.castShadow = true;
-          pergolaGroup.add(foliageCluster);
+    // Enredadera 3D Realista (Santa Rita / Bougainvillea):
+    // Troncos leñosos helicoidales subiendo por los postes + guías sinuosas CatmullRomCurve3 entre cabios + hojas 3D anguladas + racimos de brácteas
+    const barkMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.92, metalness: 0.02 });
+    const stemGreenMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.78, metalness: 0.04 });
+    const leafDarkMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.68, metalness: 0.05, side: THREE.DoubleSide });
+    const leafBrightMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.62, metalness: 0.05, side: THREE.DoubleSide });
+    const bractMagentaMat = new THREE.MeshStandardMaterial({ color: 0xdb2777, roughness: 0.52, side: THREE.DoubleSide });
+    const bractVioletMat = new THREE.MeshStandardMaterial({ color: 0x9d174d, roughness: 0.55, side: THREE.DoubleSide });
 
-          if ((vx + vz) % 3 === 0) {
-            const bloom = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), flowerMat);
-            bloom.scale.set(1.2, 0.5, 1.2);
-            bloom.position.set(fx + 0.12, pY + 0.34, fz - 0.08);
-            pergolaGroup.add(bloom);
-          }
+    // Geometría de hoja acuminada 3D (forma lanceolada/ovada natural, cero círculos planos)
+    const leafShape = new THREE.Shape();
+    leafShape.moveTo(0, 0);
+    leafShape.quadraticCurveTo(0.045, 0.05, 0.028, 0.12);
+    leafShape.lineTo(0, 0.165);
+    leafShape.lineTo(-0.028, 0.12);
+    leafShape.quadraticCurveTo(-0.045, 0.05, 0, 0);
+    const leafGeo = new THREE.ShapeGeometry(leafShape, 4);
+    const bractGeo = new THREE.ConeGeometry(0.048, 0.095, 3);
+
+    const addLeafSprig = (pos, seed) => {
+      const sprigCount = 3 + (seed % 3);
+      for (let k = 0; k < sprigCount; k++) {
+        const angleY = ((seed * 1.7 + k * 2.1) % (Math.PI * 2));
+        const tiltX = 0.35 + ((seed + k) % 4) * 0.22;
+        const leaf = new THREE.Mesh(leafGeo, (seed + k) % 2 === 0 ? leafDarkMat : leafBrightMat);
+        leaf.position.set(
+          pos.x + Math.cos(angleY) * 0.04,
+          pos.y + ((k % 2 === 0) ? 0.02 : -0.015),
+          pos.z + Math.sin(angleY) * 0.04
+        );
+        leaf.rotation.set(tiltX, angleY, ((seed + k) % 3 - 1) * 0.3);
+        const s = 0.85 + ((seed + k) % 4) * 0.22;
+        leaf.scale.set(s, s, s);
+        pergolaGroup.add(leaf);
+      }
+      if (seed % 2 === 0) {
+        const flowerGroup = new THREE.Group();
+        flowerGroup.position.set(pos.x, pos.y + 0.03, pos.z);
+        for (let b = 0; b < 3; b++) {
+          const bract = new THREE.Mesh(bractGeo, (seed + b) % 2 === 0 ? bractMagentaMat : bractVioletMat);
+          const ba = (b * Math.PI * 2) / 3 + (seed * 0.3);
+          bract.position.set(Math.cos(ba) * 0.03, 0.01, Math.sin(ba) * 0.03);
+          bract.rotation.set(0.65, ba, 0.3);
+          flowerGroup.add(bract);
         }
+        pergolaGroup.add(flowerGroup);
+      }
+    };
+
+    // 1) Troncos trepadores helicoidales subiendo por los 4 postes principales de la pérgola
+    postCoords.slice(0, 4).forEach(([px, pz], pIdx) => {
+      const trunkPts = [];
+      const turns = 2.5;
+      const steps = 14;
+      for (let s = 0; s <= steps; s++) {
+        const t = s / steps;
+        const ang = pIdx * 1.4 + t * Math.PI * 2 * turns;
+        const rad = 0.095 + (1 - t) * 0.025;
+        trunkPts.push(new THREE.Vector3(
+          px + Math.cos(ang) * rad,
+          0.04 + t * (pY + 0.14),
+          pz + Math.sin(ang) * rad
+        ));
+      }
+      const trunkCurve = new THREE.CatmullRomCurve3(trunkPts);
+      const trunkMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(trunkCurve, 28, 0.028, 7, false),
+        barkMat
+      );
+      trunkMesh.castShadow = true;
+      pergolaGroup.add(trunkMesh);
+
+      for (let s = 3; s <= steps; s += 2) {
+        addLeafSprig(trunkPts[s], pIdx * 17 + s);
+      }
+    });
+
+    // 2) Guías principales y secundarias serpenteando sobre los cabios de madera con caída natural (catenaria)
+    const numRunners = 9;
+    for (let r = 0; r < numRunners; r++) {
+      const rxBase = pMinX + 0.45 + r * ((pW - 0.90) / (numRunners - 1));
+      const runnerPts = [];
+      const segs = 16;
+      for (let s = 0; s <= segs; s++) {
+        const tz = s / segs;
+        const rz = pMinZ + 0.25 + tz * (pD - 0.50);
+        const weaveX = Math.sin(tz * Math.PI * 4 + r * 1.3) * 0.28 + Math.cos(tz * Math.PI * 2 + r) * 0.12;
+        const catenaryY = pY + 0.23 + Math.sin(tz * Math.PI * 7 + r * 0.7) * 0.045;
+        runnerPts.push(new THREE.Vector3(rxBase + weaveX, catenaryY, rz));
+      }
+      const runnerCurve = new THREE.CatmullRomCurve3(runnerPts);
+      const runnerMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(runnerCurve, 36, r % 3 === 0 ? 0.022 : 0.015, 6, false),
+        r % 3 === 0 ? barkMat : stemGreenMat
+      );
+      runnerMesh.castShadow = true;
+      pergolaGroup.add(runnerMesh);
+
+      for (let s = 1; s < segs; s++) {
+        const pt = runnerCurve.getPoint(s / segs);
+        addLeafSprig(pt, r * 31 + s * 7);
+      }
+    }
+
+    // 3) Ramas transversales entrelazadas y guirnaldas colgantes naturales en los bordes de la pérgola
+    const crossRunners = 6;
+    for (let c = 0; c < crossRunners; c++) {
+      const rzBase = pMinZ + 0.55 + c * ((pD - 1.10) / (crossRunners - 1));
+      const crossPts = [];
+      const segs = 14;
+      for (let s = 0; s <= segs; s++) {
+        const tx = s / segs;
+        const rx = pMinX + 0.35 + tx * (pW - 0.70);
+        const weaveZ = Math.cos(tx * Math.PI * 3.5 + c * 1.5) * 0.26;
+        const dropEdge = (s === 0 || s === segs) ? -0.32 : Math.sin(tx * Math.PI * 5 + c) * 0.04;
+        crossPts.push(new THREE.Vector3(rx, pY + 0.22 + dropEdge, rzBase + weaveZ));
+      }
+      const crossCurve = new THREE.CatmullRomCurve3(crossPts);
+      const crossMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(crossCurve, 30, 0.014, 6, false),
+        stemGreenMat
+      );
+      pergolaGroup.add(crossMesh);
+
+      for (let s = 0; s <= segs; s += 2) {
+        const pt = crossCurve.getPoint(s / segs);
+        addLeafSprig(pt, 200 + c * 23 + s * 5);
       }
     }
 
     tagGroupUserData(pergolaGroup, {
       type: 'pergola_cochera',
       bankCategory: 'nuevo_rojo',
-      name: 'Pérgola de Madera Dura con Enredadera (Santa Rita) y Chapa Translúcida Antigranizo (Incluida desde BNF 350M)',
+      name: 'Pérgola de Madera Dura con Enredadera Natural 3D (Santa Rita) y Chapa Translúcida Antigranizo (Incluida desde BNF 350M)',
       dimensions: '7.00m × 6.60m (x = -4.50..+2.50m, z = -3.80..+2.80m, Y = +2.55..+2.75m)',
       costo: 'Gs. 7.850.000 (Prevista en Crédito BNF 350M y 440M)',
-      status: 'Sombra Natural + Protección Antigranizo para el Vehículo 🌿🚗',
-      desc: 'Marco de madera dura con enredadera y cubierta translúcida antigranizo sobre el estacionamiento, prevista a partir del escenario de Crédito BNF 350M.'
+      status: 'Enredadera Botánica 3D + Protección Antigranizo para el Vehículo 🌿🚗',
+      desc: 'Marco de madera dura con enredadera trepadora 3D (troncos helicoidales, guías entrelazadas, follaje lanceolado y flores de Santa Rita) más cubierta translúcida antigranizo sobre el estacionamiento.'
     });
     facadeGroup.add(pergolaGroup);
   }
@@ -4300,10 +4411,10 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
   addWallSegment(
     plantaAltaArchGroup,
-    1.15, 3.00, 1.15, 4.85,
+    1.50, 3.00, 1.50, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Baño en Suite / Vestidor en Suite (x = +1.15m, z = 3.00..4.85m)',
-    'Divide el Baño Principal en Suite (x=-1.65..+1.15m) respecto del Vestidor en Suite (x=+1.15..+4.87m), sin dejar ningún hueco muerto.'
+    'Tabique Divisorio Baño en Suite / Vestidor en Suite (x = +1.50m, z = 3.00..4.85m)',
+    'Divide el Baño Principal en Suite (x=-1.65..+1.50m) respecto del Vestidor en Suite (x=+1.50..+4.87m), sin dejar ningún hueco muerto.'
   );
 
   // Pared continua en z = 4.85m desde x = -3.84m hasta x = +4.87m que cierra SSHH 2 (hacia el Pasillo) y cierra Baño en Suite + Vestidor (hacia el Dormitorio en Suite)
@@ -4316,23 +4427,23 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -2.35, 4.85, 0.32, 4.85,
+    -2.35, 4.85, 0.65, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Sur Pasillo Distribuidor — Cierre Continuo de SSHH 2 y Baño en Suite (z = 4.85m, x = -2.35..+0.32m)',
+    'Muro Sur Pasillo Distribuidor — Cierre Continuo de SSHH 2 y Baño en Suite (z = 4.85m, x = -2.35..+0.65m)',
     'Pared continua que delimita el Pasillo Distribuidor y garantiza privacidad total al Baño en Suite.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    0.32, 4.85, 0.42, 4.85,
+    0.65, 4.85, 0.74, 4.85,
     0.00, hPA, 0.15, intWallMat,
     'Mocheta Oeste Puerta Privada Baño en Suite (z = 4.85m)',
     'Mocheta de la puerta privada que conecta el Dormitorio en Suite con su Baño en Suite.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    1.18, 4.85, 2.45, 4.85,
+    1.50, 4.85, 2.45, 4.85,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Interior Suite — Entre Puerta de Baño en Suite y Puerta de Vestidor (z = 4.85m, x = +1.18..+2.45m)',
+    'Muro Interior Suite — Entre Puerta de Baño en Suite y Puerta de Vestidor (z = 4.85m, x = +1.50..+2.45m)',
     'Cierra el frente del Baño en Suite y del Vestidor dentro del Dormitorio Principal en Suite.'
   );
   addWallSegment(
@@ -4344,30 +4455,30 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
   // Dinteles sobre las puertas de SSHH 2, Baño en Suite y Vestidor en z = 4.85m
   addWallSegment(plantaAltaArchGroup, -3.15, 4.85, -2.35, 4.85, 2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat, 'Dintel Puerta SSHH 2 (z = 4.85m)', 'Dintel sobre puerta de SSHH 2.');
-  addWallSegment(plantaAltaArchGroup, 0.42, 4.85, 1.18, 4.85, 2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat, 'Dintel Puerta Baño en Suite (z = 4.85m)', 'Dintel sobre puerta privada del Baño en Suite.');
+  addWallSegment(plantaAltaArchGroup, 0.74, 4.85, 1.50, 4.85, 2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat, 'Dintel Puerta Baño en Suite (z = 4.85m)', 'Dintel sobre puerta privada del Baño en Suite.');
   addWallSegment(plantaAltaArchGroup, 2.45, 4.85, 3.25, 4.85, 2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat, 'Dintel Puerta Vestidor en Suite (z = 4.85m)', 'Dintel sobre puerta del Vestidor en Suite.');
 
-  // Muro Norte del PASILLO DISTRIBUIDOR (z = 6.00m) y acceso limpio a DORMITORIO 2 (x = -1.80m..+0.30m, z = 6.00m..9.94m)
+  // Muro Norte del PASILLO DISTRIBUIDOR (z = 6.00m) y acceso limpio a DORMITORIO 1 SENCILLO (x = -1.80m..+0.65m, z = 6.00m..9.94m)
   addWallSegment(
     plantaAltaArchGroup,
-    -1.80, 6.00, -1.15, 6.00,
+    -1.80, 6.00, -1.05, 6.00,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Norte Pasillo Distribuidor — Cierre Oeste Dormitorio 2 (z = 6.00m)',
-    'Separa el Dormitorio 2 del Pasillo Distribuidor de Planta Alta.'
+    'Muro Norte Pasillo Distribuidor — Cierre Oeste Dormitorio 1 Sencillo (z = 6.00m)',
+    'Separa el Dormitorio 1 Sencillo del Pasillo Distribuidor de Planta Alta.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -0.31, 6.00, 0.30, 6.00,
+    -0.21, 6.00, 0.65, 6.00,
     0.00, hPA, 0.15, intWallMat,
-    'Muro Norte Pasillo Distribuidor — Cierre Este Dormitorio 2 (z = 6.00m)',
-    'Mocheta de puerta del Dormitorio 2 en esquina con el acceso a la Suite Principal.'
+    'Muro Norte Pasillo Distribuidor — Cierre Este Dormitorio 1 Sencillo (z = 6.00m)',
+    'Mocheta de puerta del Dormitorio 1 Sencillo en esquina con el acceso a la Suite Principal.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    -1.15, 6.00, -0.31, 6.00,
+    -1.05, 6.00, -0.21, 6.00,
     2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat,
-    'Dintel Puerta Dormitorio 2 (z = 6.00m)',
-    'Dintel sobre puerta de acceso al Dormitorio 2.'
+    'Dintel Puerta Dormitorio 1 Sencillo (z = 6.00m)',
+    'Dintel sobre puerta de acceso al Dormitorio 1 Sencillo.'
   );
 
   // Tabique / Muro Este del ESCRITORIO / DESK (x = -1.80m) extendido desde z = 6.00m hasta el extremo de la galería Eje A (z = 13.34m), con puerta lateral de salida hacia Deck 2 (z = 10.15m..10.95m)
@@ -4375,8 +4486,8 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     plantaAltaArchGroup,
     -1.80, 6.00, -1.80, 10.15,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Escritorio-Desk / Dormitorio 2 (x = -1.80m, z = 6.00..10.15m)',
-    'Separa el desembarco de la Escalera 2 y el Escritorio respecto del Dormitorio 2.'
+    'Tabique Divisorio Escritorio-Desk / Dormitorio 1 Sencillo (x = -1.80m, z = 6.00..10.15m)',
+    'Separa el desembarco de la Escalera 2 y el Escritorio respecto del Dormitorio 1 Sencillo.'
   );
   addWallSegment(
     plantaAltaArchGroup,
@@ -4393,26 +4504,26 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     'Dintel superior sobre la puerta de salida del Escritorio hacia la terraza Deck 2.'
   );
 
-  // Tabique Divisorio entre DORMITORIO 2 + PASILLO (Oeste) y DORMITORIO PRINCIPAL EN SUITE (x = +0.30m..+4.87m, Este)
+  // Tabique Divisorio entre DORMITORIO 1 SENCILLO + PASILLO (Oeste) y DORMITORIO 2 PRINCIPAL EN SUITE (x = +0.65m..+4.87m, Este)
   addWallSegment(
     plantaAltaArchGroup,
-    0.30, 4.85, 0.30, 5.02,
+    0.65, 4.85, 0.65, 5.02,
     0.00, hPA, 0.15, intWallMat,
-    'Mocheta Sur Puerta Suite Principal (x = +0.30m)',
+    'Mocheta Sur Puerta Suite Principal (x = +0.65m)',
     'Arranque del tabique de entrada al Dormitorio Principal en Suite al final del Pasillo Distribuidor.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    0.30, 5.88, 0.30, 9.94,
+    0.65, 5.88, 0.65, 9.94,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Dormitorio 2 / Dormitorio Principal en Suite (x = +0.30m, z = 5.88..9.94m)',
-    'Divide el Dormitorio 2 central respecto del Dormitorio Principal en Suite (+X).'
+    'Tabique Divisorio Dormitorio 1 Sencillo / Dormitorio 2 Principal en Suite (x = +0.65m, z = 5.88..9.94m)',
+    'Divide el Dormitorio 1 Sencillo central (x=-1.80..+0.65m) respecto del Dormitorio 2 Principal en Suite (x=+0.65..+4.87m).'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    0.30, 5.02, 0.30, 5.88,
+    0.65, 5.02, 0.65, 5.88,
     2.12, Math.max(0.20, hPA - 2.12), 0.15, intWallMat,
-    'Dintel Puerta Dormitorio Principal en Suite (x = +0.30m)',
+    'Dintel Puerta Dormitorio Principal en Suite (x = +0.65m)',
     'Dintel sobre la puerta principal de entrada a la Suite.'
   );
 
@@ -4439,26 +4550,26 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, -0.73, localFloorY, 6.00, 0.84, 2.10, 0, 0.60,
-      'Puerta Placa de Madera — Acceso a Dormitorio 2 (desde Pasillo Distribuidor z = 6.00m)'
+      THREE, mats, -0.63, localFloorY, 6.00, 0.84, 2.10, 0, 0.60,
+      'Puerta Placa de Madera — Acceso a Dormitorio 1 Sencillo (desde Pasillo Distribuidor z = 6.00m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, 0.30, localFloorY, 5.45, 0.86, 2.10, -Math.PI / 2, 0.65,
-      'Puerta Principal de Madera — Acceso a Dormitorio Principal en Suite (al final del Pasillo Distribuidor x = +0.30m)'
+      THREE, mats, 0.65, localFloorY, 5.45, 0.86, 2.10, -Math.PI / 2, 0.65,
+      'Puerta Principal de Madera — Acceso a Dormitorio 2 Principal en Suite (al final del Pasillo Distribuidor x = +0.65m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, 0.80, localFloorY, 4.85, 0.76, 2.10, 0, -0.55,
-      'Puerta Privada de Madera Hidrófuga — Acceso Interno desde la Suite al Baño en Suite (z = 4.85m, x = +0.80m)'
+      THREE, mats, 1.12, localFloorY, 4.85, 0.76, 2.10, 0, -0.65,
+      'Puerta Privada de Madera Hidrófuga — Acceso Directo desde Dormitorio en Suite al Baño en Suite (z = 4.85m, x = +1.12m)'
     )
   );
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
-      THREE, mats, 2.85, localFloorY, 4.85, 0.80, 2.10, 0, -0.50,
-      'Puerta Placa de Madera — Acceso Interno desde la Suite al Vestidor Independiente (z = 4.85m, x = +2.85m)'
+      THREE, mats, 2.85, localFloorY, 4.85, 0.80, 2.10, 0, -0.75,
+      'Puerta Placa de Madera — Acceso Directo desde Dormitorio en Suite al Vestidor Independiente (z = 4.85m, x = +2.85m)'
     )
   );
   plantaAltaArchGroup.add(
@@ -4468,7 +4579,7 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // Cerramiento Vidriado del ESCRITORIO / DESK en el extremo Norte de la sección de Galería (Eje A z = 13.30m) + Muro y Ventanales de Dormitorio 2 y Suite en Eje B (z = 9.94m)
+  // Cerramiento Vidriado del ESCRITORIO / DESK en el extremo Norte de la sección de Galería (Eje A z = 13.30m) + Muro y Ventanales de Dormitorio 1 Sencillo y Suite en Eje B (z = 9.94m)
   addWallSegment(
     plantaAltaArchGroup,
     -4.87, 13.30, -1.80, 13.30,
@@ -4484,20 +4595,20 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // Cierre en Eje B (z = 9.94m) para Dormitorio 2 (x = -1.80..+0.30m) y Dormitorio Principal en Suite (x = +0.30..+4.87m) con mochetas y dinteles reales
+  // Cierre en Eje B (z = 9.94m) para Dormitorio 1 Sencillo (x = -1.80..+0.65m) y Dormitorio 2 Principal en Suite (x = +0.65..+4.87m) con mochetas y dinteles reales
   addWallSegment(
     plantaAltaArchGroup,
     -1.80, 9.94, 4.87, 9.94,
     2.32, Math.max(0.20, hPA - 2.32), 0.20, extWallMat,
-    'Dintel Corrido sobre Ventanales de Dormitorio 2 y Suite hacia Terraza (Eje B z = 9.94m)',
+    'Dintel Corrido sobre Ventanales de Dormitorio 1 Sencillo y Suite hacia Terraza (Eje B z = 9.94m)',
     'Viga dintel superior sobre los ventanales Blindex que dan al Deck 2 / Terraza al Río.'
   );
   addWallSegment(
     plantaAltaArchGroup,
-    0.10, 9.94, 0.65, 9.94,
+    0.42, 9.94, 0.88, 9.94,
     0.00, 2.32, 0.20, extWallMat,
-    'Mocheta Central Eje B entre Dormitorio 2 y Suite Principal (z = 9.94m)',
-    'Pilar/mocheta de mampostería que separa el ventanal del Dormitorio 2 respecto del ventanal de la Suite Principal.'
+    'Mocheta Central Eje B entre Dormitorio 1 Sencillo y Suite Principal (z = 9.94m)',
+    'Pilar/mocheta de mampostería que separa el ventanal del Dormitorio 1 Sencillo respecto del ventanal de la Suite Principal.'
   );
   addWallSegment(
     plantaAltaArchGroup,
@@ -4508,15 +4619,15 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, -0.82, 1.25, 9.94, 1.85, 2.30, 0,
-      'Puerta-Ventana Corrediza Blindex — Dormitorio 2 hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
-      'Ventanal corredizo de piso a dintel en el Dormitorio 2 con vista y salida a la terraza mirador Norte.'
+      THREE, mats, -0.68, 1.25, 9.94, 2.15, 2.30, 0,
+      'Puerta-Ventana Corrediza Blindex — Dormitorio 1 Sencillo hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
+      'Ventanal corredizo de piso a dintel en el Dormitorio 1 Sencillo con vista y salida a la terraza mirador Norte.'
     )
   );
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, 2.55, 1.25, 9.94, 3.80, 2.30, 0,
-      'Gran Ventanal Corredizo Blindex — Dormitorio Principal en Suite hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
+      THREE, mats, 2.66, 1.25, 9.94, 3.55, 2.30, 0,
+      'Gran Ventanal Corredizo Blindex — Dormitorio 2 Principal en Suite hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
       'Puerta-ventana corrediza Blindex 10mm del Dormitorio Principal en Suite con salida directa a la Terraza Panorámica.'
     )
   );
@@ -4535,29 +4646,37 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // G4. Equipamiento de SSHH 2 (x = -3.84..-1.65m, z = 3.00..4.85m), BAÑO EN SUITE (x = -1.65..+1.15m, z = 3.00..4.85m) y VESTIDOR (x = +1.15..+4.87m, z = 3.00..4.85m)
+  // G4. Equipamiento de SSHH 2 (x = -3.84..-1.65m, z = 3.00..4.85m), BAÑO EN SUITE (x = -1.65..+1.50m, z = 3.00..4.85m) y VESTIDOR (x = +1.50..+4.87m, z = 3.00..4.85m)
   // SSHH 2 / Segundo Baño Completo de Planta Alta (sobre Eje F–G, acceso desde Pasillo Distribuidor)
   plantaAltaArchGroup.add(createToilet3D(THREE, mats, -3.30, localFloorY + 0.02, 3.42, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
   plantaAltaArchGroup.add(createVanity3D(THREE, mats, -2.55, localFloorY + 0.02, 3.48, 0.85, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
   plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, -2.10, localFloorY + 0.02, 4.25, 0.85, 1.05, 0, 'SSHH 2 / Baño de Planta Alta (Eje F–G)'));
 
-  // Baño Principal en Suite (x = -1.65..+1.15m, z = 3.00..4.85m, apilado sobre el núcleo húmedo de PB y con acceso privado desde la Suite)
+  // Baño Principal en Suite (x = -1.65..+1.50m, z = 3.00..4.85m, apilado sobre el núcleo húmedo de PB y con acceso privado desde la Suite)
   plantaAltaArchGroup.add(createToilet3D(THREE, mats, -0.35, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
   plantaAltaArchGroup.add(createBidet3D(THREE, mats, 0.25, localFloorY + 0.02, 3.42, 0, 'Baño Principal en Suite (Eje F–G)'));
-  plantaAltaArchGroup.add(createVanity3D(THREE, mats, 0.72, localFloorY + 0.02, 3.85, 0.82, -Math.PI / 2, 'Baño Principal en Suite (Eje F–G)'));
+  plantaAltaArchGroup.add(createVanity3D(THREE, mats, 1.05, localFloorY + 0.02, 3.85, 0.82, -Math.PI / 2, 'Baño Principal en Suite (Eje F–G)'));
   plantaAltaArchGroup.add(createShowerBox3D(THREE, mats, -1.10, localFloorY + 0.02, 3.92, 0.95, 1.65, 0, 'Baño Principal en Suite (Eje F–G)'));
 
-  // G5. DORMITORIO PRINCIPAL EN SUITE ARMADO Y COMPLETO (x = +0.30..+4.87m, z = 4.85..9.94m):
-  //     1 Sommier de 1,40m con respaldo sobre Muro Este + Alfombra + 2 Mesas de Luz con veladores + Tocador #1 con Espejo adosado al tabique Oeste (x = +0.30m)
+  // G5. DORMITORIO 2 — PRINCIPAL EN SUITE CON ACCESO DIRECTO AL VESTIDOR Y BAÑO EN SUITE (x = +0.65..+4.87m, z = 4.85..9.94m):
+  //     1 Sommier de 1,40m con respaldo sobre Muro Este + Alfombra + 2 Mesas de Luz con veladores + Tocador #1 con Espejo adosado al tabique Oeste (x = +0.65m)
   const suiteOwnFurnitureGroup = new THREE.Group();
 
   // Alfombra textil cálida bajo la cama en Suite
   const suiteRug = new THREE.Mesh(
-    new THREE.BoxGeometry(2.40, 0.012, 2.30),
+    new THREE.BoxGeometry(2.40, 0.014, 2.30),
     new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 0.92 })
   );
   suiteRug.position.set(3.45, localFloorY + 0.02, 7.45);
   suiteOwnFurnitureGroup.add(suiteRug);
+
+  // Caminero de conexión visual desde la Suite hacia la puerta del Vestidor (x = +2.85m, z = 4.85m)
+  const vestidorRunner = new THREE.Mesh(
+    new THREE.BoxGeometry(0.90, 0.012, 1.65),
+    new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.85 })
+  );
+  vestidorRunner.position.set(2.85, localFloorY + 0.022, 4.95);
+  suiteOwnFurnitureGroup.add(vestidorRunner);
 
   const headboard = new THREE.Mesh(new THREE.BoxGeometry(0.10, 1.15, 2.20), mats.woodDeckPBR);
   headboard.position.set(4.72, localFloorY + 0.58, 7.45);
@@ -4592,30 +4711,30 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     suiteOwnFurnitureGroup.add(lamp);
   });
 
-  // Tocador de Dormitorio #1 con Espejo y Cajones perfectamente adosado contra el tabique Oeste de la Suite (x = +0.30m, z = 7.45m) + Banqueta
+  // Tocador de Dormitorio #1 con Espejo y Cajones perfectamente adosado contra el tabique Oeste de la Suite (x = +0.65m, z = 7.45m) + Banqueta
   const dresser1Base = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.76, 1.05), mats.woodDoorPBR);
-  dresser1Base.position.set(0.59, localFloorY + 0.38, 7.45);
+  dresser1Base.position.set(0.94, localFloorY + 0.38, 7.45);
   suiteOwnFurnitureGroup.add(dresser1Base);
 
   const dresser1MirrorFrame = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.82, 0.85), mats.woodDeckPBR);
-  dresser1MirrorFrame.position.set(0.39, localFloorY + 1.18, 7.45);
+  dresser1MirrorFrame.position.set(0.74, localFloorY + 1.18, 7.45);
   suiteOwnFurnitureGroup.add(dresser1MirrorFrame);
 
   const dresser1Mirror = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.74, 0.77), mats.mirrorMat);
-  dresser1Mirror.position.set(0.40, localFloorY + 1.18, 7.45);
+  dresser1Mirror.position.set(0.75, localFloorY + 1.18, 7.45);
   suiteOwnFurnitureGroup.add(dresser1Mirror);
 
   const dresserStool = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.44, 16), mats.linenSofaMat);
-  dresserStool.position.set(1.02, localFloorY + 0.22, 7.45);
+  dresserStool.position.set(1.36, localFloorY + 0.22, 7.45);
   suiteOwnFurnitureGroup.add(dresserStool);
 
   tagGroupUserData(suiteOwnFurnitureGroup, {
     type: 'mobiliario_propio',
-    name: 'Dormitorio Principal en Suite Armado Completo (4.57m × 5.09m): Sommier 1,40m + 2 Mesas de Luz + Tocador #1 con Espejo + Vestidor + Baño en Suite',
-    dimensions: 'Suite 23,26 m² + Vestidor 6,88 m² + Baño en Suite 5,18 m² (Total Suite = 35,3 m² en Planta Alta)',
+    name: 'Dormitorio 2 — Principal en Suite con Acceso al Vestidor y Baño en Suite (4.22m × 5.09m): Sommier 1,40m + 2 Mesas de Luz + Tocador #1',
+    dimensions: 'Suite 21,48 m² + Vestidor 6,27 m² + Baño en Suite 5,83 m² (Total Suite = 33,6 m² en Planta Alta)',
     costo: 'Gs. 0 (Mobiliario Propio de Ruth y Leo — A trasladar)',
-    status: 'Suite Principal 100% Armada con Baño Privado, Vestidor y Terraza 📦✨',
-    desc: 'Dormitorio Principal en Suite de Ruth y Leo (x=+0.30..+4.87m, z=4.85..9.94m) completamente cerrado y armado con su Sommier de 1,40m, 2 mesas de luz, tocador con espejo sobre el muro oeste, puerta privada al Baño en Suite (x=-1.65..+1.15m), puerta privada al Vestidor independiente (x=+1.15..+4.87m) y salida al Deck 2 / Terraza al Río.'
+    status: 'Dormitorio en Suite 100% Armado con Acceso Directo al Vestidor y Baño 📦✨',
+    desc: 'Dormitorio Principal en Suite de Ruth y Leo (x=+0.65..+4.87m, z=4.85..9.94m) completamente cerrado y armado con su Sommier de 1,40m, 2 mesas de luz, tocador con espejo sobre el muro oeste, puerta directa al Vestidor independiente en U (x=+1.50..+4.87m) y puerta privada al Baño en Suite (x=-1.65..+1.50m).'
   });
   plantaAltaArchGroup.add(suiteOwnFurnitureGroup);
 
@@ -4716,51 +4835,73 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   });
   plantaAltaArchGroup.add(antiqueSewingGroup);
 
-  // G7. DORMITORIO 2 (en x = -1.80m..+0.30m, z = 6.00m..9.94m):
-  //     1 Cama de 1 Plaza (0.90m × 1.90m, Propia — Gs. 0) + Tocador de Dormitorio #2 con Espejo adosado al tabique Este (x = +0.30m)
+  // G7. DORMITORIO 1 — SENCILLO (en x = -1.80m..+0.65m, z = 6.00m..9.94m — 2.45m × 3.94m = 9.65 m²):
+  //     Cama Sencilla / 1½ Plaza (1.05m × 1.95m, Propia — Gs. 0) posicionada al centro con cubrecama terracota cálido,
+  //     alfombra tejida, mesa de luz con velador LED, y Tocador #2 con espejo adosado al tabique Este (x = +0.65m)
   const secondRoomOwnFurniture = new THREE.Group();
-  const sbX = -1.22;
-  const sbZ = 7.95;
+  const sbX = -0.62;
+  const sbZ = 8.15;
 
-  const singleHeadboard = new THREE.Mesh(new THREE.BoxGeometry(0.94, 0.95, 0.08), mats.woodDeckPBR);
-  singleHeadboard.position.set(sbX, localFloorY + 0.48, sbZ - 0.94);
+  // Alfombra cálida en Dormitorio 1 Sencillo para delimitar claramente el ambiente en 3D
+  const singleRoomRug = new THREE.Mesh(
+    new THREE.BoxGeometry(1.85, 0.014, 2.35),
+    new THREE.MeshStandardMaterial({ color: 0xfef3c7, roughness: 0.90 })
+  );
+  singleRoomRug.position.set(sbX, localFloorY + 0.02, sbZ);
+  secondRoomOwnFurniture.add(singleRoomRug);
+
+  const singleHeadboard = new THREE.Mesh(new THREE.BoxGeometry(1.10, 1.05, 0.09), mats.woodDeckPBR);
+  singleHeadboard.position.set(sbX, localFloorY + 0.52, sbZ - 0.96);
   secondRoomOwnFurniture.add(singleHeadboard);
 
-  const singleBedFrame = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.26, 1.92), mats.woodDeckPBR);
-  singleBedFrame.position.set(sbX, localFloorY + 0.14, sbZ);
+  const singleBedFrame = new THREE.Mesh(new THREE.BoxGeometry(1.06, 0.28, 1.95), mats.woodDeckPBR);
+  singleBedFrame.position.set(sbX, localFloorY + 0.15, sbZ);
   secondRoomOwnFurniture.add(singleBedFrame);
 
-  const singleMattress = new THREE.Mesh(new THREE.BoxGeometry(0.90, 0.20, 1.90), mats.bedSheetMat);
-  singleMattress.position.set(sbX, localFloorY + 0.34, sbZ);
+  const singleMattress = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.22, 1.92), mats.bedSheetMat);
+  singleMattress.position.set(sbX, localFloorY + 0.36, sbZ);
   secondRoomOwnFurniture.add(singleMattress);
 
-  const singleDuvet = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.21, 1.25), mats.bedDuvetMat);
-  singleDuvet.position.set(sbX, localFloorY + 0.35, sbZ + 0.30);
+  const singleDuvetMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.78 });
+  const singleDuvet = new THREE.Mesh(new THREE.BoxGeometry(1.04, 0.23, 1.32), singleDuvetMat);
+  singleDuvet.position.set(sbX, localFloorY + 0.37, sbZ + 0.28);
   secondRoomOwnFurniture.add(singleDuvet);
 
-  const singlePillow = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.10, 0.32), mats.bedSheetMat);
-  singlePillow.position.set(sbX, localFloorY + 0.48, sbZ - 0.70);
-  secondRoomOwnFurniture.add(singlePillow);
+  [-0.24, 0.24].forEach((pxOff) => {
+    const singlePillow = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.11, 0.32), mats.bedSheetMat);
+    singlePillow.position.set(sbX + pxOff, localFloorY + 0.51, sbZ - 0.70);
+    secondRoomOwnFurniture.add(singlePillow);
+  });
 
-  const dresser2Base = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.76, 0.85), mats.woodDoorPBR);
-  dresser2Base.position.set(0.01, localFloorY + 0.38, 7.65);
+  // Mesa de luz + lámpara cálida en Dormitorio 1 Sencillo
+  const singleNightStand = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.52, 0.42), mats.woodDoorPBR);
+  singleNightStand.position.set(sbX - 0.78, localFloorY + 0.26, sbZ - 0.72);
+  secondRoomOwnFurniture.add(singleNightStand);
+
+  const singleLamp = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.11, 0.22, 14), mats.ledWarmMat);
+  singleLamp.position.set(sbX - 0.78, localFloorY + 0.63, sbZ - 0.72);
+  secondRoomOwnFurniture.add(singleLamp);
+
+  // Tocador de Dormitorio #2 con Espejo sobre el tabique Este (x = +0.65m) sin obstaculizar la cama
+  const dresser2Base = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.76, 0.88), mats.woodDoorPBR);
+  dresser2Base.position.set(0.38, localFloorY + 0.38, 7.95);
   secondRoomOwnFurniture.add(dresser2Base);
 
-  const dresser2Mirror = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.68, 0.65), mats.mirrorMat);
-  dresser2Mirror.position.set(0.20, localFloorY + 1.10, 7.65);
+  const dresser2Mirror = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.70, 0.68), mats.mirrorMat);
+  dresser2Mirror.position.set(0.55, localFloorY + 1.12, 7.95);
   secondRoomOwnFurniture.add(dresser2Mirror);
 
   tagGroupUserData(secondRoomOwnFurniture, {
     type: 'mobiliario_propio',
-    name: 'Dormitorio 2 en Planta Alta (2.10m × 3.94m): 1 Cama de 1 Plaza (0.90×1.90m) + Tocador de Dormitorio #2 con Espejo',
-    dimensions: 'Dormitorio 2 (x=-1.80..+0.30m, z=6.00..9.94m) • Cama 1 Plaza 0.90×1.90m + Tocador #2 0.85×0.40m',
+    name: 'Dormitorio 1 — Sencillo en Planta Alta (2.45m × 3.94m = 9,65 m²): Cama 1½ Plaza (1.05×1.95m) + Mesa de Luz + Tocador #2 + Placar',
+    dimensions: 'Dormitorio 1 Sencillo (x=-1.80..+0.65m, z=6.00..9.94m) • Cama 1.05×1.95m + Tocador #2 0.88×0.38m',
     costo: 'Gs. 0 (Propio de Ruth y Leo — A trasladar)',
-    status: 'Propio del Propietario en Dormitorio 2 PA (Gs. 0 — A trasladar) 📦',
-    desc: 'Segundo dormitorio independiente de Planta Alta con acceso desde el Pasillo Distribuidor, salida al Deck 2 / Terraza al Río y baño SSHH 2 contiguo.'
+    status: 'Dormitorio 1 Sencillo 100% Armado y Visible en Planta Alta 📦✨',
+    desc: 'Dormitorio Sencillo independiente de Planta Alta ubicado en el sector central (entre el Escritorio al Oeste y el Dormitorio en Suite al Este), con acceso desde el Pasillo Distribuidor, salida al Deck 2 / Terraza al Río y baño SSHH 2 contiguo.'
   });
   plantaAltaArchGroup.add(secondRoomOwnFurniture);
 
-  // G8. EQUIPAMIENTO DE VESTIDOR EN SUITE (x = +1.15..+4.87m, z = 3.00..4.85m — 3.72m × 1.85m) Y PLACAR DE DORMITORIO 2:
+  // G8. EQUIPAMIENTO DE VESTIDOR EN SUITE (x = +1.50..+4.87m, z = 3.00..4.85m — 3.37m × 1.85m) Y PLACAR DE DORMITORIO 1 SENCILLO:
   //     Visible desde 300M (estructura de vestidor) y terminado en melamina texturada desde 350M
   const budgetedClosetsGroup = new THREE.Group();
 
@@ -4769,19 +4910,19 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   closetVestidorEast.position.set(4.50, localFloorY + 1.18, 3.92);
   budgetedClosetsGroup.add(closetVestidorEast);
 
-  // Placar Oeste del Vestidor en Suite (contra tabique de Baño en Suite x = +1.15m)
+  // Placar Oeste del Vestidor en Suite (contra tabique de Baño en Suite x = +1.50m)
   const closetVestidorWest = new THREE.Mesh(new THREE.BoxGeometry(0.55, 2.35, 1.72), mats.woodDoorPBR);
-  closetVestidorWest.position.set(1.52, localFloorY + 1.18, 3.92);
+  closetVestidorWest.position.set(1.85, localFloorY + 1.18, 3.92);
   budgetedClosetsGroup.add(closetVestidorWest);
 
   // Placar Fondo Sur del Vestidor bajo el ventiluz alto (z = 3.32m)
-  const closetVestidorSouth = new THREE.Mesh(new THREE.BoxGeometry(2.10, 1.80, 0.50), mats.woodDoorPBR);
-  closetVestidorSouth.position.set(3.01, localFloorY + 0.92, 3.32);
+  const closetVestidorSouth = new THREE.Mesh(new THREE.BoxGeometry(1.95, 1.80, 0.50), mats.woodDoorPBR);
+  closetVestidorSouth.position.set(3.18, localFloorY + 0.92, 3.32);
   budgetedClosetsGroup.add(closetVestidorSouth);
 
-  // Placar de Dormitorio 2 (contra muro x = +0.30m, z = 6.45m)
-  const closetSecond = new THREE.Mesh(new THREE.BoxGeometry(0.50, 2.35, 1.10), mats.woodDoorPBR);
-  closetSecond.position.set(-0.02, localFloorY + 1.18, 6.62);
+  // Placar de Dormitorio 1 Sencillo (adosado al rincón Sur-Oeste x = -1.42m, z = 6.32m para dejar 100% despejada la visual de la cama)
+  const closetSecond = new THREE.Mesh(new THREE.BoxGeometry(0.68, 2.25, 0.52), mats.woodDoorPBR);
+  closetSecond.position.set(-1.38, localFloorY + 1.13, 6.34);
   budgetedClosetsGroup.add(closetSecond);
 
   if (isAtLeast440) {
@@ -4792,13 +4933,59 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
 
   tagGroupUserData(budgetedClosetsGroup, {
     type: 'adicional_a_presupuestar',
-    name: 'Vestidor en Suite Completo en U (3.72m × 1.85m) + Placar Empotrado en Dormitorio 2',
-    dimensions: 'Vestidor en U sobre Eje F–G (x=+1.15..+4.87m, z=3.00..4.85m) + Placar Dormitorio 2',
-    costo: 'Gs. 9.600.000 (Vestidor en Suite + Placar Dormitorio 2)',
+    name: 'Vestidor en Suite Completo en U (3.37m × 1.85m c/ Acceso desde Suite) + Placar Empotrado en Dormitorio 1 Sencillo',
+    dimensions: 'Vestidor en U sobre Eje F–G (x=+1.50..+4.87m, z=3.00..4.85m) + Placar Dormitorio 1 Sencillo',
+    costo: 'Gs. 9.600.000 (Vestidor en Suite + Placar Dormitorio 1 Sencillo)',
     status: isAtLeast350 ? 'Vestidor y Placares Terminados ✨' : 'Espacio de Vestidor Cerrado y Armado 🎯',
-    desc: 'Vestidor independiente de 3.72m × 1.85m integrado dentro del Dormitorio Principal en Suite con tres frentes de guardado en U, más placar piso-techo en el Dormitorio 2.'
+    desc: 'Vestidor independiente en U integrado dentro del Dormitorio Principal en Suite con tres frentes de guardado y puerta directa, más placar en el Dormitorio 1 Sencillo.'
   });
   plantaAltaArchGroup.add(budgetedClosetsGroup);
+
+  // Etiquetas Flotantes 3D de Identificación de Ambientes en Planta Alta (2 Dormitorios + Vestidor + Escritorio)
+  const makeZoneBadgeSprite = (title, sub, borderHex, posX, posY, posZ) => {
+    const c = document.createElement('canvas');
+    c.width = 512;
+    c.height = 128;
+    const cx = c.getContext('2d');
+    cx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+    cx.strokeStyle = borderHex;
+    cx.lineWidth = 6;
+    cx.beginPath();
+    if (cx.roundRect) {
+      cx.roundRect(8, 8, 496, 112, 20);
+    } else {
+      cx.rect(8, 8, 496, 112);
+    }
+    cx.fill();
+    cx.stroke();
+    cx.fillStyle = '#f8fafc';
+    cx.font = 'bold 28px Inter, Arial, sans-serif';
+    cx.textAlign = 'center';
+    cx.fillText(title, 256, 54);
+    cx.fillStyle = borderHex;
+    cx.font = 'bold 21px Inter, Arial, sans-serif';
+    cx.fillText(sub, 256, 94);
+    const tex = new THREE.CanvasTexture(c);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+    const sp = new THREE.Sprite(mat);
+    sp.scale.set(2.35, 0.58, 1);
+    sp.position.set(posX, posY, posZ);
+    sp.renderOrder = 999;
+    return sp;
+  };
+
+  plantaAltaArchGroup.add(
+    makeZoneBadgeSprite('🛏️ DORMITORIO 1 (SENCILLO)', 'Cama 1½ Plaza + Placar • 9,65 m²', '#fbbf24', -0.58, localFloorY + 2.32, 8.15)
+  );
+  plantaAltaArchGroup.add(
+    makeZoneBadgeSprite('👑 DORMITORIO 2 (EN SUITE)', 'Sommier 1.40m + Acceso a Vestidor • 21,5 m²', '#c084fc', 2.85, localFloorY + 2.32, 7.45)
+  );
+  plantaAltaArchGroup.add(
+    makeZoneBadgeSprite('👗 VESTIDOR EN SUITE', 'Placares en U • Acceso desde Suite', '#38bdf8', 3.18, localFloorY + 2.18, 3.92)
+  );
+  plantaAltaArchGroup.add(
+    makeZoneBadgeSprite('💻 SECTOR ESCRITORIO', 'Home-Office Doble + Costura + Biblioteca', '#34d399', -3.33, localFloorY + 2.32, 11.45)
+  );
 
   // ============================================================================
   // G9. ELEMENTOS ESPECIALES SOLICITADOS POR RUTH Y LEO:

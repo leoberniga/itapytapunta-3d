@@ -51,21 +51,117 @@ export function getSuggestedProductForPartida(idOrItem) {
   }
 
   if (typeof idOrItem === 'object' && idOrItem.suggestedProduct) {
-    const breakdown = idOrItem.unitBreakdown || idOrItem.insumosUnitarios || fallback.insumosUnitarios;
+    const rawUnitPrice = Number(idOrItem.commercialUnitPrice ?? idOrItem.precioUnitarioGs ?? idOrItem.unitPrice ?? 150000);
+    const customDefaultBreakdown =
+      idOrItem.unitBreakdown ||
+      idOrItem.insumosUnitarios || [
+        {
+          product: idOrItem.suggestedProduct,
+          insumo: idOrItem.suggestedProduct,
+          nombre: idOrItem.suggestedProduct,
+          brand: idOrItem.brand || 'Marca Certificada INTN Paraguay',
+          marca: idOrItem.brand || 'Marca Certificada INTN Paraguay',
+          unit: idOrItem.commercialUnit || idOrItem.unidad || idOrItem.unit || 'un',
+          unidad: idOrItem.commercialUnit || idOrItem.unidad || idOrItem.unit || 'un',
+          unitPrice: Math.round(rawUnitPrice * 0.62),
+          unitPriceGs: Math.round(rawUnitPrice * 0.62),
+          precioUnitarioGs: Math.round(rawUnitPrice * 0.62),
+          qtyPerUnit: 1.0,
+          cantidad: 1.0
+        },
+        {
+          product: 'Mano de obra de instalación y puesta en marcha certificada',
+          insumo: 'Mano de obra de instalación y puesta en marcha certificada',
+          nombre: 'Mano de obra de instalación y puesta en marcha certificada',
+          brand: 'Cuadrilla Especializada Asunción',
+          marca: 'Cuadrilla Especializada Asunción',
+          unit: 'jornal',
+          unidad: 'jornal',
+          unitPrice: Math.max(rawUnitPrice - Math.round(rawUnitPrice * 0.62), 35000),
+          unitPriceGs: Math.max(rawUnitPrice - Math.round(rawUnitPrice * 0.62), 35000),
+          precioUnitarioGs: Math.max(rawUnitPrice - Math.round(rawUnitPrice * 0.62), 35000),
+          qtyPerUnit: 1.0,
+          cantidad: 1.0
+        }
+      ];
     return {
       id: idOrItem.id || 'custom',
       partidaId: idOrItem.id || 'custom',
       suggestedProduct: idOrItem.suggestedProduct,
       brand: idOrItem.brand || 'Marca Certificada INTN Paraguay',
       commercialUnit: idOrItem.commercialUnit || idOrItem.unidad || idOrItem.unit || 'un',
-      commercialUnitPrice: Number(idOrItem.commercialUnitPrice ?? idOrItem.precioUnitarioGs ?? idOrItem.unitPrice ?? 0),
+      commercialUnitPrice: rawUnitPrice,
       supplierRef: idOrItem.supplierRef || fallback.supplierRef,
-      insumosUnitarios: breakdown,
-      unitBreakdown: breakdown
+      insumosUnitarios: customDefaultBreakdown,
+      unitBreakdown: customDefaultBreakdown
     };
   }
 
   return { ...fallback, unitBreakdown: fallback.insumosUnitarios };
+}
+
+/**
+ * Computes the product-by-product commercial breakdown for a budget partida,
+ * returning both per-unit (e.g. per 1 m³ or 1 m²) and total project commercial quantities
+ * (exact number of 50kg bags, 12m rebar bars, Tobatí bricks, tile boxes, PVC pipes, etc.).
+ *
+ * @param {object} partida
+ * @returns {Array<object>}
+ */
+export function computeCommercialProductBreakdownForPartida(partida) {
+  if (!partida || typeof partida !== 'object') return [];
+  const meta = getSuggestedProductForPartida(partida);
+  const rawList =
+    Array.isArray(partida.unitBreakdown) && partida.unitBreakdown.length > 0
+      ? partida.unitBreakdown
+      : Array.isArray(partida.insumosUnitarios) && partida.insumosUnitarios.length > 0
+        ? partida.insumosUnitarios
+        : meta.unitBreakdown || [];
+
+  const partidaUnit = String(partida.unidad || partida.unit || 'un').trim();
+  const rawPartidaQty = Number(partida.cantidadActual ?? partida.cantidad ?? partida.qty ?? 1);
+  const partidaQty = Number.isFinite(rawPartidaQty) && rawPartidaQty > 0 ? rawPartidaQty : 1;
+  const isGlobalUnit = partidaUnit.toLowerCase() === 'gl' || partidaUnit.toLowerCase() === 'global';
+  const scaleFactor = isGlobalUnit ? 1 : partidaQty;
+
+  return rawList.map((ins) => {
+    const product = ins.product || ins.insumo || ins.nombre || ins.item || 'Producto Comercial';
+    const brand = ins.brand || ins.marca || meta.brand || 'Marca Certificada INTN';
+    const unit = ins.unit || ins.unidad || 'un';
+    const unitPriceGs = Number(ins.unitPrice ?? ins.unitPriceGs ?? ins.precioUnitarioGs ?? 0);
+    const qtyPerUnit = Number(ins.qtyPerUnit ?? ins.cantidad ?? 1);
+    const costPerUnitGs = Math.round(qtyPerUnit * unitPriceGs);
+
+    const exactTotalCommercialQty = Number((qtyPerUnit * scaleFactor).toFixed(2));
+    const isDiscretePackage = /bolsa|barra|un|caja|balde|bid[oó]n|rollo|tira|placa|pa[ñn]o|lata|cartucho|par|juego|kit|estante|tabla|volquete|camionada/i.test(
+      unit
+    );
+    const commercialUnitsToBuy = isDiscretePackage
+      ? Math.max(1, Math.ceil(exactTotalCommercialQty - 1e-6))
+      : exactTotalCommercialQty;
+    const totalCommercialCostGs = Math.round(exactTotalCommercialQty * unitPriceGs);
+
+    return {
+      product,
+      insumo: product,
+      nombre: product,
+      brand,
+      marca: brand,
+      unit,
+      unidad: unit,
+      unitPrice: unitPriceGs,
+      unitPriceGs,
+      precioUnitarioGs: unitPriceGs,
+      qtyPerUnit,
+      cantidad: qtyPerUnit,
+      costPerUnitGs,
+      partidaQty,
+      partidaUnit,
+      exactTotalCommercialQty,
+      commercialUnitsToBuy,
+      totalCommercialCostGs
+    };
+  });
 }
 
 export const ITEM_STATUS = Object.freeze({
@@ -238,6 +334,13 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
   const existingWorkRows = rawBuiltRubros.map((rubro, idx) => {
     const subtotalGs = Number(rubro.montoGs) || 0;
     const catInfo = getSuggestedProductForPartida(idx + 1);
+    const enrichedBreakdown = computeCommercialProductBreakdownForPartida({
+      ...rubro,
+      id: `EXIST-${rubro.codigo}`,
+      unidad: rubro.unidad || 'gl',
+      cantidad: Number(rubro.cantidad) || 1,
+      unitBreakdown: catInfo.unitBreakdown
+    });
     return {
       id: `EXIST-${rubro.codigo}`,
       codigo: rubro.codigo,
@@ -249,8 +352,8 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
       commercialUnit: catInfo.commercialUnit,
       commercialUnitPrice: catInfo.commercialUnitPrice,
       supplierRef: catInfo.supplierRef,
-      insumosUnitarios: catInfo.insumosUnitarios,
-      unitBreakdown: catInfo.unitBreakdown,
+      insumosUnitarios: enrichedBreakdown,
+      unitBreakdown: enrichedBreakdown,
       unidad: rubro.unidad || 'gl',
       cantidad: Number(rubro.cantidad) || 1,
       formulaDim: rubro.estado || 'Certificado en obra',
@@ -291,6 +394,12 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
     const status = isIncluded ? ITEM_STATUS.PREVISTO_CREDITO : ITEM_STATUS.NO_INCLUIDO;
     const code = `P-${String(idx + 1).padStart(2, '0')}`;
     const catInfo = getSuggestedProductForPartida(partida);
+    const enrichedBreakdown = computeCommercialProductBreakdownForPartida({
+      ...partida,
+      cantidad,
+      unidad: partida.unidad,
+      unitBreakdown: partida.unitBreakdown || catInfo.unitBreakdown
+    });
 
     return {
       id: partida.id,
@@ -303,8 +412,8 @@ export function buildMetricCalculationBreakdown(scenarioKeyOrOptions = 'escenari
       commercialUnit: partida.commercialUnit || catInfo.commercialUnit,
       commercialUnitPrice: Number(partida.commercialUnitPrice ?? catInfo.commercialUnitPrice ?? precioUnitarioGs),
       supplierRef: partida.supplierRef || catInfo.supplierRef,
-      insumosUnitarios: partida.insumosUnitarios || catInfo.insumosUnitarios,
-      unitBreakdown: partida.unitBreakdown || catInfo.unitBreakdown,
+      insumosUnitarios: enrichedBreakdown,
+      unitBreakdown: enrichedBreakdown,
       unidad: partida.unidad,
       cantidad,
       formulaDim: partida.formulaDim || '',

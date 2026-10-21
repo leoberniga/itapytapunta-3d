@@ -2321,9 +2321,9 @@ export class ProjectScene {
       return 'Gran Salón Abierto de Subsuelo 100 m² (-2.34m)';
     }
     if (y > 1.8) {
+      if (x < -1.80 && z >= 6.00) return 'Escritorio / Desk Extendido hasta Galería Eje A (+2.88m)';
       if (z > 9.94) return 'Deck 2 / Terraza Panorámica al Río (+2.88m)';
       if (z >= 4.85 && z <= 6.00 && x >= -3.84 && x <= 0.60) return 'Pasillo Distribuidor de Planta Alta (+2.88m)';
-      if (x < -1.80 && z >= 6.00) return 'Escritorio / Desk junto a Escalera 2 (+2.88m)';
       if (x >= -1.80 && x <= 0.60 && z >= 6.00) return 'Dormitorio 2 (+2.88m)';
       if (x > 0.60 && z >= 4.85) return 'Dormitorio Principal en Suite (+2.88m)';
       if (x >= -1.65 && z < 4.85) return 'Vestidor y Baño en Suite (+2.88m)';
@@ -2424,13 +2424,14 @@ export class ProjectScene {
       collideSegmentZ(6.00, -0.20, 0.60);
       // Muro de Dormitorio en Suite (x = +0.60m, entre z = 4.85m y z = 9.94m, puerta desde el pasillo en z = 5.42m)
       collideSegmentX(0.60, 5.85, 9.94);
-      // Muro entre Escritorio y Dormitorio 2 (x = -1.80m, entre z = 6.00m y z = 9.94m)
-      collideSegmentX(-1.80, 6.00, 9.94);
-      // Baranda/Blindex hacia Deck 2 (z = 9.94m): aberturas en x = -3.30..-1.90m y x = +1.50..+3.90m
-      collideSegmentZ(9.94, -4.87, -3.30);
-      collideSegmentZ(9.94, -1.90, 1.50);
+      // Muro Este del Escritorio Extendido (x = -1.80m, desde z = 6.00m hasta Eje A z = 13.34m, con puerta lateral a Deck 2 en z = 10.15..10.95m)
+      collideSegmentX(-1.80, 6.00, 10.15);
+      collideSegmentX(-1.80, 10.95, 13.34);
+      // En x = -4.87m..-1.80m (Escritorio), z = 9.94m está 100% abierto para dar lugar al desembarco de Escalera 2!
+      // Baranda/Blindex hacia Deck 2 en Eje B (z = 9.94m, solo desde x = -1.80m a x = +4.87m): aberturas en Dorm 2 y Suite (x = +1.50..+3.90m)
+      collideSegmentZ(9.94, -1.80, 1.50);
       collideSegmentZ(9.94, 3.90, 4.87);
-      // Borde Balcón Deck 2 (z = 13.34m)
+      // Extremo Norte Eje A (z = 13.34m): Ventanal Blindex del Escritorio + Baranda de Deck 2
       collideSegmentZ(13.34, -4.87, 4.87);
     } else if (y >= -0.8) {
       // --- COLISIONES PLANTA BAJA (0.00m / -0.45m) ---

@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@latest" defer></script>
   
   <link rel="stylesheet" href="./src/style.css">
 </head>
@@ -225,7 +225,7 @@
       <span>·</span>
       <span><strong>Shift:</strong> Correr</span>
       <span>·</span>
-      <span><strong>Mouse:</strong> Mirar</span>
+      <span><strong>Mouse / Táctil:</strong> Mirar</span>
       <span>·</span>
       <span><strong>E:</strong> Interactuar</span>
       <span>·</span>
@@ -234,6 +234,23 @@
       <span><strong>1/2/3:</strong> Subsuelo / PB / PA</span>
       <span>·</span>
       <span><strong>ESC:</strong> Salir</span>
+    </div>
+
+    <!-- Controles Táctiles Móviles para Modo Juego GTA (#gta-mobile-touch-controls) -->
+    <div id="gta-mobile-touch-controls" class="gta-mobile-touch-controls" aria-label="Controles táctiles para móvil">
+      <div class="gta-touch-dpad">
+        <button type="button" class="gta-touch-btn gta-dpad-up" data-touch-key="KeyW" aria-label="Avanzar">▲</button>
+        <div class="gta-dpad-mid-row">
+          <button type="button" class="gta-touch-btn gta-dpad-left" data-touch-key="KeyA" aria-label="Izquierda">◀</button>
+          <button type="button" class="gta-touch-btn gta-dpad-sprint" id="btn-gta-touch-sprint" aria-label="Correr">🏃</button>
+          <button type="button" class="gta-touch-btn gta-dpad-right" data-touch-key="KeyD" aria-label="Derecha">▶</button>
+        </div>
+        <button type="button" class="gta-touch-btn gta-dpad-down" data-touch-key="KeyS" aria-label="Retroceder">▼</button>
+      </div>
+      <div class="gta-touch-actions">
+        <button type="button" class="gta-touch-action-btn gta-touch-use" id="btn-gta-touch-interact">🖐️ E · Usar</button>
+        <button type="button" class="gta-touch-action-btn gta-touch-cam" id="btn-gta-touch-cam">🎥 1ra / 3ra</button>
+      </div>
     </div>
   </div>
 
@@ -332,8 +349,17 @@
     </div>
   </div>
 
-  <!-- Left Sidebar Command Center (Tabbed UX 2026) -->
+  <!-- Left Sidebar Command Center (Tabbed UX 2026 + Mobile Bottom Sheet) -->
   <aside id="left-sidebar" class="left-sidebar glass-panel">
+    <!-- Barra tirador exclusiva para pantallas móviles (Bottom-Sheet Handle) -->
+    <button type="button" id="mobile-sidebar-handle" class="mobile-sidebar-handle" aria-label="Expandir o minimizar panel de herramientas en móvil">
+      <span class="msh-pill-bar"></span>
+      <div class="msh-summary-row">
+        <span id="mobile-sheet-role-label" class="msh-role">💑 Pareja (Ruth y Leo)</span>
+        <span id="mobile-sheet-budget-label" class="msh-budget">Gs. 298.210.000</span>
+        <span id="mobile-sheet-toggle-badge" class="msh-toggle-badge">▲ Panel</span>
+      </div>
+    </button>
     
     <!-- KPI Summary Card -->
     <div class="kpi-panel">

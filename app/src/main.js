@@ -4114,6 +4114,16 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .join('');
 
+    const mshRole = document.getElementById('mobile-sheet-role-label');
+    if (mshRole) {
+      mshRole.textContent = `${role.emoji || '🎯'} ${role.shortName || role.nombre}`;
+    }
+    const mshBudget = document.getElementById('mobile-sheet-budget-label');
+    const kpiAmt = document.getElementById('kpi-total-amount');
+    if (mshBudget && kpiAmt) {
+      mshBudget.textContent = `Gs. ${kpiAmt.textContent}`;
+    }
+
     host.innerHTML = `
       <div class="role-wb-card" style="border-color:${accent}55;">
         <div class="role-wb-header">
@@ -4228,7 +4238,100 @@ document.addEventListener('DOMContentLoaded', () => {
     topography: 'layer-topo'
   };
 
-  const applyUserRole = (roleId, { skipCamera = false } = {}) => {
+  const leftSidebarEl = document.getElementById('left-sidebar');
+  const mobileSidebarHandle = document.getElementById('mobile-sidebar-handle');
+  const mobileSheetRoleLabel = document.getElementById('mobile-sheet-role-label');
+  const mobileSheetBudgetLabel = document.getElementById('mobile-sheet-budget-label');
+  const mobileSheetToggleBadge = document.getElementById('mobile-sheet-toggle-badge');
+
+  const syncMobileSheetHeader = () => {
+    const profile = getRoleWorkspaceConfig(activeUserRoleId);
+    if (mobileSheetRoleLabel && profile) {
+      mobileSheetRoleLabel.textContent = `${profile.emoji || '🎯'} ${profile.shortName || profile.nombre}`;
+    }
+    const kpiTotalEl = document.getElementById('kpi-total-amount');
+    if (mobileSheetBudgetLabel && kpiTotalEl) {
+      mobileSheetBudgetLabel.textContent = `Gs. ${kpiTotalEl.textContent}`;
+    }
+    if (mobileSheetToggleBadge && leftSidebarEl) {
+      const isCollapsed = leftSidebarEl.classList.contains('mobile-collapsed');
+      mobileSheetToggleBadge.textContent = isCollapsed ? '▲ Abrir Panel' : '▼ Ver 3D';
+    }
+  };
+
+  const setMobileSidebarCollapsed = (collapsed) => {
+    if (!leftSidebarEl) return;
+    leftSidebarEl.classList.toggle('mobile-collapsed', Boolean(collapsed));
+    syncMobileSheetHeader();
+  };
+
+  if (window.innerWidth <= 900) {
+    setMobileSidebarCollapsed(true);
+  }
+
+  if (mobileSidebarHandle) {
+    mobileSidebarHandle.addEventListener('click', () => {
+      if (!leftSidebarEl) return;
+      const nextCollapsed = !leftSidebarEl.classList.contains('mobile-collapsed');
+      setMobileSidebarCollapsed(nextCollapsed);
+    });
+  }
+
+  // Wire GTA Mobile Touch Controls (D-Pad + Sprint + Interact + Camera)
+  document.querySelectorAll('#gta-mobile-touch-controls [data-touch-key]').forEach((btn) => {
+    const keyCode = btn.getAttribute('data-touch-key');
+    if (!keyCode) return;
+    const pressKey = (e) => {
+      if (e.cancelable) e.preventDefault();
+      if (scene && scene.keysPressed) scene.keysPressed[keyCode] = true;
+      btn.classList.add('active');
+    };
+    const releaseKey = (e) => {
+      if (e && e.cancelable) e.preventDefault();
+      if (scene && scene.keysPressed) scene.keysPressed[keyCode] = false;
+      btn.classList.remove('active');
+    };
+    btn.addEventListener('touchstart', pressKey, { passive: false });
+    btn.addEventListener('touchend', releaseKey, { passive: false });
+    btn.addEventListener('touchcancel', releaseKey, { passive: false });
+    btn.addEventListener('mousedown', pressKey);
+    btn.addEventListener('mouseup', releaseKey);
+    btn.addEventListener('mouseleave', releaseKey);
+  });
+
+  const btnGtaTouchSprint = document.getElementById('btn-gta-touch-sprint');
+  if (btnGtaTouchSprint) {
+    btnGtaTouchSprint.addEventListener('click', () => {
+      if (!scene || !scene.keysPressed) return;
+      scene.keysPressed.ShiftLeft = !scene.keysPressed.ShiftLeft;
+      btnGtaTouchSprint.classList.toggle('active', Boolean(scene.keysPressed.ShiftLeft));
+    });
+  }
+
+  const btnGtaTouchInteract = document.getElementById('btn-gta-touch-interact');
+  if (btnGtaTouchInteract) {
+    btnGtaTouchInteract.addEventListener('click', () => {
+      if (scene && typeof scene._interactNearestObject === 'function') {
+        scene._interactNearestObject();
+      }
+    });
+  }
+
+  const btnGtaTouchCam = document.getElementById('btn-gta-touch-cam');
+  if (btnGtaTouchCam) {
+    btnGtaTouchCam.addEventListener('click', () => {
+      if (!scene) return;
+      scene.thirdPersonView = !scene.thirdPersonView;
+      if (scene.playerAvatar) {
+        scene.playerAvatar.visible = scene.gameMode && scene.thirdPersonView;
+      }
+      if (typeof scene._notifyGameHud === 'function') {
+        scene._notifyGameHud();
+      }
+    });
+  }
+
+  const applyUserRole = (roleId, { skipCamera = false, fromUserClick = false } = {}) => {
     const profile = getRoleWorkspaceConfig(roleId);
     activeUserRoleId = profile.id;
 
@@ -4274,18 +4377,31 @@ document.addEventListener('DOMContentLoaded', () => {
       mepPanel.style.display = profile.openMepSim ? 'block' : 'none';
     }
 
+    // On mobile screens, if the role opens the Drawer or MEP Simulator, collapse the sidebar sheet so they don't overlap;
+    // otherwise expand the sidebar sheet when the user explicitly taps a role pill so they see its workbench.
+    if (window.innerWidth <= 900 && fromUserClick) {
+      if (profile.openDrawer || profile.openMepSim) {
+        setMobileSidebarCollapsed(true);
+      } else {
+        setMobileSidebarCollapsed(false);
+      }
+    }
+
     renderActiveRoleWorkbench();
+    syncMobileSheetHeader();
   };
 
   document.querySelectorAll('.role-pill-btn[data-role-id]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const rId = btn.getAttribute('data-role-id');
-      if (rId) applyUserRole(rId);
+      if (rId) applyUserRole(rId, { fromUserClick: true });
     });
   });
 
   // Initialize default role workbench on startup without overriding default camera
   renderActiveRoleWorkbench();
+  syncMobileSheetHeader();
 });
+
 
 

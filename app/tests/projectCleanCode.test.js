@@ -175,3 +175,33 @@ test('7. Seven User Personas (Roles) Workspace & BOM Engine: Arquitecto, Ingenie
     assert.ok(csv.includes(profile.nombre), `CSV for ${roleId} must include role name`);
   }
 });
+
+test('8. Extended Escritorio to Eje A (z=13.34m), No Floating Subsuelo Blindex & Mobile Bottom-Sheet UX', async () => {
+  const fs = await import('node:fs');
+  const archVizCode = fs.readFileSync(new URL('../src/archVizInterior.js', import.meta.url), 'utf8');
+  const floorplanCode = fs.readFileSync(new URL('../src/floorplanEditor.js', import.meta.url), 'utf8');
+  const indexHtml = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+
+  // 1. Floating Subsuelo Blindex window at Eje B must NOT exist
+  assert.ok(
+    !archVizCode.includes('Ventanal Corredizo Blindex 10mm — Gran Salón del Subsuelo hacia Quincho Inferior'),
+    'Floating Blindex window in Subsuelo must be removed'
+  );
+
+  // 2. Escritorio / Desk in Planta Alta must extend to z = 13.34m (Eje A) in both 3D and 2D
+  assert.ok(
+    archVizCode.includes('paFloorEscritorioExt') && archVizCode.includes('-4.87, 3.00, -4.87, 13.34'),
+    '3D Planta Alta Escritorio must extend West wall and floor slab to Eje A (z=13.34m)'
+  );
+  assert.ok(
+    floorplanCode.includes('d: 7.34') && floorplanCode.includes('_blindex_desk_a'),
+    '2D Floorplan Editor Escritorio must have depth 7.34m (z=6.00..13.34m) and front Blindex at Eje A'
+  );
+
+  // 3. Mobile Bottom-Sheet Handle and GTA Touch Controls must exist in index.html
+  assert.ok(
+    indexHtml.includes('id="mobile-sidebar-handle"') && indexHtml.includes('id="gta-mobile-touch-controls"'),
+    'index.html must include mobile bottom-sheet handle and GTA mobile touch controls'
+  );
+});
+

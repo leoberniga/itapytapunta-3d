@@ -4064,22 +4064,14 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
 
   // F2. PARRILLITA / QUINCHO INFERIOR EN SUBSUELO HACIA EL PATIO (x = -4.50m..-2.00m, z = 12.20m..13.34m, Y = -2.34m)
+  // Nota: El Gran Salón del Subsuelo (100.71 m²) es un espacio semicubierto abierto hacia la Parrillita y el jardín (sin ventanal Blindex flotante en Eje B).
   groups.archSubsuelo.add(buildSubsueloParilla3D(THREE, mats, ySub, scenarioKey));
-
-  // Ventanal Corredizo Blindex del Gran Salón del Subsuelo mirando al Jardín Nivelado y Piscina (Eje B z=9.94m)
-  groups.archSubsuelo.add(
-    createBlindexWindow3D(
-      THREE, mats, 0.45, ySub + 1.12, 9.94, 6.40, 2.15, 0,
-      'Ventanal Corredizo Blindex 10mm — Gran Salón del Subsuelo hacia Quincho Inferior y Patio Nivelado (Eje B)',
-      'Cerramiento de vidrio templado Blindex del Salón del Subsuelo con salida al mismo nivel (Y = -2.34m) hacia la Parrillita y el patio.'
-    )
-  );
 
   // ============================================================================
   // G. 2DO PISO / PLANTA ALTA (Cota +102.88m / Y = +2.88m — ACTIVO DESDE EL DÍA 1):
   //    DORMITORIO EN SUITE DE RUTH Y LEO (Sommier 1.40m + 2 Mesas de Luz + Tocador #1 + Placares)
   //    + BAÑO COMPLETO EN SUITE
-  //    + ESTUDIO / COSTURA / HUÉSPEDES (2 Escritorios + 1 Silla Oficina + Máquina de Coser Antigua + Cama 1 Plaza + Tocador #2)
+  //    + ESCRITORIO / DESK EXTENDIDO HASTA EL EXTREMO DE GALERÍA (Eje A z = 13.34m) PARA DAR LUGAR AL DESEMBARCO DE ESCALERA 2
   // ============================================================================
   // Agrupamos todo el 2do piso en `plantaAltaArchGroup` con `position.y = 2.88` para que el corte `'cut_pa'`
   // (`ch.position.y > 2.75`) oculte limpiamente el 2do piso cuando se inspecciona la Gran Sala de Nivel Calle.
@@ -4090,7 +4082,7 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   const localFloorY = 0.20; // Sobre la losa de viguetas pretensadas (2.88 + 0.20 = +3.08m)
   const hPA = 2.68;
 
-  // G1. Solado Interior Cubierto de Planta Alta (z = 3.00m..9.94m) + Deck 2 / Terraza al Río (z = 9.94m..13.34m)
+  // G1. Solado Interior Cubierto de Planta Alta (z = 3.00m..9.94m) + Extensión Cubierta del Escritorio hasta Eje A (x = -4.87m..-1.80m, z = 9.94m..13.34m) + Deck 2 / Terraza al Río (x = -1.80m..+4.77m, z = 9.94m..13.34m)
   const paFloorInterior = new THREE.Mesh(
     new THREE.BoxGeometry(9.54, 0.03, 6.94),
     isAtLeast350 ? mats.porcelainPBR : mats.plasterRoughPBR
@@ -4100,43 +4092,61 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   paFloorInterior.userData = {
     type: 'piso_terminado',
     name: isAtLeast350
-      ? 'Piso Porcelanato Rectificado 60×60cm en Planta Alta — Suite, Vestidor, Dormitorio 2, Escritorio y 2 Baños (+102.88m)'
+      ? 'Piso Porcelanato Rectificado 60×60cm en Planta Alta — Suite, Vestidor, Dormitorio 2, Desembarco Escalera y 2 Baños (+102.88m)'
       : 'Solado Nivelado en Planta Alta + Cerámico Impermeable en Baño en Suite y SSHH 2 (Base 300M)',
     dimensions: '9.54m × 6.94m cubiertos (z = 3.00m..9.94m en Cota +102.88m / Y=+2.88m)',
     status: isAtLeast350 ? 'Porcelanato 60×60 en Planta Alta ✨' : 'Planta Alta Habitable desde 300M 🎯',
-    desc: 'Piso interior de Planta Alta según plano original: Vestidor + Baño en Suite + SSHH 2 sobre Eje F–G (z=3.00..5.00m), Dormitorio Principal en Suite (5.00×3.95m), Dormitorio 2 (3.85×3.00m) y Escritorio/Desk (3.50×2.30m).'
+    desc: 'Piso interior de Planta Alta según plano original: Vestidor + Baño en Suite + SSHH 2 sobre Eje F–G (z=3.00..5.00m), Dormitorio Principal en Suite (5.00×3.95m), Dormitorio 2 (3.85×3.00m) y desembarco de Escalera 2.'
   };
   plantaAltaArchGroup.add(paFloorInterior);
 
+  // Extensión del solado interior del Escritorio / Desk sobre la sección de Galería hasta el extremo Eje A (x = -4.77m..-1.80m, z = 9.94m..13.34m)
+  const paFloorEscritorioExt = new THREE.Mesh(
+    new THREE.BoxGeometry(2.97, 0.03, 3.40),
+    isAtLeast350 ? mats.porcelainPBR : mats.plasterRoughPBR
+  );
+  paFloorEscritorioExt.position.set(-3.285, localFloorY, 11.64);
+  paFloorEscritorioExt.receiveShadow = true;
+  paFloorEscritorioExt.userData = {
+    type: 'piso_terminado',
+    name: 'Solado Interior del Cuadrado de Escritorio / Desk Extendido hasta Extremo de Galería (Eje A z = 13.34m)',
+    dimensions: '3.07m × 3.40m (x = -4.87m..-1.80m, z = 9.94m..13.34m • Total Escritorio + Desembarco = 3.07m × 7.34m)',
+    status: isAtLeast350 ? 'Porcelanato 60×60 Interior en Escritorio Extendido ✨' : 'Escritorio Cubierto hasta Eje A 🎯',
+    desc: 'Tal como prevé el diseño original en planos, la construcción del cuadrado de Escritorio (3.50×2.30m) se extiende hasta el extremo de la sección de galería (Eje A z = 13.34m) para dejar totalmente libre la subida y desembarco de la Escalera 2 (z = 5.26m..9.94m).'
+  };
+  plantaAltaArchGroup.add(paFloorEscritorioExt);
+
+  // Deck 2 / Terraza al Río en la sección central-este de la galería (x = -1.80m..+4.77m, z = 9.94m..13.34m, 6.57m × 3.40m)
   const paDeck2Floor = new THREE.Mesh(
-    new THREE.BoxGeometry(9.54, 0.03, 3.40),
+    new THREE.BoxGeometry(6.57, 0.03, 3.40),
     isAtLeast350 ? mats.woodDeckPBR : mats.plasterRoughPBR
   );
-  paDeck2Floor.position.set(0, localFloorY - 0.01, 11.64);
+  paDeck2Floor.position.set(1.485, localFloorY - 0.01, 11.64);
   paDeck2Floor.receiveShadow = true;
   paDeck2Floor.userData = {
     type: 'piso_terminado',
-    name: 'DECK 2 / TERRAZA MIRADOR AL RÍO EN PLANTA ALTA (z = 9.94m..13.34m • Ejes A–B)',
-    dimensions: '9.54m × 3.40m (32.4 m² de Terraza Panorámica al Río Paraguay en Cota +102.88m)',
+    name: 'DECK 2 / TERRAZA MIRADOR AL RÍO EN PLANTA ALTA (x = -1.80m..+4.87m, z = 9.94m..13.34m • Ejes A–B)',
+    dimensions: '6.67m × 3.40m (22.7 m² de Terraza Panorámica al Río Paraguay en Cota +102.88m)',
     status: isAtLeast350 ? 'Deck / Porcelanato Exterior Antideslizante ✨' : 'Terraza Mirador Impermeabilizada 🎯',
-    desc: 'Deck 2 / Terraza Panorámica al Río Paraguay en Planta Alta (z = 9.94m a 13.34m sobre la Galería de PB), con acceso directo desde el Dormitorio Principal en Suite, Dormitorio 2 y Escritorio.'
+    desc: 'Deck 2 / Terraza Panorámica al Río Paraguay en Planta Alta (z = 9.94m a 13.34m), contigua al cuadrado extendido del Escritorio, con acceso directo desde el Dormitorio Principal en Suite, Dormitorio 2 y Escritorio.'
   };
   plantaAltaArchGroup.add(paDeck2Floor);
 
   // G2. Cerramientos Perimetrales y Fachada Frontal CIEGA con Ventiluces Altos sobre Eje G (z = 3.00m, SIN balcón frontal)
+  // El Muro Medianero Oeste (Eje 9, x = -4.87m) se extiende desde Eje G (z = 3.00m) hasta el extremo de la galería Eje A (z = 13.34m) cerrando el Escritorio!
   addWallSegment(
     plantaAltaArchGroup,
-    -4.87, 3.00, -4.87, 9.94,
+    -4.87, 3.00, -4.87, 13.34,
     0.00, hPA, 0.20, extWallMat,
-    'Muro Medianero Oeste Planta Alta (Eje 9 • z = 3.00m..9.94m)',
-    'Cerramiento lateral Oeste de Planta Alta que protege el Vestidor y el Dormitorio Principal en Suite.'
+    'Muro Medianero Oeste Planta Alta Extendido hasta Galería (Eje 9 • z = 3.00m..13.34m)',
+    'Cerramiento lateral Oeste continuo desde Eje G (z=3.00m) hasta el extremo de la galería en Eje A (z=13.34m), conformando el cuadrado del Escritorio luego de la subida de la Escalera 2.'
   );
   addWallSegment(
     plantaAltaArchGroup,
     4.87, 3.00, 4.87, 9.94,
     0.00, hPA, 0.20, extWallMat,
     'Muro Medianero Este Planta Alta (Eje 1 • z = 3.00m..9.94m)',
-    'Cerramiento lateral Este de Planta Alta junto al desembarco de la Escalera 2 y el Escritorio.'
+    'Cerramiento lateral Este de Planta Alta que protege el Vestidor y el Dormitorio Principal en Suite.'
   );
 
   // Fachada Frontal de Planta Alta sobre Eje G (z = 3.00m): Muro de mampostería revocada con ventiluces altos horizontales (SIN balcón frontal ni Blindex de piso a techo)
@@ -4184,7 +4194,7 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   );
 
   // G3. Tabiquería Interior de Planta Alta con PASILLO DISTRIBUIDOR FRANCO (z = 4.85m..6.00m, ancho 1.15m):
-  //     - Al subir la Escalera 2 (en Ejes 8-9, x = -4.87m..-3.84m, z = 5.26m..8.85m), se llega directamente al ESCRITORIO / DESK (x = -4.87m..-1.80m, z = 6.00m..9.94m) y al PASILLO DISTRIBUIDOR (x = -3.84m..+0.60m, z = 4.85m..6.00m).
+  //     - Al subir la Escalera 2 (en Ejes 8-9, x = -4.87m..-3.84m, z = 5.26m..8.85m), se llega al desembarco (z = 8.85m..9.94m) y al cuadrado del ESCRITORIO / DESK extendido hasta el extremo de la galería (x = -4.87m..-1.80m, z = 9.94m..13.34m).
   //     - Franja Frontal Húmeda Eje F–G (z = 3.00m..4.85m, superpuesta sobre cocina y baño social de PB):
   //       * SSHH 2 / Baño Planta Alta: x = -3.84m..-1.65m, z = 3.00m..4.85m (acceso desde Pasillo Distribuidor)
   //       * Baño en Suite: x = -1.65m..+0.60m, z = 3.00m..4.85m (acceso privado desde Suite)
@@ -4271,13 +4281,28 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     'Mocheta de puerta del Dormitorio 2 en esquina con el acceso a la Suite Principal.'
   );
 
-  // Tabique Divisorio entre ESCRITORIO / DESK (x = -4.87m..-1.80m) y DORMITORIO 2 (x = -1.80m..+0.60m)
+  // Tabique / Muro Este del ESCRITORIO / DESK (x = -1.80m) extendido desde z = 6.00m hasta el extremo de la galería Eje A (z = 13.34m), con puerta lateral de salida hacia Deck 2 (z = 10.15m..10.95m)
   addWallSegment(
     plantaAltaArchGroup,
-    -1.80, 6.00, -1.80, 9.94,
+    -1.80, 6.00, -1.80, 10.15,
     0.00, hPA, 0.15, intWallMat,
-    'Tabique Divisorio Escritorio-Desk / Dormitorio 2 (x = -1.80m, z = 6.00..9.94m)',
-    'Separa el Escritorio / Desk abierto al desembarco de la Escalera 2 respecto del Dormitorio 2.'
+    'Tabique Divisorio Escritorio-Desk / Dormitorio 2 (x = -1.80m, z = 6.00..10.15m)',
+    'Separa el desembarco de la Escalera 2 y el Escritorio respecto del Dormitorio 2.'
+  );
+  addWallSegment(
+    plantaAltaArchGroup,
+    -1.80, 10.95, -1.80, 13.34,
+    0.00, hPA, 0.20, extWallMat,
+    'Muro Lateral Este del Cuadrado de Escritorio sobre Galería (x = -1.80m, z = 10.95..13.34m)',
+    'Cierra lateralmente el cuadrado del Escritorio extendido hasta el extremo de la galería (Eje A z=13.34m), separándolo del Deck 2 / Terraza al Río.'
+  );
+  // Dintel sobre puerta lateral de Escritorio hacia Deck 2 (x = -1.80m, z = 10.15..10.95m)
+  addWallSegment(
+    plantaAltaArchGroup,
+    -1.80, 10.15, -1.80, 10.95,
+    2.12, Math.max(0.20, hPA - 2.12), 0.20, extWallMat,
+    'Dintel Puerta Lateral Escritorio -> Deck 2 (x = -1.80m)',
+    'Dintel superior sobre la puerta de salida del Escritorio hacia la terraza Deck 2.'
   );
 
   // Tabique Divisorio entre DORMITORIO 2 + PASILLO (Oeste) y DORMITORIO PRINCIPAL EN SUITE (x = +0.60m..+4.87m, Este)
@@ -4300,11 +4325,11 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   plantaAltaArchGroup.add(
     createBalconyGrille3D(
       THREE, mats, -3.84, 5.26, -3.84, 8.85, 0.05, 0.98,
-      'Baranda de Seguridad del Hueco de Escalera 2 en Escritorio / Planta Alta (x = -3.84m)'
+      'Baranda de Seguridad del Hueco de Escalera 2 en Planta Alta (x = -3.84m, z = 5.26..8.85m)'
     )
   );
 
-  // 5 Puertas Interiores de Madera en Planta Alta (100% libres de colisión y alineadas al Pasillo Distribuidor)
+  // 6 Puertas en Planta Alta (5 interiores + 1 puerta lateral desde el Escritorio extendido hacia Deck 2)
   plantaAltaArchGroup.add(
     createWoodenDoor3D(
       THREE, mats, -2.75, localFloorY, 4.85, 0.80, 2.10, 0, -0.55,
@@ -4335,13 +4360,19 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
       'Puerta Placa de Madera — Acceso a Vestidor en Suite (z = 4.85m)'
     )
   );
+  plantaAltaArchGroup.add(
+    createWoodenDoor3D(
+      THREE, mats, -1.80, localFloorY, 10.55, 0.80, 2.10, -Math.PI / 2, 0.50,
+      'Puerta Lateral de Salida — Escritorio / Desk hacia Deck 2 / Terraza al Río (x = -1.80m, z = 10.55m)'
+    )
+  );
 
-  // Cerramiento Vidriado sobre Eje B (z = 9.94m) con Salida a DECK 2 / TERRAZA AL RÍO (z = 9.94m..13.34m)
+  // Cerramiento Vidriado del ESCRITORIO / DESK en el extremo Norte de la sección de Galería (Eje A z = 13.30m) + Ventanales de Dormitorio 2 y Suite en Eje B (z = 9.94m)
   plantaAltaArchGroup.add(
     createBlindexWindow3D(
-      THREE, mats, -3.33, 1.25, 9.94, 2.85, 2.30, 0,
-      'Ventanal Panorámico Blindex — Escritorio / Desk hacia Deck 2 / Terraza al Río (Eje B z = 9.94m)',
-      'Cerramiento vidriado del Escritorio / Home-Office al subir la Escalera 2 con luz natural Norte y salida al Deck 2.'
+      THREE, mats, -3.33, 1.25, 13.30, 2.85, 2.30, 0,
+      'Ventanal Panorámico Blindex — Extremo Norte del Escritorio / Desk sobre Eje A (z = 13.34m)',
+      'Cerramiento vidriado frontal del cuadrado de Escritorio extendido hasta el extremo de la galería (Eje A z=13.34m), dejando libre el Eje B (z=9.94m) para la subida y desembarco de la Escalera 2.'
     )
   );
   plantaAltaArchGroup.add(
@@ -4359,17 +4390,11 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
     )
   );
 
-  // Barandas Perimetrales de Seguridad en DECK 2 / TERRAZA MIRADOR AL RÍO (z = 9.94m..13.34m, SIN balcón frontal en Eje G)
+  // Barandas Perimetrales de Seguridad en DECK 2 / TERRAZA MIRADOR AL RÍO (x = -1.80m..+4.82m, z = 9.94m..13.30m)
   plantaAltaArchGroup.add(
     createBalconyGrille3D(
-      THREE, mats, -4.82, 13.30, 4.82, 13.30, 0.18, 1.08,
-      'Baranda y Reja de Seguridad en Deck 2 / Terraza Mirador al Río (Eje A z = 13.34m)'
-    )
-  );
-  plantaAltaArchGroup.add(
-    createBalconyGrille3D(
-      THREE, mats, -4.82, 9.94, -4.82, 13.30, 0.18, 1.08,
-      'Baranda Lateral Oeste Deck 2 / Terraza Mirador (z = 9.94m..13.30m)'
+      THREE, mats, -1.80, 13.30, 4.82, 13.30, 0.18, 1.08,
+      'Baranda y Reja de Seguridad en Deck 2 / Terraza Mirador al Río (Eje A z = 13.34m, x = -1.80..+4.82m)'
     )
   );
   plantaAltaArchGroup.add(
@@ -4447,29 +4472,30 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   });
   plantaAltaArchGroup.add(suiteOwnFurnitureGroup);
 
-  // G6. ESCRITORIO / DESK (en x = -4.87m..-1.80m, z = 6.00m..9.94m, inmediatamente al subir la Escalera 2):
-  //     2 Escritorios pequeños de Ruth y Leo + 2 Sillas de oficina + Máquina de coser antigua
+  // G6. ESCRITORIO / DESK EXTENDIDO HASTA EL EXTREMO DE LA GALERÍA (x = -4.87m..-1.80m, z = 9.94m..13.34m):
+  //     2 Escritorios de Ruth y Leo + 2 Sillas de oficina + Máquina de coser antigua + Biblioteca #2
+  //     (Dejando z = 6.00m..10.20m 100% libre para el desembarco de la Escalera 2 y circulación!)
   const homeOfficePAGroup = new THREE.Group();
 
-  [-3.40, -2.35].forEach((dxOffset) => {
+  [-3.65, -2.50].forEach((dxOffset) => {
     const deskTop = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.035, 0.52), mats.woodDeckPBR);
-    deskTop.position.set(dxOffset, localFloorY + 0.75, 9.15);
+    deskTop.position.set(dxOffset, localFloorY + 0.75, 12.35);
     homeOfficePAGroup.add(deskTop);
 
     [[-0.42, -0.22], [0.42, -0.22], [-0.42, 0.22], [0.42, 0.22]].forEach(([lx, lz]) => {
       const dLeg = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.73, 0.04), mats.blackMetalMat);
-      dLeg.position.set(dxOffset + lx, localFloorY + 0.37, 9.15 + lz);
+      dLeg.position.set(dxOffset + lx, localFloorY + 0.37, 12.35 + lz);
       homeOfficePAGroup.add(dLeg);
     });
 
     const laptop = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.22, 0.02), mats.blackMetalMat);
-    laptop.position.set(dxOffset, localFloorY + 0.88, 9.25);
+    laptop.position.set(dxOffset, localFloorY + 0.88, 12.45);
     homeOfficePAGroup.add(laptop);
   });
 
-  // 2 Sillas Ergonómicas de Oficina en Escritorio / Desk (x = -3.40m y -2.35m)
-  [-3.40, -2.35].forEach((chairX) => {
-    const chairZ = 8.62;
+  // 2 Sillas Ergonómicas de Oficina en el cuadrado extendido del Escritorio / Desk (x = -3.65m y -2.50m, z = 11.78m)
+  [-3.65, -2.50].forEach((chairX) => {
+    const chairZ = 11.78;
     const chairStarBase = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.04, 5), mats.blackMetalMat);
     chairStarBase.position.set(chairX, localFloorY + 0.04, chairZ);
     homeOfficePAGroup.add(chairStarBase);
@@ -4489,18 +4515,18 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
 
   tagGroupUserData(homeOfficePAGroup, {
     type: 'mobiliario_propio',
-    name: 'Escritorio / Desk en Planta Alta (3.50m × 2.30m • Desembarco Escalera 2): 2 Escritorios de Ruth y Leo + 2 Sillas Ergonómicas',
-    dimensions: 'Ambiente Escritorio 3.50m × 2.30m (x=-4.87..-1.80m, z=6.00..9.94m) • 2 Escritorios 0.95×0.52m',
+    name: 'Escritorio / Desk Extendido hasta Extremo de Galería (3.07m × 3.40m en z = 9.94..13.34m): 2 Escritorios de Ruth y Leo + 2 Sillas Ergonómicas',
+    dimensions: 'Cuadrado Escritorio Extendido (x=-4.87..-1.80m, z=9.94..13.34m) • 2 Escritorios 0.95×0.52m',
     costo: '2 Escritorios + 1 Silla Gs. 0 (Propios) • 2da Silla Ergonómica: Gs. 850.000',
-    status: 'Escritorio / Home-Office Doble de Ruth y Leo 📦✨',
-    desc: 'Sector de Escritorio / Desk ubicado inmediatamente al subir la Escalera 2 en Planta Alta según el plano original, con vista directa al Río Paraguay y salida al Deck 2.'
+    status: 'Escritorio / Home-Office Doble Extendido hasta Eje A 📦✨',
+    desc: 'El cuadrado del Escritorio / Desk se extiende hasta el extremo de la sección de galería (Eje A z=13.34m), dejando totalmente libre la llegada de la Escalera 2 en Eje B (z=8.85..9.94m) y ofreciendo vista panorámica en primera línea hacia el Río Paraguay.'
   });
   plantaAltaArchGroup.add(homeOfficePAGroup);
 
-  // Máquina de Coser Antigua en el sector Escritorio / Desk (x = -2.15m, z = 7.25m, contra tabique x = -1.80m)
+  // Máquina de Coser Antigua en el cuadrado extendido del Escritorio / Desk (x = -4.48m, z = 11.15m, contra muro Oeste Eje 9)
   const antiqueSewingGroup = new THREE.Group();
-  const asmX = -2.15;
-  const asmZ = 7.25;
+  const asmX = -4.48;
+  const asmZ = 11.15;
 
   [-0.32, 0.32].forEach((lz) => {
     const sLeg = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.72, 0.035), mats.blackMetalMat);
@@ -4535,11 +4561,11 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
 
   tagGroupUserData(antiqueSewingGroup, {
     type: 'mobiliario_propio',
-    name: 'Máquina de Coser Antigua Completa en Escritorio / Desk de Planta Alta (x = -2.15m, z = 7.25m)',
+    name: 'Máquina de Coser Antigua Completa en Escritorio Extendido de Planta Alta (x = -4.48m, z = 11.15m)',
     dimensions: '0.78m × 0.46m × 1.05m • Pedestal de Hierro Fundido + Gabinete y Cabezal Antiguo',
     costo: 'Gs. 0 (Propio de Ruth y Leo — A trasladar)',
     status: 'Propio del Propietario en Escritorio PA (Gs. 0 — A trasladar) 📦',
-    desc: 'Máquina de coser antigua clásica con pedestal de hierro forjado, pedal, gabinete de madera y cabezal original ubicada en el ambiente Escritorio / Desk de Planta Alta.'
+    desc: 'Máquina de coser antigua clásica con pedestal de hierro forjado, pedal, gabinete de madera y cabezal original ubicada sobre el muro Oeste del Escritorio extendido.'
   });
   plantaAltaArchGroup.add(antiqueSewingGroup);
 
@@ -4619,9 +4645,9 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(
     createLibrary4Shelves2m3D(THREE, mats, -0.95, 0.03, 8.45, -Math.PI / 2, 'Estar / Living Social Nivel Calle (Muro Eje 5 x=-0.74m)')
   );
-  // 2) Biblioteca #2 de 4 estantes de 2,00m cada uno en el Escritorio / Desk de Planta Alta (sobre tabique x = -1.98m, z = 8.55m)
+  // 2) Biblioteca #2 de 4 estantes de 2,00m cada uno en el Escritorio / Desk Extendido de Planta Alta (sobre tabique x = -1.98m, z = 8.45m)
   plantaAltaArchGroup.add(
-    createLibrary4Shelves2m3D(THREE, mats, -1.98, localFloorY, 8.55, -Math.PI / 2, 'Escritorio / Desk Planta Alta (Tabique x=-1.80m)')
+    createLibrary4Shelves2m3D(THREE, mats, -1.98, localFloorY, 8.45, -Math.PI / 2, 'Escritorio / Desk Planta Alta (Tabique x=-1.80m)')
   );
 
   // 2) Las Mascotas de Ruth y Leo: Emma (Caniche) y Serafina (Gata Calicó) en el Estar / Living Social
@@ -4634,7 +4660,7 @@ export function buildHyperRealisticInterior3D(THREE, groups, mats, scenarioKey =
   groups.archMain.add(createSansevieriaPot3D(THREE, mats, 1.65, 0.03, 3.35, 1.05, 'Recibidor Puerta Principal'));
   groups.archMain.add(createSansevieriaPot3D(THREE, mats, -1.85, -0.42, 10.45, 1.15, 'Galería Panorámica al Río'));
   plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, 1.05, localFloorY + 0.76, 7.85, 0.70, 'Tocador Dormitorio Suite PA'));
-  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, -2.55, localFloorY + 0.76, 9.15, 0.68, 'Escritorio / Desk PA'));
+  plantaAltaArchGroup.add(createSansevieriaPot3D(THREE, mats, -2.75, localFloorY + 0.76, 12.35, 0.68, 'Escritorio / Desk Extendido PA'));
 
   // 4) Sistema Completo de Alarma Pet-Immune (Central + Teclado, Sirenas Estroboscópicas y Sensores PIR Pet-Immune)
   groups.archMain.add(createPetImmuneAlarmSystem3D(THREE, mats));

@@ -1166,12 +1166,12 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_escritorio_desk`,
-      name: 'Escritorio / Desk al Subir Escalera 2 (3.07m × 3.94m • x=-4.87..-1.80m, z=6.00..9.94m)',
+      name: 'Escritorio / Desk Extendido hasta Galería Eje A (3.07m × 7.34m • x=-4.87..-1.80m, z=6.00..13.34m)',
       codeType: 'habitable',
       x: -4.87,
       z: 6.00,
       w: 3.07,
-      d: 3.94,
+      d: 7.34,
       floorCostPerM2Gs: 180000,
       equipCostGs: 4800000,
       activeStage: activeFlag,
@@ -1205,11 +1205,11 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     },
     {
       id: `${prefix}_terraza_rio`,
-      name: 'Deck 2 / Terraza al Río (Eje A–B z=9.94..13.34m)',
+      name: 'Deck 2 / Terraza al Río (6.67m × 3.40m • x=-1.80..+4.87m, z=9.94..13.34m)',
       codeType: 'exterior',
-      x: -4.87,
+      x: -1.80,
       z: 9.94,
-      w: 9.74,
+      w: 6.67,
       d: 3.40,
       floorCostPerM2Gs: 175000,
       equipCostGs: 4620000,
@@ -1220,7 +1220,7 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
 
   const buildPlantaAltaWalls = (wPrefix) => [
     { id: `${wPrefix}_frente_g`, type: 'ladrillo_20', x1: -4.87, z1: 3.00, x2: 4.87,  z2: 3.00, activeStage: activeFlag, label: 'Muro Frontal Mampostería PA en Eje G (z=3.00m • SIN Balcón ni Blindex Frontal)' },
-    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 (Escalera 2 y Escritorio/Desk)' },
+    { id: `${wPrefix}_oeste_9`,  type: 'ladrillo_15', x1: -4.87, z1: 3.00, x2: -4.87, z2: 13.34, activeStage: activeFlag, label: 'Muro Exterior PA Oeste Eje 9 Extendido hasta Eje A (Escalera 2 y Escritorio/Desk)' },
     { id: `${wPrefix}_este_1`,   type: 'ladrillo_15', x1: 4.87,  z1: 3.00, x2: 4.87,  z2: 9.94, activeStage: activeFlag, label: 'Muro Exterior PA Este Eje 1 (Vestidor y Dormitorio Principal en Suite)' },
     { id: `${wPrefix}_pasillo_sur`, type: 'ladrillo_15', x1: -3.84, z1: 4.85, x2: 0.60, z2: 4.85, activeStage: activeFlag, label: 'Muro Sur Pasillo Distribuidor (z=4.85m • Cierre SSHH 2 y Baño en Suite)' },
     { id: `${wPrefix}_pasillo_norte`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: 0.60, z2: 6.00, activeStage: activeFlag, label: 'Muro Norte Pasillo Distribuidor (z=6.00m • Acceso a Dormitorio 2)' },
@@ -1228,10 +1228,11 @@ export function createPresetPlan(rawPresetKey = 'cierre_300m') {
     { id: `${wPrefix}_sshh2_suite`, type: 'ladrillo_15', x1: -1.65, z1: 3.00, x2: -1.65, z2: 4.85, activeStage: activeFlag, label: 'Divisorio SSHH 2 / Baño en Suite (x=-1.65m)' },
     { id: `${wPrefix}_vestidor_o`, type: 'ladrillo_15', x1: 2.77, z1: 3.00, x2: 2.77, z2: 4.85, activeStage: activeFlag, label: 'Tabique Vestidor en Suite (x=+2.77m)' },
     { id: `${wPrefix}_vestidor_n`, type: 'ladrillo_15', x1: 2.77, z1: 4.85, x2: 4.87, z2: 4.85, activeStage: activeFlag, label: 'Cerramiento Vestidor hacia Suite (z=4.85m)' },
-    { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Escritorio-Desk / Dormitorio 2 (x=-1.80m)' },
+    { id: `${wPrefix}_desk_dorm2`, type: 'ladrillo_15', x1: -1.80, z1: 6.00, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Muro Este Escritorio-Desk Extendido hasta Eje A (x=-1.80m • Separa Dormitorio 2 y Deck 2)' },
     { id: `${wPrefix}_dorm2_suite`, type: 'ladrillo_15', x1: 0.60, z1: 3.00, x2: 0.60, z2: 9.94, activeStage: activeFlag, label: 'Divisorio Dormitorio 2 y Pasillo / Dormitorio Principal en Suite (x=+0.60m)' },
-    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -4.87, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B hacia Deck 2 / Terraza al Río' },
-    { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Eje A' }
+    { id: `${wPrefix}_blindex_desk_a`, type: 'blindex_corredizo', x1: -4.87, z1: 13.34, x2: -1.80, z2: 13.34, activeStage: activeFlag, label: 'Ventanal Blindex Extremo Norte Escritorio / Desk sobre Eje A (z=13.34m)' },
+    { id: `${wPrefix}_blindex_b`, type: 'blindex_corredizo', x1: -1.80, z1: 9.94, x2: 4.87, z2: 9.94, activeStage: activeFlag, label: 'Ventanal PA Eje B (Dormitorio 2 y Suite) hacia Deck 2 / Terraza al Río' },
+    { id: `${wPrefix}_baranda_a`, type: 'blindex_corredizo', x1: -1.80, z1: 13.34, x2: 4.87, z2: 13.34, activeStage: activeFlag, label: 'Baranda Terraza al Río Deck 2 sobre Eje A (x=-1.80..+4.87m)' }
   ];
 
   // =========================================================================
